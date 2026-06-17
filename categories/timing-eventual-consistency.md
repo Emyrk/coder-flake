@@ -20,6 +20,42 @@ This category is where bigger timeouts are most tempting. Sometimes they help, b
 - Widen time ranges only when the product genuinely measures wall-clock elapsed time.
 - Use deterministic fixtures for timezone and precision boundaries.
 
+## Code examples
+
+These examples are illustrative patterns for the category, not direct patches against one specific test.
+
+<details>
+<summary>Code examples</summary>
+
+### Bad: sleep and hope the async state converged
+
+```go
+triggerReconciliation(ctx)
+time.Sleep(2 * time.Second)
+
+got, err := store.GetStatus(ctx, id)
+require.NoError(t, err)
+require.Equal(t, StatusReady, got)
+```
+
+### Better: poll the condition and report the last observed value
+
+```go
+triggerReconciliation(ctx)
+
+var last Status
+require.Eventuallyf(t, func() bool {
+	got, err := store.GetStatus(ctx, id)
+	if err != nil {
+		return false
+	}
+	last = got
+	return got == StatusReady
+}, testutil.WaitLong, testutil.IntervalFast, "last status: %s", last)
+```
+
+</details>
+
 ## Suggested first slice
 
 Add deterministic clock guidance and search for exact boundary assertions around scheduling and metrics tests.

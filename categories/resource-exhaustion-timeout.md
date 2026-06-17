@@ -20,6 +20,42 @@ A timeout is a symptom, not a root cause. Without runner and package fanout data
 - Separate resource-sensitive stress runs from normal PR checks.
 - Track rerun minutes consumed by known flaky signatures.
 
+## Code examples
+
+These examples are illustrative patterns for the category, not direct patches against one specific test.
+
+<details>
+<summary>Code examples</summary>
+
+### Bad: unbounded parallel work inside an already parallel package
+
+```go
+for _, workspace := range workspaces {
+	workspace := workspace
+	go func() {
+		_ = startWorkspace(ctx, workspace)
+	}()
+}
+```
+
+### Better: bound fanout and join before cleanup
+
+```go
+group, ctx := errgroup.WithContext(ctx)
+group.SetLimit(4)
+
+for _, workspace := range workspaces {
+	workspace := workspace
+	group.Go(func() error {
+		return startWorkspace(ctx, workspace)
+	})
+}
+
+require.NoError(t, group.Wait())
+```
+
+</details>
+
 ## Suggested first slice
 
 Measure package fanout for the highest timeout buckets and tune parallelism by package class.

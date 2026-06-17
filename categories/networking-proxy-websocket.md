@@ -20,6 +20,52 @@ These failures are noisy because the test is observing a distributed system. A r
 - Drain websocket readers and record close reasons before teardown.
 - Use dynamic ports and listener-owned addresses. Do not hardcode ports.
 
+## Code examples
+
+These examples are illustrative patterns for the category, not direct patches against one specific test.
+
+<details>
+<summary>Code examples</summary>
+
+### Bad: connect before the server is ready
+
+```go
+go srv.Serve(listener)
+
+conn, _, err := websocket.DefaultDialer.Dial(url, nil)
+require.NoError(t, err)
+```
+
+### Better: publish a readiness signal, then connect
+
+```go
+ready := make(chan struct{})
+srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	select {
+	case <-ready:
+	default:
+		close(ready)
+	}
+	serveWebsocket(w, r)
+}))
+t.Cleanup(srv.Close)
+
+require.Eventually(t, func() bool {
+	resp, err := srv.Client().Get(srv.URL + "/healthz")
+	if err != nil {
+		return false
+	}
+	_ = resp.Body.Close()
+	return resp.StatusCode == http.StatusOK
+}, testutil.WaitLong, testutil.IntervalFast)
+
+<-ready
+conn, _, err := websocket.DefaultDialer.Dial(wsURL(srv.URL), nil)
+require.NoError(t, err)
+```
+
+</details>
+
 ## Suggested first slice
 
 Start with helper functions for server-ready, route-selected, message-ack, and close-drain states in high-flake network packages.

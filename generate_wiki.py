@@ -193,6 +193,254 @@ ORDER = [
     "not-a-test-flake/nix-flake-or-maintenance",
 ]
 
+CODE_EXAMPLES = {
+    "networking/proxy/websocket": [
+        ("Bad: connect before the server is ready", """```go
+go srv.Serve(listener)
+
+conn, _, err := websocket.DefaultDialer.Dial(url, nil)
+require.NoError(t, err)
+```"""),
+        ("Better: publish a readiness signal, then connect", """```go
+ready := make(chan struct{})
+srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	select {
+	case <-ready:
+	default:
+		close(ready)
+	}
+	serveWebsocket(w, r)
+}))
+t.Cleanup(srv.Close)
+
+require.Eventually(t, func() bool {
+	resp, err := srv.Client().Get(srv.URL + "/healthz")
+	if err != nil {
+		return false
+	}
+	_ = resp.Body.Close()
+	return resp.StatusCode == http.StatusOK
+}, testutil.WaitLong, testutil.IntervalFast)
+
+<-ready
+conn, _, err := websocket.DefaultDialer.Dial(wsURL(srv.URL), nil)
+require.NoError(t, err)
+```"""),
+    ],
+    "workspace/agent lifecycle": [
+        ("Bad: assert immediately after creating async work", """```go
+build := coderdtest.CreateWorkspaceBuild(t, client, workspace.ID)
+
+agent, err := client.WorkspaceAgent(ctx, build.Resources[0].Agents[0].ID)
+require.NoError(t, err)
+require.Equal(t, codersdk.WorkspaceAgentConnected, agent.Status)
+```"""),
+        ("Better: wait for the exact lifecycle state and print the last state", """```go
+build := coderdtest.CreateWorkspaceBuild(t, client, workspace.ID)
+
+var last codersdk.WorkspaceAgent
+require.Eventuallyf(t, func() bool {
+	agent, err := client.WorkspaceAgent(ctx, build.Resources[0].Agents[0].ID)
+	if err != nil {
+		return false
+	}
+	last = agent
+	return agent.Status == codersdk.WorkspaceAgentConnected
+}, testutil.WaitLong, testutil.IntervalFast, "last agent state: %+v", last)
+```"""),
+    ],
+    "concurrency/race": [
+        ("Bad: parallel subtests capture shared loop state", """```go
+for _, tc := range cases {
+	t.Run(tc.name, func(t *testing.T) {
+		t.Parallel()
+		require.Equal(t, tc.want, run(tc.input))
+	})
+}
+```"""),
+        ("Better: copy testcase data before `t.Parallel()`", """```go
+for _, tc := range cases {
+	tc := tc
+	t.Run(tc.name, func(t *testing.T) {
+		t.Parallel()
+		got := run(tc.input)
+		require.Equal(t, tc.want, got)
+	})
+}
+```"""),
+    ],
+    "database/transactions/migrations": [
+        ("Bad: share mutable DB rows across parallel tests", """```go
+user := dbgen.User(t, db, database.User{})
+
+t.Run("first", func(t *testing.T) {
+	t.Parallel()
+	require.NoError(t, db.UpdateUser(ctx, user.ID, patchA))
+})
+t.Run("second", func(t *testing.T) {
+	t.Parallel()
+	require.NoError(t, db.UpdateUser(ctx, user.ID, patchB))
+})
+```"""),
+        ("Better: create isolated DB resources per subtest", """```go
+for _, tc := range cases {
+	tc := tc
+	t.Run(tc.name, func(t *testing.T) {
+		t.Parallel()
+		user := dbgen.User(t, db, database.User{
+			Email: testutil.GetRandomName(t) + "@example.com",
+		})
+		require.NoError(t, db.UpdateUser(ctx, user.ID, tc.patch))
+	})
+}
+```"""),
+    ],
+    "browser/e2e/playwright": [
+        ("Bad: assert against broad text while the UI is still changing", """```ts
+await page.goto(`/workspaces/${workspaceName}`);
+await expect(page.getByText("Running")).toBeVisible();
+```"""),
+        ("Better: use stable locators and wait for the settled state", """```ts
+await page.goto(`/workspaces/${workspaceName}`);
+
+const status = page.getByTestId("workspace-status");
+await expect(status).toHaveText("Running", { timeout: 30_000 });
+
+await test.info().attach("workspace-url", {
+	body: page.url(),
+	contentType: "text/plain",
+});
+```"""),
+    ],
+    "timing/eventual consistency": [
+        ("Bad: sleep and hope the async state converged", """```go
+triggerReconciliation(ctx)
+time.Sleep(2 * time.Second)
+
+got, err := store.GetStatus(ctx, id)
+require.NoError(t, err)
+require.Equal(t, StatusReady, got)
+```"""),
+        ("Better: poll the condition and report the last observed value", """```go
+triggerReconciliation(ctx)
+
+var last Status
+require.Eventuallyf(t, func() bool {
+	got, err := store.GetStatus(ctx, id)
+	if err != nil {
+		return false
+	}
+	last = got
+	return got == StatusReady
+}, testutil.WaitLong, testutil.IntervalFast, "last status: %s", last)
+```"""),
+    ],
+    "platform/os-specific CI behavior": [
+        ("Bad: assume Linux shell and paths everywhere", """```go
+cmd := exec.Command("sh", "-c", "touch /tmp/coder-test-file")
+require.NoError(t, cmd.Run())
+```"""),
+        ("Better: use Go APIs or isolate platform-specific behavior", """```go
+dir := t.TempDir()
+path := filepath.Join(dir, "coder-test-file")
+
+require.NoError(t, os.WriteFile(path, []byte("ok"), 0o600))
+_, err := os.Stat(path)
+require.NoError(t, err)
+```"""),
+    ],
+    "resource exhaustion/timeout": [
+        ("Bad: unbounded parallel work inside an already parallel package", """```go
+for _, workspace := range workspaces {
+	workspace := workspace
+	go func() {
+		_ = startWorkspace(ctx, workspace)
+	}()
+}
+```"""),
+        ("Better: bound fanout and join before cleanup", """```go
+group, ctx := errgroup.WithContext(ctx)
+group.SetLimit(4)
+
+for _, workspace := range workspaces {
+	workspace := workspace
+	group.Go(func() error {
+		return startWorkspace(ctx, workspace)
+	})
+}
+
+require.NoError(t, group.Wait())
+```"""),
+    ],
+    "test isolation/order dependency": [
+        ("Bad: reuse global names, ports, or paths", """```go
+const workspaceName = "test-workspace"
+
+workspace := dbgen.Workspace(t, db, database.Workspace{
+	Name: workspaceName,
+})
+```"""),
+        ("Better: generate unique resources per test", """```go
+workspaceName := testutil.GetRandomName(t)
+
+workspace := dbgen.Workspace(t, db, database.Workspace{
+	Name: workspaceName,
+})
+t.Cleanup(func() {
+	_ = db.DeleteWorkspace(context.Background(), workspace.ID)
+})
+```"""),
+    ],
+    "external service/dependency": [
+        ("Bad: call the real external service from PR CI", """```go
+client := openai.NewClient(os.Getenv("OPENAI_API_KEY"))
+resp, err := client.CreateChatCompletion(ctx, req)
+require.NoError(t, err)
+require.NotEmpty(t, resp.Choices)
+```"""),
+        ("Better: inject a fake transport with deterministic responses", """```go
+server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	require.Equal(t, "/v1/chat/completions", r.URL.Path)
+	w.Header().Set("Content-Type", "application/json")
+	_, _ = w.Write([]byte(`{"choices":[{"message":{"content":"ok"}}]}`))
+}))
+t.Cleanup(server.Close)
+
+client := openai.NewClientForTest(server.URL, server.Client())
+resp, err := client.CreateChatCompletion(ctx, req)
+require.NoError(t, err)
+require.Equal(t, "ok", resp.Choices[0].Message.Content)
+```"""),
+    ],
+    "unknown/needs manual read": [
+        ("Bad: file an unclassifiable flake report", """```md
+Test failed again. Rerun passed.
+```"""),
+        ("Better: capture a minimum useful flake signature", """```md
+## Flake signature
+- Test: TestWorkspaceAgentReconnect
+- Package: coderd/workspaces
+- Job: linux-amd64-postgres
+- Platform: ubuntu-24.04, 4 CPU
+- Error: timed out waiting for agent status connected
+- Rerun: passed on attempt 2
+- Artifacts: logs, trace, last observed agent state
+```"""),
+    ],
+    "not-a-test-flake/nix-flake-or-maintenance": [
+        ("Bad: mix Nix maintenance with test-flake counts", """```sql
+select count(*)
+from github_references
+where lower(title) like '%flake%';
+```"""),
+        ("Better: filter false positives before reporting test flakes", """```sql
+select count(*)
+from github_references
+where category != 'not-a-test-flake/nix-flake-or-maintenance';
+```"""),
+    ],
+}
+
 
 def clean(s: str, n: int = 360) -> str:
     s = re.sub(r"\s+", " ", s or "").strip()
@@ -225,10 +473,20 @@ def ref_table(rows: list[dict[str, str]]) -> str:
     return "\n".join(lines)
 
 
+def code_examples(category: str) -> str:
+    examples = CODE_EXAMPLES[category]
+    lines = ["<details>", "<summary>Code examples</summary>", ""]
+    for title, snippet in examples:
+        lines += [f"### {title}", "", snippet, ""]
+    lines += ["</details>"]
+    return "\n".join(lines)
+
+
 def category_page(category: str, rows: list[dict[str, str]]) -> str:
     info = CATEGORY_INFO[category]
     counts = Counter(r["kind"] for r in rows)
     fixes = "\n".join(f"- {x}" for x in info["fixes"])
+    examples = code_examples(category)
     return f"""# {info['title']}
 
 {info['summary']}
@@ -246,6 +504,12 @@ def category_page(category: str, rows: list[dict[str, str]]) -> str:
 ## Common fixes
 
 {fixes}
+
+## Code examples
+
+These examples are illustrative patterns for the category, not direct patches against one specific test.
+
+{examples}
 
 ## Suggested first slice
 

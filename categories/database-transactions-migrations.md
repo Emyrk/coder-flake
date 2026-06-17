@@ -20,6 +20,45 @@ Postgres amplifies timing and isolation mistakes. The failure often looks like a
 - Cap DB-heavy package parallelism separately from pure unit tests.
 - Avoid exact timestamp equality after database round trips.
 
+## Code examples
+
+These examples are illustrative patterns for the category, not direct patches against one specific test.
+
+<details>
+<summary>Code examples</summary>
+
+### Bad: share mutable DB rows across parallel tests
+
+```go
+user := dbgen.User(t, db, database.User{})
+
+t.Run("first", func(t *testing.T) {
+	t.Parallel()
+	require.NoError(t, db.UpdateUser(ctx, user.ID, patchA))
+})
+t.Run("second", func(t *testing.T) {
+	t.Parallel()
+	require.NoError(t, db.UpdateUser(ctx, user.ID, patchB))
+})
+```
+
+### Better: create isolated DB resources per subtest
+
+```go
+for _, tc := range cases {
+	tc := tc
+	t.Run(tc.name, func(t *testing.T) {
+		t.Parallel()
+		user := dbgen.User(t, db, database.User{
+			Email: testutil.GetRandomName(t) + "@example.com",
+		})
+		require.NoError(t, db.UpdateUser(ctx, user.ID, tc.patch))
+	})
+}
+```
+
+</details>
+
 ## Suggested first slice
 
 Inventory DB-heavy flaky packages and split their parallelism profile from cheap unit tests.

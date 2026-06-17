@@ -20,6 +20,41 @@ This bucket is core to Coder. It also overlaps with timing, DB-backed lifecycle,
 - Join background goroutines before cleanup cancels contexts.
 - Add failure logs around provisioner and agent state transitions.
 
+## Code examples
+
+These examples are illustrative patterns for the category, not direct patches against one specific test.
+
+<details>
+<summary>Code examples</summary>
+
+### Bad: assert immediately after creating async work
+
+```go
+build := coderdtest.CreateWorkspaceBuild(t, client, workspace.ID)
+
+agent, err := client.WorkspaceAgent(ctx, build.Resources[0].Agents[0].ID)
+require.NoError(t, err)
+require.Equal(t, codersdk.WorkspaceAgentConnected, agent.Status)
+```
+
+### Better: wait for the exact lifecycle state and print the last state
+
+```go
+build := coderdtest.CreateWorkspaceBuild(t, client, workspace.ID)
+
+var last codersdk.WorkspaceAgent
+require.Eventuallyf(t, func() bool {
+	agent, err := client.WorkspaceAgent(ctx, build.Resources[0].Agents[0].ID)
+	if err != nil {
+		return false
+	}
+	last = agent
+	return agent.Status == codersdk.WorkspaceAgentConnected
+}, testutil.WaitLong, testutil.IntervalFast, "last agent state: %+v", last)
+```
+
+</details>
+
 ## Suggested first slice
 
 This is the best first implementation slice: build lifecycle helpers and migrate 3 to 5 existing flaky tests onto them.

@@ -20,6 +20,33 @@ Platform flakes often get dismissed as CI weirdness. They still define the contr
 - Skip only with owner, issue link, category, date, and retirement condition.
 - Make browser and system dependencies explicit for each platform.
 
+## Code examples
+
+These examples are illustrative patterns for the category, not direct patches against one specific test.
+
+<details>
+<summary>Code examples</summary>
+
+### Bad: assume Linux shell and paths everywhere
+
+```go
+cmd := exec.Command("sh", "-c", "touch /tmp/coder-test-file")
+require.NoError(t, cmd.Run())
+```
+
+### Better: use Go APIs or isolate platform-specific behavior
+
+```go
+dir := t.TempDir()
+path := filepath.Join(dir, "coder-test-file")
+
+require.NoError(t, os.WriteFile(path, []byte("ok"), 0o600))
+_, err := os.Stat(path)
+require.NoError(t, err)
+```
+
+</details>
+
 ## Suggested first slice
 
 Add runner metadata to high-risk jobs and split platform-sensitive packages into their own parallelism profile.

@@ -20,6 +20,39 @@ Race flakes are often real product bugs or test harness bugs that only show up u
 - Never call `t.Fatal`, `require.*`, or `assert.*` from non-test goroutines.
 - Verify race suspects with `go test -race -count=N`.
 
+## Code examples
+
+These examples are illustrative patterns for the category, not direct patches against one specific test.
+
+<details>
+<summary>Code examples</summary>
+
+### Bad: parallel subtests capture shared loop state
+
+```go
+for _, tc := range cases {
+	t.Run(tc.name, func(t *testing.T) {
+		t.Parallel()
+		require.Equal(t, tc.want, run(tc.input))
+	})
+}
+```
+
+### Better: copy testcase data before `t.Parallel()`
+
+```go
+for _, tc := range cases {
+	tc := tc
+	t.Run(tc.name, func(t *testing.T) {
+		t.Parallel()
+		got := run(tc.input)
+		require.Equal(t, tc.want, got)
+	})
+}
+```
+
+</details>
+
 ## Suggested first slice
 
 Add review checks and helper patterns for goroutine joins, per-subtest contexts, and immutable testcase setup.

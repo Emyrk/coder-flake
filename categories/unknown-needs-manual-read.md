@@ -19,6 +19,34 @@ Unknown is a signal that failure artifacts are too thin. It should shrink as int
 - Track unknowns separately instead of forcing fake precision.
 - Manually read the highest-impact unknowns and reclassify them.
 
+## Code examples
+
+These examples are illustrative patterns for the category, not direct patches against one specific test.
+
+<details>
+<summary>Code examples</summary>
+
+### Bad: file an unclassifiable flake report
+
+```md
+Test failed again. Rerun passed.
+```
+
+### Better: capture a minimum useful flake signature
+
+```md
+## Flake signature
+- Test: TestWorkspaceAgentReconnect
+- Package: coderd/workspaces
+- Job: linux-amd64-postgres
+- Platform: ubuntu-24.04, 4 CPU
+- Error: timed out waiting for agent status connected
+- Rerun: passed on attempt 2
+- Artifacts: logs, trace, last observed agent state
+```
+
+</details>
+
 ## Suggested first slice
 
 Manually classify the top unknowns and use the gaps to improve the intake template.

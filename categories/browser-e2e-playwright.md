@@ -20,6 +20,36 @@ Frontend flakes are expensive to debug after the fact. Without traces and locato
 - Repeat affected specs in a targeted workflow instead of rerunning the whole suite blindly.
 - Make browser dependencies explicit in CI images or setup.
 
+## Code examples
+
+These examples are illustrative patterns for the category, not direct patches against one specific test.
+
+<details>
+<summary>Code examples</summary>
+
+### Bad: assert against broad text while the UI is still changing
+
+```ts
+await page.goto(`/workspaces/${workspaceName}`);
+await expect(page.getByText("Running")).toBeVisible();
+```
+
+### Better: use stable locators and wait for the settled state
+
+```ts
+await page.goto(`/workspaces/${workspaceName}`);
+
+const status = page.getByTestId("workspace-status");
+await expect(status).toHaveText("Running", { timeout: 30_000 });
+
+await test.info().attach("workspace-url", {
+	body: page.url(),
+	contentType: "text/plain",
+});
+```
+
+</details>
+
 ## Suggested first slice
 
 Require trace artifacts for browser flake detection and migrate the noisiest specs to stable locator helpers.

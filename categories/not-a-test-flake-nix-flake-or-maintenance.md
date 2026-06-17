@@ -18,6 +18,31 @@ Keep these out of nondeterministic test-flake metrics. They are useful CI mainte
 - Track Nix maintenance separately if needed.
 - Use the category as a false-positive bucket for search hygiene.
 
+## Code examples
+
+These examples are illustrative patterns for the category, not direct patches against one specific test.
+
+<details>
+<summary>Code examples</summary>
+
+### Bad: mix Nix maintenance with test-flake counts
+
+```sql
+select count(*)
+from github_references
+where lower(title) like '%flake%';
+```
+
+### Better: filter false positives before reporting test flakes
+
+```sql
+select count(*)
+from github_references
+where category != 'not-a-test-flake/nix-flake-or-maintenance';
+```
+
+</details>
+
 ## Suggested first slice
 
 Exclude this category from test-flake incident counts and keep it only as a search-quality note.

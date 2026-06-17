@@ -20,6 +20,38 @@ These failures are preventable. The suite should not depend on test order or sha
 - Randomize test order in detection workflows to expose hidden coupling.
 - Document helpers for unique names and isolated test resources.
 
+## Code examples
+
+These examples are illustrative patterns for the category, not direct patches against one specific test.
+
+<details>
+<summary>Code examples</summary>
+
+### Bad: reuse global names, ports, or paths
+
+```go
+const workspaceName = "test-workspace"
+
+workspace := dbgen.Workspace(t, db, database.Workspace{
+	Name: workspaceName,
+})
+```
+
+### Better: generate unique resources per test
+
+```go
+workspaceName := testutil.GetRandomName(t)
+
+workspace := dbgen.Workspace(t, db, database.Workspace{
+	Name: workspaceName,
+})
+t.Cleanup(func() {
+	_ = db.DeleteWorkspace(context.Background(), workspace.ID)
+})
+```
+
+</details>
+
 ## Suggested first slice
 
 Add reusable unique-resource helpers and run randomized order checks on known-isolation packages.

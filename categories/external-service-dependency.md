@@ -20,6 +20,40 @@ External systems create noise unless the test explicitly exists to validate that
 - Quarantine unavoidable external tests behind owner and expiry metadata.
 - Record dependency versions and upstream error details in failure output.
 
+## Code examples
+
+These examples are illustrative patterns for the category, not direct patches against one specific test.
+
+<details>
+<summary>Code examples</summary>
+
+### Bad: call the real external service from PR CI
+
+```go
+client := openai.NewClient(os.Getenv("OPENAI_API_KEY"))
+resp, err := client.CreateChatCompletion(ctx, req)
+require.NoError(t, err)
+require.NotEmpty(t, resp.Choices)
+```
+
+### Better: inject a fake transport with deterministic responses
+
+```go
+server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	require.Equal(t, "/v1/chat/completions", r.URL.Path)
+	w.Header().Set("Content-Type", "application/json")
+	_, _ = w.Write([]byte(`{"choices":[{"message":{"content":"ok"}}]}`))
+}))
+t.Cleanup(server.Close)
+
+client := openai.NewClientForTest(server.URL, server.Client())
+resp, err := client.CreateChatCompletion(ctx, req)
+require.NoError(t, err)
+require.Equal(t, "ok", resp.Choices[0].Message.Content)
+```
+
+</details>
+
 ## Suggested first slice
 
 List tests with real external dependencies and move them behind fakes, targeted jobs, or explicit quarantine.
