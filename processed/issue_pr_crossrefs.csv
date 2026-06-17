@@ -1,0 +1,14 @@
+issue_number,pr_number,event,created_at,actor,source_type,source_title,source_url
+382,383,cross-referenced,2022-02-28T19:49:27Z,kylecarbs,issue,test: Fix test flake panic in provisionerd,https://github.com/coder/coder/pull/383
+388,389,cross-referenced,2022-03-01T18:04:16Z,kylecarbs,issue,test: Add mutex to opening PostgreSQL ports to prevent collision,https://github.com/coder/coder/pull/389
+1368,1562,cross-referenced,2022-05-18T16:58:49Z,dwahler,issue,fix: Make TestAgent and TestWorkspaceAgentPTY less flaky,https://github.com/coder/coder/pull/1562
+1644,1774,cross-referenced,2022-05-26T03:36:59Z,kylecarbs,issue,fix: Close peer negotiate mutex if we haven't negotiated,https://github.com/coder/coder/pull/1774
+1644,3086,cross-referenced,2022-07-21T13:05:09Z,mafredri,issue,"fix: Deadlock and race in `peer`, test improvements",https://github.com/coder/coder/pull/3086
+2335,3050,cross-referenced,2022-07-21T03:22:04Z,spikecurtis,issue,restore devtunnel test,https://github.com/coder/coder/pull/3050
+2347,2413,cross-referenced,2022-06-16T15:22:58Z,spikecurtis,issue,"Fix socket leak, clean up single use postgres databases",https://github.com/coder/coder/pull/2413
+2603,2732,cross-referenced,2022-06-29T19:13:22Z,spikecurtis,issue,provisionerd sends failed or complete last,https://github.com/coder/coder/pull/2732
+2603,2783,cross-referenced,2022-07-01T18:26:06Z,spikecurtis,issue,fix pubsub/poll race on provisioner job logs,https://github.com/coder/coder/pull/2783
+2603,5353,cross-referenced,2022-12-08T14:15:34Z,mtojek,issue,chore: improve logging in provisionerd_test,https://github.com/coder/coder/pull/5353
+2709,2730,cross-referenced,2022-06-29T17:43:33Z,Emyrk,issue,test: Try again in unit test if user already exists,https://github.com/coder/coder/pull/2730
+3747,3765,cross-referenced,2022-08-30T23:08:03Z,kylecarbs,issue,fix: Scope error to test functions to fix TestFeaturesService race,https://github.com/coder/coder/pull/3765
+4607,4842,cross-referenced,2022-11-01T19:27:46Z,kylecarbs,issue,fix: Flake on `TestReplica/TwentyConcurrent`,https://github.com/coder/coder/pull/4842

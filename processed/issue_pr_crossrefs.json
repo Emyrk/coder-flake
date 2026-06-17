@@ -1,0 +1,132 @@
+[
+  {
+    "actor": "kylecarbs",
+    "created_at": "2022-02-28T19:49:27Z",
+    "event": "cross-referenced",
+    "issue_number": 382,
+    "pr_number": 383,
+    "source_title": "test: Fix test flake panic in provisionerd",
+    "source_type": "issue",
+    "source_url": "https://github.com/coder/coder/pull/383"
+  },
+  {
+    "actor": "kylecarbs",
+    "created_at": "2022-03-01T18:04:16Z",
+    "event": "cross-referenced",
+    "issue_number": 388,
+    "pr_number": 389,
+    "source_title": "test: Add mutex to opening PostgreSQL ports to prevent collision",
+    "source_type": "issue",
+    "source_url": "https://github.com/coder/coder/pull/389"
+  },
+  {
+    "actor": "dwahler",
+    "created_at": "2022-05-18T16:58:49Z",
+    "event": "cross-referenced",
+    "issue_number": 1368,
+    "pr_number": 1562,
+    "source_title": "fix: Make TestAgent and TestWorkspaceAgentPTY less flaky",
+    "source_type": "issue",
+    "source_url": "https://github.com/coder/coder/pull/1562"
+  },
+  {
+    "actor": "kylecarbs",
+    "created_at": "2022-05-26T03:36:59Z",
+    "event": "cross-referenced",
+    "issue_number": 1644,
+    "pr_number": 1774,
+    "source_title": "fix: Close peer negotiate mutex if we haven't negotiated",
+    "source_type": "issue",
+    "source_url": "https://github.com/coder/coder/pull/1774"
+  },
+  {
+    "actor": "mafredri",
+    "created_at": "2022-07-21T13:05:09Z",
+    "event": "cross-referenced",
+    "issue_number": 1644,
+    "pr_number": 3086,
+    "source_title": "fix: Deadlock and race in `peer`, test improvements",
+    "source_type": "issue",
+    "source_url": "https://github.com/coder/coder/pull/3086"
+  },
+  {
+    "actor": "spikecurtis",
+    "created_at": "2022-07-21T03:22:04Z",
+    "event": "cross-referenced",
+    "issue_number": 2335,
+    "pr_number": 3050,
+    "source_title": "restore devtunnel test",
+    "source_type": "issue",
+    "source_url": "https://github.com/coder/coder/pull/3050"
+  },
+  {
+    "actor": "spikecurtis",
+    "created_at": "2022-06-16T15:22:58Z",
+    "event": "cross-referenced",
+    "issue_number": 2347,
+    "pr_number": 2413,
+    "source_title": "Fix socket leak, clean up single use postgres databases",
+    "source_type": "issue",
+    "source_url": "https://github.com/coder/coder/pull/2413"
+  },
+  {
+    "actor": "spikecurtis",
+    "created_at": "2022-06-29T19:13:22Z",
+    "event": "cross-referenced",
+    "issue_number": 2603,
+    "pr_number": 2732,
+    "source_title": "provisionerd sends failed or complete last",
+    "source_type": "issue",
+    "source_url": "https://github.com/coder/coder/pull/2732"
+  },
+  {
+    "actor": "spikecurtis",
+    "created_at": "2022-07-01T18:26:06Z",
+    "event": "cross-referenced",
+    "issue_number": 2603,
+    "pr_number": 2783,
+    "source_title": "fix pubsub/poll race on provisioner job logs",
+    "source_type": "issue",
+    "source_url": "https://github.com/coder/coder/pull/2783"
+  },
+  {
+    "actor": "mtojek",
+    "created_at": "2022-12-08T14:15:34Z",
+    "event": "cross-referenced",
+    "issue_number": 2603,
+    "pr_number": 5353,
+    "source_title": "chore: improve logging in provisionerd_test",
+    "source_type": "issue",
+    "source_url": "https://github.com/coder/coder/pull/5353"
+  },
+  {
+    "actor": "Emyrk",
+    "created_at": "2022-06-29T17:43:33Z",
+    "event": "cross-referenced",
+    "issue_number": 2709,
+    "pr_number": 2730,
+    "source_title": "test: Try again in unit test if user already exists",
+    "source_type": "issue",
+    "source_url": "https://github.com/coder/coder/pull/2730"
+  },
+  {
+    "actor": "kylecarbs",
+    "created_at": "2022-08-30T23:08:03Z",
+    "event": "cross-referenced",
+    "issue_number": 3747,
+    "pr_number": 3765,
+    "source_title": "fix: Scope error to test functions to fix TestFeaturesService race",
+    "source_type": "issue",
+    "source_url": "https://github.com/coder/coder/pull/3765"
+  },
+  {
+    "actor": "kylecarbs",
+    "created_at": "2022-11-01T19:27:46Z",
+    "event": "cross-referenced",
+    "issue_number": 4607,
+    "pr_number": 4842,
+    "source_title": "fix: Flake on `TestReplica/TwentyConcurrent`",
+    "source_type": "issue",
+    "source_url": "https://github.com/coder/coder/pull/4842"
+  }
+]
