@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/17678#pullrequestreview-2814794189"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/17678"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "thanks Ethan!",
+    "commit_id": "80dd321f20c2b62ad363f1e95edb46a05bdb339d",
+    "html_url": "https://github.com/coder/coder/pull/17678#pullrequestreview-2814794189",
+    "id": 2814794189,
+    "node_id": "PRR_kwDOGkVX1s6nxlnN",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/17678",
+    "state": "APPROVED",
+    "submitted_at": "2025-05-05T13:21:06Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/28019628?u=4a43732725fdfc5e527d8e33121595ff9e7349fb&v=4",
+      "events_url": "https://api.github.com/users/hugodutka/events{/privacy}",
+      "followers_url": "https://api.github.com/users/hugodutka/followers",
+      "following_url": "https://api.github.com/users/hugodutka/following{/other_user}",
+      "gists_url": "https://api.github.com/users/hugodutka/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/hugodutka",
+      "id": 28019628,
+      "login": "hugodutka",
+      "node_id": "MDQ6VXNlcjI4MDE5NjI4",
+      "organizations_url": "https://api.github.com/users/hugodutka/orgs",
+      "received_events_url": "https://api.github.com/users/hugodutka/received_events",
+      "repos_url": "https://api.github.com/users/hugodutka/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/hugodutka/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/hugodutka/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/hugodutka",
+      "user_view_type": "public"
+    }
+  }
+]

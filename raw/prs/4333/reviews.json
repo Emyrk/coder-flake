@@ -1,0 +1,82 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/4333#pullrequestreview-1128649400"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/4333"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "a84b3a4a2569870dabfb9faa3e575a83d4fe8f8b",
+    "html_url": "https://github.com/coder/coder/pull/4333#pullrequestreview-1128649400",
+    "id": 1128649400,
+    "node_id": "PRR_kwDOGkVX1s5DRdK4",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/4333",
+    "state": "APPROVED",
+    "submitted_at": "2022-10-03T15:59:52Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/19379394?u=9383f6d1971486f96b25dcdc083c175770ee1423&v=4",
+      "events_url": "https://api.github.com/users/f0ssel/events{/privacy}",
+      "followers_url": "https://api.github.com/users/f0ssel/followers",
+      "following_url": "https://api.github.com/users/f0ssel/following{/other_user}",
+      "gists_url": "https://api.github.com/users/f0ssel/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/f0ssel",
+      "id": 19379394,
+      "login": "f0ssel",
+      "node_id": "MDQ6VXNlcjE5Mzc5Mzk0",
+      "organizations_url": "https://api.github.com/users/f0ssel/orgs",
+      "received_events_url": "https://api.github.com/users/f0ssel/received_events",
+      "repos_url": "https://api.github.com/users/f0ssel/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/f0ssel/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/f0ssel/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/f0ssel",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/4333#pullrequestreview-1128675522"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/4333"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "d76c4364015ca84f1c2504bf8a05b3be6fe9dda2",
+    "html_url": "https://github.com/coder/coder/pull/4333#pullrequestreview-1128675522",
+    "id": 1128675522,
+    "node_id": "PRR_kwDOGkVX1s5DRjjC",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/4333",
+    "state": "APPROVED",
+    "submitted_at": "2022-10-03T16:18:17Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/19142439?u=89ef8c86dfb634d07ec36aeef594d7baa360b9e4&v=4",
+      "events_url": "https://api.github.com/users/Kira-Pilot/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Kira-Pilot/followers",
+      "following_url": "https://api.github.com/users/Kira-Pilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Kira-Pilot/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Kira-Pilot",
+      "id": 19142439,
+      "login": "Kira-Pilot",
+      "node_id": "MDQ6VXNlcjE5MTQyNDM5",
+      "organizations_url": "https://api.github.com/users/Kira-Pilot/orgs",
+      "received_events_url": "https://api.github.com/users/Kira-Pilot/received_events",
+      "repos_url": "https://api.github.com/users/Kira-Pilot/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Kira-Pilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Kira-Pilot/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Kira-Pilot",
+      "user_view_type": "public"
+    }
+  }
+]

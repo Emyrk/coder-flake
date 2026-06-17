@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/33da64d32e71c9be9d0a347ccd6873e0eb19ccc8/flake.nix",
+    "changes": 9,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=33da64d32e71c9be9d0a347ccd6873e0eb19ccc8",
+    "deletions": 7,
+    "filename": "flake.nix",
+    "patch": "@@ -44,7 +44,7 @@\n           name = \"protoc-gen-go\";\n           owner = \"protocolbuffers\";\n           repo = \"protobuf-go\";\n-          rev = \"v1.30.0\"; \n+          rev = \"v1.30.0\";\n           src = pkgs.fetchFromGitHub {\n             owner = \"protocolbuffers\";\n             repo = \"protobuf-go\";\n@@ -54,11 +54,6 @@\n           };\n           subPackages = [ \"cmd/protoc-gen-go\" ];\n           vendorHash = null;\n-          proxyVendor = true;\n-          preBuild = ''\n-            export GOPROXY=https://proxy.golang.org,direct\n-            go mod download\n-          '';\n         };\n \n         # The minimal set of packages to build Coder.\n@@ -172,7 +167,7 @@\n           '';\n         };\n         packages = {\n-          proto_gen_go = proto_gen_go_1_30;  \n+          proto_gen_go = proto_gen_go_1_30;\n           all = pkgs.buildEnv {\n             name = \"all-packages\";\n             paths = devShellPackages;",
+    "raw_url": "https://github.com/coder/coder/raw/33da64d32e71c9be9d0a347ccd6873e0eb19ccc8/flake.nix",
+    "sha": "1473db147ce847ee92c86dd07148384474ab5101",
+    "status": "modified"
+  }
+]

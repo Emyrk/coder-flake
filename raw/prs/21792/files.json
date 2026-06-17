@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 11,
+    "blob_url": "https://github.com/coder/coder/blob/404e06b7ac9953a422c5cf5d73592420a4bca5f0/cli%2Fssh_test.go",
+    "changes": 12,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fssh_test.go?ref=404e06b7ac9953a422c5cf5d73592420a4bca5f0",
+    "deletions": 1,
+    "filename": "cli/ssh_test.go",
+    "patch": "@@ -1188,7 +1188,17 @@ func TestSSH(t *testing.T) {\n \t\t\t}\n \t\t\tclose(sessionStarted)\n \t\t\t<-sleepDone\n-\t\t\tassert.NoError(t, session.Close())\n+\t\t\t// Ref: https://github.com/coder/internal/issues/1289\n+\t\t\t// This may return either a nil error or io.EOF.\n+\t\t\t// There is an inherent race here:\n+\t\t\t// 1. Sleep process is killed -> sleepDone is closed.\n+\t\t\t// 2. watchParentContext detects parent death, cancels context,\n+\t\t\t//    causing SSH session teardown.\n+\t\t\t// 3. We receive from sleepDone and attempt to call session.Close()\n+\t\t\t// Now either:\n+\t\t\t// a. Session teardown completes before we call Close(), resulting in io.EOF\n+\t\t\t// b. We call Close() first, resulting in a nil error.\n+\t\t\t_ = session.Close()\n \t\t}()\n \n \t\t// Wait for our \"parent\" process to start",
+    "raw_url": "https://github.com/coder/coder/raw/404e06b7ac9953a422c5cf5d73592420a4bca5f0/cli%2Fssh_test.go",
+    "sha": "5167a2d8c3e532998230917891589384c78822bf",
+    "status": "modified"
+  }
+]

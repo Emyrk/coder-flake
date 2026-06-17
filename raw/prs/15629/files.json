@@ -1,0 +1,50 @@
+[
+  {
+    "additions": 23,
+    "blob_url": "https://github.com/coder/coder/blob/6363475c1334cfae9b837649606ad9b92bf54598/coderd%2Fdatabase%2Fdbgen%2Fdbgen.go",
+    "changes": 33,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdatabase%2Fdbgen%2Fdbgen.go?ref=6363475c1334cfae9b837649606ad9b92bf54598",
+    "deletions": 10,
+    "filename": "coderd/database/dbgen/dbgen.go",
+    "patch": "@@ -220,16 +220,29 @@ func WorkspaceAgentScriptTimings(t testing.TB, db database.Store, script databas\n }\n \n func WorkspaceAgentScriptTiming(t testing.TB, db database.Store, orig database.WorkspaceAgentScriptTiming) database.WorkspaceAgentScriptTiming {\n-\ttiming, err := db.InsertWorkspaceAgentScriptTimings(genCtx, database.InsertWorkspaceAgentScriptTimingsParams{\n-\t\tStartedAt: takeFirst(orig.StartedAt, dbtime.Now()),\n-\t\tEndedAt:   takeFirst(orig.EndedAt, dbtime.Now()),\n-\t\tStage:     takeFirst(orig.Stage, database.WorkspaceAgentScriptTimingStageStart),\n-\t\tScriptID:  takeFirst(orig.ScriptID, uuid.New()),\n-\t\tExitCode:  takeFirst(orig.ExitCode, 0),\n-\t\tStatus:    takeFirst(orig.Status, database.WorkspaceAgentScriptTimingStatusOk),\n-\t})\n-\trequire.NoError(t, err, \"insert workspace agent script\")\n-\treturn timing\n+\t// retry a few times in case of a unique constraint violation\n+\tfor i := 0; i < 10; i++ {\n+\t\ttiming, err := db.InsertWorkspaceAgentScriptTimings(genCtx, database.InsertWorkspaceAgentScriptTimingsParams{\n+\t\t\tStartedAt: takeFirst(orig.StartedAt, dbtime.Now()),\n+\t\t\tEndedAt:   takeFirst(orig.EndedAt, dbtime.Now()),\n+\t\t\tStage:     takeFirst(orig.Stage, database.WorkspaceAgentScriptTimingStageStart),\n+\t\t\tScriptID:  takeFirst(orig.ScriptID, uuid.New()),\n+\t\t\tExitCode:  takeFirst(orig.ExitCode, 0),\n+\t\t\tStatus:    takeFirst(orig.Status, database.WorkspaceAgentScriptTimingStatusOk),\n+\t\t})\n+\t\tif err == nil {\n+\t\t\treturn timing\n+\t\t}\n+\t\t// Some tests run WorkspaceAgentScriptTiming in a loop and run into\n+\t\t// a unique violation - 2 rows get the same started_at value.\n+\t\tif (database.IsUniqueViolation(err, database.UniqueWorkspaceAgentScriptTimingsScriptIDStartedAtKey) && orig.StartedAt == time.Time{}) {\n+\t\t\t// Wait 1 millisecond so dbtime.Now() changes\n+\t\t\ttime.Sleep(time.Millisecond * 1)\n+\t\t\tcontinue\n+\t\t}\n+\t\trequire.NoError(t, err, \"insert workspace agent script\")\n+\t}\n+\tpanic(\"failed to insert workspace agent script timing\")\n }\n \n func Workspace(t testing.TB, db database.Store, orig database.WorkspaceTable) database.WorkspaceTable {",
+    "raw_url": "https://github.com/coder/coder/raw/6363475c1334cfae9b837649606ad9b92bf54598/coderd%2Fdatabase%2Fdbgen%2Fdbgen.go",
+    "sha": "ae898d4f1fdc3afcf6f72a04e5fb288c15058009",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/6363475c1334cfae9b837649606ad9b92bf54598/coderd%2Fdatabase%2Fdbpurge%2Fdbpurge_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdatabase%2Fdbpurge%2Fdbpurge_test.go?ref=6363475c1334cfae9b837649606ad9b92bf54598",
+    "deletions": 1,
+    "filename": "coderd/database/dbpurge/dbpurge_test.go",
+    "patch": "@@ -54,7 +54,7 @@ func TestPurge(t *testing.T) {\n \n //nolint:paralleltest // It uses LockIDDBPurge.\n func TestDeleteOldWorkspaceAgentStats(t *testing.T) {\n-\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitShort)\n+\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitLong)\n \tdefer cancel()\n \n \tnow := dbtime.Now()",
+    "raw_url": "https://github.com/coder/coder/raw/6363475c1334cfae9b837649606ad9b92bf54598/coderd%2Fdatabase%2Fdbpurge%2Fdbpurge_test.go",
+    "sha": "671c65c68790e38e9a242d43142a1de640a40c81",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/6363475c1334cfae9b837649606ad9b92bf54598/enterprise%2Ftailnet%2Fpgcoord_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Ftailnet%2Fpgcoord_test.go?ref=6363475c1334cfae9b837649606ad9b92bf54598",
+    "deletions": 1,
+    "filename": "enterprise/tailnet/pgcoord_test.go",
+    "patch": "@@ -921,7 +921,7 @@ func TestPGCoordinatorPropogatedPeerContext(t *testing.T) {\n \t\tt.Skip(\"test only with postgres\")\n \t}\n \n-\tctx := testutil.Context(t, testutil.WaitShort)\n+\tctx := testutil.Context(t, testutil.WaitMedium)\n \tstore, ps := dbtestutil.NewDB(t)\n \tlogger := testutil.Logger(t)\n ",
+    "raw_url": "https://github.com/coder/coder/raw/6363475c1334cfae9b837649606ad9b92bf54598/enterprise%2Ftailnet%2Fpgcoord_test.go",
+    "sha": "1971534f44d6ea3021fe9b628447a2eddb459147",
+    "status": "modified"
+  },
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/6363475c1334cfae9b837649606ad9b92bf54598/testutil%2Fduration_windows.go",
+    "changes": 14,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/testutil%2Fduration_windows.go?ref=6363475c1334cfae9b837649606ad9b92bf54598",
+    "deletions": 7,
+    "filename": "testutil/duration_windows.go",
+    "patch": "@@ -7,18 +7,18 @@ import \"time\"\n //\n // Windows durations are adjusted for slow CI workers.\n const (\n-\tWaitShort     = 15 * time.Second\n-\tWaitMedium    = 20 * time.Second\n-\tWaitLong      = 35 * time.Second\n-\tWaitSuperLong = 120 * time.Second\n+\tWaitShort     = 30 * time.Second\n+\tWaitMedium    = 40 * time.Second\n+\tWaitLong      = 70 * time.Second\n+\tWaitSuperLong = 240 * time.Second\n )\n \n // Constants for delaying repeated operations, e.g. in\n // require.Eventually.\n //\n // Windows durations are adjusted for slow CI workers.\n const (\n-\tIntervalFast   = 50 * time.Millisecond\n-\tIntervalMedium = 500 * time.Millisecond\n-\tIntervalSlow   = 2 * time.Second\n+\tIntervalFast   = 100 * time.Millisecond\n+\tIntervalMedium = 1000 * time.Millisecond\n+\tIntervalSlow   = 4 * time.Second\n )",
+    "raw_url": "https://github.com/coder/coder/raw/6363475c1334cfae9b837649606ad9b92bf54598/testutil%2Fduration_windows.go",
+    "sha": "d363dae2ba596464437a46dabc796fe41b715050",
+    "status": "modified"
+  }
+]

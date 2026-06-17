@@ -1,0 +1,82 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/12377#pullrequestreview-1910068447"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/12377"
+      }
+    },
+    "author_association": "NONE",
+    "body": "This PR is a hotfix and has been automatically approved.\n\n* \u2705 Base is main\n* \u2705 Has hotfix label\n* \u2705 Head is from coder/coder\n* \u2705 Less than 100 lines\n",
+    "commit_id": "2d31ca3fb738c09d7609b66820235bad2a93df1b",
+    "html_url": "https://github.com/coder/coder/pull/12377#pullrequestreview-1910068447",
+    "id": 1910068447,
+    "node_id": "PRR_kwDOGkVX1s5x2VTf",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/12377",
+    "state": "APPROVED",
+    "submitted_at": "2024-02-29T23:52:31Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/338482?v=4",
+      "events_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/cdr-bot",
+      "id": 134560238,
+      "login": "cdr-bot[bot]",
+      "node_id": "BOT_kgDOCAU57g",
+      "organizations_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/cdr-bot%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/12377#pullrequestreview-1910071786"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/12377"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "2d31ca3fb738c09d7609b66820235bad2a93df1b",
+    "html_url": "https://github.com/coder/coder/pull/12377#pullrequestreview-1910071786",
+    "id": 1910071786,
+    "node_id": "PRR_kwDOGkVX1s5x2WHq",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/12377",
+    "state": "APPROVED",
+    "submitted_at": "2024-02-29T23:56:40Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  }
+]

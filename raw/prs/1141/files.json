@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/13bedba0c74776849de1ad8a5781a5e31dae15ad/agent%2Fagent_test.go",
+    "changes": 5,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagent_test.go?ref=13bedba0c74776849de1ad8a5781a5e31dae15ad",
+    "deletions": 0,
+    "filename": "agent/agent_test.go",
+    "patch": "@@ -76,6 +76,11 @@ func TestAgent(t *testing.T) {\n \t\tsession.Stdin = ptty.Input()\n \t\terr = session.Start(command)\n \t\trequire.NoError(t, err)\n+\t\tcaret := \"$\"\n+\t\tif runtime.GOOS == \"windows\" {\n+\t\t\tcaret = \">\"\n+\t\t}\n+\t\tptty.ExpectMatch(caret)\n \t\tptty.WriteLine(\"echo test\")\n \t\tptty.ExpectMatch(\"test\")\n \t\tptty.WriteLine(\"exit\")",
+    "raw_url": "https://github.com/coder/coder/raw/13bedba0c74776849de1ad8a5781a5e31dae15ad/agent%2Fagent_test.go",
+    "sha": "49f6dba293e2b327753f1f1dd87edfcbd328480a",
+    "status": "modified"
+  },
+  {
+    "additions": 15,
+    "blob_url": "https://github.com/coder/coder/blob/13bedba0c74776849de1ad8a5781a5e31dae15ad/pty%2Fptytest%2Fptytest.go",
+    "changes": 15,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/pty%2Fptytest%2Fptytest.go?ref=13bedba0c74776849de1ad8a5781a5e31dae15ad",
+    "deletions": 0,
+    "filename": "pty/ptytest/ptytest.go",
+    "patch": "@@ -3,13 +3,15 @@ package ptytest\n import (\n \t\"bufio\"\n \t\"bytes\"\n+\t\"context\"\n \t\"io\"\n \t\"os\"\n \t\"os/exec\"\n \t\"regexp\"\n \t\"runtime\"\n \t\"strings\"\n \t\"testing\"\n+\t\"time\"\n \t\"unicode/utf8\"\n \n \t\"github.com/stretchr/testify/require\"\n@@ -76,6 +78,19 @@ func (p *PTY) ExpectMatch(str string) string {\n \tvar buffer bytes.Buffer\n \tmultiWriter := io.MultiWriter(&buffer, p.outputWriter)\n \truneWriter := bufio.NewWriterSize(multiWriter, utf8.UTFMax)\n+\tcomplete, cancelFunc := context.WithCancel(context.Background())\n+\tdefer cancelFunc()\n+\tgo func() {\n+\t\ttimer := time.NewTimer(10 * time.Second)\n+\t\tdefer timer.Stop()\n+\t\tselect {\n+\t\tcase <-complete.Done():\n+\t\t\treturn\n+\t\tcase <-timer.C:\n+\t\t}\n+\t\t_ = p.Close()\n+\t\tp.t.Errorf(\"match exceeded deadline: wanted %q; got %q\", str, buffer.String())\n+\t}()\n \tfor {\n \t\tvar r rune\n \t\tr, _, err := p.runeReader.ReadRune()",
+    "raw_url": "https://github.com/coder/coder/raw/13bedba0c74776849de1ad8a5781a5e31dae15ad/pty%2Fptytest%2Fptytest.go",
+    "sha": "e465a35d06d24d5f2dc4542e6717b24610678d8a",
+    "status": "modified"
+  }
+]

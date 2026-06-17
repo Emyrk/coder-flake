@@ -1,0 +1,82 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21854#pullrequestreview-3741262036"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21854"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "b96b51d83a4c758a190c8f1cc247f5c1e62e9a33",
+    "html_url": "https://github.com/coder/coder/pull/21854#pullrequestreview-3741262036",
+    "id": 3741262036,
+    "node_id": "PRR_kwDOGkVX1s7e_yDU",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21854",
+    "state": "APPROVED",
+    "submitted_at": "2026-02-02T18:43:00Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4856196?u=9916d1544a99b9eca4ea1ad6a133537bd5f0c778&v=4",
+      "events_url": "https://api.github.com/users/sreya/events{/privacy}",
+      "followers_url": "https://api.github.com/users/sreya/followers",
+      "following_url": "https://api.github.com/users/sreya/following{/other_user}",
+      "gists_url": "https://api.github.com/users/sreya/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/sreya",
+      "id": 4856196,
+      "login": "sreya",
+      "node_id": "MDQ6VXNlcjQ4NTYxOTY=",
+      "organizations_url": "https://api.github.com/users/sreya/orgs",
+      "received_events_url": "https://api.github.com/users/sreya/received_events",
+      "repos_url": "https://api.github.com/users/sreya/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/sreya/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/sreya/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/sreya",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21854#pullrequestreview-3741269646"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21854"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "## Code Review\n\nReviewed test fix for tar block size edge case. The change correctly addresses the issue where 1000 bytes and 1001 bytes result in the same tar archive size due to 512-byte block alignment.\n\n### Summary\n\n\u2705 **Approval Recommendation**: This is a good fix.\n\n**What Changed**: Increased the \"extra\" module payload from 1001 to 2000 bytes in the `PackingEdgeCaseExactFit` test.\n\n**Why This Matters**: The test validates that when the archive size limit is set to exactly fit one module, additional modules are correctly skipped. The previous test was flaky because:\n- The \"exact\" module: 1000 bytes \u2192 rounds to ~1024 bytes in tar\n- The \"extra\" module: 1001 bytes \u2192 also rounds to ~1024 bytes in tar\n- Both modules could fit, breaking the test's assumption\n\nWith 2000 bytes, the \"extra\" module is guaranteed to require a different tar block size and will be properly skipped.\n\n### Observations\n\n1. **The fix is correct**: 2000 bytes ensures a meaningful size difference after tar block alignment\n2. **Test name accuracy**: Consider whether the test name `PackingEdgeCaseExactFit` still accurately describes what's being tested, since the \"extra\" module is now significantly larger\n3. **Magic numbers**: The choice of 2000 could benefit from a comment explaining why this value was chosen (e.g., \"large enough to exceed tar block alignment\")\n\n### Minor Suggestions\n\nSee inline comments for optional improvements to test clarity.",
+    "commit_id": "b96b51d83a4c758a190c8f1cc247f5c1e62e9a33",
+    "html_url": "https://github.com/coder/coder/pull/21854#pullrequestreview-3741269646",
+    "id": 3741269646,
+    "node_id": "PRR_kwDOGkVX1s7e_z6O",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21854",
+    "state": "COMMENTED",
+    "submitted_at": "2026-02-02T18:45:17Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/2652121?v=4",
+      "events_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-tasks",
+      "id": 254784001,
+      "login": "coder-tasks[bot]",
+      "node_id": "BOT_kgDODy-yAQ",
+      "organizations_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-tasks%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  }
+]

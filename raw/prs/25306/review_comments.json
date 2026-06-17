@@ -1,0 +1,140 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25306#discussion_r3236713830"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25306"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3236713830"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "**P3** [DEREM-1] The poll condition allowlists two terminal states (`Waiting`, `Error`) instead of excluding the two active states (`Pending`, `Running`). The project's established pattern in `waitForChatTerminalState` (coderdtest/chat.go:116) uses `chat.Status != Pending && chat.Status != Running`, which correctly captures all terminal states: `waiting`, `error`, `requires_action`, `completed`, `paused`.\n\nWith the current fake LLM this works, but the condition is the wrong shape. If the fake or daemon changes such that processing ends in `requires_action` or `completed`, this poll hangs until the context deadline rather than proceeding. The timeout failure message would point at the poll, not the unexpected status.\n\nSame issue applies to the identical condition at line 7485.\n\nSuggested fix for both:\n```go\nreturn c.Status != codersdk.ChatStatusPending &&\n    c.Status != codersdk.ChatStatusRunning\n```\n\n*(Bisky)*\n\n> \ud83e\udd16",
+    "commit_id": "3c7ce3ee589a644413e113a3adc307f622d53317",
+    "created_at": "2026-05-13T18:52:14Z",
+    "diff_hunk": "@@ -7435,6 +7435,20 @@ func TestPatchChatMessage(t *testing.T) {\n \t\trequire.Equal(t, defaultModel.ID, chat.LastModelConfigID,\n \t\t\t\"chat starts on the default model\")\n \n+\t\t// Wait for the initial chat processing to complete before\n+\t\t// editing. CreateChat sets the chat to pending and the daemon\n+\t\t// processes it asynchronously; editing while that first round\n+\t\t// is still running can race with message insertions that\n+\t\t// overwrite last_model_config_id.\n+\t\ttestutil.Eventually(ctx, t, func(_ context.Context) bool {\n+\t\t\tc, getErr := client.GetChat(ctx, chat.ID)\n+\t\t\tif getErr != nil {\n+\t\t\t\treturn false\n+\t\t\t}\n+\t\t\treturn c.Status == codersdk.ChatStatusWaiting ||",
+    "html_url": "https://github.com/coder/coder/pull/25306#discussion_r3236713830",
+    "id": 3236713830,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7A7FVm",
+    "original_commit_id": "3c7ce3ee589a644413e113a3adc307f622d53317",
+    "original_line": 7448,
+    "original_position": 14,
+    "original_start_line": null,
+    "path": "coderd/exp_chats_test.go",
+    "position": 1,
+    "pull_request_review_id": 4284513124,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25306",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3236713830/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-05-13T18:52:14Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3236713830",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25306#discussion_r3236713835"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25306"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3236713835"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "**Nit** [DEREM-2] Both polling callbacks discard the context parameter (`func(_ context.Context) bool`) and capture the outer `ctx` from the closure. Functionally identical since both reference the same context, and the same pattern exists at line 1833, so this matches local convention. Using the passed parameter would be slightly more defensive if `Eventually` ever derives a sub-context.\n\n*(Hisoka, Mafu-san)*\n\n> \ud83e\udd16",
+    "commit_id": "3c7ce3ee589a644413e113a3adc307f622d53317",
+    "created_at": "2026-05-13T18:52:14Z",
+    "diff_hunk": "@@ -7435,6 +7435,20 @@ func TestPatchChatMessage(t *testing.T) {\n \t\trequire.Equal(t, defaultModel.ID, chat.LastModelConfigID,\n \t\t\t\"chat starts on the default model\")\n \n+\t\t// Wait for the initial chat processing to complete before\n+\t\t// editing. CreateChat sets the chat to pending and the daemon\n+\t\t// processes it asynchronously; editing while that first round\n+\t\t// is still running can race with message insertions that\n+\t\t// overwrite last_model_config_id.\n+\t\ttestutil.Eventually(ctx, t, func(_ context.Context) bool {\n+\t\t\tc, getErr := client.GetChat(ctx, chat.ID)\n+\t\t\tif getErr != nil {\n+\t\t\t\treturn false\n+\t\t\t}\n+\t\t\treturn c.Status == codersdk.ChatStatusWaiting ||",
+    "html_url": "https://github.com/coder/coder/pull/25306#discussion_r3236713835",
+    "id": 3236713835,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7A7FVr",
+    "original_commit_id": "3c7ce3ee589a644413e113a3adc307f622d53317",
+    "original_line": 7448,
+    "original_position": 14,
+    "original_start_line": null,
+    "path": "coderd/exp_chats_test.go",
+    "position": 1,
+    "pull_request_review_id": 4284513124,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25306",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3236713835/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-05-13T18:52:14Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3236713835",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  }
+]

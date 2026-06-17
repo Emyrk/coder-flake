@@ -1,0 +1,82 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24572#pullrequestreview-4148629375"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24572"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Clean, well-scoped fix. The helper mirrors the existing `require.Eventually` pattern already used by `PreservesUpdatedAt` and `NoOpWhenTitleUnchanged`, and correctly covers the 4 subtests that were missing it.\n\nCross-checked 6 reviewers. All structural findings were false positives after verification (e.g. `TestChatAuthorization` inserts chats as `ChatStatusWaiting`, not `Pending`, so it isn't susceptible). 1 nit below.",
+    "commit_id": "0cbfa46b46cd82c37ff88366b7508797d67f276b",
+    "html_url": "https://github.com/coder/coder/pull/24572#pullrequestreview-4148629375",
+    "id": 4148629375,
+    "node_id": "PRR_kwDOGkVX1s73Rw9_",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24572",
+    "state": "COMMENTED",
+    "submitted_at": "2026-04-21T14:50:06Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/1858163?u=dc0d28a01d736a2da6052c4890e848db5ad71b31&v=4",
+      "events_url": "https://api.github.com/users/jaaydenh/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jaaydenh/followers",
+      "following_url": "https://api.github.com/users/jaaydenh/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jaaydenh/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jaaydenh",
+      "id": 1858163,
+      "login": "jaaydenh",
+      "node_id": "MDQ6VXNlcjE4NTgxNjM=",
+      "organizations_url": "https://api.github.com/users/jaaydenh/orgs",
+      "received_events_url": "https://api.github.com/users/jaaydenh/received_events",
+      "repos_url": "https://api.github.com/users/jaaydenh/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jaaydenh/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jaaydenh/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jaaydenh",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24572#pullrequestreview-4149010434"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24572"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "0cbfa46b46cd82c37ff88366b7508797d67f276b",
+    "html_url": "https://github.com/coder/coder/pull/24572#pullrequestreview-4149010434",
+    "id": 4149010434,
+    "node_id": "PRR_kwDOGkVX1s73TOAC",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24572",
+    "state": "APPROVED",
+    "submitted_at": "2026-04-21T15:40:07Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/40153966?u=f9361ea910fccdf9e76c3ee799b9f0791ef74f9e&v=4",
+      "events_url": "https://api.github.com/users/DanielleMaywood/events{/privacy}",
+      "followers_url": "https://api.github.com/users/DanielleMaywood/followers",
+      "following_url": "https://api.github.com/users/DanielleMaywood/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DanielleMaywood/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/DanielleMaywood",
+      "id": 40153966,
+      "login": "DanielleMaywood",
+      "node_id": "MDQ6VXNlcjQwMTUzOTY2",
+      "organizations_url": "https://api.github.com/users/DanielleMaywood/orgs",
+      "received_events_url": "https://api.github.com/users/DanielleMaywood/received_events",
+      "repos_url": "https://api.github.com/users/DanielleMaywood/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/DanielleMaywood/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DanielleMaywood/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/DanielleMaywood",
+      "user_view_type": "public"
+    }
+  }
+]

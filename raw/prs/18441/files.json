@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/13285c30dd17420d53bb44a2e7826d01ec812434/coderd%2Fprovisionerdserver%2Fprovisionerdserver.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fprovisionerdserver%2Fprovisionerdserver.go?ref=13285c30dd17420d53bb44a2e7826d01ec812434",
+    "deletions": 1,
+    "filename": "coderd/provisionerdserver/provisionerdserver.go",
+    "patch": "@@ -368,7 +368,7 @@ func (s *server) AcquireJobWithCancel(stream proto.DRPCProvisionerDaemon_Acquire\n \t\tje = <-jec\n \tcase je = <-jec:\n \t}\n-\tif xerrors.Is(je.err, context.Canceled) {\n+\tif database.IsQueryCanceledError(je.err) {\n \t\ts.Logger.Debug(streamCtx, \"successful cancel\")\n \t\terr := stream.Send(&proto.AcquiredJob{})\n \t\tif err != nil {",
+    "raw_url": "https://github.com/coder/coder/raw/13285c30dd17420d53bb44a2e7826d01ec812434/coderd%2Fprovisionerdserver%2Fprovisionerdserver.go",
+    "sha": "0398bbf5f4b3ee62bf58b219d1b7cbb0f9a26072",
+    "status": "modified"
+  }
+]

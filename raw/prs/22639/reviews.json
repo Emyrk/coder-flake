@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/22639#pullrequestreview-3893137712"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/22639"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "6b8e4ab8da191973cfb7038eea4713ab028c7685",
+    "html_url": "https://github.com/coder/coder/pull/22639#pullrequestreview-3893137712",
+    "id": 3893137712,
+    "node_id": "PRR_kwDOGkVX1s7oDJEw",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/22639",
+    "state": "APPROVED",
+    "submitted_at": "2026-03-05T02:01:55Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/283283?v=4",
+      "events_url": "https://api.github.com/users/geokat/events{/privacy}",
+      "followers_url": "https://api.github.com/users/geokat/followers",
+      "following_url": "https://api.github.com/users/geokat/following{/other_user}",
+      "gists_url": "https://api.github.com/users/geokat/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/geokat",
+      "id": 283283,
+      "login": "geokat",
+      "node_id": "MDQ6VXNlcjI4MzI4Mw==",
+      "organizations_url": "https://api.github.com/users/geokat/orgs",
+      "received_events_url": "https://api.github.com/users/geokat/received_events",
+      "repos_url": "https://api.github.com/users/geokat/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/geokat/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/geokat/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/geokat",
+      "user_view_type": "public"
+    }
+  }
+]

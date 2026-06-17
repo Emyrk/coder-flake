@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/60fde50e8c27e62166918075efaa4dc3c7a00dc1/coderd%2Fprovisionerdserver%2Fupload_file_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fprovisionerdserver%2Fupload_file_test.go?ref=60fde50e8c27e62166918075efaa4dc3c7a00dc1",
+    "deletions": 2,
+    "filename": "coderd/provisionerdserver/upload_file_test.go",
+    "patch": "@@ -23,8 +23,6 @@ import (\n func TestUploadFileLargeModuleFiles(t *testing.T) {\n \tt.Parallel()\n \n-\tctx := testutil.Context(t, testutil.WaitMedium)\n-\n \t// Create server\n \tserver, db, _, _ := setup(t, false, &overrides{\n \t\texternalAuthConfigs: []*externalauth.Config{{}},\n@@ -42,6 +40,8 @@ func TestUploadFileLargeModuleFiles(t *testing.T) {\n \t\tt.Run(fmt.Sprintf(\"size_%d_bytes\", size), func(t *testing.T) {\n \t\t\tt.Parallel()\n \n+\t\t\tctx := testutil.Context(t, testutil.WaitMedium)\n+\n \t\t\t// Generate test module files data\n \t\t\tmoduleData := make([]byte, size)\n \t\t\t_, err := crand.Read(moduleData)",
+    "raw_url": "https://github.com/coder/coder/raw/60fde50e8c27e62166918075efaa4dc3c7a00dc1/coderd%2Fprovisionerdserver%2Fupload_file_test.go",
+    "sha": "eb822140c408928f160be780c759f91a72b57e15",
+    "status": "modified"
+  }
+]

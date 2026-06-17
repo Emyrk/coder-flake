@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/2758b1d6ce218a19b36acfb9fe7e18d33cbae744/provisionerd%2Fprovisionerd_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/provisionerd%2Fprovisionerd_test.go?ref=2758b1d6ce218a19b36acfb9fe7e18d33cbae744",
+    "deletions": 0,
+    "filename": "provisionerd/provisionerd_test.go",
+    "patch": "@@ -391,6 +391,7 @@ func TestProvisionerd(t *testing.T) {\n \t\t\t\t\t\t},\n \t\t\t\t\t}, nil\n \t\t\t\t},\n+\t\t\t\tupdateJob: noopUpdateJob,\n \t\t\t\tfailJob: func(ctx context.Context, job *proto.FailedJob) (*proto.Empty, error) {\n \t\t\t\t\tdidFail.Store(true)\n \t\t\t\t\treturn &proto.Empty{}, nil",
+    "raw_url": "https://github.com/coder/coder/raw/2758b1d6ce218a19b36acfb9fe7e18d33cbae744/provisionerd%2Fprovisionerd_test.go",
+    "sha": "de27ec846df090dc5d185724d5e696de53c1755f",
+    "status": "modified"
+  }
+]

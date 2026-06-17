@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19398#pullrequestreview-3132316907"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19398"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "229866f7c970d503bad4a287014d761a64bb4407",
+    "html_url": "https://github.com/coder/coder/pull/19398#pullrequestreview-3132316907",
+    "id": 3132316907,
+    "node_id": "PRR_kwDOGkVX1s66s1zr",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19398",
+    "state": "APPROVED",
+    "submitted_at": "2025-08-19T13:19:12Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?u=260538c7d8b8c3c5350dba175ebb8294358441e0&v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  }
+]

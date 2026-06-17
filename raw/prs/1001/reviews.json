@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/1001#pullrequestreview-942532253"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/1001"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "7c94c279f9b49f55fdb8d0612b792494413944b2",
+    "html_url": "https://github.com/coder/coder/pull/1001#pullrequestreview-942532253",
+    "id": 942532253,
+    "node_id": "PRR_kwDOGkVX1s44Lead",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/1001",
+    "state": "APPROVED",
+    "submitted_at": "2022-04-14T16:36:56Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/19379394?u=9383f6d1971486f96b25dcdc083c175770ee1423&v=4",
+      "events_url": "https://api.github.com/users/f0ssel/events{/privacy}",
+      "followers_url": "https://api.github.com/users/f0ssel/followers",
+      "following_url": "https://api.github.com/users/f0ssel/following{/other_user}",
+      "gists_url": "https://api.github.com/users/f0ssel/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/f0ssel",
+      "id": 19379394,
+      "login": "f0ssel",
+      "node_id": "MDQ6VXNlcjE5Mzc5Mzk0",
+      "organizations_url": "https://api.github.com/users/f0ssel/orgs",
+      "received_events_url": "https://api.github.com/users/f0ssel/received_events",
+      "repos_url": "https://api.github.com/users/f0ssel/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/f0ssel/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/f0ssel/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/f0ssel",
+      "user_view_type": "public"
+    }
+  }
+]

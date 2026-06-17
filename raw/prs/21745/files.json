@@ -1,0 +1,50 @@
+[
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/1a405f4719290813fa1f3068328c3a2eb1f4b45e/cli%2Fcreate_test.go",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fcreate_test.go?ref=1a405f4719290813fa1f3068328c3a2eb1f4b45e",
+    "deletions": 1,
+    "filename": "cli/create_test.go",
+    "patch": "@@ -139,12 +139,15 @@ func TestCreate(t *testing.T) {\n \t\tclient := coderdtest.New(t, &coderdtest.Options{IncludeProvisionerDaemon: true})\n \t\towner := coderdtest.CreateFirstUser(t, client)\n \t\tmember, _ := coderdtest.CreateAnotherUser(t, client, owner.OrganizationID)\n-\t\tversion := coderdtest.CreateTemplateVersion(t, client, owner.OrganizationID, completeWithAgent())\n+\t\tversion := coderdtest.CreateTemplateVersion(t, client, owner.OrganizationID, completeWithAgent(), func(ctvr *codersdk.CreateTemplateVersionRequest) {\n+\t\t\tctvr.Name = \"v1\"\n+\t\t})\n \t\tcoderdtest.AwaitTemplateVersionJobCompleted(t, client, version.ID)\n \t\ttemplate := coderdtest.CreateTemplate(t, client, owner.OrganizationID, version.ID)\n \n \t\t// Create a new version\n \t\tversion2 := coderdtest.CreateTemplateVersion(t, client, owner.OrganizationID, completeWithAgent(), func(ctvr *codersdk.CreateTemplateVersionRequest) {\n+\t\t\tctvr.Name = \"v2\"\n \t\t\tctvr.TemplateID = template.ID\n \t\t})\n \t\tcoderdtest.AwaitTemplateVersionJobCompleted(t, client, version2.ID)\n@@ -516,6 +519,7 @@ func TestCreateWithRichParameters(t *testing.T) {\n \t\t\t\tversion2 := coderdtest.CreateTemplateVersion(t, tctx.client, tctx.owner.OrganizationID, prepareEchoResponses([]*proto.RichParameter{\n \t\t\t\t\t{Name: \"another_parameter\", Type: \"string\", DefaultValue: \"not-relevant\"},\n \t\t\t\t}), func(ctvr *codersdk.CreateTemplateVersionRequest) {\n+\t\t\t\t\tctvr.Name = \"v2\"\n \t\t\t\t\tctvr.TemplateID = tctx.template.ID\n \t\t\t\t})\n \t\t\t\tcoderdtest.AwaitTemplateVersionJobCompleted(t, tctx.client, version2.ID)",
+    "raw_url": "https://github.com/coder/coder/raw/1a405f4719290813fa1f3068328c3a2eb1f4b45e/cli%2Fcreate_test.go",
+    "sha": "d80b8e56a5394ac22b654b552c5caecd1617e9ea",
+    "status": "modified"
+  },
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/1a405f4719290813fa1f3068328c3a2eb1f4b45e/cli%2Fstart_test.go",
+    "changes": 5,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fstart_test.go?ref=1a405f4719290813fa1f3068328c3a2eb1f4b45e",
+    "deletions": 1,
+    "filename": "cli/start_test.go",
+    "patch": "@@ -367,7 +367,9 @@ func TestStartAutoUpdate(t *testing.T) {\n \t\t\tclient := coderdtest.New(t, &coderdtest.Options{IncludeProvisionerDaemon: true})\n \t\t\towner := coderdtest.CreateFirstUser(t, client)\n \t\t\tmember, _ := coderdtest.CreateAnotherUser(t, client, owner.OrganizationID)\n-\t\t\tversion1 := coderdtest.CreateTemplateVersion(t, client, owner.OrganizationID, nil)\n+\t\t\tversion1 := coderdtest.CreateTemplateVersion(t, client, owner.OrganizationID, nil, func(ctvr *codersdk.CreateTemplateVersionRequest) {\n+\t\t\t\tctvr.Name = \"v1\"\n+\t\t\t})\n \t\t\tcoderdtest.AwaitTemplateVersionJobCompleted(t, client, version1.ID)\n \t\t\ttemplate := coderdtest.CreateTemplate(t, client, owner.OrganizationID, version1.ID)\n \t\t\tworkspace := coderdtest.CreateWorkspace(t, member, template.ID, func(cwr *codersdk.CreateWorkspaceRequest) {\n@@ -379,6 +381,7 @@ func TestStartAutoUpdate(t *testing.T) {\n \t\t\t\tcoderdtest.MustTransitionWorkspace(t, member, workspace.ID, codersdk.WorkspaceTransitionStart, codersdk.WorkspaceTransitionStop)\n \t\t\t}\n \t\t\tversion2 := coderdtest.CreateTemplateVersion(t, client, owner.OrganizationID, prepareEchoResponses(stringRichParameters), func(ctvr *codersdk.CreateTemplateVersionRequest) {\n+\t\t\t\tctvr.Name = \"v2\"\n \t\t\t\tctvr.TemplateID = template.ID\n \t\t\t})\n \t\t\tcoderdtest.AwaitTemplateVersionJobCompleted(t, client, version2.ID)",
+    "raw_url": "https://github.com/coder/coder/raw/1a405f4719290813fa1f3068328c3a2eb1f4b45e/cli%2Fstart_test.go",
+    "sha": "54cf419b38e55285dd5b81a0880a24ca338f83f4",
+    "status": "modified"
+  },
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/1a405f4719290813fa1f3068328c3a2eb1f4b45e/coderd%2Ftemplateversions_test.go",
+    "changes": 5,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Ftemplateversions_test.go?ref=1a405f4719290813fa1f3068328c3a2eb1f4b45e",
+    "deletions": 1,
+    "filename": "coderd/templateversions_test.go",
+    "patch": "@@ -1977,10 +1977,13 @@ func TestTemplateVersionPatch(t *testing.T) {\n \t\tt.Parallel()\n \t\tclient := coderdtest.New(t, nil)\n \t\tuser := coderdtest.CreateFirstUser(t, client)\n-\t\tversion1 := coderdtest.CreateTemplateVersion(t, client, user.OrganizationID, nil)\n+\t\tversion1 := coderdtest.CreateTemplateVersion(t, client, user.OrganizationID, nil, func(ctvr *codersdk.CreateTemplateVersionRequest) {\n+\t\t\tctvr.Name = \"v1\"\n+\t\t})\n \t\ttemplate := coderdtest.CreateTemplate(t, client, user.OrganizationID, version1.ID)\n \n \t\tversion2 := coderdtest.CreateTemplateVersion(t, client, user.OrganizationID, nil, func(ctvr *codersdk.CreateTemplateVersionRequest) {\n+\t\t\tctvr.Name = \"v2\"\n \t\t\tctvr.TemplateID = template.ID\n \t\t})\n ",
+    "raw_url": "https://github.com/coder/coder/raw/1a405f4719290813fa1f3068328c3a2eb1f4b45e/coderd%2Ftemplateversions_test.go",
+    "sha": "d377787a20968b2e6553fa5521c884b9e642e7f3",
+    "status": "modified"
+  },
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/1a405f4719290813fa1f3068328c3a2eb1f4b45e/enterprise%2Fcoderd%2Fworkspaces_test.go",
+    "changes": 5,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcoderd%2Fworkspaces_test.go?ref=1a405f4719290813fa1f3068328c3a2eb1f4b45e",
+    "deletions": 1,
+    "filename": "enterprise/coderd/workspaces_test.go",
+    "patch": "@@ -1486,7 +1486,9 @@ func TestWorkspaceAutobuild(t *testing.T) {\n \t\trequire.NoError(t, err)\n \n \t\t// Create a template version1 that passes to get a functioning workspace.\n-\t\tversion1 := coderdtest.CreateTemplateVersion(t, client, user.OrganizationID, nil)\n+\t\tversion1 := coderdtest.CreateTemplateVersion(t, client, user.OrganizationID, nil, func(ctvr *codersdk.CreateTemplateVersionRequest) {\n+\t\t\tctvr.Name = \"v1\"\n+\t\t})\n \t\tcoderdtest.AwaitTemplateVersionJobCompleted(t, client, version1.ID)\n \n \t\ttemplate := coderdtest.CreateTemplate(t, client, user.OrganizationID, version1.ID)\n@@ -1502,6 +1504,7 @@ func TestWorkspaceAutobuild(t *testing.T) {\n \t\t// Create a new version so that we can assert we don't update\n \t\t// to the latest by default.\n \t\tversion2 := coderdtest.CreateTemplateVersion(t, client, user.OrganizationID, nil, func(ctvr *codersdk.CreateTemplateVersionRequest) {\n+\t\t\tctvr.Name = \"v2\"\n \t\t\tctvr.TemplateID = template.ID\n \t\t})\n \t\tcoderdtest.AwaitTemplateVersionJobCompleted(t, client, version2.ID)",
+    "raw_url": "https://github.com/coder/coder/raw/1a405f4719290813fa1f3068328c3a2eb1f4b45e/enterprise%2Fcoderd%2Fworkspaces_test.go",
+    "sha": "2ab511470fd95c0a0b7d4518df5c23c0d01f75ab",
+    "status": "modified"
+  }
+]

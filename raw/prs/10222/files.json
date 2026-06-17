@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/c35b3d5237cf67f99b93cc60d388b10015028442/enterprise%2Fcli%2Fserver_dbcrypt_test.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcli%2Fserver_dbcrypt_test.go?ref=c35b3d5237cf67f99b93cc60d388b10015028442",
+    "deletions": 0,
+    "filename": "enterprise/cli/server_dbcrypt_test.go",
+    "patch": "@@ -79,6 +79,7 @@ func TestServerDBCrypt(t *testing.T) {\n \tinv.Stdout = pty.Output()\n \terr = inv.Run()\n \trequire.NoError(t, err)\n+\trequire.NoError(t, pty.Close())\n \n \t// Validate that all existing data has been encrypted with cipher A.\n \tfor _, usr := range users {\n@@ -101,6 +102,7 @@ func TestServerDBCrypt(t *testing.T) {\n \tinv.Stdout = pty.Output()\n \terr = inv.Run()\n \trequire.NoError(t, err)\n+\trequire.NoError(t, pty.Close())\n \n \t// Validate that all data has been re-encrypted with cipher B.\n \tfor _, usr := range users {\n@@ -142,6 +144,7 @@ func TestServerDBCrypt(t *testing.T) {\n \tinv.Stdout = pty.Output()\n \terr = inv.Run()\n \trequire.NoError(t, err)\n+\trequire.NoError(t, pty.Close())\n \n \t// Validate that both keys have been revoked.\n \tkeys, err = db.GetDBCryptKeys(ctx)\n@@ -172,6 +175,7 @@ func TestServerDBCrypt(t *testing.T) {\n \tinv.Stdout = pty.Output()\n \terr = inv.Run()\n \trequire.NoError(t, err)\n+\trequire.NoError(t, pty.Close())\n \n \t// Validate that all data has been re-encrypted with cipher C.\n \tfor _, usr := range users {\n@@ -189,6 +193,7 @@ func TestServerDBCrypt(t *testing.T) {\n \tinv.Stdout = pty.Output()\n \terr = inv.Run()\n \trequire.NoError(t, err)\n+\trequire.NoError(t, pty.Close())\n \n \t// Assert that no user links remain.\n \tfor _, usr := range users {\n@@ -217,7 +222,10 @@ func genData(t *testing.T, db database.Store) []database.User {\n \tfor _, status := range database.AllUserStatusValues() {\n \t\tfor _, loginType := range database.AllLoginTypeValues() {\n \t\t\tfor _, deleted := range []bool{false, true} {\n+\t\t\t\trandName := mustString(t, 32)\n \t\t\t\tusr := dbgen.User(t, db, database.User{\n+\t\t\t\t\tUsername:  randName,\n+\t\t\t\t\tEmail:     randName + \"@notcoder.com\",\n \t\t\t\t\tLoginType: loginType,\n \t\t\t\t\tStatus:    status,\n \t\t\t\t\tDeleted:   deleted,",
+    "raw_url": "https://github.com/coder/coder/raw/c35b3d5237cf67f99b93cc60d388b10015028442/enterprise%2Fcli%2Fserver_dbcrypt_test.go",
+    "sha": "8b1bbffa52b9f78f1cdc900aa62e3f84ebb20ebb",
+    "status": "modified"
+  }
+]

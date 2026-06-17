@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/aa525637c0230b1e1c47e0eafcb48dc900b3534c/aibridge%2Fintercept%2Feventstream%2Feventstream.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/aibridge%2Fintercept%2Feventstream%2Feventstream.go?ref=aa525637c0230b1e1c47e0eafcb48dc900b3534c",
+    "deletions": 0,
+    "filename": "aibridge/intercept/eventstream/eventstream.go",
+    "patch": "@@ -121,6 +121,7 @@ func (s *EventStream) Start(w http.ResponseWriter, r *http.Request) {\n \t\t\t\treturn\n \t\t\t}\n \n+\t\t\ttime.Sleep(100 * time.Millisecond)\n \t\t\t// Initiate the stream on first event (if not already initiated).\n \t\t\ts.InitiateStream(w)\n \t\tcase <-s.tick.C:",
+    "raw_url": "https://github.com/coder/coder/raw/aa525637c0230b1e1c47e0eafcb48dc900b3534c/aibridge%2Fintercept%2Feventstream%2Feventstream.go",
+    "sha": "7a1af49f9204cefef13bbd28c062c6ac4bc5eafb",
+    "status": "modified"
+  },
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/aa525637c0230b1e1c47e0eafcb48dc900b3534c/aibridge%2Fintercept%2Fmessages%2Fstreaming.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/aibridge%2Fintercept%2Fmessages%2Fstreaming.go?ref=aa525637c0230b1e1c47e0eafcb48dc900b3534c",
+    "deletions": 0,
+    "filename": "aibridge/intercept/messages/streaming.go",
+    "patch": "@@ -483,6 +483,14 @@ newStream:\n \n \t\t\t\t\t// Causes a new stream to be run with updated messages.\n \t\t\t\t\tisFirst = false\n+\t\t\t\t\t// Commit to SSE format before the next iteration: if\n+\t\t\t\t\t// it fails (e.g. all keys exhausted), the error must\n+\t\t\t\t\t// be relayed as an SSE event since we already streamed\n+\t\t\t\t\t// the first iteration's events. Setting initiated here\n+\t\t\t\t\t// closes the race window in EventStream.IsStreaming()\n+\t\t\t\t\t// where Start may not yet have processed buffered\n+\t\t\t\t\t// events from this iteration.\n+\t\t\t\t\tevents.InitiateStream(w)\n \t\t\t\t\tcontinue newStream\n \t\t\t\t}\n ",
+    "raw_url": "https://github.com/coder/coder/raw/aa525637c0230b1e1c47e0eafcb48dc900b3534c/aibridge%2Fintercept%2Fmessages%2Fstreaming.go",
+    "sha": "c4997bb8b89d805013619f88b3e04a18d29b6139",
+    "status": "modified"
+  }
+]

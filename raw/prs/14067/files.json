@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/941c920f585b18e378e6fdc87d099695d7d66af2/.github%2Fworkflows%2Fci.yaml",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Fci.yaml?ref=941c920f585b18e378e6fdc87d099695d7d66af2",
+    "deletions": 0,
+    "filename": ".github/workflows/ci.yaml",
+    "patch": "@@ -129,6 +129,8 @@ jobs:\n         uses: actions/checkout@v4\n         with:\n           fetch-depth: 1\n+          # See: https://github.com/stefanzweifel/git-auto-commit-action?tab=readme-ov-file#commits-made-by-this-action-do-not-trigger-new-workflow-runs\n+          token: ${{ secrets.GITHUB_TOKEN }}\n \n       - name: Setup Go\n         uses: ./.github/actions/setup-go",
+    "raw_url": "https://github.com/coder/coder/raw/941c920f585b18e378e6fdc87d099695d7d66af2/.github%2Fworkflows%2Fci.yaml",
+    "sha": "5fb37ad12db4821c44c4a32e9b37bb8de0d9405a",
+    "status": "modified"
+  }
+]

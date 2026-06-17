@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 40,
+    "blob_url": "https://github.com/coder/coder/blob/03a3bcd974462129ca1d4f3c101f6169683a95a9/.github%2Fworkflows%2Fnightly-flake.yaml",
+    "changes": 40,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Fnightly-flake.yaml?ref=03a3bcd974462129ca1d4f3c101f6169683a95a9",
+    "deletions": 0,
+    "filename": ".github/workflows/nightly-flake.yaml",
+    "patch": "@@ -0,0 +1,40 @@\n+name: nightly-flake\n+on:\n+  schedule:\n+    # Every day at midnight\n+    - cron: \"0 0 * * *\"\n+  workflow_dispatch:\n+  push:\n+    paths:\n+      # For testing purposes\n+      # - \".github/workflows/nightly-flake.yaml\"\n+jobs:\n+  test-go-race:\n+    # While GitHub's toaster runners are likelier to flake, we want consistency\n+    # between this environment and the regular test environment for DataDog\n+    # statistics and to only show real workflow threats.\n+    runs-on: \"buildjet-8vcpu-ubuntu-2204\"\n+    # This runner costs 0.016 USD per minute,\n+    # so 0.016 * 240 = 3.84 USD per run.\n+    timeout-minutes: 240\n+    steps:\n+      - uses: actions/checkout@v3\n+\n+      - uses: ./.github/actions/setup-go\n+\n+      - uses: hashicorp/setup-terraform@v2\n+        with:\n+          terraform_version: 1.1.9\n+          terraform_wrapper: false\n+\n+      - name: Run Tests\n+        run: |\n+          # -race is likeliest to catch flaky tests\n+          # due to correctness detection and its performance\n+          # impact.\n+          gotestsum --junitfile=\"gotests.xml\" -- -timeout=240m -count=10 -race ./...\n+\n+      - uses: ./.github/actions/upload-datadog\n+        if: always()\n+        with:\n+          api-key: ${{ secrets.DATADOG_API_KEY }}",
+    "raw_url": "https://github.com/coder/coder/raw/03a3bcd974462129ca1d4f3c101f6169683a95a9/.github%2Fworkflows%2Fnightly-flake.yaml",
+    "sha": "35d361024439f630e01b6a6b99f350cfeca67424",
+    "status": "added"
+  }
+]

@@ -1,1 +1,132 @@
-[]
+[
+  {
+    "issue_number": 382,
+    "pr_number": 383,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 388,
+    "pr_number": 389,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 1368,
+    "pr_number": 1562,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 1644,
+    "pr_number": 1774,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 2335,
+    "pr_number": 3050,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 2347,
+    "pr_number": 2413,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 2603,
+    "pr_number": 2732,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 2603,
+    "pr_number": 2783,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 3747,
+    "pr_number": 3765,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 4607,
+    "pr_number": 4842,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 9107,
+    "pr_number": 9262,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 9340,
+    "pr_number": 9709,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 10335,
+    "pr_number": 10387,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 10481,
+    "pr_number": 10553,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 10832,
+    "pr_number": 10833,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 12277,
+    "pr_number": 12280,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 12509,
+    "pr_number": 12517,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 12752,
+    "pr_number": 12760,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 13240,
+    "pr_number": 13250,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 13258,
+    "pr_number": 13313,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 13962,
+    "pr_number": 14233,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 14143,
+    "pr_number": 14195,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 14365,
+    "pr_number": 14378,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 14365,
+    "pr_number": 14642,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 14632,
+    "pr_number": 14634,
+    "source": "pr_body"
+  },
+  {
+    "issue_number": 14877,
+    "pr_number": 14888,
+    "source": "pr_body"
+  }
+]

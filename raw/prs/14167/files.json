@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/ceacca214315844632f59e66784108e217a96f60/enterprise%2Fwsproxy%2Fwsproxy.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fwsproxy%2Fwsproxy.go?ref=ceacca214315844632f59e66784108e217a96f60",
+    "deletions": 1,
+    "filename": "enterprise/wsproxy/wsproxy.go",
+    "patch": "@@ -463,7 +463,7 @@ func (s *Server) pingSiblingReplicas(replicas []codersdk.Replica) {\n \terrStr := pingSiblingReplicas(ctx, s.Logger, &s.replicaPingSingleflight, s.derpMeshTLSConfig, replicas)\n \ts.replicaErrMut.Lock()\n \ts.replicaErr = errStr\n-\ts.replicaErrMut.Unlock()\n+\tdefer s.replicaErrMut.Unlock()\n \tif s.Options.ReplicaErrCallback != nil {\n \t\ts.Options.ReplicaErrCallback(replicas, s.replicaErr)\n \t}",
+    "raw_url": "https://github.com/coder/coder/raw/ceacca214315844632f59e66784108e217a96f60/enterprise%2Fwsproxy%2Fwsproxy.go",
+    "sha": "cb66c411d3c70e8cae4c6aa8d343886c4461d363",
+    "status": "modified"
+  },
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/ceacca214315844632f59e66784108e217a96f60/enterprise%2Fwsproxy%2Fwsproxy_test.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fwsproxy%2Fwsproxy_test.go?ref=ceacca214315844632f59e66784108e217a96f60",
+    "deletions": 4,
+    "filename": "enterprise/wsproxy/wsproxy_test.go",
+    "patch": "@@ -312,7 +312,7 @@ resourceLoop:\n \t\tt.Parallel()\n \n \t\t// Try to connect to the DERP server on the no-derp-proxy region.\n-\t\tclient, err := derphttp.NewClient(key.NewNode(), proxyAPI3.Options.AccessURL.String(), func(format string, args ...any) {})\n+\t\tclient, err := derphttp.NewClient(key.NewNode(), proxyAPI3.Options.AccessURL.String(), func(string, ...any) {})\n \t\trequire.NoError(t, err)\n \n \t\tctx := testutil.Context(t, testutil.WaitLong)\n@@ -405,7 +405,7 @@ func TestDERPEndToEnd(t *testing.T) {\n \t\tproxyOnlyDERPMap.OmitDefaultRegions = true\n \t\treturn true\n \t}, testutil.WaitLong, testutil.IntervalMedium)\n-\tnewDERPMapper := func(derpMap *tailcfg.DERPMap) *tailcfg.DERPMap {\n+\tnewDERPMapper := func(_ *tailcfg.DERPMap) *tailcfg.DERPMap {\n \t\treturn proxyOnlyDERPMap\n \t}\n \tapi.AGPL.DERPMapper.Store(&newDERPMapper)\n@@ -577,7 +577,7 @@ func TestWorkspaceProxyDERPMeshProbe(t *testing.T) {\n \tregisterBrokenProxy := func(ctx context.Context, t *testing.T, primaryAccessURL *url.URL, accessURL, token string) uuid.UUID {\n \t\tt.Helper()\n \t\t// Create a HTTP server that always replies with 500.\n-\t\tsrv := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {\n+\t\tsrv := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, _ *http.Request) {\n \t\t\trw.WriteHeader(http.StatusInternalServerError)\n \t\t}))\n \t\tt.Cleanup(srv.Close)\n@@ -848,7 +848,7 @@ func TestWorkspaceProxyDERPMeshProbe(t *testing.T) {\n \t\tproxy := coderdenttest.NewWorkspaceProxyReplica(t, api, client, &coderdenttest.ProxyOptions{\n \t\t\tName:     \"proxy-2\",\n \t\t\tProxyURL: proxyURL,\n-\t\t\tReplicaPingCallback: func(replicas []codersdk.Replica, err string) {\n+\t\t\tReplicaPingCallback: func(_ []codersdk.Replica, err string) {\n \t\t\t\treplicaPingErr <- err\n \t\t\t},\n \t\t})",
+    "raw_url": "https://github.com/coder/coder/raw/ceacca214315844632f59e66784108e217a96f60/enterprise%2Fwsproxy%2Fwsproxy_test.go",
+    "sha": "b3768c3603f16a966e3ea122f214e11cfe189f19",
+    "status": "modified"
+  }
+]

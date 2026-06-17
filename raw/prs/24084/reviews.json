@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24084#pullrequestreview-4068794589"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24084"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "09da6254163672acc8f4d76660bfb9e8fdbde311",
+    "html_url": "https://github.com/coder/coder/pull/24084#pullrequestreview-4068794589",
+    "id": 4068794589,
+    "node_id": "PRR_kwDOGkVX1s7yhODd",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24084",
+    "state": "APPROVED",
+    "submitted_at": "2026-04-07T14:16:22Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/39577870?u=1eb1bf0a337525e45f5f0e1b60c8f32c81d56855&v=4",
+      "events_url": "https://api.github.com/users/ethanndickson/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ethanndickson/followers",
+      "following_url": "https://api.github.com/users/ethanndickson/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ethanndickson/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ethanndickson",
+      "id": 39577870,
+      "login": "ethanndickson",
+      "node_id": "MDQ6VXNlcjM5NTc3ODcw",
+      "organizations_url": "https://api.github.com/users/ethanndickson/orgs",
+      "received_events_url": "https://api.github.com/users/ethanndickson/received_events",
+      "repos_url": "https://api.github.com/users/ethanndickson/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ethanndickson/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ethanndickson/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ethanndickson",
+      "user_view_type": "public"
+    }
+  }
+]

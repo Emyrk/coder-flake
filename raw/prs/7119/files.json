@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 12,
+    "blob_url": "https://github.com/coder/coder/blob/75b840aab57362b30d9bac7b1c672f9b010daba7/coderd%2Frbac%2Fauthz.go",
+    "changes": 14,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Frbac%2Fauthz.go?ref=75b840aab57362b30d9bac7b1c672f9b010daba7",
+    "deletions": 2,
+    "filename": "coderd/rbac/authz.go",
+    "patch": "@@ -137,6 +137,10 @@ func Filter[O Objecter](ctx context.Context, auth Authorizer, subject Subject, a\n \t\t\terr := auth.Authorize(ctx, subject, action, o.RBACObject())\n \t\t\tif err == nil {\n \t\t\t\tfiltered = append(filtered, o)\n+\t\t\t} else if !IsUnauthorizedError(err) {\n+\t\t\t\t// If the error is not the expected \"Unauthorized\" error, then\n+\t\t\t\t// it is something unexpected.\n+\t\t\t\treturn nil, err\n \t\t\t}\n \t\t}\n \t\treturn filtered, nil\n@@ -155,6 +159,10 @@ func Filter[O Objecter](ctx context.Context, auth Authorizer, subject Subject, a\n \t\terr := prepared.Authorize(ctx, rbacObj)\n \t\tif err == nil {\n \t\t\tfiltered = append(filtered, object)\n+\t\t} else if !IsUnauthorizedError(err) {\n+\t\t\t// If the error is not the expected \"Unauthorized\" error, then\n+\t\t\t// it is something unexpected.\n+\t\t\treturn nil, err\n \t\t}\n \t}\n \n@@ -319,7 +327,8 @@ func (a RegoAuthorizer) authorize(ctx context.Context, subject Subject, action A\n \n \tresults, err := a.query.Eval(ctx, rego.EvalParsedInput(astV))\n \tif err != nil {\n-\t\treturn ForbiddenWithInternal(xerrors.Errorf(\"eval rego: %w\", err), subject, action, object, results)\n+\t\terr = correctCancelError(err)\n+\t\treturn xerrors.Errorf(\"evaluate rego: %w\", err)\n \t}\n \n \tif !results.Allowed() {\n@@ -430,7 +439,8 @@ EachQueryLoop:\n \t\t// We need to eval each query with the newly known fields.\n \t\tresults, err := q.Eval(ctx, rego.EvalParsedInput(parsed))\n \t\tif err != nil {\n-\t\t\tcontinue EachQueryLoop\n+\t\t\terr = correctCancelError(err)\n+\t\t\treturn xerrors.Errorf(\"eval error: %w\", err)\n \t\t}\n \n \t\t// If there are no results, then the query is false. This is because rego",
+    "raw_url": "https://github.com/coder/coder/raw/75b840aab57362b30d9bac7b1c672f9b010daba7/coderd%2Frbac%2Fauthz.go",
+    "sha": "e8beeea1bd4689cface469c50a896b7e51f53da1",
+    "status": "modified"
+  },
+  {
+    "additions": 60,
+    "blob_url": "https://github.com/coder/coder/blob/75b840aab57362b30d9bac7b1c672f9b010daba7/coderd%2Frbac%2Fauthz_internal_test.go",
+    "changes": 70,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Frbac%2Fauthz_internal_test.go?ref=75b840aab57362b30d9bac7b1c672f9b010daba7",
+    "deletions": 10,
+    "filename": "coderd/rbac/authz_internal_test.go",
+    "patch": "@@ -30,18 +30,68 @@ func (w fakeObject) RBACObject() Object {\n \t}\n }\n \n+// objectBomb is a wrapper around an Objecter that calls a function when\n+// RBACObject is called.\n+type objectBomb struct {\n+\tObjecter\n+\tbomb func()\n+}\n+\n+func (o *objectBomb) RBACObject() Object {\n+\to.bomb()\n+\treturn o.Objecter.RBACObject()\n+}\n+\n func TestFilterError(t *testing.T) {\n \tt.Parallel()\n-\tauth := NewAuthorizer(prometheus.NewRegistry())\n-\tsubject := Subject{\n-\t\tID:     uuid.NewString(),\n-\t\tRoles:  RoleNames{},\n-\t\tGroups: []string{},\n-\t\tScope:  ScopeAll,\n-\t}\n+\t_ = objectBomb{}\n \n-\t_, err := Filter(context.Background(), auth, subject, ActionRead, []Object{ResourceUser, ResourceWorkspace})\n-\trequire.ErrorContains(t, err, \"object types must be uniform\")\n+\tt.Run(\"DifferentResourceTypes\", func(t *testing.T) {\n+\t\tt.Parallel()\n+\n+\t\tauth := NewAuthorizer(prometheus.NewRegistry())\n+\t\tsubject := Subject{\n+\t\t\tID:     uuid.NewString(),\n+\t\t\tRoles:  RoleNames{},\n+\t\t\tGroups: []string{},\n+\t\t\tScope:  ScopeAll,\n+\t\t}\n+\n+\t\t_, err := Filter(context.Background(), auth, subject, ActionRead, []Object{ResourceUser, ResourceWorkspace})\n+\t\trequire.ErrorContains(t, err, \"object types must be uniform\")\n+\t})\n+\n+\tt.Run(\"CancelledContext\", func(t *testing.T) {\n+\t\tt.Parallel()\n+\t\tt.Skipf(\"This test is racy as rego eval checks the ctx canceled in a go routine. \" +\n+\t\t\t\"It is a coin flip if the query finishes before the 'cancel' is checked. \" +\n+\t\t\t\"So sometimes the 'Authorize' call succeeds even if ctx is canceled.\")\n+\n+\t\tauth := NewAuthorizer(prometheus.NewRegistry())\n+\t\tsubject := Subject{\n+\t\t\tID: uuid.NewString(),\n+\t\t\tRoles: RoleNames{\n+\t\t\t\tRoleOwner(),\n+\t\t\t},\n+\t\t\tGroups: []string{},\n+\t\t\tScope:  ScopeAll,\n+\t\t}\n+\n+\t\tctx, cancel := context.WithCancel(context.Background())\n+\t\tdefer cancel()\n+\t\tobjects := []Objecter{\n+\t\t\tResourceUser,\n+\t\t\tResourceUser,\n+\t\t\t&objectBomb{\n+\t\t\t\tObjecter: ResourceUser,\n+\t\t\t\tbomb:     cancel,\n+\t\t\t},\n+\t\t\tResourceUser,\n+\t\t}\n+\n+\t\t_, err := Filter(ctx, auth, subject, ActionRead, objects)\n+\t\trequire.ErrorIs(t, err, context.Canceled)\n+\t})\n }\n \n // TestFilter ensures the filter acts the same as an individual authorize.\n@@ -170,7 +220,7 @@ func TestFilter(t *testing.T) {\n \t\t\tlocalObjects := make([]fakeObject, len(objects))\n \t\t\tcopy(localObjects, objects)\n \n-\t\t\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitShort)\n+\t\t\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitMedium)\n \t\t\tdefer cancel()\n \t\t\tauth := NewAuthorizer(prometheus.NewRegistry())\n ",
+    "raw_url": "https://github.com/coder/coder/raw/75b840aab57362b30d9bac7b1c672f9b010daba7/coderd%2Frbac%2Fauthz_internal_test.go",
+    "sha": "2d7e33416c23a0584478cf24dc723c2180fbffa3",
+    "status": "modified"
+  },
+  {
+    "additions": 17,
+    "blob_url": "https://github.com/coder/coder/blob/75b840aab57362b30d9bac7b1c672f9b010daba7/coderd%2Frbac%2Ferror.go",
+    "changes": 17,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Frbac%2Ferror.go?ref=75b840aab57362b30d9bac7b1c672f9b010daba7",
+    "deletions": 0,
+    "filename": "coderd/rbac/error.go",
+    "patch": "@@ -1,11 +1,14 @@\n package rbac\n \n import (\n+\t\"context\"\n \t\"errors\"\n \t\"flag\"\n \t\"fmt\"\n \n \t\"github.com/open-policy-agent/opa/rego\"\n+\t\"github.com/open-policy-agent/opa/topdown\"\n+\t\"golang.org/x/xerrors\"\n )\n \n const (\n@@ -97,3 +100,17 @@ func (*UnauthorizedError) As(target interface{}) bool {\n \t}\n \treturn false\n }\n+\n+// correctCancelError will return the correct error for a canceled context. This\n+// is because rego changes a canceled context to a topdown.CancelErr. This error\n+// is not helpful if the code is \"canceled\". To make the error conform with the\n+// rest of our canceled errors, we will convert the error to a context.Canceled\n+// error. No good information is lost, as the topdown.CancelErr provides the\n+// location of the query that was canceled, which does not matter.\n+func correctCancelError(err error) error {\n+\te := new(topdown.Error)\n+\tif xerrors.As(err, &e) || e.Code == topdown.CancelErr {\n+\t\treturn context.Canceled\n+\t}\n+\treturn err\n+}",
+    "raw_url": "https://github.com/coder/coder/raw/75b840aab57362b30d9bac7b1c672f9b010daba7/coderd%2Frbac%2Ferror.go",
+    "sha": "36ff664d67145aea397c9d9f702b5f83932ab76d",
+    "status": "modified"
+  }
+]

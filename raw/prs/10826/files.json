@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/e559294a845a4e7ecca854f3beb88b43996e442c/coderd%2Fhealthcheck%2Fderphealth%2Fderp_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fhealthcheck%2Fderphealth%2Fderp_test.go?ref=e559294a845a4e7ecca854f3beb88b43996e442c",
+    "deletions": 0,
+    "filename": "coderd/healthcheck/derphealth/derp_test.go",
+    "patch": "@@ -83,6 +83,7 @@ func TestDERP(t *testing.T) {\n \n \tt.Run(\"HealthyWithNodeDegraded\", func(t *testing.T) {\n \t\tt.Parallel()\n+\t\tt.Skip(\"https://github.com/coder/coder/issues/10824\")\n \n \t\thealthyDerpSrv := derp.NewServer(key.NewNode(), func(format string, args ...any) { t.Logf(format, args...) })\n \t\tdefer healthyDerpSrv.Close()",
+    "raw_url": "https://github.com/coder/coder/raw/e559294a845a4e7ecca854f3beb88b43996e442c/coderd%2Fhealthcheck%2Fderphealth%2Fderp_test.go",
+    "sha": "b1a236dc3315e8194533d1403eade1aa47076f71",
+    "status": "modified"
+  }
+]

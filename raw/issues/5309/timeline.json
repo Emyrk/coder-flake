@@ -1,0 +1,69 @@
+[
+  {
+    "actor": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/14044910?v=4",
+      "events_url": "https://api.github.com/users/mtojek/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mtojek/followers",
+      "following_url": "https://api.github.com/users/mtojek/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mtojek/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mtojek",
+      "id": 14044910,
+      "login": "mtojek",
+      "node_id": "MDQ6VXNlcjE0MDQ0OTEw",
+      "organizations_url": "https://api.github.com/users/mtojek/orgs",
+      "received_events_url": "https://api.github.com/users/mtojek/received_events",
+      "repos_url": "https://api.github.com/users/mtojek/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mtojek/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mtojek/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mtojek",
+      "user_view_type": "public"
+    },
+    "commit_id": null,
+    "commit_url": null,
+    "created_at": "2022-12-06T12:52:58Z",
+    "event": "labeled",
+    "id": 7966236145,
+    "label": {
+      "color": "D98F0B",
+      "name": "flake"
+    },
+    "node_id": "LE_lADOGkVX1s5YKC7YzwAAAAHa0x3x",
+    "performed_via_github_app": null,
+    "url": "https://api.github.com/repos/coder/coder/issues/events/7966236145"
+  },
+  {
+    "actor": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/14044910?v=4",
+      "events_url": "https://api.github.com/users/mtojek/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mtojek/followers",
+      "following_url": "https://api.github.com/users/mtojek/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mtojek/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mtojek",
+      "id": 14044910,
+      "login": "mtojek",
+      "node_id": "MDQ6VXNlcjE0MDQ0OTEw",
+      "organizations_url": "https://api.github.com/users/mtojek/orgs",
+      "received_events_url": "https://api.github.com/users/mtojek/received_events",
+      "repos_url": "https://api.github.com/users/mtojek/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mtojek/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mtojek/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mtojek",
+      "user_view_type": "public"
+    },
+    "commit_id": null,
+    "commit_url": null,
+    "created_at": "2022-12-09T12:11:38Z",
+    "event": "closed",
+    "id": 7998184952,
+    "node_id": "CE_lADOGkVX1s5YKC7YzwAAAAHcup34",
+    "performed_via_github_app": null,
+    "state_reason": null,
+    "url": "https://api.github.com/repos/coder/coder/issues/events/7998184952"
+  }
+]

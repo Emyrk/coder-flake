@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21745#pullrequestreview-3723814975"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21745"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "1a405f4719290813fa1f3068328c3a2eb1f4b45e",
+    "html_url": "https://github.com/coder/coder/pull/21745#pullrequestreview-3723814975",
+    "id": 3723814975,
+    "node_id": "PRR_kwDOGkVX1s7d9Og_",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21745",
+    "state": "APPROVED",
+    "submitted_at": "2026-01-29T16:34:23Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?u=ca786d69e9499bdc2d6e362245d35f70632ddc55&v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/18932#pullrequestreview-3037622313"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/18932"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "## Pull Request Overview\n\nThis PR fixes a flaky test `TestAPI/ModifyAutostopWithRunningWorkspace` caused by a race condition in `AwaitWorkspaceBuildJobCompleted`. The issue occurs when the API returns stale workspace build data due to non-transactional database queries between workspace builds and provisioner jobs.\n\n- Adds a re-fetch of the workspace build before accessing its deadline to ensure fresh data\n- Restructures the test flow to validate the deadline state before making TTL updates\n\n\n<details>\n<summary>Comments suppressed due to low confidence (1)</summary>\n\n**coderd/workspaces_test.go:2880**\n* The variable name 'build' is being reused and shadows the original build variable from the outer scope. Consider using a more descriptive name like 'freshBuild' or 'updatedBuild' to avoid confusion.\n```\n\t\t\t\tbuild, err := client.WorkspaceBuild(ctx, build.ID)\n```\n</details>\n\n",
+    "commit_id": "a3f64f74f794c733126ad21cd1feb0801caf67c4",
+    "html_url": "https://github.com/coder/coder/pull/18932#pullrequestreview-3037622313",
+    "id": 3037622313,
+    "node_id": "PRR_kwDOGkVX1s61DnAp",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/18932",
+    "state": "COMMENTED",
+    "submitted_at": "2025-07-21T11:18:46Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "id": 175728472,
+      "login": "copilot-pull-request-reviewer[bot]",
+      "node_id": "BOT_kgDOCnlnWA",
+      "organizations_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/18932#pullrequestreview-3037769389"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/18932"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "a3f64f74f794c733126ad21cd1feb0801caf67c4",
+    "html_url": "https://github.com/coder/coder/pull/18932#pullrequestreview-3037769389",
+    "id": 3037769389,
+    "node_id": "PRR_kwDOGkVX1s61EK6t",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/18932",
+    "state": "APPROVED",
+    "submitted_at": "2025-07-21T11:59:29Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?u=bd1828de93463cc139feb1dc4b4f6871dec2a7b3&v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  }
+]

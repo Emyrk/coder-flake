@@ -1,0 +1,416 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19494#discussion_r2293881958"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19494"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2293881958"
+      }
+    },
+    "author_association": "NONE",
+    "body": "_\ud83d\udee0\ufe0f Refactor suggestion_\n\n**Disambiguate tests by package to avoid false flakiness**\n\n`jq` aggregates by `.Test` only. Identically named tests across different packages will be merged and misreported as flaky/failing. Include the package when keying results.\n\n\n\n```diff\n-          jq -s '\n-            map(select(.Action==\"pass\" or .Action==\"fail\") | select(.Test)) as $events\n-            | reduce $events[] as $e ({}; .[$e.Test] = (\n-                .[$e.Test] // {pass:0,fail:0}\n-                | if $e.Action==\"pass\" then (.pass+=1) else (.fail+=1) end\n-              )\n-            )\n-          ' json/*.json > json/counts.json\n+          jq -s '\n+            map(select(.Action==\"pass\" or .Action==\"fail\") | select(.Test)) as $events\n+            | reduce $events[] as $e ({}; .[($e.Package // \"unknown\") + \"/\" + $e.Test] = (\n+                .[($e.Package // \"unknown\") + \"/\" + $e.Test] // {pass:0,fail:0}\n+                | if $e.Action==\"pass\" then (.pass+=1) else (.fail+=1) end\n+              )\n+            )\n+          ' json/*.json > json/counts.json\n```\n\nThe downstream summaries already use the map keys as names, so they\u2019ll automatically include `pkg/test`.\n\n\nAlso applies to: 118-119\n\n<details>\n<summary>\ud83e\udd16 Prompt for AI Agents</summary>\n\n```\nIn .github/workflows/flake-go.yaml around lines 109 to 116 (and also the similar\nblock at lines 118-119), jq currently keys results by .Test only which merges\nidentically named tests across packages; change the key to include package (for\nexample use a concatenation like \"\\(.Package)/\\(.Test)\" or another pkg+test\nunique identifier) in the map/select and the reduce assignment so counts are\nstored per-package-per-test; update both occurrences so downstream summaries\nreceive unique pkg/test keys.\n```\n\n</details>\n\n<!-- fingerprinting:phantom:poseidon:chinchilla -->\n\n<!-- This is an auto-generated comment by CodeRabbit -->",
+    "commit_id": "b9a562b1882aea8345f48e407ae9ed2e06bf96f9",
+    "created_at": "2025-08-22T14:24:03Z",
+    "diff_hunk": "@@ -0,0 +1,146 @@\n+name: go-flake-check\n+\n+on:\n+  pull_request:\n+  workflow_dispatch:\n+\n+permissions:\n+  contents: read\n+\n+concurrency:\n+  group: ${{ github.workflow }}-${{ github.ref }}\n+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}\n+\n+jobs:\n+  changed-go-tests:\n+    runs-on: ${{ github.repository_owner == 'coder' && 'depot-ubuntu-22.04-8' || 'ubuntu-latest' }}\n+    outputs:\n+      any_changed: ${{ steps.changed.outputs.any_changed }}\n+      files: ${{ steps.changed.outputs.all_changed_files }}\n+    steps:\n+      - name: Harden Runner\n+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0\n+        with:\n+          egress-policy: audit\n+\n+      - name: Checkout\n+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0\n+        with:\n+          fetch-depth: 0\n+\n+      - id: changed\n+        name: Detect changed go test files\n+        uses: tj-actions/changed-files@v44\n+        with:\n+          files: |\n+            **/*_test.go\n+\n+  go-flake:\n+    needs: changed-go-tests\n+    if: needs.changed-go-tests.outputs.any_changed == 'true'\n+    runs-on: ${{ github.repository_owner == 'coder' && 'depot-ubuntu-22.04-8' || 'ubuntu-latest' }}\n+    timeout-minutes: 30\n+    env:\n+      ATTEMPTS: '10'\n+      POSTGRES_VERSION: '17'\n+    steps:\n+      - name: Harden Runner\n+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0\n+        with:\n+          egress-policy: audit\n+\n+      - name: Checkout\n+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0\n+        with:\n+          fetch-depth: 1\n+\n+      - name: Setup Go\n+        uses: ./.github/actions/setup-go\n+\n+      - name: Ensure jq\n+        run: |\n+          if ! command -v jq >/dev/null; then\n+            sudo apt-get update -y\n+            sudo apt-get install -y jq\n+          fi\n+\n+      - name: Start Postgres (reuse CI helper)\n+        run: |\n+          make test-postgres-docker\n+\n+      - name: Build package and test regex from changed files\n+        id: gometa\n+        shell: bash\n+        run: |\n+          set -euo pipefail\n+          printf '%s\\n' \"${{ needs.changed-go-tests.outputs.files }}\" | tr ' ' '\\n' | sed '/^$/d' > /tmp/go_changed_files.txt\n+          sort -u /tmp/go_changed_files.txt -o /tmp/go_changed_files.txt\n+\n+          pkgs=$(awk '{print $0}' /tmp/go_changed_files.txt | xargs -I{} dirname {} | sort -u | while read d; do (cd \"$d\" && go list -f '{{.ImportPath}}'); done)\n+          if [ -z \"$pkgs\" ]; then\n+            echo \"skip=true\" >> \"$GITHUB_OUTPUT\"\n+            exit 0\n+          fi\n+          echo \"pkgs=$pkgs\" >> \"$GITHUB_OUTPUT\"\n+\n+          tests=$(awk '{print $0}' /tmp/go_changed_files.txt | xargs -I{} sh -c \"sed -nE 's/^func[[:space:]]+(Test[[:alnum:]_]+)[[:space:]]*\\\\(.*/\\\\1/p' {}\" | sort -u | paste -sd'|' -)\n+          if [ -z \"$tests\" ]; then\n+            echo \"skip=true\" >> \"$GITHUB_OUTPUT\"\n+            exit 0\n+          fi\n+          echo \"regex=^(${tests})$\" >> \"$GITHUB_OUTPUT\"\n+\n+      - name: Run repeated tests to detect flakiness\n+        if: steps.gometa.outputs.skip != 'true'\n+        shell: bash\n+        run: |\n+          set -euo pipefail\n+          mkdir -p flake/go json\n+          regex='${{ steps.gometa.outputs.regex }}'\n+          pkgs='${{ steps.gometa.outputs.pkgs }}'\n+\n+          for i in $(seq 1 ${ATTEMPTS}); do\n+            for p in $pkgs; do\n+              go test -json -run \"$regex\" -count=1 -shuffle=on \"$p\" \\\n+                | tee \"json/run-$i-$(echo \"$p\" | tr '/.' '__').json\" >/dev/null || true\n+            done\n+          done\n+\n+          jq -s '\n+            map(select(.Action==\"pass\" or .Action==\"fail\") | select(.Test)) as $events\n+            | reduce $events[] as $e ({}; .[$e.Test] = (\n+                .[$e.Test] // {pass:0,fail:0}\n+                | if $e.Action==\"pass\" then (.pass+=1) else (.fail+=1) end\n+              )\n+            )\n+          ' json/*.json > json/counts.json",
+    "html_url": "https://github.com/coder/coder/pull/19494#discussion_r2293881958",
+    "id": 2293881958,
+    "line": 118,
+    "node_id": "PRRC_kwDOGkVX1s6Iudxm",
+    "original_commit_id": "651b5b079fe7e426cd5bc801f56b66f97c762565",
+    "original_line": 116,
+    "original_position": 116,
+    "original_start_line": 109,
+    "path": ".github/workflows/flake-go.yaml",
+    "position": 118,
+    "pull_request_review_id": 3144708358,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19494",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2293881958/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 111,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-08-22T14:24:04Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2293881958",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/347564?v=4",
+      "events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coderabbitai",
+      "id": 136622811,
+      "login": "coderabbitai[bot]",
+      "node_id": "BOT_kgDOCCSy2w",
+      "organizations_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coderabbitai%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19494#discussion_r2293881965"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19494"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2293881965"
+      }
+    },
+    "author_association": "NONE",
+    "body": "_\u26a0\ufe0f Potential issue_\n\n**Syntax bug: missing 'fi' and echo escape not interpreted**\n\nThe bash block lacks a closing `fi`, which will fail the step. Also `echo \"\\n...\"` won\u2019t render a newline without `-e`. Use `printf`.\n\n\n\n```diff\n-          echo \"\\nConsistently failing tests:\" >> \"$GITHUB_STEP_SUMMARY\"\n+          printf \"\\nConsistently failing tests:\\n\" >> \"$GITHUB_STEP_SUMMARY\"\n           if jq -e 'length==0' json/failing.json >/dev/null; then\n             echo \"  none\" >> \"$GITHUB_STEP_SUMMARY\"\n           else\n             jq -r '.[] | \"  \\(.name): fail=\\(.fail)\"' json/failing.json >> \"$GITHUB_STEP_SUMMARY\"\n+          fi\n```\n\n<!-- suggestion_start -->\n\n<details>\n<summary>\ud83d\udcdd Committable suggestion</summary>\n\n> \u203c\ufe0f **IMPORTANT**\n> Carefully review the code before committing. Ensure that it accurately replaces the highlighted code, contains no missing lines, and has no issues with indentation. Thoroughly test & benchmark the code to ensure it meets the requirements.\n\n```suggestion\n          printf \"\\nConsistently failing tests:\\n\" >> \"$GITHUB_STEP_SUMMARY\"\n          if jq -e 'length==0' json/failing.json >/dev/null; then\n            echo \"  none\" >> \"$GITHUB_STEP_SUMMARY\"\n          else\n            jq -r '.[] | \"  \\(.name): fail=\\(.fail)\"' json/failing.json >> \"$GITHUB_STEP_SUMMARY\"\n          fi\n```\n\n</details>\n\n<!-- suggestion_end -->\n\n<details>\n<summary>\ud83e\udd16 Prompt for AI Agents</summary>\n\n```\n.github/workflows/flake-go.yaml around lines 128 to 133: the bash conditional is\nmissing its closing \"fi\" and the echo using \"\\n\" won't produce a newline; close\nthe if block with a matching \"fi\" after the else branch, and replace the echo\nthat writes the leading newline with printf (or echo -e) so the newline escape\nis interpreted (e.g. use printf '\\nConsistently failing tests:\\n' >>\n\"$GITHUB_STEP_SUMMARY\"), keeping the rest of the jq/echo redirections as-is.\n```\n\n</details>\n\n<!-- fingerprinting:phantom:poseidon:chinchilla -->\n\n<!-- This is an auto-generated comment by CodeRabbit -->\n\n\u2705 Addressed in commits 462e612 to ca1bd6c",
+    "commit_id": "b9a562b1882aea8345f48e407ae9ed2e06bf96f9",
+    "created_at": "2025-08-22T14:24:03Z",
+    "diff_hunk": "@@ -0,0 +1,146 @@\n+name: go-flake-check\n+\n+on:\n+  pull_request:\n+  workflow_dispatch:\n+\n+permissions:\n+  contents: read\n+\n+concurrency:\n+  group: ${{ github.workflow }}-${{ github.ref }}\n+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}\n+\n+jobs:\n+  changed-go-tests:\n+    runs-on: ${{ github.repository_owner == 'coder' && 'depot-ubuntu-22.04-8' || 'ubuntu-latest' }}\n+    outputs:\n+      any_changed: ${{ steps.changed.outputs.any_changed }}\n+      files: ${{ steps.changed.outputs.all_changed_files }}\n+    steps:\n+      - name: Harden Runner\n+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0\n+        with:\n+          egress-policy: audit\n+\n+      - name: Checkout\n+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0\n+        with:\n+          fetch-depth: 0\n+\n+      - id: changed\n+        name: Detect changed go test files\n+        uses: tj-actions/changed-files@v44\n+        with:\n+          files: |\n+            **/*_test.go\n+\n+  go-flake:\n+    needs: changed-go-tests\n+    if: needs.changed-go-tests.outputs.any_changed == 'true'\n+    runs-on: ${{ github.repository_owner == 'coder' && 'depot-ubuntu-22.04-8' || 'ubuntu-latest' }}\n+    timeout-minutes: 30\n+    env:\n+      ATTEMPTS: '10'\n+      POSTGRES_VERSION: '17'\n+    steps:\n+      - name: Harden Runner\n+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0\n+        with:\n+          egress-policy: audit\n+\n+      - name: Checkout\n+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0\n+        with:\n+          fetch-depth: 1\n+\n+      - name: Setup Go\n+        uses: ./.github/actions/setup-go\n+\n+      - name: Ensure jq\n+        run: |\n+          if ! command -v jq >/dev/null; then\n+            sudo apt-get update -y\n+            sudo apt-get install -y jq\n+          fi\n+\n+      - name: Start Postgres (reuse CI helper)\n+        run: |\n+          make test-postgres-docker\n+\n+      - name: Build package and test regex from changed files\n+        id: gometa\n+        shell: bash\n+        run: |\n+          set -euo pipefail\n+          printf '%s\\n' \"${{ needs.changed-go-tests.outputs.files }}\" | tr ' ' '\\n' | sed '/^$/d' > /tmp/go_changed_files.txt\n+          sort -u /tmp/go_changed_files.txt -o /tmp/go_changed_files.txt\n+\n+          pkgs=$(awk '{print $0}' /tmp/go_changed_files.txt | xargs -I{} dirname {} | sort -u | while read d; do (cd \"$d\" && go list -f '{{.ImportPath}}'); done)\n+          if [ -z \"$pkgs\" ]; then\n+            echo \"skip=true\" >> \"$GITHUB_OUTPUT\"\n+            exit 0\n+          fi\n+          echo \"pkgs=$pkgs\" >> \"$GITHUB_OUTPUT\"\n+\n+          tests=$(awk '{print $0}' /tmp/go_changed_files.txt | xargs -I{} sh -c \"sed -nE 's/^func[[:space:]]+(Test[[:alnum:]_]+)[[:space:]]*\\\\(.*/\\\\1/p' {}\" | sort -u | paste -sd'|' -)\n+          if [ -z \"$tests\" ]; then\n+            echo \"skip=true\" >> \"$GITHUB_OUTPUT\"\n+            exit 0\n+          fi\n+          echo \"regex=^(${tests})$\" >> \"$GITHUB_OUTPUT\"\n+\n+      - name: Run repeated tests to detect flakiness\n+        if: steps.gometa.outputs.skip != 'true'\n+        shell: bash\n+        run: |\n+          set -euo pipefail\n+          mkdir -p flake/go json\n+          regex='${{ steps.gometa.outputs.regex }}'\n+          pkgs='${{ steps.gometa.outputs.pkgs }}'\n+\n+          for i in $(seq 1 ${ATTEMPTS}); do\n+            for p in $pkgs; do\n+              go test -json -run \"$regex\" -count=1 -shuffle=on \"$p\" \\\n+                | tee \"json/run-$i-$(echo \"$p\" | tr '/.' '__').json\" >/dev/null || true\n+            done\n+          done\n+\n+          jq -s '\n+            map(select(.Action==\"pass\" or .Action==\"fail\") | select(.Test)) as $events\n+            | reduce $events[] as $e ({}; .[$e.Test] = (\n+                .[$e.Test] // {pass:0,fail:0}\n+                | if $e.Action==\"pass\" then (.pass+=1) else (.fail+=1) end\n+              )\n+            )\n+          ' json/*.json > json/counts.json\n+\n+          jq 'to_entries | map(select(.value.fail>0 and .value.pass>0) | {name:.key, pass:.value.pass, fail:.value.fail})' json/counts.json > json/flaky.json\n+          jq 'to_entries | map(select(.value.fail>0 and ((.value.pass//0)==0)) | {name:.key, fail:.value.fail})' json/counts.json > json/failing.json\n+\n+          echo \"Go flaky tests (changed files) after ${ATTEMPTS} runs:\" >> \"$GITHUB_STEP_SUMMARY\"\n+          if jq -e 'length==0' json/flaky.json >/dev/null; then\n+            echo \"  none\" >> \"$GITHUB_STEP_SUMMARY\"\n+          else\n+            jq -r '.[] | \"  \\(.name): fail=\\(.fail) pass=\\(.pass)\"' json/flaky.json >> \"$GITHUB_STEP_SUMMARY\"\n+          fi\n+\n+          echo \"\\nConsistently failing tests:\" >> \"$GITHUB_STEP_SUMMARY\"\n+          if jq -e 'length==0' json/failing.json >/dev/null; then\n+            echo \"  none\" >> \"$GITHUB_STEP_SUMMARY\"\n+          else\n+            jq -r '.[] | \"  \\(.name): fail=\\(.fail)\"' json/failing.json >> \"$GITHUB_STEP_SUMMARY\"\n+",
+    "html_url": "https://github.com/coder/coder/pull/19494#discussion_r2293881965",
+    "id": 2293881965,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6Iudxt",
+    "original_commit_id": "651b5b079fe7e426cd5bc801f56b66f97c762565",
+    "original_line": 133,
+    "original_position": 133,
+    "original_start_line": 128,
+    "path": ".github/workflows/flake-go.yaml",
+    "position": 1,
+    "pull_request_review_id": 3144708358,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19494",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2293881965/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-08-22T15:53:39Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2293881965",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/347564?v=4",
+      "events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coderabbitai",
+      "id": 136622811,
+      "login": "coderabbitai[bot]",
+      "node_id": "BOT_kgDOCCSy2w",
+      "organizations_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coderabbitai%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19494#discussion_r2293881978"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19494"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2293881978"
+      }
+    },
+    "author_association": "NONE",
+    "body": "_\u26a0\ufe0f Potential issue_\n\n**Test case mismatch: input port (11) vs expected (2113) will always fail**\n\nThe \"127.0.0.1\" case now passes \"127.0.0.1:11\" but still expects 2113 with wantErr=false. Either revert the input to 127.0.0.1:2113 or change want to 11. Suggest reverting to keep intent clear.\n\n\n\nApply one of the following diffs (pick one):\n\nOption A \u2014 revert input to match expected:\n```diff\n-            urlString: \"127.0.0.1:11\",\n+            urlString: \"127.0.0.1:2113\",\n             want:      2113,\n```\n\nOption B \u2014 update expected to match input:\n```diff\n-            urlString: \"127.0.0.1:11\",\n-            want:      2113,\n+            urlString: \"127.0.0.1:11\",\n+            want:      11,\n```\n\n<!-- suggestion_start -->\n\n<details>\n<summary>\ud83d\udcdd Committable suggestion</summary>\n\n> \u203c\ufe0f **IMPORTANT**\n> Carefully review the code before committing. Ensure that it accurately replaces the highlighted code, contains no missing lines, and has no issues with indentation. Thoroughly test & benchmark the code to ensure it meets the requirements.\n\n```suggestion\n         {\n             name:      \"127.0.0.1\",\n            urlString: \"127.0.0.1:2113\",\n             want:      2113,\n             wantErr:   false,\n         },\n```\n\n</details>\n\n<!-- suggestion_end -->\n\n<details>\n<summary>\ud83e\udd16 Prompt for AI Agents</summary>\n\n```\nIn cli/agent_internal_test.go around lines 50 to 54, the test case uses\nurlString \"127.0.0.1:11\" but expects want 2113 which will always fail; fix by\nmaking the input and expectation consistent: either revert urlString to\n\"127.0.0.1:2113\" to keep want=2113 (Option A) or change want to 11 to match the\ncurrent urlString (Option B); pick one and update the test case so urlString and\nwant match and keep wantErr as false.\n```\n\n</details>\n\n<!-- fingerprinting:phantom:poseidon:chinchilla -->\n\n<!-- This is an auto-generated comment by CodeRabbit -->\n\n\u2705 Addressed in commits 462e612 to ca1bd6c",
+    "commit_id": "b9a562b1882aea8345f48e407ae9ed2e06bf96f9",
+    "created_at": "2025-08-22T14:24:04Z",
+    "diff_hunk": "@@ -48,7 +48,7 @@ func Test_extractPort(t *testing.T) {\n \t\t},\n \t\t{\n \t\t\tname:      \"127.0.0.1\",\n-\t\t\turlString: \"127.0.0.1:2113\",\n+\t\t\turlString: \"127.0.0.1:11\",\n \t\t\twant:      2113,\n \t\t\twantErr:   false,\n \t\t},",
+    "html_url": "https://github.com/coder/coder/pull/19494#discussion_r2293881978",
+    "id": 2293881978,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6Iudx6",
+    "original_commit_id": "651b5b079fe7e426cd5bc801f56b66f97c762565",
+    "original_line": 54,
+    "original_position": 8,
+    "original_start_line": 50,
+    "path": "cli/agent_internal_test.go",
+    "position": 1,
+    "pull_request_review_id": 3144708358,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19494",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2293881978/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 50,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-08-22T15:53:27Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2293881978",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/347564?v=4",
+      "events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coderabbitai",
+      "id": 136622811,
+      "login": "coderabbitai[bot]",
+      "node_id": "BOT_kgDOCCSy2w",
+      "organizations_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coderabbitai%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19494#discussion_r2294093605"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19494"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2294093605"
+      }
+    },
+    "author_association": "NONE",
+    "body": "_\u26a0\ufe0f Potential issue_\n\n**Guard artifact upload when test run was skipped**\n\nWhen `gometa.skip == 'true'`, no `json/` dir exists and this step will fail despite earlier intentional skip. Gate the upload on the same condition while preserving `always()` for failure cases.\n\n```diff\n-      - name: Upload artifacts\n-        if: always()\n+      - name: Upload artifacts\n+        if: ${{ always() && steps.gometa.outputs.skip != 'true' }}\n         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2\n         with:\n           name: go-flake-json\n           path: json/\n```\n\n<!-- suggestion_start -->\n\n<details>\n<summary>\ud83d\udcdd Committable suggestion</summary>\n\n> \u203c\ufe0f **IMPORTANT**\n> Carefully review the code before committing. Ensure that it accurately replaces the highlighted code, contains no missing lines, and has no issues with indentation. Thoroughly test & benchmark the code to ensure it meets the requirements.\n\n```suggestion\n      - name: Upload artifacts\n        if: ${{ always() && steps.gometa.outputs.skip != 'true' }}\n        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2\n        with:\n          name: go-flake-json\n          path: json/\n```\n\n</details>\n\n<!-- suggestion_end -->\n\n<details>\n<summary>\ud83e\udd16 Prompt for AI Agents</summary>\n\n```\n.github/workflows/flake-go.yaml around lines 135 to 141: the artifact upload\nstep unconditionally runs even when gometa.skip == 'true' and the json/\ndirectory doesn't exist; change the step's if so it still runs for\ncleanup/failure (always()) but only attempts upload when the job wasn't\nintentionally skipped by combining always() with the existing skip check (e.g.,\nif: always() && github.event.inputs.gometa.skip != 'true' or the same\nexpression/variable used earlier in the workflow), ensuring the upload is gated\nby the same condition used for skipping tests.\n```\n\n</details>\n\n<!-- fingerprinting:phantom:triton:chinchilla -->\n\n<!-- This is an auto-generated comment by CodeRabbit -->",
+    "commit_id": "b9a562b1882aea8345f48e407ae9ed2e06bf96f9",
+    "created_at": "2025-08-22T15:48:26Z",
+    "diff_hunk": "@@ -0,0 +1,147 @@\n+name: go-flake-check\n+\n+on:\n+  pull_request:\n+  workflow_dispatch:\n+\n+permissions:\n+  contents: read\n+\n+concurrency:\n+  group: ${{ github.workflow }}-${{ github.ref }}\n+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}\n+\n+jobs:\n+  changed-go-tests:\n+    runs-on: ${{ github.repository_owner == 'coder' && 'depot-ubuntu-22.04-8' || 'ubuntu-latest' }}\n+    outputs:\n+      any_changed: ${{ steps.changed.outputs.any_changed }}\n+      files: ${{ steps.changed.outputs.all_changed_files }}\n+    steps:\n+      - name: Harden Runner\n+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0\n+        with:\n+          egress-policy: audit\n+\n+      - name: Checkout\n+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0\n+        with:\n+          fetch-depth: 0\n+\n+      - id: changed\n+        name: Detect changed go test files\n+        uses: tj-actions/changed-files@v44\n+        with:\n+          files: |\n+            **/*_test.go\n+\n+  go-flake:\n+    needs: changed-go-tests\n+    if: needs.changed-go-tests.outputs.any_changed == 'true'\n+    runs-on: ${{ github.repository_owner == 'coder' && 'depot-ubuntu-22.04-8' || 'ubuntu-latest' }}\n+    timeout-minutes: 30\n+    env:\n+      ATTEMPTS: '10'\n+      POSTGRES_VERSION: '17'\n+    steps:\n+      - name: Harden Runner\n+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0\n+        with:\n+          egress-policy: audit\n+\n+      - name: Checkout\n+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0\n+        with:\n+          fetch-depth: 1\n+\n+      - name: Setup Go\n+        uses: ./.github/actions/setup-go\n+\n+      - name: Ensure jq\n+        run: |\n+          if ! command -v jq >/dev/null; then\n+            sudo apt-get update -y\n+            sudo apt-get install -y jq\n+          fi\n+\n+      - name: Start Postgres (reuse CI helper)\n+        run: |\n+          make test-postgres-docker\n+\n+      - name: Build package and test regex from changed files\n+        id: gometa\n+        shell: bash\n+        run: |\n+          set -euo pipefail\n+          printf '%s\\n' \"${{ needs.changed-go-tests.outputs.files }}\" | tr ' ' '\\n' | sed '/^$/d' > /tmp/go_changed_files.txt\n+          sort -u /tmp/go_changed_files.txt -o /tmp/go_changed_files.txt\n+\n+          pkgs=$(awk '{print $0}' /tmp/go_changed_files.txt | xargs -I{} dirname {} | sort -u | while read d; do (cd \"$d\" && go list -f '{{.ImportPath}}'); done)\n+          if [ -z \"$pkgs\" ]; then\n+            echo \"skip=true\" >> \"$GITHUB_OUTPUT\"\n+            exit 0\n+          fi\n+          echo \"pkgs=$pkgs\" >> \"$GITHUB_OUTPUT\"\n+\n+          tests=$(awk '{print $0}' /tmp/go_changed_files.txt | xargs -I{} sh -c \"sed -nE 's/^func[[:space:]]+(Test[[:alnum:]_]+)[[:space:]]*\\\\(.*/\\\\1/p' {}\" | sort -u | paste -sd'|' -)\n+          if [ -z \"$tests\" ]; then\n+            echo \"skip=true\" >> \"$GITHUB_OUTPUT\"\n+            exit 0\n+          fi\n+          echo \"regex=^(${tests})$\" >> \"$GITHUB_OUTPUT\"\n+\n+      - name: Run repeated tests to detect flakiness\n+        if: steps.gometa.outputs.skip != 'true'\n+        shell: bash\n+        run: |\n+          set -euo pipefail\n+          mkdir -p flake/go json\n+          regex='${{ steps.gometa.outputs.regex }}'\n+          pkgs='${{ steps.gometa.outputs.pkgs }}'\n+\n+          for i in $(seq 1 ${ATTEMPTS}); do\n+            for p in $pkgs; do\n+              go test -json -run \"$regex\" -count=1 -shuffle=on \"$p\" \\\n+                | tee \"json/run-$i-$(echo \"$p\" | tr '/.' '__').json\" >/dev/null || true\n+            done\n+          done\n+\n+          jq -s '\n+            map(select(.Action==\"pass\" or .Action==\"fail\") | select(.Test)) as $events\n+            | reduce $events[] as $e ({}; .[$e.Test] = (\n+                .[$e.Test] // {pass:0,fail:0}\n+                | if $e.Action==\"pass\" then (.pass+=1) else (.fail+=1) end\n+              )\n+            )\n+          ' json/*.json > json/counts.json\n+\n+          jq 'to_entries | map(select(.value.fail>0 and .value.pass>0) | {name:.key, pass:.value.pass, fail:.value.fail})' json/counts.json > json/flaky.json\n+          jq 'to_entries | map(select(.value.fail>0 and ((.value.pass//0)==0)) | {name:.key, fail:.value.fail})' json/counts.json > json/failing.json\n+\n+          echo \"Go flaky tests (changed files) after ${ATTEMPTS} runs:\" >> \"$GITHUB_STEP_SUMMARY\"\n+          if jq -e 'length==0' json/flaky.json >/dev/null; then\n+            echo \"  none\" >> \"$GITHUB_STEP_SUMMARY\"\n+          else\n+            jq -r '.[] | \"  \\(.name): fail=\\(.fail) pass=\\(.pass)\"' json/flaky.json >> \"$GITHUB_STEP_SUMMARY\"\n+          fi\n+\n+          echo \"\\nConsistently failing tests:\" >> \"$GITHUB_STEP_SUMMARY\"\n+          if jq -e 'length==0' json/failing.json >/dev/null; then\n+            echo \"  none\" >> \"$GITHUB_STEP_SUMMARY\"\n+          else\n+            jq -r '.[] | \"  \\(.name): fail=\\(.fail)\"' json/failing.json >> \"$GITHUB_STEP_SUMMARY\"\n+          fi\n+          \n+      - name: Upload artifacts\n+        if: always()\n+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2\n+        with:\n+          name: go-flake-json\n+          path: json/\n+",
+    "html_url": "https://github.com/coder/coder/pull/19494#discussion_r2294093605",
+    "id": 2294093605,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6IvRcl",
+    "original_commit_id": "73b6d0592951ebcf457cff26ca128fa6516ec558",
+    "original_line": 141,
+    "original_position": 141,
+    "original_start_line": 135,
+    "path": ".github/workflows/flake-go.yaml",
+    "position": 1,
+    "pull_request_review_id": 3145008423,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19494",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2294093605/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 135,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-08-22T15:48:27Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2294093605",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/347564?v=4",
+      "events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coderabbitai",
+      "id": 136622811,
+      "login": "coderabbitai[bot]",
+      "node_id": "BOT_kgDOCCSy2w",
+      "organizations_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coderabbitai%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19494#discussion_r2294115621"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19494"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2294115621"
+      }
+    },
+    "author_association": "NONE",
+    "body": "_\ud83d\udca1 Verification agent_\n\n_\ud83d\udee0\ufe0f Refactor suggestion_\n\n<details>\n<summary>\ud83e\udde9 Analysis chain</summary>\n\n**Replace math/rand import; either remove or switch to gated cryptorand usage.**\n\nmath/rand\u2019s default seed is deterministic; coupled with parallelism, this may never trip the 10% path or, worse, introduce non-reproducible flakes. If you adopt Option A above, drop this import. If you adopt Option B, replace it with imports needed for env-gated, secure randomness:\n\n- For Option A (remove):\n```diff\n-\t\"math/rand\"\n```\n\n- For Option B (env-gated using cryptorand):\n```diff\n-\t\"math/rand\"\n+\t\"strconv\"\n+\t\"github.com/coder/coder/v2/cryptorand\"\n```\n\n\n\nAfter updating imports, run go mod tidy and ensure golangci-lint passes locally.\n\n---\n\n\ud83c\udfc1 Script executed:\n\n```shell\n#!/bin/bash\n# Verify math/rand import and usage in cli/agent_test.go\n\n# Show import lines\nrg -n --color=never '^\\s*\"math/rand\"' cli/agent_test.go\n\n# Show any calls to rand.*\nrg -n --color=never 'rand\\.' cli/agent_test.go\n```\n\nLength of output: 152\n\n---\n\n\n\n</details>\n\n**Replace math/rand in cli/agent_test.go (lines 6 & 39)**  \nThe test currently imports and uses math/rand\u2019s default global RNG, which is seeded deterministically and can  \n\u2013 never trigger the 10% branch under parallel test runs, or  \n\u2013 introduce non-reproducible flakes.  \n\nPlease choose one of the following fixes:\n\n\u2022 Option A: Remove randomness entirely  \n  \u2013 Remove the import on line 6:  \n    ```diff\n    -    \"math/rand\"\n    ```  \n  \u2013 Replace the call at line 39 (`rand.Float64() < 0.1`) with a fixed value or stub so both branches are exercised deterministically.\n\n\u2022 Option B: Gate secure randomness behind an env var  \n  \u2013 Replace the import on line 6:  \n    ```diff\n    -    \"math/rand\"\n    +    \"strconv\"\n    +    \"github.com/coder/coder/v2/cryptorand\"\n    ```  \n  \u2013 Refactor the call at line 39 to select between `rand.Float64()` and `cryptorand.Float64()` based on an environment flag (e.g., `USE_SECURE_RANDOM`), for example:  \n    ```diff\n    -    if rand.Float64() < 0.1 {\n    +    useSecure, _ := strconv.ParseBool(os.Getenv(\"USE_SECURE_RANDOM\"))\n    +    r := rand.Float64()\n    +    if useSecure {\n    +        r, _ = cryptorand.Float64()\n    +    }\n    +    if r < 0.1 {\n    ```\n\nAfter updating imports and code, run `go mod tidy` and ensure `golangci-lint run` passes locally.  \n \n\n> Committable suggestion skipped: line range outside the PR's diff.\n\n<details>\n<summary>\ud83e\udd16 Prompt for AI Agents</summary>\n\n```\nIn cli/agent_test.go around line 6 and 39, the test imports math/rand and uses\nrand.Float64() < 0.1 which introduces non-determinism and flakes; remove the\nmath/rand import and replace the rand.Float64() < 0.1 call with a deterministic\nvalue or stub (e.g., a fixed boolean or test-controlled function) so the test is\ndeterministic, and if both branches need coverage create two explicit test cases\n(one with the condition true, one false) instead of relying on randomness; after\nchanges run go mod tidy and golangci-lint run locally.\n```\n\n</details>\n\n<!-- fingerprinting:phantom:poseidon:chinchilla -->\n\n<!-- This is an auto-generated comment by CodeRabbit -->",
+    "commit_id": "b9a562b1882aea8345f48e407ae9ed2e06bf96f9",
+    "created_at": "2025-08-22T15:59:20Z",
+    "diff_hunk": "@@ -3,6 +3,7 @@\n import (\n \t\"context\"\n \t\"fmt\"\n+\t\"math/rand\"",
+    "html_url": "https://github.com/coder/coder/pull/19494#discussion_r2294115621",
+    "id": 2294115621,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6IvW0l",
+    "original_commit_id": "ca1bd6cf58e4b207a8c38a09ed85c4cbffe29491",
+    "original_line": 6,
+    "original_position": 4,
+    "original_start_line": null,
+    "path": "cli/agent_test.go",
+    "position": 1,
+    "pull_request_review_id": 3145038142,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19494",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2294115621/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-08-22T15:59:21Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2294115621",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/347564?v=4",
+      "events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coderabbitai",
+      "id": 136622811,
+      "login": "coderabbitai[bot]",
+      "node_id": "BOT_kgDOCCSy2w",
+      "organizations_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coderabbitai%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19494#discussion_r2294115629"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19494"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2294115629"
+      }
+    },
+    "author_association": "NONE",
+    "body": "_\ud83d\udca1 Verification agent_\n\n<details>\n<summary>\ud83e\udde9 Analysis chain</summary>\n\n**Do not land randomized failures in core tests; gate or remove.**\n\nIntroducing a 10% random failure makes the suite nondeterministic and will create spurious red builds outside the flake-check workflow. Additionally, because math/rand uses a deterministic default seed, this may never actually trigger on CI, undermining the intended signal.\n\nRecommended fixes (pick one):\n\n- Option A \u2014 remove the injection entirely (safe default for main):\n```diff\n-\t\t// Random failure injection - 10% chance\n-\t\tif rand.Float64() < 0.1 {\n-\t\t\tt.Fatal(\"Random test failure for testing purposes\")\n-\t\t}\n```\n\n- Option B \u2014 gate injection behind an env var and use cryptographic randomness so the workflow can opt-in without affecting normal CI:\n```diff\n-\t\t// Random failure injection - 10% chance\n-\t\tif rand.Float64() < 0.1 {\n-\t\t\tt.Fatal(\"Random test failure for testing purposes\")\n-\t\t}\n+\t\t// Optional flake injection for flake-check workflow runs (off by default).\n+\t\tif pStr := os.Getenv(\"CODER_TEST_INJECT_FLAKE_PERCENT\"); pStr != \"\" {\n+\t\t\tp, err := strconv.Atoi(pStr)\n+\t\t\trequire.NoError(t, err)\n+\t\t\tf, err := cryptorand.Float64()\n+\t\t\trequire.NoError(t, err)\n+\t\t\tif f < float64(p)/100.0 {\n+\t\t\t\tt.Fatalf(\"Random test failure injected (%d%%)\", p)\n+\t\t\t}\n+\t\t}\n```\n\nFollow-up for Option B:\n- Set CODER_TEST_INJECT_FLAKE_PERCENT (e.g., 10) solely in the go-flake-check job, not in regular test jobs.\n\n\n\n\nRun this script to confirm the workflow sets the env var only in the flake-check job and that no other tests import math/rand for flakiness:\n\n---\n\n\ud83c\udfc1 Script executed:\n\n```shell\n#!/bin/bash\nset -euo pipefail\n\necho \"1) Check math/rand usage in tests:\"\nrg -nP -C2 --type=go '\\brand\\.Float64\\(|\"math/rand\"' -- '**/*_test.go' || echo \"OK: no math/rand usage in tests.\"\n\necho\necho \"2) Inspect flake workflow for env gating:\"\nrg -nP -C3 '\\.github/workflows/flake-go\\.ya?ml' -l || echo \"flake-go workflow file not found.\"\nif fd -H '.github/workflows/flake-go.y*ml' >/dev/null; then\n  fd -H '.github/workflows/flake-go.y*ml' -X bash -lc 'echo \"--- {} ---\"; rg -nP -C3 \"CODER_TEST_INJECT_FLAKE_PERCENT|go-flake|changed-go-tests|no-changed-tests\" \"{}\"'\nfi\n```\n\nLength of output: 740\n\n---\n\nThis will verify:\n- Presence of Go test files and any unintended `rand.Float64` imports/usage.\n- Existence and contents of CI workflows gating the flake injection.\n\n---\n\n\ud83c\udfc1 Script executed:\n\n```shell\n#!/bin/bash\nset -euo pipefail\n\necho \"1) Finding all Go test files:\"\nfind . -type f -name \"*_test.go\" || echo \"No test files found\"\n\necho\necho \"2) Searching for rand.Float64 usage in test files:\"\nrg -nP '\\brand\\.Float64\\(' -tgo -g '*_test.go' -n || echo \"No rand.Float64 usage in test files\"\n\necho\necho \"3) Searching for math/rand import in test files:\"\nrg -nP '\"math/rand\"' -tgo -g '*_test.go' -n || echo \"No math/rand import in test files\"\n\necho\necho \"4) Listing workflow YAML files in .github/workflows:\"\nfind .github/workflows -type f -maxdepth 1 -print || echo \".github/workflows not found\"\n\necho\necho \"5) Grepping for CODER_TEST_INJECT_FLAKE_PERCENT in the repo:\"\nrg -nP 'CODER_TEST_INJECT_FLAKE_PERCENT' -n || echo \"CODER_TEST_INJECT_FLAKE_PERCENT not referenced\"\n\necho\necho \"6) Searching for 'flake' references in workflow files:\"\nrg -nP 'flake' -n .github/workflows/**/*.y*ml || echo \"No 'flake' references in workflows\"\n```\n\nLength of output: 22912\n\n---\n\n\n\n</details>\n\n**Remove uncontrolled random failure in cli/agent_test.go**  \n\nThe snippet in cli/agent_test.go (around line 39) injects a 10% chance of failure using math/rand.Float64, making the test suite nondeterministic and liable to produce spurious red builds without flake-check. Moreover, the CI workflows do not currently set any gating variable, so this code will silently never fire on CI (due to the deterministic default seed), defeating its purpose.\n\nPlease pick one of the following fixes:\n\n\u2022 Option A \u2013 Remove the injection entirely (safe default for all workflows):  \n```diff\n--- a/cli/agent_test.go\n+++ b/cli/agent_test.go\n@@ -36,6 +36,3 @@ func TestSomething(t *testing.T) {\n-       // Random failure injection \u2013 10% chance\n-       if rand.Float64() < 0.1 {\n-           t.Fatal(\"Random test failure for testing purposes\")\n-       }\n}\n```\n\n\u2022 Option B \u2013 Gate flake injection behind an env var and use crypto/rand so only flake-check jobs opt in:  \n```diff\n--- a/cli/agent_test.go\n+++ b/cli/agent_test.go\n@@ -36,6 +36,17 @@ func TestSomething(t *testing.T) {\n-       // Random failure injection \u2013 10% chance\n-       if rand.Float64() < 0.1 {\n-           t.Fatal(\"Random test failure for testing purposes\")\n-       }\n+       // Optional flake injection (off by default)\n+       if pStr := os.Getenv(\"CODER_TEST_INJECT_FLAKE_PERCENT\"); pStr != \"\" {\n+           p, err := strconv.Atoi(pStr)\n+           require.NoError(t, err)\n+           f, err := cryptorand.Float64()\n+           require.NoError(t, err)\n+           if f < float64(p)/100.0 {\n+               t.Fatalf(\"Injected flake failure (%d%%)\", p)\n+           }\n+       }\n}\n```\n\nFollow-up for Option B:  \n\u2022 In .github/workflows/flake-go.yaml, in the job that runs go-flake-check, set  \n```yaml\nenv:\n  CODER_TEST_INJECT_FLAKE_PERCENT: 10\n```  \nand do **not** include this env var in regular CI jobs.  \n\nThese changes are critical to preserving deterministic test behavior and ensuring any flake injection runs only when explicitly enabled.\n\n<details>\n<summary>\ud83e\udd16 Prompt for AI Agents</summary>\n\n```\nIn cli/agent_test.go around lines 38\u201341 the test injects an uncontrolled 10%\nrandom failure via math/rand.Float64 which makes tests nondeterministic; replace\nthis with a gated flake-injection: read an env var\nCODER_TEST_INJECT_FLAKE_PERCENT (default 0), parse it as an int percent, and\nonly if >0 use crypto/rand to uniformly generate a secure random number to\ndecide whether to fail; ensure math/rand is not used and that normal CI (env var\nabsent or 0) produces deterministic behavior. Also update\n.github/workflows/flake-go.yaml to set env: CODER_TEST_INJECT_FLAKE_PERCENT: 10\nin the flake-check job only (do not add the env var to regular CI jobs).\n```\n\n</details>\n\n<!-- fingerprinting:phantom:poseidon:chinchilla -->\n\n<!-- This is an auto-generated comment by CodeRabbit -->",
+    "commit_id": "b9a562b1882aea8345f48e407ae9ed2e06bf96f9",
+    "created_at": "2025-08-22T15:59:20Z",
+    "diff_hunk": "@@ -34,6 +35,11 @@\n \tt.Run(\"LogDirectory\", func(t *testing.T) {\n \t\tt.Parallel()\n \n+\t\t// Random failure injection - 10% chance\n+\t\tif rand.Float64() < 0.1 {\n+\t\t\tt.Fatal(\"Random test failure for testing purposes\")\n+\t\t}",
+    "html_url": "https://github.com/coder/coder/pull/19494#discussion_r2294115629",
+    "id": 2294115629,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6IvW0t",
+    "original_commit_id": "ca1bd6cf58e4b207a8c38a09ed85c4cbffe29491",
+    "original_line": 41,
+    "original_position": 15,
+    "original_start_line": 38,
+    "path": "cli/agent_test.go",
+    "position": 1,
+    "pull_request_review_id": 3145038142,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19494",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2294115629/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-08-22T15:59:21Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2294115629",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/347564?v=4",
+      "events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coderabbitai",
+      "id": 136622811,
+      "login": "coderabbitai[bot]",
+      "node_id": "BOT_kgDOCCSy2w",
+      "organizations_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coderabbitai%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  }
+]

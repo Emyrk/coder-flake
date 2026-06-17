@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/f8e8b9a919b0ddecdd297335a86dee891a43527b/coderd%2Fprovisionerdserver%2Fprovisionerdserver_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fprovisionerdserver%2Fprovisionerdserver_test.go?ref=f8e8b9a919b0ddecdd297335a86dee891a43527b",
+    "deletions": 0,
+    "filename": "coderd/provisionerdserver/provisionerdserver_test.go",
+    "patch": "@@ -4091,6 +4091,7 @@ func TestServer_ExpirePrebuildsSessionToken(t *testing.T) {\n \tjob, err := fs.waitForJob()\n \trequire.NoError(t, err)\n \trequire.NotNil(t, job)\n+\trequire.NotNil(t, job.Type, \"acquired job type was nil?!\")\n \tworkspaceBuildJob := job.Type.(*proto.AcquiredJob_WorkspaceBuild_).WorkspaceBuild\n \trequire.NotNil(t, workspaceBuildJob.Metadata)\n ",
+    "raw_url": "https://github.com/coder/coder/raw/f8e8b9a919b0ddecdd297335a86dee891a43527b/coderd%2Fprovisionerdserver%2Fprovisionerdserver_test.go",
+    "sha": "850d95d7549e406c9f464c446935ce5212a8ccd6",
+    "status": "modified"
+  }
+]

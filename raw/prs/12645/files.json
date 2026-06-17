@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/64df75e2250e8e4e93b05c40a45312fcf6c1683d/enterprise%2Fcli%2Fproxyserver_test.go",
+    "changes": 7,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcli%2Fproxyserver_test.go?ref=64df75e2250e8e4e93b05c40a45312fcf6c1683d",
+    "deletions": 4,
+    "filename": "enterprise/cli/proxyserver_test.go",
+    "patch": "@@ -3,7 +3,6 @@ package cli_test\n import (\n \t\"bufio\"\n \t\"context\"\n-\t\"errors\"\n \t\"fmt\"\n \t\"net/http\"\n \t\"net/http/httptest\"\n@@ -76,7 +75,8 @@ func TestWorkspaceProxy_Server_PrometheusEnabled(t *testing.T) {\n \t\t\t_, _ = w.Write([]byte(`{\"app_security_key\": \"012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789123456012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789123456\"}`))\n \t\t\treturn\n \t\t}\n-\t\tif r.URL.Path == \"/api/v2/workspaceproxies/me/coordinate\" {\n+\t\tif r.URL.Path == \"/api/v2/workspaceproxies/me/coordinate\" ||\n+\t\t\tr.URL.Path == \"/api/v2/buildinfo\" {\n \t\t\t// Slow down proxy registration, so that test runner can check if Prometheus endpoint is exposed.\n \t\t\twg.Wait()\n \n@@ -107,8 +107,7 @@ func TestWorkspaceProxy_Server_PrometheusEnabled(t *testing.T) {\n \n \t// Start \"wsproxy server\" command\n \tclitest.StartWithAssert(t, inv, func(t *testing.T, err error) {\n-\t\tassert.Error(t, err)\n-\t\tassert.False(t, errors.Is(err, context.Canceled), \"error was expected, but context was canceled\")\n+\t\t// actually no assertions are needed as the test verifies only Prometheus endpoint\n \t})\n \tpty.ExpectMatchContext(ctx, \"Started HTTP listener at\")\n ",
+    "raw_url": "https://github.com/coder/coder/raw/64df75e2250e8e4e93b05c40a45312fcf6c1683d/enterprise%2Fcli%2Fproxyserver_test.go",
+    "sha": "1af78b4b134ec1b868aa0e4069c9a872214f678b",
+    "status": "modified"
+  }
+]

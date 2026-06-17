@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/5635ff00fd90128e523c75a67ca7b06ff1f99251/agent%2Fagent_test.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagent_test.go?ref=5635ff00fd90128e523c75a67ca7b06ff1f99251",
+    "deletions": 3,
+    "filename": "agent/agent_test.go",
+    "patch": "@@ -63,11 +63,9 @@ func TestAgent(t *testing.T) {\n \tt.Run(\"SessionTTY\", func(t *testing.T) {\n \t\tt.Parallel()\n \t\tsession := setupSSHSession(t)\n-\t\tprompt := \"$\"\n \t\tcommand := \"bash\"\n \t\tif runtime.GOOS == \"windows\" {\n \t\t\tcommand = \"cmd.exe\"\n-\t\t\tprompt = \">\"\n \t\t}\n \t\terr := session.RequestPty(\"xterm\", 128, 128, ssh.TerminalModes{})\n \t\trequire.NoError(t, err)\n@@ -78,7 +76,6 @@ func TestAgent(t *testing.T) {\n \t\tsession.Stdin = ptty.Input()\n \t\terr = session.Start(command)\n \t\trequire.NoError(t, err)\n-\t\tptty.ExpectMatch(prompt)\n \t\tptty.WriteLine(\"echo test\")\n \t\tptty.ExpectMatch(\"test\")\n \t\tptty.WriteLine(\"exit\")",
+    "raw_url": "https://github.com/coder/coder/raw/5635ff00fd90128e523c75a67ca7b06ff1f99251/agent%2Fagent_test.go",
+    "sha": "d195d6580c081baabf2f834bf857d169abad2ed4",
+    "status": "modified"
+  }
+]

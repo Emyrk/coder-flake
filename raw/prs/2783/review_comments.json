@@ -1,0 +1,975 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2783#discussion_r912201849"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2783"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/912201849"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Understandable :'(",
+    "commit_id": "33b047716d0271d5cbc3f4a8e814e691978f23ac",
+    "created_at": "2022-07-01T19:14:10Z",
+    "diff_hunk": "@@ -38,6 +38,37 @@ func (api *API) provisionerJobLogs(rw http.ResponseWriter, r *http.Request, job\n \t\treturn\n \t}\n \n+\t// if we are following logs, start the subscription before we query the database, so that we don't miss any logs\n+\t// between the end of our query and the start of the subscription.  We might get duplicates, so we'll keep track\n+\t// of processed IDs.\n+\tvar bufferedLogs chan database.ProvisionerJobLog\n+\tif follow {\n+\t\tbl, closeFollow, err := api.followLogs(job.ID)\n+\t\tif err != nil {\n+\t\t\thttpapi.Write(rw, http.StatusInternalServerError, httpapi.Response{\n+\t\t\t\tMessage: \"Internal error watching provisioner logs.\",\n+\t\t\t\tDetail:  err.Error(),\n+\t\t\t})\n+\t\t\treturn\n+\t\t}\n+\t\tdefer closeFollow()\n+\t\tbufferedLogs = bl\n+\n+\t\t// Next query the job itself to see if it is complete.  If so, the historical query to the database will return\n+\t\t// the full set of logs.  It's a little sad to have to query the job again, given that our caller definitely\n+\t\t// has, but we need to query it *after* we start following the pubsub to avoid a race condition where the job\n+\t\t// completes between the prior query and the start of following the pubsub.  A more substantial refactor could\n+\t\t// avoid this, but not worth it for one fewer query at this point.\n+\t\tjob, err = api.Database.GetProvisionerJobByID(r.Context(), job.ID)\n+\t\tif err != nil {\n+\t\t\thttpapi.Write(rw, http.StatusInternalServerError, httpapi.Response{\n+\t\t\t\tMessage: \"Internal error querying job.\",\n+\t\t\t\tDetail:  err.Error(),\n+\t\t\t})\n+\t\t\treturn\n+\t\t}",
+    "html_url": "https://github.com/coder/coder/pull/2783#discussion_r912201849",
+    "id": 912201849,
+    "line": 70,
+    "node_id": "PRRC_kwDOGkVX1s42Xxh5",
+    "original_commit_id": "e8674d43b87bab88643cc79289208f978dd3a130",
+    "original_line": 69,
+    "original_position": 32,
+    "original_start_line": 57,
+    "path": "coderd/provisionerjobs.go",
+    "position": 40,
+    "pull_request_review_id": 1026575769,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2783",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/912201849/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 58,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-01T19:28:31Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/912201849",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2783#discussion_r912202945"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2783"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/912202945"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Might as well limit what the caller can do with the channel\r\n```suggestion\r\nfunc (api *API) followLogs(jobID uuid.UUID) (<-chan database.ProvisionerJobLog, func(), error) {\r\n```",
+    "commit_id": "33b047716d0271d5cbc3f4a8e814e691978f23ac",
+    "created_at": "2022-07-01T19:16:33Z",
+    "diff_hunk": "@@ -343,3 +338,46 @@ func convertProvisionerJob(provisionerJob database.ProvisionerJob) codersdk.Prov\n func provisionerJobLogsChannel(jobID uuid.UUID) string {\n \treturn fmt.Sprintf(\"provisioner-log-logs:%s\", jobID)\n }\n+\n+// provisionerJobLogsMessage is the message type published on the provisionerJobLogsChannel() channel\n+type provisionerJobLogsMessage struct {\n+\tEndOfLogs bool                         `json:\"end_of_logs,omitempty\"`\n+\tLogs      []database.ProvisionerJobLog `json:\"logs,omitempty\"`\n+}\n+\n+func (api *API) followLogs(jobID uuid.UUID) (chan database.ProvisionerJobLog, func(), error) {",
+    "html_url": "https://github.com/coder/coder/pull/2783#discussion_r912202945",
+    "id": 912202945,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s42XxzB",
+    "original_commit_id": "e8674d43b87bab88643cc79289208f978dd3a130",
+    "original_line": 348,
+    "original_position": 202,
+    "original_start_line": null,
+    "path": "coderd/provisionerjobs.go",
+    "position": 1,
+    "pull_request_review_id": 1026575769,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2783",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/912202945/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-07-01T19:28:31Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/912202945",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2783#discussion_r912204666"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2783"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/912204666"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Is there a reason we aren't using the structured fields?\r\nWe probably should have a metter method to ensure things like `job_id` are consistent everywhere we use it.\r\n\r\n```suggestion\r\n\t\t\t\tapi.Logger.Warn(ctx, \"invalid provisioner job log on channel\",\r\n\t\t\t\t\tslog.Error(err),\r\n\t\t\t\t\tslog.F(\"job_id\", jobID),\r\n\t\t\t\t)\r\n```",
+    "commit_id": "33b047716d0271d5cbc3f4a8e814e691978f23ac",
+    "created_at": "2022-07-01T19:20:01Z",
+    "diff_hunk": "@@ -343,3 +338,46 @@ func convertProvisionerJob(provisionerJob database.ProvisionerJob) codersdk.Prov\n func provisionerJobLogsChannel(jobID uuid.UUID) string {\n \treturn fmt.Sprintf(\"provisioner-log-logs:%s\", jobID)\n }\n+\n+// provisionerJobLogsMessage is the message type published on the provisionerJobLogsChannel() channel\n+type provisionerJobLogsMessage struct {\n+\tEndOfLogs bool                         `json:\"end_of_logs,omitempty\"`\n+\tLogs      []database.ProvisionerJobLog `json:\"logs,omitempty\"`\n+}\n+\n+func (api *API) followLogs(jobID uuid.UUID) (chan database.ProvisionerJobLog, func(), error) {\n+\tbufferedLogs := make(chan database.ProvisionerJobLog, 128)\n+\tcloseSubscribe, err := api.Pubsub.Subscribe(provisionerJobLogsChannel(jobID),\n+\t\tfunc(ctx context.Context, message []byte) {\n+\t\t\tjlMsg := provisionerJobLogsMessage{}\n+\t\t\terr := json.Unmarshal(message, &jlMsg)\n+\t\t\tif err != nil {\n+\t\t\t\tapi.Logger.Warn(ctx,\n+\t\t\t\t\tfmt.Sprintf(\"invalid provisioner job log on channel %q: %s\",\n+\t\t\t\t\t\tprovisionerJobLogsChannel(jobID),\n+\t\t\t\t\t\terr.Error()))",
+    "html_url": "https://github.com/coder/coder/pull/2783#discussion_r912204666",
+    "id": 912204666,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s42XyN6",
+    "original_commit_id": "e8674d43b87bab88643cc79289208f978dd3a130",
+    "original_line": 358,
+    "original_position": 212,
+    "original_start_line": 355,
+    "path": "coderd/provisionerjobs.go",
+    "position": 1,
+    "pull_request_review_id": 1026575769,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2783",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/912204666/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-01T19:28:31Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/912204666",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2783#discussion_r912206464"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2783"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/912206464"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I don't totally get this comment. Doesn't the messages from from the database? So doesn't this overflow if the caller (websocket) is slower than the logs coming in over the database? \r\n\r\n\r\nJust looking for clarity of the comment, I know we should not block the database side of this. I wonder if we should record the number of skipped logs and try to insert something like \"... X logs lines skipped ...\". ",
+    "commit_id": "33b047716d0271d5cbc3f4a8e814e691978f23ac",
+    "created_at": "2022-07-01T19:24:09Z",
+    "diff_hunk": "@@ -343,3 +338,46 @@ func convertProvisionerJob(provisionerJob database.ProvisionerJob) codersdk.Prov\n func provisionerJobLogsChannel(jobID uuid.UUID) string {\n \treturn fmt.Sprintf(\"provisioner-log-logs:%s\", jobID)\n }\n+\n+// provisionerJobLogsMessage is the message type published on the provisionerJobLogsChannel() channel\n+type provisionerJobLogsMessage struct {\n+\tEndOfLogs bool                         `json:\"end_of_logs,omitempty\"`\n+\tLogs      []database.ProvisionerJobLog `json:\"logs,omitempty\"`\n+}\n+\n+func (api *API) followLogs(jobID uuid.UUID) (chan database.ProvisionerJobLog, func(), error) {\n+\tbufferedLogs := make(chan database.ProvisionerJobLog, 128)\n+\tcloseSubscribe, err := api.Pubsub.Subscribe(provisionerJobLogsChannel(jobID),\n+\t\tfunc(ctx context.Context, message []byte) {\n+\t\t\tjlMsg := provisionerJobLogsMessage{}\n+\t\t\terr := json.Unmarshal(message, &jlMsg)\n+\t\t\tif err != nil {\n+\t\t\t\tapi.Logger.Warn(ctx,\n+\t\t\t\t\tfmt.Sprintf(\"invalid provisioner job log on channel %q: %s\",\n+\t\t\t\t\t\tprovisionerJobLogsChannel(jobID),\n+\t\t\t\t\t\terr.Error()))\n+\t\t\t\treturn\n+\t\t\t}\n+\n+\t\t\tfor _, log := range jlMsg.Logs {\n+\t\t\t\tselect {\n+\t\t\t\tcase bufferedLogs <- log:\n+\t\t\t\t\tapi.Logger.Debug(ctx, \"subscribe buffered log\",\n+\t\t\t\t\t\tslog.F(\"job_id\", jobID),\n+\t\t\t\t\t\tslog.F(\"stage\", log.Stage))\n+\t\t\t\tdefault:\n+\t\t\t\t\t// If this overflows users could miss logs streaming. This can happen\n+\t\t\t\t\t// if a database request takes a long amount of time, and we get a lot of logs.\n+\t\t\t\t\tapi.Logger.Warn(ctx, \"provisioner job log overflowing channel\")",
+    "html_url": "https://github.com/coder/coder/pull/2783#discussion_r912206464",
+    "id": 912206464,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s42XyqA",
+    "original_commit_id": "e8674d43b87bab88643cc79289208f978dd3a130",
+    "original_line": 371,
+    "original_position": 225,
+    "original_start_line": 369,
+    "path": "coderd/provisionerjobs.go",
+    "position": 1,
+    "pull_request_review_id": 1026575769,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2783",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/912206464/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-01T19:28:31Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/912206464",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2783#discussion_r912206961"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2783"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/912206961"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "`go mod tidy` removes the `objx` dep",
+    "commit_id": "33b047716d0271d5cbc3f4a8e814e691978f23ac",
+    "created_at": "2022-07-01T19:25:15Z",
+    "diff_hunk": "@@ -138,7 +138,10 @@ require (\n \ttailscale.com v1.26.1\n )\n \n-require github.com/googleapis/enterprise-certificate-proxy v0.1.0 // indirect\n+require (\n+\tgithub.com/googleapis/enterprise-certificate-proxy v0.1.0 // indirect\n+\tgithub.com/stretchr/objx v0.4.0 // indirect\n+)",
+    "html_url": "https://github.com/coder/coder/pull/2783#discussion_r912206961",
+    "id": 912206961,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s42Xyxx",
+    "original_commit_id": "e8674d43b87bab88643cc79289208f978dd3a130",
+    "original_line": 144,
+    "original_position": 8,
+    "original_start_line": 141,
+    "path": "go.mod",
+    "position": 1,
+    "pull_request_review_id": 1026575769,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2783",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/912206961/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-01T19:28:31Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/912206961",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2783#discussion_r912208514"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2783"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/912208514"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "One little thing to help logger fields maybe.\r\n\r\n```golang\r\nlogger := api.Logger.With(slog.F(\"job_id\", jobID))\r\n```\r\n\r\nThen just `logger.Warn()` and `logger.Debug()` later. The field is always present.",
+    "commit_id": "33b047716d0271d5cbc3f4a8e814e691978f23ac",
+    "created_at": "2022-07-01T19:28:17Z",
+    "diff_hunk": "@@ -343,3 +338,46 @@ func convertProvisionerJob(provisionerJob database.ProvisionerJob) codersdk.Prov\n func provisionerJobLogsChannel(jobID uuid.UUID) string {\n \treturn fmt.Sprintf(\"provisioner-log-logs:%s\", jobID)\n }\n+\n+// provisionerJobLogsMessage is the message type published on the provisionerJobLogsChannel() channel\n+type provisionerJobLogsMessage struct {\n+\tEndOfLogs bool                         `json:\"end_of_logs,omitempty\"`\n+\tLogs      []database.ProvisionerJobLog `json:\"logs,omitempty\"`\n+}\n+\n+func (api *API) followLogs(jobID uuid.UUID) (chan database.ProvisionerJobLog, func(), error) {\n+\tbufferedLogs := make(chan database.ProvisionerJobLog, 128)",
+    "html_url": "https://github.com/coder/coder/pull/2783#discussion_r912208514",
+    "id": 912208514,
+    "line": 349,
+    "node_id": "PRRC_kwDOGkVX1s42XzKC",
+    "original_commit_id": "e8674d43b87bab88643cc79289208f978dd3a130",
+    "original_line": 349,
+    "original_position": 203,
+    "original_start_line": null,
+    "path": "coderd/provisionerjobs.go",
+    "position": 211,
+    "pull_request_review_id": 1026575769,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2783",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/912208514/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-07-01T19:28:31Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/912208514",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2783#discussion_r912214519"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2783"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/912214519"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "Yeah, the channel could overflow if the client is slow to read from the websocket, but it could also overflow if more than 128 messages are added between the time we set up the pubsub subscription and the time we start reading from the channel, which doesn't happen until `GetProvisionerLogsByIDBetween` completes.",
+    "commit_id": "33b047716d0271d5cbc3f4a8e814e691978f23ac",
+    "created_at": "2022-07-01T19:41:49Z",
+    "diff_hunk": "@@ -343,3 +338,46 @@ func convertProvisionerJob(provisionerJob database.ProvisionerJob) codersdk.Prov\n func provisionerJobLogsChannel(jobID uuid.UUID) string {\n \treturn fmt.Sprintf(\"provisioner-log-logs:%s\", jobID)\n }\n+\n+// provisionerJobLogsMessage is the message type published on the provisionerJobLogsChannel() channel\n+type provisionerJobLogsMessage struct {\n+\tEndOfLogs bool                         `json:\"end_of_logs,omitempty\"`\n+\tLogs      []database.ProvisionerJobLog `json:\"logs,omitempty\"`\n+}\n+\n+func (api *API) followLogs(jobID uuid.UUID) (chan database.ProvisionerJobLog, func(), error) {\n+\tbufferedLogs := make(chan database.ProvisionerJobLog, 128)\n+\tcloseSubscribe, err := api.Pubsub.Subscribe(provisionerJobLogsChannel(jobID),\n+\t\tfunc(ctx context.Context, message []byte) {\n+\t\t\tjlMsg := provisionerJobLogsMessage{}\n+\t\t\terr := json.Unmarshal(message, &jlMsg)\n+\t\t\tif err != nil {\n+\t\t\t\tapi.Logger.Warn(ctx,\n+\t\t\t\t\tfmt.Sprintf(\"invalid provisioner job log on channel %q: %s\",\n+\t\t\t\t\t\tprovisionerJobLogsChannel(jobID),\n+\t\t\t\t\t\terr.Error()))\n+\t\t\t\treturn\n+\t\t\t}\n+\n+\t\t\tfor _, log := range jlMsg.Logs {\n+\t\t\t\tselect {\n+\t\t\t\tcase bufferedLogs <- log:\n+\t\t\t\t\tapi.Logger.Debug(ctx, \"subscribe buffered log\",\n+\t\t\t\t\t\tslog.F(\"job_id\", jobID),\n+\t\t\t\t\t\tslog.F(\"stage\", log.Stage))\n+\t\t\t\tdefault:\n+\t\t\t\t\t// If this overflows users could miss logs streaming. This can happen\n+\t\t\t\t\t// if a database request takes a long amount of time, and we get a lot of logs.\n+\t\t\t\t\tapi.Logger.Warn(ctx, \"provisioner job log overflowing channel\")",
+    "html_url": "https://github.com/coder/coder/pull/2783#discussion_r912214519",
+    "id": 912214519,
+    "in_reply_to_id": 912206464,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s42X0n3",
+    "original_commit_id": "e8674d43b87bab88643cc79289208f978dd3a130",
+    "original_line": 371,
+    "original_position": 225,
+    "original_start_line": 369,
+    "path": "coderd/provisionerjobs.go",
+    "position": 1,
+    "pull_request_review_id": 1026593815,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2783",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/912214519/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-01T19:41:49Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/912214519",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/548160?v=4",
+      "events_url": "https://api.github.com/users/dwahler/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dwahler/followers",
+      "following_url": "https://api.github.com/users/dwahler/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dwahler/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dwahler",
+      "id": 548160,
+      "login": "dwahler",
+      "node_id": "MDQ6VXNlcjU0ODE2MA==",
+      "organizations_url": "https://api.github.com/users/dwahler/orgs",
+      "received_events_url": "https://api.github.com/users/dwahler/received_events",
+      "repos_url": "https://api.github.com/users/dwahler/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dwahler/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dwahler/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dwahler",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2783#discussion_r912215195"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2783"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/912215195"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "That's a good point.  This code was just moved, so I didn't really look at it very critically.  Happy to fix up.",
+    "commit_id": "33b047716d0271d5cbc3f4a8e814e691978f23ac",
+    "created_at": "2022-07-01T19:43:26Z",
+    "diff_hunk": "@@ -343,3 +338,46 @@ func convertProvisionerJob(provisionerJob database.ProvisionerJob) codersdk.Prov\n func provisionerJobLogsChannel(jobID uuid.UUID) string {\n \treturn fmt.Sprintf(\"provisioner-log-logs:%s\", jobID)\n }\n+\n+// provisionerJobLogsMessage is the message type published on the provisionerJobLogsChannel() channel\n+type provisionerJobLogsMessage struct {\n+\tEndOfLogs bool                         `json:\"end_of_logs,omitempty\"`\n+\tLogs      []database.ProvisionerJobLog `json:\"logs,omitempty\"`\n+}\n+\n+func (api *API) followLogs(jobID uuid.UUID) (chan database.ProvisionerJobLog, func(), error) {\n+\tbufferedLogs := make(chan database.ProvisionerJobLog, 128)\n+\tcloseSubscribe, err := api.Pubsub.Subscribe(provisionerJobLogsChannel(jobID),\n+\t\tfunc(ctx context.Context, message []byte) {\n+\t\t\tjlMsg := provisionerJobLogsMessage{}\n+\t\t\terr := json.Unmarshal(message, &jlMsg)\n+\t\t\tif err != nil {\n+\t\t\t\tapi.Logger.Warn(ctx,\n+\t\t\t\t\tfmt.Sprintf(\"invalid provisioner job log on channel %q: %s\",\n+\t\t\t\t\t\tprovisionerJobLogsChannel(jobID),\n+\t\t\t\t\t\terr.Error()))",
+    "html_url": "https://github.com/coder/coder/pull/2783#discussion_r912215195",
+    "id": 912215195,
+    "in_reply_to_id": 912204666,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s42X0yb",
+    "original_commit_id": "e8674d43b87bab88643cc79289208f978dd3a130",
+    "original_line": 358,
+    "original_position": 212,
+    "original_start_line": 355,
+    "path": "coderd/provisionerjobs.go",
+    "position": 1,
+    "pull_request_review_id": 1026595554,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2783",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/912215195/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-01T19:43:27Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/912215195",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2783#discussion_r912216327"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2783"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/912216327"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "I guess technically we could do this query asynchronously and check its result later, since we already know we're going to query logs from the DB regardless of whether the job is already complete. But it's such a lightweight query that it doesn't seem worth the extra complexity.",
+    "commit_id": "33b047716d0271d5cbc3f4a8e814e691978f23ac",
+    "created_at": "2022-07-01T19:45:57Z",
+    "diff_hunk": "@@ -38,6 +38,37 @@ func (api *API) provisionerJobLogs(rw http.ResponseWriter, r *http.Request, job\n \t\treturn\n \t}\n \n+\t// if we are following logs, start the subscription before we query the database, so that we don't miss any logs\n+\t// between the end of our query and the start of the subscription.  We might get duplicates, so we'll keep track\n+\t// of processed IDs.\n+\tvar bufferedLogs chan database.ProvisionerJobLog\n+\tif follow {\n+\t\tbl, closeFollow, err := api.followLogs(job.ID)\n+\t\tif err != nil {\n+\t\t\thttpapi.Write(rw, http.StatusInternalServerError, httpapi.Response{\n+\t\t\t\tMessage: \"Internal error watching provisioner logs.\",\n+\t\t\t\tDetail:  err.Error(),\n+\t\t\t})\n+\t\t\treturn\n+\t\t}\n+\t\tdefer closeFollow()\n+\t\tbufferedLogs = bl\n+\n+\t\t// Next query the job itself to see if it is complete.  If so, the historical query to the database will return\n+\t\t// the full set of logs.  It's a little sad to have to query the job again, given that our caller definitely\n+\t\t// has, but we need to query it *after* we start following the pubsub to avoid a race condition where the job\n+\t\t// completes between the prior query and the start of following the pubsub.  A more substantial refactor could\n+\t\t// avoid this, but not worth it for one fewer query at this point.\n+\t\tjob, err = api.Database.GetProvisionerJobByID(r.Context(), job.ID)\n+\t\tif err != nil {\n+\t\t\thttpapi.Write(rw, http.StatusInternalServerError, httpapi.Response{\n+\t\t\t\tMessage: \"Internal error querying job.\",\n+\t\t\t\tDetail:  err.Error(),\n+\t\t\t})\n+\t\t\treturn\n+\t\t}",
+    "html_url": "https://github.com/coder/coder/pull/2783#discussion_r912216327",
+    "id": 912216327,
+    "in_reply_to_id": 912201849,
+    "line": 70,
+    "node_id": "PRRC_kwDOGkVX1s42X1EH",
+    "original_commit_id": "e8674d43b87bab88643cc79289208f978dd3a130",
+    "original_line": 69,
+    "original_position": 32,
+    "original_start_line": 57,
+    "path": "coderd/provisionerjobs.go",
+    "position": 40,
+    "pull_request_review_id": 1026598102,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2783",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/912216327/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 58,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-01T19:45:58Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/912216327",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/548160?v=4",
+      "events_url": "https://api.github.com/users/dwahler/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dwahler/followers",
+      "following_url": "https://api.github.com/users/dwahler/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dwahler/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dwahler",
+      "id": 548160,
+      "login": "dwahler",
+      "node_id": "MDQ6VXNlcjU0ODE2MA==",
+      "organizations_url": "https://api.github.com/users/dwahler/orgs",
+      "received_events_url": "https://api.github.com/users/dwahler/received_events",
+      "repos_url": "https://api.github.com/users/dwahler/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dwahler/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dwahler/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dwahler",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2783#discussion_r912216951"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2783"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/912216951"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Yep, yep.\r\n\r\nThe problem with trying to insert a  \"... X logs lines skipped ...\" message is that the buffer is already full, so we don't have anywhere to put it.  We'd have to roll our own ring buffer or something messy to be able to coalesce logs already buffered.  I don't want to do that in this PR --- this is just a refactor matching existing behavior. ",
+    "commit_id": "33b047716d0271d5cbc3f4a8e814e691978f23ac",
+    "created_at": "2022-07-01T19:47:03Z",
+    "diff_hunk": "@@ -343,3 +338,46 @@ func convertProvisionerJob(provisionerJob database.ProvisionerJob) codersdk.Prov\n func provisionerJobLogsChannel(jobID uuid.UUID) string {\n \treturn fmt.Sprintf(\"provisioner-log-logs:%s\", jobID)\n }\n+\n+// provisionerJobLogsMessage is the message type published on the provisionerJobLogsChannel() channel\n+type provisionerJobLogsMessage struct {\n+\tEndOfLogs bool                         `json:\"end_of_logs,omitempty\"`\n+\tLogs      []database.ProvisionerJobLog `json:\"logs,omitempty\"`\n+}\n+\n+func (api *API) followLogs(jobID uuid.UUID) (chan database.ProvisionerJobLog, func(), error) {\n+\tbufferedLogs := make(chan database.ProvisionerJobLog, 128)\n+\tcloseSubscribe, err := api.Pubsub.Subscribe(provisionerJobLogsChannel(jobID),\n+\t\tfunc(ctx context.Context, message []byte) {\n+\t\t\tjlMsg := provisionerJobLogsMessage{}\n+\t\t\terr := json.Unmarshal(message, &jlMsg)\n+\t\t\tif err != nil {\n+\t\t\t\tapi.Logger.Warn(ctx,\n+\t\t\t\t\tfmt.Sprintf(\"invalid provisioner job log on channel %q: %s\",\n+\t\t\t\t\t\tprovisionerJobLogsChannel(jobID),\n+\t\t\t\t\t\terr.Error()))\n+\t\t\t\treturn\n+\t\t\t}\n+\n+\t\t\tfor _, log := range jlMsg.Logs {\n+\t\t\t\tselect {\n+\t\t\t\tcase bufferedLogs <- log:\n+\t\t\t\t\tapi.Logger.Debug(ctx, \"subscribe buffered log\",\n+\t\t\t\t\t\tslog.F(\"job_id\", jobID),\n+\t\t\t\t\t\tslog.F(\"stage\", log.Stage))\n+\t\t\t\tdefault:\n+\t\t\t\t\t// If this overflows users could miss logs streaming. This can happen\n+\t\t\t\t\t// if a database request takes a long amount of time, and we get a lot of logs.\n+\t\t\t\t\tapi.Logger.Warn(ctx, \"provisioner job log overflowing channel\")",
+    "html_url": "https://github.com/coder/coder/pull/2783#discussion_r912216951",
+    "id": 912216951,
+    "in_reply_to_id": 912206464,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s42X1N3",
+    "original_commit_id": "e8674d43b87bab88643cc79289208f978dd3a130",
+    "original_line": 371,
+    "original_position": 225,
+    "original_start_line": 369,
+    "path": "coderd/provisionerjobs.go",
+    "position": 1,
+    "pull_request_review_id": 1026598823,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2783",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/912216951/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-01T19:47:03Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/912216951",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2783#discussion_r912217138"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2783"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/912217138"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "\ud83e\udd37\u200d\u2642\ufe0f ",
+    "commit_id": "33b047716d0271d5cbc3f4a8e814e691978f23ac",
+    "created_at": "2022-07-01T19:47:21Z",
+    "diff_hunk": "@@ -138,7 +138,10 @@ require (\n \ttailscale.com v1.26.1\n )\n \n-require github.com/googleapis/enterprise-certificate-proxy v0.1.0 // indirect\n+require (\n+\tgithub.com/googleapis/enterprise-certificate-proxy v0.1.0 // indirect\n+\tgithub.com/stretchr/objx v0.4.0 // indirect\n+)",
+    "html_url": "https://github.com/coder/coder/pull/2783#discussion_r912217138",
+    "id": 912217138,
+    "in_reply_to_id": 912206961,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s42X1Qy",
+    "original_commit_id": "e8674d43b87bab88643cc79289208f978dd3a130",
+    "original_line": 144,
+    "original_position": 8,
+    "original_start_line": 141,
+    "path": "go.mod",
+    "position": 1,
+    "pull_request_review_id": 1026599039,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2783",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/912217138/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-01T19:47:21Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/912217138",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2783#discussion_r912217480"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2783"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/912217480"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Oh!  I briefly was using stretchr/testify/mock in my test",
+    "commit_id": "33b047716d0271d5cbc3f4a8e814e691978f23ac",
+    "created_at": "2022-07-01T19:47:55Z",
+    "diff_hunk": "@@ -138,7 +138,10 @@ require (\n \ttailscale.com v1.26.1\n )\n \n-require github.com/googleapis/enterprise-certificate-proxy v0.1.0 // indirect\n+require (\n+\tgithub.com/googleapis/enterprise-certificate-proxy v0.1.0 // indirect\n+\tgithub.com/stretchr/objx v0.4.0 // indirect\n+)",
+    "html_url": "https://github.com/coder/coder/pull/2783#discussion_r912217480",
+    "id": 912217480,
+    "in_reply_to_id": 912206961,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s42X1WI",
+    "original_commit_id": "e8674d43b87bab88643cc79289208f978dd3a130",
+    "original_line": 144,
+    "original_position": 8,
+    "original_start_line": 141,
+    "path": "go.mod",
+    "position": 1,
+    "pull_request_review_id": 1026599372,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2783",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/912217480/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-01T19:47:56Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/912217480",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2783#discussion_r912219681"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2783"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/912219681"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": ">  But it's such a lightweight query that it doesn't seem worth the extra complexity.\r\n\r\nAgree",
+    "commit_id": "33b047716d0271d5cbc3f4a8e814e691978f23ac",
+    "created_at": "2022-07-01T19:52:07Z",
+    "diff_hunk": "@@ -38,6 +38,37 @@ func (api *API) provisionerJobLogs(rw http.ResponseWriter, r *http.Request, job\n \t\treturn\n \t}\n \n+\t// if we are following logs, start the subscription before we query the database, so that we don't miss any logs\n+\t// between the end of our query and the start of the subscription.  We might get duplicates, so we'll keep track\n+\t// of processed IDs.\n+\tvar bufferedLogs chan database.ProvisionerJobLog\n+\tif follow {\n+\t\tbl, closeFollow, err := api.followLogs(job.ID)\n+\t\tif err != nil {\n+\t\t\thttpapi.Write(rw, http.StatusInternalServerError, httpapi.Response{\n+\t\t\t\tMessage: \"Internal error watching provisioner logs.\",\n+\t\t\t\tDetail:  err.Error(),\n+\t\t\t})\n+\t\t\treturn\n+\t\t}\n+\t\tdefer closeFollow()\n+\t\tbufferedLogs = bl\n+\n+\t\t// Next query the job itself to see if it is complete.  If so, the historical query to the database will return\n+\t\t// the full set of logs.  It's a little sad to have to query the job again, given that our caller definitely\n+\t\t// has, but we need to query it *after* we start following the pubsub to avoid a race condition where the job\n+\t\t// completes between the prior query and the start of following the pubsub.  A more substantial refactor could\n+\t\t// avoid this, but not worth it for one fewer query at this point.\n+\t\tjob, err = api.Database.GetProvisionerJobByID(r.Context(), job.ID)\n+\t\tif err != nil {\n+\t\t\thttpapi.Write(rw, http.StatusInternalServerError, httpapi.Response{\n+\t\t\t\tMessage: \"Internal error querying job.\",\n+\t\t\t\tDetail:  err.Error(),\n+\t\t\t})\n+\t\t\treturn\n+\t\t}",
+    "html_url": "https://github.com/coder/coder/pull/2783#discussion_r912219681",
+    "id": 912219681,
+    "in_reply_to_id": 912201849,
+    "line": 70,
+    "node_id": "PRRC_kwDOGkVX1s42X14h",
+    "original_commit_id": "e8674d43b87bab88643cc79289208f978dd3a130",
+    "original_line": 69,
+    "original_position": 32,
+    "original_start_line": 57,
+    "path": "coderd/provisionerjobs.go",
+    "position": 40,
+    "pull_request_review_id": 1026601966,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2783",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/912219681/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 58,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-01T19:52:16Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/912219681",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2783#discussion_r912226557"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2783"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/912226557"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "This can be `End` instead for naming redundancy. `Final` may be more apt, chefs choice.",
+    "commit_id": "33b047716d0271d5cbc3f4a8e814e691978f23ac",
+    "created_at": "2022-07-01T20:09:03Z",
+    "diff_hunk": "@@ -343,3 +338,46 @@ func convertProvisionerJob(provisionerJob database.ProvisionerJob) codersdk.Prov\n func provisionerJobLogsChannel(jobID uuid.UUID) string {\n \treturn fmt.Sprintf(\"provisioner-log-logs:%s\", jobID)\n }\n+\n+// provisionerJobLogsMessage is the message type published on the provisionerJobLogsChannel() channel\n+type provisionerJobLogsMessage struct {\n+\tEndOfLogs bool                         `json:\"end_of_logs,omitempty\"`",
+    "html_url": "https://github.com/coder/coder/pull/2783#discussion_r912226557",
+    "id": 912226557,
+    "line": 343,
+    "node_id": "PRRC_kwDOGkVX1s42X3j9",
+    "original_commit_id": "e8674d43b87bab88643cc79289208f978dd3a130",
+    "original_line": 344,
+    "original_position": 198,
+    "original_start_line": null,
+    "path": "coderd/provisionerjobs.go",
+    "position": 205,
+    "pull_request_review_id": 1026612224,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2783",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/912226557/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-07-01T21:08:28Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/912226557",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  }
+]

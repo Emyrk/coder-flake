@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/49c909902a0d854157121c9934510f8bad04f31a/cli%2Fserver.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fserver.go?ref=49c909902a0d854157121c9934510f8bad04f31a",
+    "deletions": 0,
+    "filename": "cli/server.go",
+    "patch": "@@ -1206,6 +1206,14 @@ func WriteConfigMW(cfg *codersdk.DeploymentValues) clibase.MiddlewareFunc {\n // isLocalURL returns true if the hostname of the provided URL appears to\n // resolve to a loopback address.\n func IsLocalURL(ctx context.Context, u *url.URL) (bool, error) {\n+\t// In tests, we commonly use \"example.com\" or \"google.com\", which\n+\t// are not loopback, so avoid the DNS lookup to avoid flakes.\n+\tif flag.Lookup(\"test.v\") != nil {\n+\t\tif u.Hostname() == \"example.com\" || u.Hostname() == \"google.com\" {\n+\t\t\treturn false, nil\n+\t\t}\n+\t}\n+\n \tresolver := &net.Resolver{}\n \tips, err := resolver.LookupIPAddr(ctx, u.Hostname())\n \tif err != nil {",
+    "raw_url": "https://github.com/coder/coder/raw/49c909902a0d854157121c9934510f8bad04f31a/cli%2Fserver.go",
+    "sha": "9b10687ba3b0458bab1f353dbae6c2bd48ec9374",
+    "status": "modified"
+  }
+]

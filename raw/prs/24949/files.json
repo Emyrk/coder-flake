@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 9,
+    "blob_url": "https://github.com/coder/coder/blob/4a35bbc6e526a4a9cfd6cd95098ac537c35a8458/coderd%2Fx%2Fchatd%2Fchaterror%2Fclassify_test.go",
+    "changes": 12,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fx%2Fchatd%2Fchaterror%2Fclassify_test.go?ref=4a35bbc6e526a4a9cfd6cd95098ac537c35a8458",
+    "deletions": 3,
+    "filename": "coderd/x/chatd/chaterror/classify_test.go",
+    "patch": "@@ -623,16 +623,22 @@ func TestClassify_PrefersRetryAfterMsOverRetryAfter(t *testing.T) {\n func TestClassify_ParsesRetryAfterHTTPDate(t *testing.T) {\n \tt.Parallel()\n \n-\tretryAt := time.Now().Add(3 * time.Second).UTC().Format(http.TimeFormat)\n+\t// HTTP-date format has 1-second resolution, so the parsed retry-at can\n+\t// be up to ~1s earlier than the requested offset. Combined with\n+\t// scheduling jitter between formatting and parsing, the observed\n+\t// duration can drift noticeably below the nominal offset. Use a\n+\t// generous 10s offset and a wide assertion window to keep this test\n+\t// reliable across slow CI runners.\n+\tretryAt := time.Now().Add(10 * time.Second).UTC().Format(http.TimeFormat)\n \tclassified := chaterror.Classify(testProviderError(\n \t\t\"upstream failed\",\n \t\t429,\n \t\tmap[string]string{\"Retry-After\": retryAt},\n \t))\n \n \trequire.Equal(t, 429, classified.StatusCode)\n-\trequire.GreaterOrEqual(t, classified.RetryAfter, 2*time.Second)\n-\trequire.LessOrEqual(t, classified.RetryAfter, 4*time.Second)\n+\trequire.Greater(t, classified.RetryAfter, time.Duration(0))\n+\trequire.LessOrEqual(t, classified.RetryAfter, 11*time.Second)\n }\n \n func TestClassify_IgnoresInvalidRetryAfter(t *testing.T) {",
+    "raw_url": "https://github.com/coder/coder/raw/4a35bbc6e526a4a9cfd6cd95098ac537c35a8458/coderd%2Fx%2Fchatd%2Fchaterror%2Fclassify_test.go",
+    "sha": "8cad0d0b3212678cfe71d748e3562fd854a8e34d",
+    "status": "modified"
+  }
+]

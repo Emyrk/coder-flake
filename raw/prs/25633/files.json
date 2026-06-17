@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/ba014595b1b15ad8beb679de93ad3c4332d3115c/coderd%2Fx%2Fchatd%2Fchatd_test.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fx%2Fchatd%2Fchatd_test.go?ref=ba014595b1b15ad8beb679de93ad3c4332d3115c",
+    "deletions": 0,
+    "filename": "coderd/x/chatd/chatd_test.go",
+    "patch": "@@ -8372,6 +8372,9 @@ func TestSignalWakeImmediateAcquisition(t *testing.T) {\n // triggers immediate processing via signalWake.\n func TestSignalWakeSendMessage(t *testing.T) {\n \tt.Parallel()\n+\t// TODO(CODAGT-353): Re-enable this after the chatd notification\n+\t// flow can distinguish stale status notifications from interrupts.\n+\tt.Skip(\"skipped until chatd notification flow refactor handles stale control notifications\")\n \n \tdb, ps := dbtestutil.NewDB(t)\n \tctx := testutil.Context(t, testutil.WaitSuperLong)",
+    "raw_url": "https://github.com/coder/coder/raw/ba014595b1b15ad8beb679de93ad3c4332d3115c/coderd%2Fx%2Fchatd%2Fchatd_test.go",
+    "sha": "5d1f373cd9f4b8722c407b06646da9eb8cfb63ca",
+    "status": "modified"
+  }
+]

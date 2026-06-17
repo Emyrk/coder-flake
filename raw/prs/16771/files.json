@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 19,
+    "blob_url": "https://github.com/coder/coder/blob/09e1f5f8f00fe2f2af16d445864fe30b9f51997d/cli%2Fssh_test.go",
+    "changes": 22,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fssh_test.go?ref=09e1f5f8f00fe2f2af16d445864fe30b9f51997d",
+    "deletions": 3,
+    "filename": "cli/ssh_test.go",
+    "patch": "@@ -29,13 +29,15 @@ import (\n \t\"github.com/spf13/afero\"\n \t\"github.com/stretchr/testify/assert\"\n \t\"github.com/stretchr/testify/require\"\n+\t\"go.uber.org/mock/gomock\"\n \t\"golang.org/x/crypto/ssh\"\n \tgosshagent \"golang.org/x/crypto/ssh/agent\"\n \t\"golang.org/x/sync/errgroup\"\n \t\"golang.org/x/xerrors\"\n \n \t\"github.com/coder/coder/v2/agent\"\n \t\"github.com/coder/coder/v2/agent/agentcontainers\"\n+\t\"github.com/coder/coder/v2/agent/agentcontainers/acmock\"\n \t\"github.com/coder/coder/v2/agent/agentssh\"\n \t\"github.com/coder/coder/v2/agent/agenttest\"\n \tagentproto \"github.com/coder/coder/v2/agent/proto\"\n@@ -1986,13 +1988,26 @@ func TestSSH_Container(t *testing.T) {\n \n \t\tctx := testutil.Context(t, testutil.WaitShort)\n \t\tclient, workspace, agentToken := setupWorkspaceForAgent(t)\n+\t\tctrl := gomock.NewController(t)\n+\t\tmLister := acmock.NewMockLister(ctrl)\n \t\t_ = agenttest.New(t, client.URL, agentToken, func(o *agent.Options) {\n \t\t\to.ExperimentalDevcontainersEnabled = true\n-\t\t\to.ContainerLister = agentcontainers.NewDocker(o.Execer)\n+\t\t\to.ContainerLister = mLister\n \t\t})\n \t\t_ = coderdtest.NewWorkspaceAgentWaiter(t, client, workspace.ID).Wait()\n \n-\t\tinv, root := clitest.New(t, \"ssh\", workspace.Name, \"-c\", uuid.NewString())\n+\t\tmLister.EXPECT().List(gomock.Any()).Return(codersdk.WorkspaceAgentListContainersResponse{\n+\t\t\tContainers: []codersdk.WorkspaceAgentDevcontainer{\n+\t\t\t\t{\n+\t\t\t\t\tID:           uuid.NewString(),\n+\t\t\t\t\tFriendlyName: \"something_completely_different\",\n+\t\t\t\t},\n+\t\t\t},\n+\t\t\tWarnings: nil,\n+\t\t}, nil)\n+\n+\t\tcID := uuid.NewString()\n+\t\tinv, root := clitest.New(t, \"ssh\", workspace.Name, \"-c\", cID)\n \t\tclitest.SetupConfig(t, client, root)\n \t\tptty := ptytest.New(t).Attach(inv)\n \n@@ -2001,7 +2016,8 @@ func TestSSH_Container(t *testing.T) {\n \t\t\tassert.NoError(t, err)\n \t\t})\n \n-\t\tptty.ExpectMatch(\"Container not found:\")\n+\t\tptty.ExpectMatch(fmt.Sprintf(\"Container not found: %q\", cID))\n+\t\tptty.ExpectMatch(\"Available containers: [something_completely_different]\")\n \t\t<-cmdDone\n \t})\n ",
+    "raw_url": "https://github.com/coder/coder/raw/09e1f5f8f00fe2f2af16d445864fe30b9f51997d/cli%2Fssh_test.go",
+    "sha": "1fd4069ae3aea026a20b6aa34dd4ca7b88f7241c",
+    "status": "modified"
+  }
+]

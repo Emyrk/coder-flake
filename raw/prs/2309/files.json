@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 12,
+    "blob_url": "https://github.com/coder/coder/blob/44c96dcefa70df141842ace641e964ce56c7d65e/install.sh",
+    "changes": 14,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/install.sh?ref=44c96dcefa70df141842ace641e964ce56c7d65e",
+    "deletions": 2,
+    "filename": "install.sh",
+    "patch": "@@ -85,7 +85,8 @@ echo_latest_version() {\n \n echo_standalone_postinstall() {\n \tcath <<EOF\n-\tStandalone release has been installed into $STANDALONE_INSTALL_PREFIX/bin/$STANDALONE_BINARY_NAME\n+\n+Standalone release has been installed into $STANDALONE_INSTALL_PREFIX/bin/$STANDALONE_BINARY_NAME\n \n EOF\n \n@@ -391,7 +392,16 @@ install_standalone() {\n \t\t\"$sh_c\" unzip -d \"$CACHE_DIR\" -o \"$CACHE_DIR/coder_${VERSION}_${OS}_${ARCH}.zip\"\n \tfi\n \n-\t\"$sh_c\" cp \"$CACHE_DIR/coder\" \"$STANDALONE_INSTALL_PREFIX/bin/$STANDALONE_BINARY_NAME\"\n+\tCOPY_LOCATION=\"$STANDALONE_INSTALL_PREFIX/bin/$STANDALONE_BINARY_NAME\"\n+\n+\t# Remove the file if it already exists to\n+\t# avoid https://github.com/coder/coder/issues/2086\n+\tif [ -f \"$COPY_LOCATION\" ]; then\n+\t\t\"$sh_c\" rm \"$COPY_LOCATION\"\n+\tfi\n+\n+\t# Copy the binary to the correct location.\n+\t\"$sh_c\" cp \"$CACHE_DIR/coder\" \"$COPY_LOCATION\"\n \n \techo_standalone_postinstall\n }",
+    "raw_url": "https://github.com/coder/coder/raw/44c96dcefa70df141842ace641e964ce56c7d65e/install.sh",
+    "sha": "032a792ae09a7ed7e27dc386f6584209dda4bb07",
+    "status": "modified"
+  }
+]

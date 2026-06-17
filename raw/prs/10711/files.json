@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/7faf036433a06a122646c39a8c5cde411c37177b/cli%2Fssh_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fssh_test.go?ref=7faf036433a06a122646c39a8c5cde411c37177b",
+    "deletions": 0,
+    "filename": "cli/ssh_test.go",
+    "patch": "@@ -252,6 +252,7 @@ func TestSSH(t *testing.T) {\n \t// Test that we handle OS signals properly while remote forwarding, and don't just leave the TCP\n \t// socket hanging.\n \tt.Run(\"RemoteForward_Unix_Signal\", func(t *testing.T) {\n+\t\tt.Skip(\"still flaky\")\n \t\tif runtime.GOOS == \"windows\" {\n \t\t\tt.Skip(\"No unix sockets on windows\")\n \t\t}",
+    "raw_url": "https://github.com/coder/coder/raw/7faf036433a06a122646c39a8c5cde411c37177b/cli%2Fssh_test.go",
+    "sha": "0abdfb4583ac22d6339d5970b2da4b073f7b9826",
+    "status": "modified"
+  }
+]

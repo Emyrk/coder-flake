@@ -1,0 +1,122 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25306#pullrequestreview-4284451305"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25306"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "3c7ce3ee589a644413e113a3adc307f622d53317",
+    "html_url": "https://github.com/coder/coder/pull/25306#pullrequestreview-4284451305",
+    "id": 4284451305,
+    "node_id": "PRR_kwDOGkVX1s7_X4np",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25306",
+    "state": "APPROVED",
+    "submitted_at": "2026-05-13T18:43:05Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/203725896?u=414f1b6c538cbd892cbaec2bdbb7f4cfb5be126d&v=4",
+      "events_url": "https://api.github.com/users/ibetitsmike/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ibetitsmike/followers",
+      "following_url": "https://api.github.com/users/ibetitsmike/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ibetitsmike/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ibetitsmike",
+      "id": 203725896,
+      "login": "ibetitsmike",
+      "node_id": "U_kgDODCScSA",
+      "organizations_url": "https://api.github.com/users/ibetitsmike/orgs",
+      "received_events_url": "https://api.github.com/users/ibetitsmike/received_events",
+      "repos_url": "https://api.github.com/users/ibetitsmike/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ibetitsmike/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ibetitsmike/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ibetitsmike",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25306#pullrequestreview-4284513124"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25306"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "Clean, proportional fix for a real flaky test. The race analysis is accurate: `CreateChat` triggers async daemon processing, and reading `last_model_config_id` before the daemon commits gives nondeterministic results. Adding `testutil.Eventually` polls before editing and before asserting is the right approach, consistent with how this codebase synchronizes with async chat processing elsewhere.\n\nPariston traced all three orderings through the daemon's `persistStep` ownership guard (chatd.go ~7176-7187) and confirmed the production code is already safe; the flake was purely a test-timing issue. Takumi and Meruem independently verified the same. Multiple reviewers ran the test under `-race -count=N` with clean results.\n\nOne P3 about the polling condition shape, one nit.\n\n\"I came looking for a fight. Boring code. Correct fix.\" (Hisoka)\n\n> \ud83e\udd16 This review was automatically generated with Coder Agents.",
+    "commit_id": "3c7ce3ee589a644413e113a3adc307f622d53317",
+    "html_url": "https://github.com/coder/coder/pull/25306#pullrequestreview-4284513124",
+    "id": 4284513124,
+    "node_id": "PRR_kwDOGkVX1s7_YHtk",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25306",
+    "state": "COMMENTED",
+    "submitted_at": "2026-05-13T18:52:14Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25306#pullrequestreview-4284620513"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25306"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "Both R1 findings addressed in 3b139bbf7. Poll conditions switched to exclusion pattern (`!= Pending && != Running`), callbacks now name and use the passed context. Three reviewers independently verified both fixes and re-reviewed the full diff. Bisky confirmed no sibling subtests need the same guard. All ran the test under `-race` with clean results.\n\n\"The exclusion pattern is more robust because the set of processing states is smaller and more stable than the set of terminal states.\" (Meruem)\n\n> \ud83e\udd16 This review was automatically generated with Coder Agents.",
+    "commit_id": "3b139bbf72abb0402b958bbdd32742889d0427ec",
+    "html_url": "https://github.com/coder/coder/pull/25306#pullrequestreview-4284620513",
+    "id": 4284620513,
+    "node_id": "PRR_kwDOGkVX1s7_Yh7h",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25306",
+    "state": "APPROVED",
+    "submitted_at": "2026-05-13T19:08:59Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  }
+]

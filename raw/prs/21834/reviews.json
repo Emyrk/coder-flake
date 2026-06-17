@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21834#pullrequestreview-3739413522"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21834"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Approved \u2705 \n\nLong term we could switch to a GitHub Action:\nhttps://github.com/zizmorcore/zizmor-action",
+    "commit_id": "dbd8271a012c7b89fd939d64ed5de543f2412188",
+    "html_url": "https://github.com/coder/coder/pull/21834#pullrequestreview-3739413522",
+    "id": 3739413522,
+    "node_id": "PRR_kwDOGkVX1s7e4uwS",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21834",
+    "state": "APPROVED",
+    "submitted_at": "2026-02-02T13:31:16Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/214949382?u=2a2edd640b0c3a1b48f3c4c1a2f9f41d9d020962&v=4",
+      "events_url": "https://api.github.com/users/jdomeracki-coder/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jdomeracki-coder/followers",
+      "following_url": "https://api.github.com/users/jdomeracki-coder/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jdomeracki-coder/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jdomeracki-coder",
+      "id": 214949382,
+      "login": "jdomeracki-coder",
+      "node_id": "U_kgDODM_eBg",
+      "organizations_url": "https://api.github.com/users/jdomeracki-coder/orgs",
+      "received_events_url": "https://api.github.com/users/jdomeracki-coder/received_events",
+      "repos_url": "https://api.github.com/users/jdomeracki-coder/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jdomeracki-coder/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jdomeracki-coder/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jdomeracki-coder",
+      "user_view_type": "public"
+    }
+  }
+]

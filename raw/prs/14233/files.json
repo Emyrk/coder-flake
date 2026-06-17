@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/d25b3fbf1b0f9cafa951305fdc9739abbcb52534/cli%2Fconfigssh_internal_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fconfigssh_internal_test.go?ref=d25b3fbf1b0f9cafa951305fdc9739abbcb52534",
+    "deletions": 2,
+    "filename": "cli/configssh_internal_test.go",
+    "patch": "@@ -138,6 +138,7 @@ func Test_sshConfigSplitOnCoderSection(t *testing.T) {\n \n // This test tries to mimic the behavior of OpenSSH\n // when executing e.g. a ProxyCommand.\n+// nolint:tparallel\n func Test_sshConfigExecEscape(t *testing.T) {\n \tt.Parallel()\n \n@@ -154,11 +155,10 @@ func Test_sshConfigExecEscape(t *testing.T) {\n \t\t{\"tabs\", \"path with \\ttabs\", false},\n \t\t{\"newline fails\", \"path with \\nnewline\", true},\n \t}\n+\t// nolint:paralleltest // Fixes a flake\n \tfor _, tt := range tests {\n \t\ttt := tt\n \t\tt.Run(tt.name, func(t *testing.T) {\n-\t\t\tt.Parallel()\n-\n \t\t\tif runtime.GOOS == \"windows\" {\n \t\t\t\tt.Skip(\"Windows doesn't typically execute via /bin/sh or cmd.exe, so this test is not applicable.\")\n \t\t\t}",
+    "raw_url": "https://github.com/coder/coder/raw/d25b3fbf1b0f9cafa951305fdc9739abbcb52534/cli%2Fconfigssh_internal_test.go",
+    "sha": "d3eee395de0a351274703aa3fa666c196e3f8507",
+    "status": "modified"
+  }
+]

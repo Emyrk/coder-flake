@@ -1,0 +1,50 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/0d5f35f7e9f295ef016d25929386f350f8efb512/Makefile",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/Makefile?ref=0d5f35f7e9f295ef016d25929386f350f8efb512",
+    "deletions": 2,
+    "filename": "Makefile",
+    "patch": "@@ -115,9 +115,9 @@ test: test-clean\n .PHONY: test-postgres\n test-postgres: test-clean\n \tDB=ci gotestsum --junitfile=\"gotests.xml\" --packages=\"./...\" -- \\\n-          -covermode=atomic -coverprofile=\"gotests.coverage\" -timeout=10m \\\n+          -covermode=atomic -coverprofile=\"gotests.coverage\" -timeout=30m \\\n           -coverpkg=./...,github.com/coder/coder/codersdk \\\n-          -count=1 -parallel=1 -race -failfast\n+          -count=1 -race -failfast\n \n \n .PHONY: test-postgres-docker",
+    "raw_url": "https://github.com/coder/coder/raw/0d5f35f7e9f295ef016d25929386f350f8efb512/Makefile",
+    "sha": "2fd940cb6f13b90fa9cc599ddd02f0e7eff1cf43",
+    "status": "modified"
+  },
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/0d5f35f7e9f295ef016d25929386f350f8efb512/cli%2Flist_test.go",
+    "changes": 10,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Flist_test.go?ref=0d5f35f7e9f295ef016d25929386f350f8efb512",
+    "deletions": 4,
+    "filename": "cli/list_test.go",
+    "patch": "@@ -5,7 +5,7 @@ import (\n \t\"testing\"\n \t\"time\"\n \n-\t\"github.com/stretchr/testify/require\"\n+\t\"github.com/stretchr/testify/assert\"\n \n \t\"github.com/coder/coder/cli/clitest\"\n \t\"github.com/coder/coder/coderd/coderdtest\"\n@@ -30,13 +30,15 @@ func TestList(t *testing.T) {\n \t\tpty := ptytest.New(t)\n \t\tcmd.SetIn(pty.Input())\n \t\tcmd.SetOut(pty.Output())\n-\t\terrC := make(chan error)\n+\t\tdone := make(chan any)\n \t\tgo func() {\n-\t\t\terrC <- cmd.ExecuteContext(ctx)\n+\t\t\terrC := cmd.ExecuteContext(ctx)\n+\t\t\tassert.NoError(t, errC)\n+\t\t\tclose(done)\n \t\t}()\n \t\tpty.ExpectMatch(workspace.Name)\n \t\tpty.ExpectMatch(\"Running\")\n \t\tcancelFunc()\n-\t\trequire.NoError(t, <-errC)\n+\t\t<-done\n \t})\n }",
+    "raw_url": "https://github.com/coder/coder/raw/0d5f35f7e9f295ef016d25929386f350f8efb512/cli%2Flist_test.go",
+    "sha": "98a3ae7fdf060f18bd5088b630ed83727120d9af",
+    "status": "modified"
+  },
+  {
+    "additions": 23,
+    "blob_url": "https://github.com/coder/coder/blob/0d5f35f7e9f295ef016d25929386f350f8efb512/coderd%2Fdatabase%2Fmigrate.go",
+    "changes": 25,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdatabase%2Fmigrate.go?ref=0d5f35f7e9f295ef016d25929386f350f8efb512",
+    "deletions": 2,
+    "filename": "coderd/database/migrate.go",
+    "patch": "@@ -1,6 +1,7 @@\n package database\n \n import (\n+\t\"context\"\n \t\"database/sql\"\n \t\"embed\"\n \t\"errors\"\n@@ -17,12 +18,21 @@ import (\n var migrations embed.FS\n \n func migrateSetup(db *sql.DB) (source.Driver, *migrate.Migrate, error) {\n+\tctx := context.Background()\n \tsourceDriver, err := iofs.New(migrations, \"migrations\")\n \tif err != nil {\n \t\treturn nil, nil, xerrors.Errorf(\"create iofs: %w\", err)\n \t}\n \n-\tdbDriver, err := postgres.WithInstance(db, &postgres.Config{})\n+\t// there is a postgres.WithInstance() method that takes the DB instance,\n+\t// but, when you close the resulting Migrate, it closes the DB, which\n+\t// we don't want.  Instead, create just a connection that will get closed\n+\t// when migration is done.\n+\tconn, err := db.Conn(ctx)\n+\tif err != nil {\n+\t\treturn nil, nil, xerrors.Errorf(\"postgres connection: %w\", err)\n+\t}\n+\tdbDriver, err := postgres.WithConnection(ctx, conn, &postgres.Config{})\n \tif err != nil {\n \t\treturn nil, nil, xerrors.Errorf(\"wrap postgres connection: %w\", err)\n \t}\n@@ -36,11 +46,22 @@ func migrateSetup(db *sql.DB) (source.Driver, *migrate.Migrate, error) {\n }\n \n // MigrateUp runs SQL migrations to ensure the database schema is up-to-date.\n-func MigrateUp(db *sql.DB) error {\n+func MigrateUp(db *sql.DB) (retErr error) {\n \t_, m, err := migrateSetup(db)\n \tif err != nil {\n \t\treturn xerrors.Errorf(\"migrate setup: %w\", err)\n \t}\n+\tdefer func() {\n+\t\tsrcErr, dbErr := m.Close()\n+\t\tif retErr != nil {\n+\t\t\treturn\n+\t\t}\n+\t\tif dbErr != nil {\n+\t\t\tretErr = dbErr\n+\t\t\treturn\n+\t\t}\n+\t\tretErr = srcErr\n+\t}()\n \n \terr = m.Up()\n \tif err != nil {",
+    "raw_url": "https://github.com/coder/coder/raw/0d5f35f7e9f295ef016d25929386f350f8efb512/coderd%2Fdatabase%2Fmigrate.go",
+    "sha": "88b4bf5e3b72556ae3c8e692ca4f1e8cd9db2499",
+    "status": "modified"
+  },
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/0d5f35f7e9f295ef016d25929386f350f8efb512/coderd%2Fdatabase%2Fpostgres%2Fpostgres.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdatabase%2Fpostgres%2Fpostgres.go?ref=0d5f35f7e9f295ef016d25929386f350f8efb512",
+    "deletions": 1,
+    "filename": "coderd/database/postgres/postgres.go",
+    "patch": "@@ -44,7 +44,13 @@ func Open() (string, func(), error) {\n \t\t\treturn \"\", nil, xerrors.Errorf(\"create db: %w\", err)\n \t\t}\n \n-\t\treturn \"postgres://postgres:postgres@127.0.0.1:5432/\" + dbName + \"?sslmode=disable\", func() {}, nil\n+\t\tdeleteDB := func() {\n+\t\t\tddb, _ := sql.Open(\"postgres\", dbURL)\n+\t\t\tdefer ddb.Close()\n+\t\t\t_, _ = ddb.Exec(\"DROP DATABASE \" + dbName)\n+\t\t}\n+\n+\t\treturn \"postgres://postgres:postgres@127.0.0.1:5432/\" + dbName + \"?sslmode=disable\", deleteDB, nil\n \t}\n \n \tpool, err := dockertest.NewPool(\"\")",
+    "raw_url": "https://github.com/coder/coder/raw/0d5f35f7e9f295ef016d25929386f350f8efb512/coderd%2Fdatabase%2Fpostgres%2Fpostgres.go",
+    "sha": "39cd015321dfb09025e6923dafa486a38531d45d",
+    "status": "modified"
+  }
+]

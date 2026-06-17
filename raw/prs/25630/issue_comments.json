@@ -1,0 +1,47 @@
+[
+  {
+    "author_association": "MEMBER",
+    "body": "> Might be worth adding [coder/internal#1544](https://github.com/coder/internal/issues/1544) in the PR description for future reference\r\n\r\nThaks, my bad, it should be linked.\r\n",
+    "created_at": "2026-05-25T14:41:46Z",
+    "html_url": "https://github.com/coder/coder/pull/25630#issuecomment-4535097391",
+    "id": 4535097391,
+    "issue_url": "https://api.github.com/repos/coder/coder/issues/25630",
+    "node_id": "IC_kwDOGkVX1s8AAAABDlAYLw",
+    "performed_via_github_app": null,
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/issues/comments/4535097391/reactions"
+    },
+    "updated_at": "2026-05-25T14:41:46Z",
+    "url": "https://api.github.com/repos/coder/coder/issues/comments/4535097391",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/87020025?v=4",
+      "events_url": "https://api.github.com/users/pawbana/events{/privacy}",
+      "followers_url": "https://api.github.com/users/pawbana/followers",
+      "following_url": "https://api.github.com/users/pawbana/following{/other_user}",
+      "gists_url": "https://api.github.com/users/pawbana/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/pawbana",
+      "id": 87020025,
+      "login": "pawbana",
+      "node_id": "MDQ6VXNlcjg3MDIwMDI1",
+      "organizations_url": "https://api.github.com/users/pawbana/orgs",
+      "received_events_url": "https://api.github.com/users/pawbana/received_events",
+      "repos_url": "https://api.github.com/users/pawbana/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/pawbana/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/pawbana/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/pawbana",
+      "user_view_type": "public"
+    }
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 13,
+    "blob_url": "https://github.com/coder/coder/blob/5fc8a117e9743c6256ebf37a04bf195ae9411c64/cli%2Fschedule_test.go",
+    "changes": 15,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fschedule_test.go?ref=5fc8a117e9743c6256ebf37a04bf195ae9411c64",
+    "deletions": 2,
+    "filename": "cli/schedule_test.go",
+    "patch": "@@ -352,8 +352,6 @@ func TestScheduleOverride(t *testing.T) {\n \t\t\trequire.NoError(t, err, \"invalid schedule\")\n \t\t\townerClient, _, _, ws := setupTestSchedule(t, sched)\n \t\t\tnow := time.Now()\n-\t\t\t// To avoid the likelihood of time-related flakes, only matching up to the hour.\n-\t\t\texpectedDeadline := now.In(loc).Add(10 * time.Hour).Format(\"2006-01-02T15:\")\n \n \t\t\t// When: we override the stop schedule\n \t\t\tinv, root := clitest.New(t,\n@@ -364,6 +362,19 @@ func TestScheduleOverride(t *testing.T) {\n \t\t\tpty := ptytest.New(t).Attach(inv)\n \t\t\trequire.NoError(t, inv.Run())\n \n+\t\t\t// Fetch the workspace to get the actual deadline set by the\n+\t\t\t// server. Computing our own expected deadline from a separately\n+\t\t\t// captured time.Now() is racy: the CLI command calls time.Now()\n+\t\t\t// internally, and with the Asia/Kolkata +05:30 offset the hour\n+\t\t\t// boundary falls at :30 UTC minutes. A small delay between our\n+\t\t\t// time.Now() and the command's is enough to land in different\n+\t\t\t// hours.\n+\t\t\tupdated, err := ownerClient.Workspace(context.Background(), ws[0].ID)\n+\t\t\trequire.NoError(t, err)\n+\t\t\trequire.False(t, updated.LatestBuild.Deadline.IsZero(), \"deadline should be set after extend\")\n+\t\t\trequire.WithinDuration(t, now.Add(10*time.Hour), updated.LatestBuild.Deadline.Time, 5*time.Minute)\n+\t\t\texpectedDeadline := updated.LatestBuild.Deadline.Time.In(loc).Format(time.RFC3339)\n+\n \t\t\t// Then: the updated schedule should be shown\n \t\t\tpty.ExpectMatch(ws[0].OwnerName + \"/\" + ws[0].Name)\n \t\t\tpty.ExpectMatch(sched.Humanize())",
+    "raw_url": "https://github.com/coder/coder/raw/5fc8a117e9743c6256ebf37a04bf195ae9411c64/cli%2Fschedule_test.go",
+    "sha": "ed9c5b17430299206cc73e71091192d4121c30d3",
+    "status": "modified"
+  }
+]

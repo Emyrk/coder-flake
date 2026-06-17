@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/c54787a6453bdd48016416ef6020b226af759e47/coderd%2Fworkspacebuilds_test.go",
+    "changes": 12,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspacebuilds_test.go?ref=c54787a6453bdd48016416ef6020b226af759e47",
+    "deletions": 7,
+    "filename": "coderd/workspacebuilds_test.go",
+    "patch": "@@ -48,14 +48,12 @@ func TestWorkspaceBuild(t *testing.T) {\n \tcoderdtest.AwaitTemplateVersionJobCompleted(t, client, version.ID)\n \tauditor.ResetLogs()\n \tworkspace := coderdtest.CreateWorkspace(t, client, user.OrganizationID, template.ID)\n-\n-\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitLong)\n-\tdefer cancel()\n-\n-\t_, err := client.WorkspaceBuild(ctx, workspace.LatestBuild.ID)\n-\trequire.NoError(t, err)\n-\trequire.Len(t, auditor.AuditLogs(), 1)\n+\t_ = coderdtest.AwaitWorkspaceBuildJobCompleted(t, client, workspace.LatestBuild.ID)\n+\t// Create workspace will also start a build, so we need to wait for\n+\t// it to ensure all events are recorded.\n+\trequire.Len(t, auditor.AuditLogs(), 2)\n \trequire.Equal(t, auditor.AuditLogs()[0].Ip.IPNet.IP.String(), \"127.0.0.1\")\n+\trequire.Equal(t, auditor.AuditLogs()[1].Ip.IPNet.IP.String(), \"127.0.0.1\")\n }\n \n func TestWorkspaceBuildByBuildNumber(t *testing.T) {",
+    "raw_url": "https://github.com/coder/coder/raw/c54787a6453bdd48016416ef6020b226af759e47/coderd%2Fworkspacebuilds_test.go",
+    "sha": "0978a1743affd50f1e84889e7854fd3fb051bc9c",
+    "status": "modified"
+  }
+]

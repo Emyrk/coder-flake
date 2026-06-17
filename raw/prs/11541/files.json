@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/69966e8e71502aab840b608e8f337dce0962533d/coderd%2Fworkspaceagentsrpc_internal_test.go",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaceagentsrpc_internal_test.go?ref=69966e8e71502aab840b608e8f337dce0962533d",
+    "deletions": 2,
+    "filename": "coderd/workspaceagentsrpc_internal_test.go",
+    "patch": "@@ -227,8 +227,10 @@ func TestAgentWebsocketMonitor_SendPings(t *testing.T) {\n \t}\n \tgo uut.sendPings(ctx)\n \tfConn.requireEventuallyHasPing(t)\n-\tlastPing := uut.lastPing.Load()\n-\trequire.NotNil(t, lastPing)\n+\trequire.Eventually(t, func() bool {\n+\t\tlastPing := uut.lastPing.Load()\n+\t\treturn lastPing != nil\n+\t}, testutil.WaitShort, testutil.IntervalFast)\n }\n \n func TestAgentWebsocketMonitor_StartClose(t *testing.T) {",
+    "raw_url": "https://github.com/coder/coder/raw/69966e8e71502aab840b608e8f337dce0962533d/coderd%2Fworkspaceagentsrpc_internal_test.go",
+    "sha": "2d222985b22520118d62c0055b109b3857e0d3b3",
+    "status": "modified"
+  }
+]

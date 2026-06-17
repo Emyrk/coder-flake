@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/8613#pullrequestreview-1538216271"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/8613"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "niiiice",
+    "commit_id": "cf2f7dcbade9e69266439becde3c0aa47f41e832",
+    "html_url": "https://github.com/coder/coder/pull/8613#pullrequestreview-1538216271",
+    "id": 1538216271,
+    "node_id": "PRR_kwDOGkVX1s5br1FP",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/8613",
+    "state": "APPROVED",
+    "submitted_at": "2023-07-20T00:02:10Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7416144?u=807c0138c4e62b1c255670de3ea338c9d1414717&v=4",
+      "events_url": "https://api.github.com/users/ammario/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ammario/followers",
+      "following_url": "https://api.github.com/users/ammario/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ammario/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ammario",
+      "id": 7416144,
+      "login": "ammario",
+      "node_id": "MDQ6VXNlcjc0MTYxNDQ=",
+      "organizations_url": "https://api.github.com/users/ammario/orgs",
+      "received_events_url": "https://api.github.com/users/ammario/received_events",
+      "repos_url": "https://api.github.com/users/ammario/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ammario/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ammario/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ammario",
+      "user_view_type": "public"
+    }
+  }
+]

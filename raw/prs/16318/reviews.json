@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16318#pullrequestreview-2580465421"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16318"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "8480508bc4d93b4340bb30701c629090595ded70",
+    "html_url": "https://github.com/coder/coder/pull/16318#pullrequestreview-2580465421",
+    "id": 2580465421,
+    "node_id": "PRR_kwDOGkVX1s6ZzscN",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16318",
+    "state": "APPROVED",
+    "submitted_at": "2025-01-29T09:35:07Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/10648092?u=60d24b35d3cbbee840ff2e795098dcf04190bb92&v=4",
+      "events_url": "https://api.github.com/users/matifali/events{/privacy}",
+      "followers_url": "https://api.github.com/users/matifali/followers",
+      "following_url": "https://api.github.com/users/matifali/following{/other_user}",
+      "gists_url": "https://api.github.com/users/matifali/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/matifali",
+      "id": 10648092,
+      "login": "matifali",
+      "node_id": "MDQ6VXNlcjEwNjQ4MDky",
+      "organizations_url": "https://api.github.com/users/matifali/orgs",
+      "received_events_url": "https://api.github.com/users/matifali/received_events",
+      "repos_url": "https://api.github.com/users/matifali/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/matifali/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/matifali/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/matifali",
+      "user_view_type": "public"
+    }
+  }
+]

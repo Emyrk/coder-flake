@@ -1,0 +1,696 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26132#discussion_r3372760007"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26132"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3372760007"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "**Note** [CRF-1] `testutil.RoundTripperFunc` is the correct shared location for this adapter. `coderd/coderdtest/coderdtest.go:1778` has an identical unexported `roundTripper` type and already imports `testutil`; a future cleanup could replace it. `coderd/coderdtest/oidctest/idp.go:1792` has a struct-based variant (`fakeRoundTripper`) doing the same job. Production copies in `cli/root.go:1699` and `coderd/externalauth/externalauth.go:1381` cannot import a test package, so they stay unless the helper moves to a non-test location. *(Netero, Robin)*\n\n> \ud83e\udd16",
+    "commit_id": "91e1c7944084e666f3cf343b498bd268738b37fb",
+    "created_at": "2026-06-08T11:17:34Z",
+    "diff_hunk": "@@ -9,6 +9,13 @@ import (\n \t\"github.com/stretchr/testify/require\"\n )\n \n+// RoundTripperFunc adapts a function to an http.RoundTripper.\n+type RoundTripperFunc func(*http.Request) (*http.Response, error)",
+    "html_url": "https://github.com/coder/coder/pull/26132#discussion_r3372760007",
+    "id": 3372760007,
+    "line": 13,
+    "node_id": "PRRC_kwDOGkVX1s7JCDvH",
+    "original_commit_id": "eeb6fd64aa387cc15ac6f97a86f94b9ccd449e7c",
+    "original_line": 13,
+    "original_position": 5,
+    "original_start_line": null,
+    "path": "testutil/http.go",
+    "position": 5,
+    "pull_request_review_id": 4448959879,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26132",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3372760007/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-08T11:17:35Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3372760007",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26132#discussion_r3372760013"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26132"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3372760013"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "**Nit** [CRF-3] `srvURL` no longer refers to a server. The old code had `srv := httptest.NewServer(...)` followed by `srvURL, err := url.Parse(srv.URL)`, so the name described the server's URL. The server is gone; this is now a placeholder URL for a mocked transport. `baseURL` matches the actual role. *(Gon)*\n\n> \ud83e\udd16",
+    "commit_id": "eeb6fd64aa387cc15ac6f97a86f94b9ccd449e7c",
+    "created_at": "2026-06-08T11:17:35Z",
+    "diff_hunk": "@@ -271,13 +273,13 @@ func TestResolveWorkspace(t *testing.T) {\n \tt.Run(\"TransportError\", func(t *testing.T) {\n \t\tt.Parallel()\n \n-\t\t// Close the server immediately so the transport layer fails.\n-\t\tsrv := httptest.NewServer(http.NotFoundHandler())\n-\t\tsrvURL, err := url.Parse(srv.URL)\n+\t\tsrvURL, err := url.Parse(\"http://example.com\")",
+    "html_url": "https://github.com/coder/coder/pull/26132#discussion_r3372760013",
+    "id": 3372760013,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7JCDvN",
+    "original_commit_id": "eeb6fd64aa387cc15ac6f97a86f94b9ccd449e7c",
+    "original_line": 276,
+    "original_position": 18,
+    "original_start_line": null,
+    "path": "codersdk/workspaces_test.go",
+    "position": 1,
+    "pull_request_review_id": 4448959879,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26132",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3372760013/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-08T11:17:35Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3372760013",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26132#discussion_r3372760018"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26132"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3372760018"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "**Nit** [CRF-4] `xerrors.New` adds a new import when `errors.New` would do the same thing. The file already imports `\"errors\"` (line 5, used for `errors.As` below). `errors.New` is identical to `xerrors.New` since Go 1.13. *(Ging-Go)*\n\n> \ud83e\udd16",
+    "commit_id": "91e1c7944084e666f3cf343b498bd268738b37fb",
+    "created_at": "2026-06-08T11:17:35Z",
+    "diff_hunk": "@@ -271,13 +273,13 @@ func TestResolveWorkspace(t *testing.T) {\n \tt.Run(\"TransportError\", func(t *testing.T) {\n \t\tt.Parallel()\n \n-\t\t// Close the server immediately so the transport layer fails.\n-\t\tsrv := httptest.NewServer(http.NotFoundHandler())\n-\t\tsrvURL, err := url.Parse(srv.URL)\n+\t\tsrvURL, err := url.Parse(\"http://example.com\")\n \t\trequire.NoError(t, err)\n-\t\tsrv.Close()\n-\n-\t\tclient := codersdk.New(srvURL)\n+\t\tclient := codersdk.New(srvURL, codersdk.WithHTTPClient(&http.Client{\n+\t\t\tTransport: testutil.RoundTripperFunc(func(*http.Request) (*http.Response, error) {\n+\t\t\t\treturn nil, xerrors.New(\"transport error\")",
+    "html_url": "https://github.com/coder/coder/pull/26132#discussion_r3372760018",
+    "id": 3372760018,
+    "line": 280,
+    "node_id": "PRRC_kwDOGkVX1s7JCDvS",
+    "original_commit_id": "eeb6fd64aa387cc15ac6f97a86f94b9ccd449e7c",
+    "original_line": 280,
+    "original_position": 25,
+    "original_start_line": null,
+    "path": "codersdk/workspaces_test.go",
+    "position": 25,
+    "pull_request_review_id": 4448959879,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26132",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3372760018/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-08T11:17:35Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3372760018",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26132#discussion_r3372760023"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26132"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3372760023"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "**Nit** [CRF-5] Missing compile-time interface assertion. The project convention for `http.RoundTripper` implementations is to include `var _ http.RoundTripper` (see `codersdk/client.go:666`, `coderd/x/chatd/chatdebug/transport.go:42`). Adding `var _ http.RoundTripper = RoundTripperFunc(nil)` would match the existing pattern. *(Ryosuke)*\n\n> \ud83e\udd16",
+    "commit_id": "91e1c7944084e666f3cf343b498bd268738b37fb",
+    "created_at": "2026-06-08T11:17:35Z",
+    "diff_hunk": "@@ -9,6 +9,13 @@ import (\n \t\"github.com/stretchr/testify/require\"\n )\n \n+// RoundTripperFunc adapts a function to an http.RoundTripper.\n+type RoundTripperFunc func(*http.Request) (*http.Response, error)",
+    "html_url": "https://github.com/coder/coder/pull/26132#discussion_r3372760023",
+    "id": 3372760023,
+    "line": 13,
+    "node_id": "PRRC_kwDOGkVX1s7JCDvX",
+    "original_commit_id": "eeb6fd64aa387cc15ac6f97a86f94b9ccd449e7c",
+    "original_line": 13,
+    "original_position": 5,
+    "original_start_line": null,
+    "path": "testutil/http.go",
+    "position": 5,
+    "pull_request_review_id": 4448959879,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26132",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3372760023/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-08T11:17:35Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3372760023",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26132#discussion_r3373481810"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26132"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3373481810"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Acknowledged. I kept the current PR scoped to adding the shared helper and using it in the flaking test. The existing test-only duplicates can be cleaned up separately.\n\nGenerated by Coder Agents.",
+    "commit_id": "91e1c7944084e666f3cf343b498bd268738b37fb",
+    "created_at": "2026-06-08T13:17:15Z",
+    "diff_hunk": "@@ -9,6 +9,13 @@ import (\n \t\"github.com/stretchr/testify/require\"\n )\n \n+// RoundTripperFunc adapts a function to an http.RoundTripper.\n+type RoundTripperFunc func(*http.Request) (*http.Response, error)",
+    "html_url": "https://github.com/coder/coder/pull/26132#discussion_r3373481810",
+    "id": 3373481810,
+    "in_reply_to_id": 3372760007,
+    "line": 13,
+    "node_id": "PRRC_kwDOGkVX1s7JEz9S",
+    "original_commit_id": "eeb6fd64aa387cc15ac6f97a86f94b9ccd449e7c",
+    "original_line": 13,
+    "original_position": 5,
+    "original_start_line": null,
+    "path": "testutil/http.go",
+    "position": 5,
+    "pull_request_review_id": 4449820496,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26132",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3373481810/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-08T13:17:15Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3373481810",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26132#discussion_r3373482536"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26132"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3373482536"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Fixed in `91e1c79440` by renaming `srvURL` to `baseURL`.\n\nGenerated by Coder Agents.",
+    "commit_id": "eeb6fd64aa387cc15ac6f97a86f94b9ccd449e7c",
+    "created_at": "2026-06-08T13:17:21Z",
+    "diff_hunk": "@@ -271,13 +273,13 @@ func TestResolveWorkspace(t *testing.T) {\n \tt.Run(\"TransportError\", func(t *testing.T) {\n \t\tt.Parallel()\n \n-\t\t// Close the server immediately so the transport layer fails.\n-\t\tsrv := httptest.NewServer(http.NotFoundHandler())\n-\t\tsrvURL, err := url.Parse(srv.URL)\n+\t\tsrvURL, err := url.Parse(\"http://example.com\")",
+    "html_url": "https://github.com/coder/coder/pull/26132#discussion_r3373482536",
+    "id": 3373482536,
+    "in_reply_to_id": 3372760013,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7JE0Io",
+    "original_commit_id": "eeb6fd64aa387cc15ac6f97a86f94b9ccd449e7c",
+    "original_line": 276,
+    "original_position": 18,
+    "original_start_line": null,
+    "path": "codersdk/workspaces_test.go",
+    "position": 1,
+    "pull_request_review_id": 4449821471,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26132",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3373482536/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-08T13:17:21Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3373482536",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26132#discussion_r3373483126"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26132"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3373483126"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I tried this locally, but the repo's Go formatter/lint hook rewrites `errors.New` back to `xerrors.New` via `scripts/rules.go`. I left the project-enforced form so pre-commit stays clean.\n\nGenerated by Coder Agents.",
+    "commit_id": "91e1c7944084e666f3cf343b498bd268738b37fb",
+    "created_at": "2026-06-08T13:17:26Z",
+    "diff_hunk": "@@ -271,13 +273,13 @@ func TestResolveWorkspace(t *testing.T) {\n \tt.Run(\"TransportError\", func(t *testing.T) {\n \t\tt.Parallel()\n \n-\t\t// Close the server immediately so the transport layer fails.\n-\t\tsrv := httptest.NewServer(http.NotFoundHandler())\n-\t\tsrvURL, err := url.Parse(srv.URL)\n+\t\tsrvURL, err := url.Parse(\"http://example.com\")\n \t\trequire.NoError(t, err)\n-\t\tsrv.Close()\n-\n-\t\tclient := codersdk.New(srvURL)\n+\t\tclient := codersdk.New(srvURL, codersdk.WithHTTPClient(&http.Client{\n+\t\t\tTransport: testutil.RoundTripperFunc(func(*http.Request) (*http.Response, error) {\n+\t\t\t\treturn nil, xerrors.New(\"transport error\")",
+    "html_url": "https://github.com/coder/coder/pull/26132#discussion_r3373483126",
+    "id": 3373483126,
+    "in_reply_to_id": 3372760018,
+    "line": 280,
+    "node_id": "PRRC_kwDOGkVX1s7JE0R2",
+    "original_commit_id": "eeb6fd64aa387cc15ac6f97a86f94b9ccd449e7c",
+    "original_line": 280,
+    "original_position": 25,
+    "original_start_line": null,
+    "path": "codersdk/workspaces_test.go",
+    "position": 25,
+    "pull_request_review_id": 4449822595,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26132",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3373483126/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-08T13:17:26Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3373483126",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26132#discussion_r3373483910"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26132"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3373483910"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Fixed in `91e1c79440` by adding `var _ http.RoundTripper = RoundTripperFunc(nil)`.\n\nGenerated by Coder Agents.",
+    "commit_id": "91e1c7944084e666f3cf343b498bd268738b37fb",
+    "created_at": "2026-06-08T13:17:33Z",
+    "diff_hunk": "@@ -9,6 +9,13 @@ import (\n \t\"github.com/stretchr/testify/require\"\n )\n \n+// RoundTripperFunc adapts a function to an http.RoundTripper.\n+type RoundTripperFunc func(*http.Request) (*http.Response, error)",
+    "html_url": "https://github.com/coder/coder/pull/26132#discussion_r3373483910",
+    "id": 3373483910,
+    "in_reply_to_id": 3372760023,
+    "line": 13,
+    "node_id": "PRRC_kwDOGkVX1s7JE0eG",
+    "original_commit_id": "eeb6fd64aa387cc15ac6f97a86f94b9ccd449e7c",
+    "original_line": 13,
+    "original_position": 5,
+    "original_start_line": null,
+    "path": "testutil/http.go",
+    "position": 5,
+    "pull_request_review_id": 4449823771,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26132",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3373483910/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-08T13:17:33Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3373483910",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26132#discussion_r3373832624"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26132"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3373832624"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "RoundTripperFunc.RoundTrip will panic if a nil RoundTripperFunc is ever used as a Transport (e.g. Transport: testutil.RoundTripperFunc(nil)). Since this is an exported helper, it\u2019s safer to return a clear error instead of panicking.",
+    "commit_id": "91e1c7944084e666f3cf343b498bd268738b37fb",
+    "created_at": "2026-06-08T14:07:53Z",
+    "diff_hunk": "@@ -9,6 +9,15 @@ import (\n \t\"github.com/stretchr/testify/require\"\n )\n \n+// RoundTripperFunc adapts a function to an http.RoundTripper.\n+type RoundTripperFunc func(*http.Request) (*http.Response, error)\n+\n+var _ http.RoundTripper = RoundTripperFunc(nil)\n+\n+func (f RoundTripperFunc) RoundTrip(req *http.Request) (*http.Response, error) {\n+\treturn f(req)\n+}",
+    "html_url": "https://github.com/coder/coder/pull/26132#discussion_r3373832624",
+    "id": 3373832624,
+    "line": 19,
+    "node_id": "PRRC_kwDOGkVX1s7JGJmw",
+    "original_commit_id": "91e1c7944084e666f3cf343b498bd268738b37fb",
+    "original_line": 19,
+    "original_position": 11,
+    "original_start_line": 17,
+    "path": "testutil/http.go",
+    "position": 11,
+    "pull_request_review_id": 4450251168,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26132",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3373832624/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 17,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2026-06-08T14:07:54Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3373832624",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "id": 175728472,
+      "login": "Copilot",
+      "node_id": "BOT_kgDOCnlnWA",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/Copilot",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26132#discussion_r3373832679"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26132"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3373832679"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "The test currently only asserts that an error occurred and that it\u2019s not a *codersdk.Error. To make the transport-error case deterministic and ensure the injected RoundTripper is actually the source of the failure, keep a sentinel error and assert ErrorIs on it.",
+    "commit_id": "91e1c7944084e666f3cf343b498bd268738b37fb",
+    "created_at": "2026-06-08T14:07:53Z",
+    "diff_hunk": "@@ -271,13 +273,13 @@ func TestResolveWorkspace(t *testing.T) {\n \tt.Run(\"TransportError\", func(t *testing.T) {\n \t\tt.Parallel()\n \n-\t\t// Close the server immediately so the transport layer fails.\n-\t\tsrv := httptest.NewServer(http.NotFoundHandler())\n-\t\tsrvURL, err := url.Parse(srv.URL)\n+\t\tbaseURL, err := url.Parse(\"http://example.com\")\n \t\trequire.NoError(t, err)\n-\t\tsrv.Close()\n-\n-\t\tclient := codersdk.New(srvURL)\n+\t\tclient := codersdk.New(baseURL, codersdk.WithHTTPClient(&http.Client{\n+\t\t\tTransport: testutil.RoundTripperFunc(func(*http.Request) (*http.Response, error) {\n+\t\t\t\treturn nil, xerrors.New(\"transport error\")\n+\t\t\t}),\n+\t\t}))\n \n \t\t_, err = client.ResolveWorkspace(t.Context(), uuid.NewString())\n \t\trequire.Error(t, err)",
+    "html_url": "https://github.com/coder/coder/pull/26132#discussion_r3373832679",
+    "id": 3373832679,
+    "line": 285,
+    "node_id": "PRRC_kwDOGkVX1s7JGJnn",
+    "original_commit_id": "91e1c7944084e666f3cf343b498bd268738b37fb",
+    "original_line": 285,
+    "original_position": 30,
+    "original_start_line": 276,
+    "path": "codersdk/workspaces_test.go",
+    "position": 30,
+    "pull_request_review_id": 4450251168,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26132",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3373832679/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 276,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2026-06-08T14:07:54Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3373832679",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "id": 175728472,
+      "login": "Copilot",
+      "node_id": "BOT_kgDOCnlnWA",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/Copilot",
+      "user_view_type": "public"
+    }
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/17d04a3ae1912ca62ef297177fcd0454dda98795/coderd%2Fdatabase%2Fquerier_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdatabase%2Fquerier_test.go?ref=17d04a3ae1912ca62ef297177fcd0454dda98795",
+    "deletions": 1,
+    "filename": "coderd/database/querier_test.go",
+    "patch": "@@ -400,7 +400,7 @@ func TestUserLastSeenFilter(t *testing.T) {\n \t\trequire.NoError(t, err)\n \t\tdb := database.New(sqlDB)\n \t\tctx := context.Background()\n-\t\tnow := time.Now()\n+\t\tnow := database.Now()\n \n \t\tyesterday := dbgen.User(t, db, database.User{\n \t\t\tLastSeenAt: now.Add(time.Hour * -25),",
+    "raw_url": "https://github.com/coder/coder/raw/17d04a3ae1912ca62ef297177fcd0454dda98795/coderd%2Fdatabase%2Fquerier_test.go",
+    "sha": "2d41cb7458c72556b6fe8d884ca905b126d11004",
+    "status": "modified"
+  }
+]

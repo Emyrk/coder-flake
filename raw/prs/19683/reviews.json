@@ -1,0 +1,162 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19683#pullrequestreview-3179767029"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19683"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "1c19d4ff5618c923a9fd0366d171b5ba593df97e",
+    "html_url": "https://github.com/coder/coder/pull/19683#pullrequestreview-3179767029",
+    "id": 3179767029,
+    "node_id": "PRR_kwDOGkVX1s69h2T1",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19683",
+    "state": "COMMENTED",
+    "submitted_at": "2025-09-03T09:24:33Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19683#pullrequestreview-3183839108"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19683"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "7246650a8489c3ba9f55081144c2344c90e0fe64",
+    "html_url": "https://github.com/coder/coder/pull/19683#pullrequestreview-3183839108",
+    "id": 3183839108,
+    "node_id": "PRR_kwDOGkVX1s69xYeE",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19683",
+    "state": "COMMENTED",
+    "submitted_at": "2025-09-04T07:34:45Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19683#pullrequestreview-3184037825"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19683"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "7246650a8489c3ba9f55081144c2344c90e0fe64",
+    "html_url": "https://github.com/coder/coder/pull/19683#pullrequestreview-3184037825",
+    "id": 3184037825,
+    "node_id": "PRR_kwDOGkVX1s69yI_B",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19683",
+    "state": "COMMENTED",
+    "submitted_at": "2025-09-04T08:31:10Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/39577870?u=1eb1bf0a337525e45f5f0e1b60c8f32c81d56855&v=4",
+      "events_url": "https://api.github.com/users/ethanndickson/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ethanndickson/followers",
+      "following_url": "https://api.github.com/users/ethanndickson/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ethanndickson/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ethanndickson",
+      "id": 39577870,
+      "login": "ethanndickson",
+      "node_id": "MDQ6VXNlcjM5NTc3ODcw",
+      "organizations_url": "https://api.github.com/users/ethanndickson/orgs",
+      "received_events_url": "https://api.github.com/users/ethanndickson/received_events",
+      "repos_url": "https://api.github.com/users/ethanndickson/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ethanndickson/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ethanndickson/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ethanndickson",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19683#pullrequestreview-3184632373"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19683"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Suggestion inline about only triggering a single tick and using Advance rather than AdvanceNext, but I don't need to review again. Nice work.",
+    "commit_id": "2f71aaafb79279f33e07734afc135c0c68857122",
+    "html_url": "https://github.com/coder/coder/pull/19683#pullrequestreview-3184632373",
+    "id": 3184632373,
+    "node_id": "PRR_kwDOGkVX1s690aI1",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19683",
+    "state": "APPROVED",
+    "submitted_at": "2025-09-04T11:15:56Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  }
+]

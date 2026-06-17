@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/7c9ecc689e2200d6b4c9d25b6c067e303a592ec5/coderd%2Fbatchstats%2Fbatcher.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fbatchstats%2Fbatcher.go?ref=7c9ecc689e2200d6b4c9d25b6c067e303a592ec5",
+    "deletions": 1,
+    "filename": "coderd/batchstats/batcher.go",
+    "patch": "@@ -13,7 +13,6 @@ import (\n \n \t\"cdr.dev/slog\"\n \t\"cdr.dev/slog/sloggers/sloghuman\"\n-\n \t\"github.com/coder/coder/coderd/database\"\n \t\"github.com/coder/coder/coderd/database/dbauthz\"\n \t\"github.com/coder/coder/codersdk/agentsdk\"",
+    "raw_url": "https://github.com/coder/coder/raw/7c9ecc689e2200d6b4c9d25b6c067e303a592ec5/coderd%2Fbatchstats%2Fbatcher.go",
+    "sha": "e7c734862e8bcf671901bcc418660de4c5a416d5",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/7c9ecc689e2200d6b4c9d25b6c067e303a592ec5/tailnet%2Fconn_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/tailnet%2Fconn_test.go?ref=7c9ecc689e2200d6b4c9d25b6c067e303a592ec5",
+    "deletions": 1,
+    "filename": "tailnet/conn_test.go",
+    "patch": "@@ -99,7 +99,7 @@ func TestTailnet(t *testing.T) {\n \n \tt.Run(\"ForcesWebSockets\", func(t *testing.T) {\n \t\tt.Parallel()\n-\t\tctx := testutil.Context(t, testutil.WaitLong)\n+\t\tctx := testutil.Context(t, testutil.WaitMedium)\n \n \t\tw1IP := tailnet.IP()\n \t\tderpMap := tailnettest.RunDERPOnlyWebSockets(t)",
+    "raw_url": "https://github.com/coder/coder/raw/7c9ecc689e2200d6b4c9d25b6c067e303a592ec5/tailnet%2Fconn_test.go",
+    "sha": "db526bfd3da02780fcc72a259a6071146e4de05c",
+    "status": "modified"
+  },
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/7c9ecc689e2200d6b4c9d25b6c067e303a592ec5/tailnet%2Ftailnettest%2Ftailnettest.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/tailnet%2Ftailnettest%2Ftailnettest.go?ref=7c9ecc689e2200d6b4c9d25b6c067e303a592ec5",
+    "deletions": 1,
+    "filename": "tailnet/tailnettest/tailnettest.go",
+    "patch": "@@ -77,7 +77,8 @@ func RunDERPOnlyWebSockets(t *testing.T) *tailcfg.DERPMap {\n \thandler, closeFunc = tailnet.WithWebsocketSupport(d, handler)\n \tserver := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n \t\tif r.URL.Path != \"/derp\" {\n-\t\t\thandler.ServeHTTP(w, r)\n+\t\t\tw.WriteHeader(http.StatusOK)\n+\t\t\t_, _ = w.Write([]byte(\"hello\"))\n \t\t\treturn\n \t\t}\n \t\tif r.Header.Get(\"Upgrade\") != \"websocket\" {",
+    "raw_url": "https://github.com/coder/coder/raw/7c9ecc689e2200d6b4c9d25b6c067e303a592ec5/tailnet%2Ftailnettest%2Ftailnettest.go",
+    "sha": "16fc92591cbd31d901a2e80d5c3e4cc2581aba3b",
+    "status": "modified"
+  }
+]

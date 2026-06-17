@@ -1,0 +1,162 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19654#pullrequestreview-3171016763"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19654"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "45b36f5ff2d3e73217636c1da643ea0a6a8743f0",
+    "html_url": "https://github.com/coder/coder/pull/19654#pullrequestreview-3171016763",
+    "id": 3171016763,
+    "node_id": "PRR_kwDOGkVX1s69AeA7",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19654",
+    "state": "COMMENTED",
+    "submitted_at": "2025-08-30T11:58:12Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?u=ca786d69e9499bdc2d6e362245d35f70632ddc55&v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19654#pullrequestreview-3171129033"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19654"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "45b36f5ff2d3e73217636c1da643ea0a6a8743f0",
+    "html_url": "https://github.com/coder/coder/pull/19654#pullrequestreview-3171129033",
+    "id": 3171129033,
+    "node_id": "PRR_kwDOGkVX1s69A5bJ",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19654",
+    "state": "APPROVED",
+    "submitted_at": "2025-08-30T17:13:27Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4856196?u=9916d1544a99b9eca4ea1ad6a133537bd5f0c778&v=4",
+      "events_url": "https://api.github.com/users/sreya/events{/privacy}",
+      "followers_url": "https://api.github.com/users/sreya/followers",
+      "following_url": "https://api.github.com/users/sreya/following{/other_user}",
+      "gists_url": "https://api.github.com/users/sreya/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/sreya",
+      "id": 4856196,
+      "login": "sreya",
+      "node_id": "MDQ6VXNlcjQ4NTYxOTY=",
+      "organizations_url": "https://api.github.com/users/sreya/orgs",
+      "received_events_url": "https://api.github.com/users/sreya/received_events",
+      "repos_url": "https://api.github.com/users/sreya/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/sreya/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/sreya/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/sreya",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19654#pullrequestreview-3171781497"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19654"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "45b36f5ff2d3e73217636c1da643ea0a6a8743f0",
+    "html_url": "https://github.com/coder/coder/pull/19654#pullrequestreview-3171781497",
+    "id": 3171781497,
+    "node_id": "PRR_kwDOGkVX1s69DYt5",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19654",
+    "state": "APPROVED",
+    "submitted_at": "2025-08-31T20:27:36Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?u=bd1828de93463cc139feb1dc4b4f6871dec2a7b3&v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19654#pullrequestreview-3171781901"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19654"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "45b36f5ff2d3e73217636c1da643ea0a6a8743f0",
+    "html_url": "https://github.com/coder/coder/pull/19654#pullrequestreview-3171781901",
+    "id": 3171781901,
+    "node_id": "PRR_kwDOGkVX1s69DY0N",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19654",
+    "state": "COMMENTED",
+    "submitted_at": "2025-08-31T20:29:46Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?u=bd1828de93463cc139feb1dc4b4f6871dec2a7b3&v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  }
+]

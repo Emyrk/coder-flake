@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/fff719f757a2c96cf161b84bd3d23d3635dc32bc/.github%2Fworkflows%2Fci.yaml",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Fci.yaml?ref=fff719f757a2c96cf161b84bd3d23d3635dc32bc",
+    "deletions": 0,
+    "filename": ".github/workflows/ci.yaml",
+    "patch": "@@ -141,6 +141,9 @@ jobs:\n         with:\n           # Allows dependabot to still rebase!\n           commit_message: \"[dependabot skip] Update Nix Flake SRI Hash\"\n+          commit_user_name: \"dependabot[bot]\"\n+          commit_user_email: \"49699333+dependabot[bot]@users.noreply.github.com>\"\n+          commit_author: \"dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>\"\n \n       # require everyone else to update it themselves\n       - name: Ensure No Changes",
+    "raw_url": "https://github.com/coder/coder/raw/fff719f757a2c96cf161b84bd3d23d3635dc32bc/.github%2Fworkflows%2Fci.yaml",
+    "sha": "e5ee64f4ce3e1f87c7b015b11cfd7be94f42dd8e",
+    "status": "modified"
+  }
+]

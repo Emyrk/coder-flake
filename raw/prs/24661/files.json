@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/8619f359fd29472fef3bae6c2de1de3ff9bd237b/cli%2Fexp_agents_e2e_test.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fexp_agents_e2e_test.go?ref=8619f359fd29472fef3bae6c2de1de3ff9bd237b",
+    "deletions": 1,
+    "filename": "cli/exp_agents_e2e_test.go",
+    "patch": "@@ -77,8 +77,14 @@ func TestExpAgentsE2E(t *testing.T) {\n \t\tchat := seedChat(t, ctx, expClient, orgID, \"direct open seed\")\n \t\tsession := startExpAgentsSession(t, ctx, client, chat.ID.String())\n \n+\t\t// The initial render contains both the chat title/content\n+\t\t// and the status bar in a single frame. Their relative\n+\t\t// order in the PTY byte stream depends on async title\n+\t\t// generation, so matching them with separate sequential\n+\t\t// expects is racy. Instead, just confirm the seed text is\n+\t\t// visible (proving we are in the chat view), then verify\n+\t\t// esc navigates back to the list.\n \t\tsession.expect(ctx, \"direct open seed\")\n-\t\tsession.expect(ctx, \"esc\")\n \t\tsession.esc()\n \t\tsession.expect(ctx, \"enter: open\")\n \t\tsession.quit()",
+    "raw_url": "https://github.com/coder/coder/raw/8619f359fd29472fef3bae6c2de1de3ff9bd237b/cli%2Fexp_agents_e2e_test.go",
+    "sha": "c43ee5c97213de18cc21869bf7dc38a75852a0a7",
+    "status": "modified"
+  }
+]

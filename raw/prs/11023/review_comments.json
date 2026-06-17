@@ -1,0 +1,141 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/11023#discussion_r1414133582"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/11023"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1414133582"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I don't think we need to strip the monotonic clock here since we're parsing a string. Monotonic clock should only be present when `time.Now()` is used. \ud83e\udd14",
+    "commit_id": "e30f166b6f66d96fbee95faca6913cf57340f4a2",
+    "created_at": "2023-12-04T16:07:52Z",
+    "diff_hunk": "@@ -550,6 +550,9 @@ func parseInsightsStartAndEndTime(ctx context.Context, rw http.ResponseWriter, s\n \t\t{\"end_time\", endTimeString, &endTime},\n \t} {\n \t\tt, err := time.Parse(insightsTimeLayout, qp.value)\n+\t\t// strip monotonic clock reading\n+\t\t// so presentation time and arithmetic operations are consistent\n+\t\tt = t.Round(0)",
+    "html_url": "https://github.com/coder/coder/pull/11023#discussion_r1414133582",
+    "id": 1414133582,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5USfdO",
+    "original_commit_id": "0d8c561d76d5cafe3152925e67e4e0f852d688d7",
+    "original_line": 555,
+    "original_position": 6,
+    "original_start_line": null,
+    "path": "coderd/insights.go",
+    "position": 1,
+    "pull_request_review_id": 1762825853,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/11023",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1414133582/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2023-12-04T16:07:52Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1414133582",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/11023#discussion_r1414141058"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/11023"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1414141058"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Yeah I just learned that after making this :P",
+    "commit_id": "e30f166b6f66d96fbee95faca6913cf57340f4a2",
+    "created_at": "2023-12-04T16:12:32Z",
+    "diff_hunk": "@@ -550,6 +550,9 @@ func parseInsightsStartAndEndTime(ctx context.Context, rw http.ResponseWriter, s\n \t\t{\"end_time\", endTimeString, &endTime},\n \t} {\n \t\tt, err := time.Parse(insightsTimeLayout, qp.value)\n+\t\t// strip monotonic clock reading\n+\t\t// so presentation time and arithmetic operations are consistent\n+\t\tt = t.Round(0)",
+    "html_url": "https://github.com/coder/coder/pull/11023#discussion_r1414141058",
+    "id": 1414141058,
+    "in_reply_to_id": 1414133582,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5UShSC",
+    "original_commit_id": "0d8c561d76d5cafe3152925e67e4e0f852d688d7",
+    "original_line": 555,
+    "original_position": 6,
+    "original_start_line": null,
+    "path": "coderd/insights.go",
+    "position": 1,
+    "pull_request_review_id": 1762837403,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/11023",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1414141058/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2023-12-04T16:12:32Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1414141058",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/19379394?v=4",
+      "events_url": "https://api.github.com/users/f0ssel/events{/privacy}",
+      "followers_url": "https://api.github.com/users/f0ssel/followers",
+      "following_url": "https://api.github.com/users/f0ssel/following{/other_user}",
+      "gists_url": "https://api.github.com/users/f0ssel/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/f0ssel",
+      "id": 19379394,
+      "login": "f0ssel",
+      "node_id": "MDQ6VXNlcjE5Mzc5Mzk0",
+      "organizations_url": "https://api.github.com/users/f0ssel/orgs",
+      "received_events_url": "https://api.github.com/users/f0ssel/received_events",
+      "repos_url": "https://api.github.com/users/f0ssel/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/f0ssel/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/f0ssel/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/f0ssel",
+      "user_view_type": "public"
+    }
+  }
+]

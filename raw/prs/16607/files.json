@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/20c6b756d5d0be9d7c854d69a3120deeb14f223d/flake.nix",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=20c6b756d5d0be9d7c854d69a3120deeb14f223d",
+    "deletions": 0,
+    "filename": "flake.nix",
+    "patch": "@@ -281,6 +281,7 @@\n                     unzip\n                     zip\n                     gzip\n+                    procps # free\n                   ])\n                   ++ oldAttrs.buildInputs;\n               });",
+    "raw_url": "https://github.com/coder/coder/raw/20c6b756d5d0be9d7c854d69a3120deeb14f223d/flake.nix",
+    "sha": "e5ce3d4a790af95cd232b03790724eadad1e999d",
+    "status": "modified"
+  },
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/20c6b756d5d0be9d7c854d69a3120deeb14f223d/nix%2Fdocker.nix",
+    "changes": 5,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/nix%2Fdocker.nix?ref=20c6b756d5d0be9d7c854d69a3120deeb14f223d",
+    "deletions": 0,
+    "filename": "nix/docker.nix",
+    "patch": "@@ -50,6 +50,10 @@ let\n     experimental-features = nix-command flakes\n   '';\n \n+  etcReleaseName = writeTextDir \"etc/coderniximage-release\" ''\n+    0.0.0\n+  '';\n+\n   etcPamdSudoFile = writeText \"pam-sudo\" ''\n     # Allow root to bypass authentication (optional)\n     auth      sufficient pam_rootok.so\n@@ -271,6 +275,7 @@ let\n         etcNixConf\n         etcSudoers\n         etcPamdSudo\n+        etcReleaseName\n         (fakeNss.override {\n           # Allows programs to look up the build user's home directory\n           # https://github.com/NixOS/nix/blob/ffe155abd36366a870482625543f9bf924a58281/src/libstore/build/local-derivation-goal.cc#L906-L910",
+    "raw_url": "https://github.com/coder/coder/raw/20c6b756d5d0be9d7c854d69a3120deeb14f223d/nix%2Fdocker.nix",
+    "sha": "84c1a34e79bbe229e9a28788657cea49f395fa0c",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,1184 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3384191308"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3384191308"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "**P3** [CRF-1] `Close()` has three distinct exit paths: (1) Ctrl+C succeeds, read completes gracefully; (2) Ctrl+C succeeds, graceful wait times out, force-close; (3) Ctrl+C write fails, force-close with joined error. Paths 1 and 2 are covered by the Graceful and ForceClose tests. Path 3, where `writeNoLock` fails and the result is `errors.Join(writeErr, forceCloseErr)`, has no test.\n\nThis matters beyond coverage: the joined error does NOT match `errRPTYGracefulCloseTimeout`, so `run.go` treats it as a hard failure. That asymmetry between \"server was slow\" (warning) and \"write failed\" (error) is the right design choice, but nothing pins it.\n\n> \"If `forceClose` silently stops being called here, the read goroutine leaks.\" *(Bisky)*\n\nA stub that returns an error from `Write` would cover the path and prove `forceClose` ran (drain goroutine finishes). *(Bisky P3, Chopper P3, Hisoka P3, Kite P3, Mafuuu P3, Meruem P3)*\n\n> \ud83e\udd16",
+    "commit_id": "70cf874b56e56431d7e0a34d51d721dc1a4a2542",
+    "created_at": "2026-06-09T22:18:15Z",
+    "diff_hunk": "@@ -124,21 +143,46 @@ func (c *rptyConn) Close() (err error) {\n \tc.closed = true\n \tc.mu.Unlock()\n \n-\tdefer c.conn.Close()\n-\n-\t// Send Ctrl+C to interrupt the command.\n-\t_, err = c.writeNoLock([]byte(\"\\u0003\"))\n-\tif err != nil {\n-\t\treturn xerrors.Errorf(\"write ctrl+c: %w\", err)\n+\t// Send Ctrl+C to interrupt the command, giving the server a chance to\n+\t// flush remaining output and close the connection gracefully.\n+\tif _, err = c.writeNoLock([]byte(\"\\u0003\")); err != nil {\n+\t\t// We couldn't interrupt the command, force close the connection to\n+\t\t// unblock the read before returning.\n+\t\tcerr := c.forceClose()\n+\t\treturn errors.Join(xerrors.Errorf(\"write ctrl+c: %w\", err), cerr)",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3384191308",
+    "id": 3384191308,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7JtqlM",
+    "original_commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "original_line": 152,
+    "original_position": 69,
+    "original_start_line": 148,
+    "path": "scaletest/workspacetraffic/conn.go",
+    "position": 1,
+    "pull_request_review_id": 4462857087,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3384191308/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2026-06-09T22:18:16Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3384191308",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3384191315"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3384191315"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "**P4** [CRF-2] `forceClose` calls `c.conn.Close()` synchronously (line 178), then starts the `readWaitTimeout` timer (line 179). If the underlying connection's `Close` blocks (e.g., websocket sending a close frame to an unresponsive peer), the total time in `forceClose` is `close_duration + readWaitTimeout`, not just `readWaitTimeout`. The `waitCloseTimeout` formula on line 29 budgets only `forceCloseReadTimeout` for this phase.\n\nPre-existing in character (the old `defer c.conn.Close()` had the same blocking risk), and the PR makes the situation strictly better by actively closing. Starting the timer before `c.conn.Close()` and using one select for both events would close the gap. *(Meruem)*\n\n> \ud83e\udd16",
+    "commit_id": "9d252c5c98347bfbb52e8b9bf3adbaf26ee01c89",
+    "created_at": "2026-06-09T22:18:15Z",
+    "diff_hunk": "@@ -124,21 +143,46 @@ func (c *rptyConn) Close() (err error) {\n \tc.closed = true\n \tc.mu.Unlock()\n \n-\tdefer c.conn.Close()\n-\n-\t// Send Ctrl+C to interrupt the command.\n-\t_, err = c.writeNoLock([]byte(\"\\u0003\"))\n-\tif err != nil {\n-\t\treturn xerrors.Errorf(\"write ctrl+c: %w\", err)\n+\t// Send Ctrl+C to interrupt the command, giving the server a chance to\n+\t// flush remaining output and close the connection gracefully.\n+\tif _, err = c.writeNoLock([]byte(\"\\u0003\")); err != nil {\n+\t\t// We couldn't interrupt the command, force close the connection to\n+\t\t// unblock the read before returning.\n+\t\tcerr := c.forceClose()\n+\t\treturn errors.Join(xerrors.Errorf(\"write ctrl+c: %w\", err), cerr)\n \t}\n+\n+\t// Wait for the server to close the connection, which unblocks the read. If\n+\t// the server doesn't close in time, force close the connection ourselves.\n+\tt := time.NewTimer(c.closeTimeout)\n+\tdefer t.Stop()\n \tselect {\n-\tcase <-time.After(connCloseTimeout):\n-\t\treturn xerrors.Errorf(\"timeout waiting for read to finish\")\n \tcase err = <-c.readErr:\n+\t\t_ = c.conn.Close()\n \t\tif errors.Is(err, io.EOF) {\n \t\t\treturn nil\n \t\t}\n \t\treturn err\n+\tcase <-t.C:\n+\t\tif err := c.forceClose(); err != nil {\n+\t\t\treturn err\n+\t\t}\n+\t\treturn errRPTYGracefulCloseTimeout\n+\t}\n+}\n+\n+// forceClose closes the underlying connection and waits for the read to\n+// unblock. The read error is caused by the close, so it is expected and\n+// discarded.\n+func (c *rptyConn) forceClose() error {",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3384191315",
+    "id": 3384191315,
+    "line": 187,
+    "node_id": "PRRC_kwDOGkVX1s7JtqlT",
+    "original_commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "original_line": 177,
+    "original_position": 96,
+    "original_start_line": null,
+    "path": "scaletest/workspacetraffic/conn.go",
+    "position": 107,
+    "pull_request_review_id": 4462857087,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3384191315/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-09T22:18:16Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3384191315",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3384191317"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3384191317"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "**Nit** [CRF-4] The doc comment describes only the happy path (`readErr` received, error discarded). It says nothing about the timeout branch on line 185 that returns `\"timeout waiting for read to finish after close\"`. A reader of the doc without the body would conclude `forceClose` always returns nil.\n\nSuggestion:\n```go\n// forceClose closes the underlying connection and waits for the read to\n// unblock. The read error is caused by the close, so it is expected and\n// discarded. Returns an error if the read does not unblock within\n// readWaitTimeout.\n```\n*(Leorio)*\n\n> \ud83e\udd16",
+    "commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "created_at": "2026-06-09T22:18:15Z",
+    "diff_hunk": "@@ -124,21 +143,46 @@ func (c *rptyConn) Close() (err error) {\n \tc.closed = true\n \tc.mu.Unlock()\n \n-\tdefer c.conn.Close()\n-\n-\t// Send Ctrl+C to interrupt the command.\n-\t_, err = c.writeNoLock([]byte(\"\\u0003\"))\n-\tif err != nil {\n-\t\treturn xerrors.Errorf(\"write ctrl+c: %w\", err)\n+\t// Send Ctrl+C to interrupt the command, giving the server a chance to\n+\t// flush remaining output and close the connection gracefully.\n+\tif _, err = c.writeNoLock([]byte(\"\\u0003\")); err != nil {\n+\t\t// We couldn't interrupt the command, force close the connection to\n+\t\t// unblock the read before returning.\n+\t\tcerr := c.forceClose()\n+\t\treturn errors.Join(xerrors.Errorf(\"write ctrl+c: %w\", err), cerr)\n \t}\n+\n+\t// Wait for the server to close the connection, which unblocks the read. If\n+\t// the server doesn't close in time, force close the connection ourselves.\n+\tt := time.NewTimer(c.closeTimeout)\n+\tdefer t.Stop()\n \tselect {\n-\tcase <-time.After(connCloseTimeout):\n-\t\treturn xerrors.Errorf(\"timeout waiting for read to finish\")\n \tcase err = <-c.readErr:\n+\t\t_ = c.conn.Close()\n \t\tif errors.Is(err, io.EOF) {\n \t\t\treturn nil\n \t\t}\n \t\treturn err\n+\tcase <-t.C:\n+\t\tif err := c.forceClose(); err != nil {\n+\t\t\treturn err\n+\t\t}\n+\t\treturn errRPTYGracefulCloseTimeout\n+\t}\n+}\n+\n+// forceClose closes the underlying connection and waits for the read to\n+// unblock. The read error is caused by the close, so it is expected and\n+// discarded.",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3384191317",
+    "id": 3384191317,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7JtqlV",
+    "original_commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "original_line": 176,
+    "original_position": 95,
+    "original_start_line": 174,
+    "path": "scaletest/workspacetraffic/conn.go",
+    "position": 1,
+    "pull_request_review_id": 4462857087,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3384191317/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2026-06-09T22:18:16Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3384191317",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3384191323"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3384191323"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "**Nit** [CRF-5] The constant `forceCloseReadTimeout` and the struct field `readWaitTimeout` (line 75) name the same concept differently. The constant emphasizes \"force close\"; the field drops that context. Either rename the constant to `readWaitTimeout` or the field to `forceCloseReadTimeout`. *(Gon)*\n\n> \ud83e\udd16",
+    "commit_id": "9d252c5c98347bfbb52e8b9bf3adbaf26ee01c89",
+    "created_at": "2026-06-09T22:18:16Z",
+    "diff_hunk": "@@ -21,8 +21,12 @@ import (\n const (\n \t// Set a timeout for graceful close of the connection.\n \tconnCloseTimeout = 30 * time.Second\n+\t// Set a timeout for the read to unblock after a force close. Closing the\n+\t// connection unblocks a pending read, so this should never be hit unless\n+\t// the underlying connection misbehaves.\n+\tforceCloseReadTimeout = 5 * time.Second",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3384191323",
+    "id": 3384191323,
+    "line": 27,
+    "node_id": "PRRC_kwDOGkVX1s7Jtqlb",
+    "original_commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "original_line": 27,
+    "original_position": 7,
+    "original_start_line": null,
+    "path": "scaletest/workspacetraffic/conn.go",
+    "position": 7,
+    "pull_request_review_id": 4462857087,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3384191323/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-09T22:18:16Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3384191323",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3384191325"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3384191325"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "**Nit** [CRF-6] The `5*time.Second` trailing buffer in `waitCloseTimeout = connCloseTimeout + forceCloseReadTimeout + 5*time.Second` is the only unnamed addend. Extracting a constant (e.g., `waitCloseGracePeriod`) would document what the margin accounts for. *(Gon)*\n\n> \ud83e\udd16",
+    "commit_id": "9d252c5c98347bfbb52e8b9bf3adbaf26ee01c89",
+    "created_at": "2026-06-09T22:18:16Z",
+    "diff_hunk": "@@ -21,8 +21,12 @@ import (\n const (\n \t// Set a timeout for graceful close of the connection.\n \tconnCloseTimeout = 30 * time.Second\n+\t// Set a timeout for the read to unblock after a force close. Closing the\n+\t// connection unblocks a pending read, so this should never be hit unless\n+\t// the underlying connection misbehaves.\n+\tforceCloseReadTimeout = 5 * time.Second\n \t// Set a timeout for waiting for the connection to close.\n-\twaitCloseTimeout = connCloseTimeout + 5*time.Second\n+\twaitCloseTimeout = connCloseTimeout + forceCloseReadTimeout + 5*time.Second",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3384191325",
+    "id": 3384191325,
+    "line": 29,
+    "node_id": "PRRC_kwDOGkVX1s7Jtqld",
+    "original_commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "original_line": 29,
+    "original_position": 10,
+    "original_start_line": null,
+    "path": "scaletest/workspacetraffic/conn.go",
+    "position": 10,
+    "pull_request_review_id": 4462857087,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3384191325/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-09T22:18:16Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3384191325",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3384191327"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3384191327"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "**Nit** [CRF-7] `ignoreClose` reads as \"close calls are ignored,\" but `Close()` still signals `closedCh` normally. The flag switches `Read` to block on `releaseCh` instead of `closedCh`, so reads stay blocked after close. `readIgnoresClose` or `stickyRead` would describe the actual behavior more accurately. *(Gon)*\n\n> \ud83e\udd16",
+    "commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "created_at": "2026-06-09T22:18:16Z",
+    "diff_hunk": "@@ -0,0 +1,151 @@\n+package workspacetraffic\n+\n+import (\n+\t\"io\"\n+\t\"sync\"\n+\t\"testing\"\n+\t\"time\"\n+\n+\t\"github.com/stretchr/testify/require\"\n+\n+\t\"github.com/coder/coder/v2/testutil\"\n+)\n+\n+// stubConn simulates the server side of a reconnecting PTY connection.\n+type stubConn struct {\n+\t// closeOnWrite closes the connection on the first write, simulating a\n+\t// server that closes gracefully in response to Ctrl+C.\n+\tcloseOnWrite bool\n+\t// ignoreClose prevents reads from unblocking when the connection is\n+\t// closed, simulating a misbehaving connection.\n+\tignoreClose bool",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3384191327",
+    "id": 3384191327,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7Jtqlf",
+    "original_commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "original_line": 21,
+    "original_position": 21,
+    "original_start_line": null,
+    "path": "scaletest/workspacetraffic/conn_internal_test.go",
+    "position": 1,
+    "pull_request_review_id": 4462857087,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3384191327/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-09T22:18:16Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3384191327",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3384191331"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3384191331"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "**Nit** [CRF-8] `waitDone` reimplements `testutil.TryReceive[struct{}]`. The rest of the scaletest suite uses `testutil.Context(t, ...)` or `context.WithTimeout` with the testutil channel helpers. Replacing:\n```go\nctx := testutil.Context(t, testutil.WaitShort)\ntestutil.TryReceive(ctx, t, done)\n```\nwould align with the established convention and avoid the raw `time.After` select. *(Robin)*\n\n> \ud83e\udd16",
+    "commit_id": "9d252c5c98347bfbb52e8b9bf3adbaf26ee01c89",
+    "created_at": "2026-06-09T22:18:16Z",
+    "diff_hunk": "@@ -0,0 +1,151 @@\n+package workspacetraffic\n+\n+import (\n+\t\"io\"\n+\t\"sync\"\n+\t\"testing\"\n+\t\"time\"\n+\n+\t\"github.com/stretchr/testify/require\"\n+\n+\t\"github.com/coder/coder/v2/testutil\"\n+)\n+\n+// stubConn simulates the server side of a reconnecting PTY connection.\n+type stubConn struct {\n+\t// closeOnWrite closes the connection on the first write, simulating a\n+\t// server that closes gracefully in response to Ctrl+C.\n+\tcloseOnWrite bool\n+\t// ignoreClose prevents reads from unblocking when the connection is\n+\t// closed, simulating a misbehaving connection.\n+\tignoreClose bool\n+\n+\tcloseOnce sync.Once\n+\tclosedCh  chan struct{}\n+\t// releaseCh unblocks reads when ignoreClose is set, allowing the test to\n+\t// clean up the read goroutine.\n+\treleaseCh chan struct{}\n+}\n+\n+func newStubConn() *stubConn {\n+\treturn &stubConn{\n+\t\tclosedCh:  make(chan struct{}),\n+\t\treleaseCh: make(chan struct{}),\n+\t}\n+}\n+\n+func (s *stubConn) Read(_ []byte) (int, error) {\n+\tif s.ignoreClose {\n+\t\t<-s.releaseCh\n+\t\treturn 0, io.EOF\n+\t}\n+\t<-s.closedCh\n+\treturn 0, io.EOF\n+}\n+\n+func (s *stubConn) Write(p []byte) (int, error) {\n+\tif s.closeOnWrite {\n+\t\t_ = s.Close()\n+\t}\n+\treturn len(p), nil\n+}\n+\n+func (s *stubConn) Close() error {\n+\ts.closeOnce.Do(func() {\n+\t\tclose(s.closedCh)\n+\t})\n+\treturn nil\n+}\n+\n+// startDrain reads from rc until it errors, mirroring the drain goroutine in\n+// Runner.Run. It returns a channel that is closed when the read finishes.\n+func startDrain(t *testing.T, rc *rptyConn) <-chan struct{} {\n+\tt.Helper()\n+\tdone := make(chan struct{})\n+\tgo func() {\n+\t\tdefer close(done)\n+\t\t_, _ = io.Copy(io.Discard, rc)\n+\t}()\n+\treturn done\n+}\n+\n+func waitDone(t *testing.T, done <-chan struct{}) {",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3384191331",
+    "id": 3384191331,
+    "line": 78,
+    "node_id": "PRRC_kwDOGkVX1s7Jtqlj",
+    "original_commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "original_line": 72,
+    "original_position": 72,
+    "original_start_line": null,
+    "path": "scaletest/workspacetraffic/conn_internal_test.go",
+    "position": 78,
+    "pull_request_review_id": 4462857087,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3384191331/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-09T22:18:16Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3384191331",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3390572122"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3390572122"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Added the WriteFails subtest covering this path in a8bef36883. (Coder Agents generated)",
+    "commit_id": "70cf874b56e56431d7e0a34d51d721dc1a4a2542",
+    "created_at": "2026-06-10T18:21:44Z",
+    "diff_hunk": "@@ -124,21 +143,46 @@ func (c *rptyConn) Close() (err error) {\n \tc.closed = true\n \tc.mu.Unlock()\n \n-\tdefer c.conn.Close()\n-\n-\t// Send Ctrl+C to interrupt the command.\n-\t_, err = c.writeNoLock([]byte(\"\\u0003\"))\n-\tif err != nil {\n-\t\treturn xerrors.Errorf(\"write ctrl+c: %w\", err)\n+\t// Send Ctrl+C to interrupt the command, giving the server a chance to\n+\t// flush remaining output and close the connection gracefully.\n+\tif _, err = c.writeNoLock([]byte(\"\\u0003\")); err != nil {\n+\t\t// We couldn't interrupt the command, force close the connection to\n+\t\t// unblock the read before returning.\n+\t\tcerr := c.forceClose()\n+\t\treturn errors.Join(xerrors.Errorf(\"write ctrl+c: %w\", err), cerr)",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3390572122",
+    "id": 3390572122,
+    "in_reply_to_id": 3384191308,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7KGAZa",
+    "original_commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "original_line": 152,
+    "original_position": 69,
+    "original_start_line": 148,
+    "path": "scaletest/workspacetraffic/conn.go",
+    "position": 1,
+    "pull_request_review_id": 4470504913,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3390572122/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2026-06-10T18:21:44Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3390572122",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3390572373"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3390572373"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Timer now starts before conn.Close so a blocking close is bounded in a8bef36883. (Coder Agents generated)",
+    "commit_id": "9d252c5c98347bfbb52e8b9bf3adbaf26ee01c89",
+    "created_at": "2026-06-10T18:21:46Z",
+    "diff_hunk": "@@ -124,21 +143,46 @@ func (c *rptyConn) Close() (err error) {\n \tc.closed = true\n \tc.mu.Unlock()\n \n-\tdefer c.conn.Close()\n-\n-\t// Send Ctrl+C to interrupt the command.\n-\t_, err = c.writeNoLock([]byte(\"\\u0003\"))\n-\tif err != nil {\n-\t\treturn xerrors.Errorf(\"write ctrl+c: %w\", err)\n+\t// Send Ctrl+C to interrupt the command, giving the server a chance to\n+\t// flush remaining output and close the connection gracefully.\n+\tif _, err = c.writeNoLock([]byte(\"\\u0003\")); err != nil {\n+\t\t// We couldn't interrupt the command, force close the connection to\n+\t\t// unblock the read before returning.\n+\t\tcerr := c.forceClose()\n+\t\treturn errors.Join(xerrors.Errorf(\"write ctrl+c: %w\", err), cerr)\n \t}\n+\n+\t// Wait for the server to close the connection, which unblocks the read. If\n+\t// the server doesn't close in time, force close the connection ourselves.\n+\tt := time.NewTimer(c.closeTimeout)\n+\tdefer t.Stop()\n \tselect {\n-\tcase <-time.After(connCloseTimeout):\n-\t\treturn xerrors.Errorf(\"timeout waiting for read to finish\")\n \tcase err = <-c.readErr:\n+\t\t_ = c.conn.Close()\n \t\tif errors.Is(err, io.EOF) {\n \t\t\treturn nil\n \t\t}\n \t\treturn err\n+\tcase <-t.C:\n+\t\tif err := c.forceClose(); err != nil {\n+\t\t\treturn err\n+\t\t}\n+\t\treturn errRPTYGracefulCloseTimeout\n+\t}\n+}\n+\n+// forceClose closes the underlying connection and waits for the read to\n+// unblock. The read error is caused by the close, so it is expected and\n+// discarded.\n+func (c *rptyConn) forceClose() error {",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3390572373",
+    "id": 3390572373,
+    "in_reply_to_id": 3384191315,
+    "line": 187,
+    "node_id": "PRRC_kwDOGkVX1s7KGAdV",
+    "original_commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "original_line": 177,
+    "original_position": 96,
+    "original_start_line": null,
+    "path": "scaletest/workspacetraffic/conn.go",
+    "position": 107,
+    "pull_request_review_id": 4470505155,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3390572373/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-10T18:21:46Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3390572373",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3390572583"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3390572583"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Doc comment now covers the timeout branch in a8bef36883. (Coder Agents generated)",
+    "commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "created_at": "2026-06-10T18:21:48Z",
+    "diff_hunk": "@@ -124,21 +143,46 @@ func (c *rptyConn) Close() (err error) {\n \tc.closed = true\n \tc.mu.Unlock()\n \n-\tdefer c.conn.Close()\n-\n-\t// Send Ctrl+C to interrupt the command.\n-\t_, err = c.writeNoLock([]byte(\"\\u0003\"))\n-\tif err != nil {\n-\t\treturn xerrors.Errorf(\"write ctrl+c: %w\", err)\n+\t// Send Ctrl+C to interrupt the command, giving the server a chance to\n+\t// flush remaining output and close the connection gracefully.\n+\tif _, err = c.writeNoLock([]byte(\"\\u0003\")); err != nil {\n+\t\t// We couldn't interrupt the command, force close the connection to\n+\t\t// unblock the read before returning.\n+\t\tcerr := c.forceClose()\n+\t\treturn errors.Join(xerrors.Errorf(\"write ctrl+c: %w\", err), cerr)\n \t}\n+\n+\t// Wait for the server to close the connection, which unblocks the read. If\n+\t// the server doesn't close in time, force close the connection ourselves.\n+\tt := time.NewTimer(c.closeTimeout)\n+\tdefer t.Stop()\n \tselect {\n-\tcase <-time.After(connCloseTimeout):\n-\t\treturn xerrors.Errorf(\"timeout waiting for read to finish\")\n \tcase err = <-c.readErr:\n+\t\t_ = c.conn.Close()\n \t\tif errors.Is(err, io.EOF) {\n \t\t\treturn nil\n \t\t}\n \t\treturn err\n+\tcase <-t.C:\n+\t\tif err := c.forceClose(); err != nil {\n+\t\t\treturn err\n+\t\t}\n+\t\treturn errRPTYGracefulCloseTimeout\n+\t}\n+}\n+\n+// forceClose closes the underlying connection and waits for the read to\n+// unblock. The read error is caused by the close, so it is expected and\n+// discarded.",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3390572583",
+    "id": 3390572583,
+    "in_reply_to_id": 3384191317,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7KGAgn",
+    "original_commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "original_line": 176,
+    "original_position": 95,
+    "original_start_line": 174,
+    "path": "scaletest/workspacetraffic/conn.go",
+    "position": 1,
+    "pull_request_review_id": 4470505421,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3390572583/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2026-06-10T18:21:48Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3390572583",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3390572755"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3390572755"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Renamed the field to forceCloseReadTimeout to match the constant in a8bef36883. (Coder Agents generated)",
+    "commit_id": "9d252c5c98347bfbb52e8b9bf3adbaf26ee01c89",
+    "created_at": "2026-06-10T18:21:50Z",
+    "diff_hunk": "@@ -21,8 +21,12 @@ import (\n const (\n \t// Set a timeout for graceful close of the connection.\n \tconnCloseTimeout = 30 * time.Second\n+\t// Set a timeout for the read to unblock after a force close. Closing the\n+\t// connection unblocks a pending read, so this should never be hit unless\n+\t// the underlying connection misbehaves.\n+\tforceCloseReadTimeout = 5 * time.Second",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3390572755",
+    "id": 3390572755,
+    "in_reply_to_id": 3384191323,
+    "line": 27,
+    "node_id": "PRRC_kwDOGkVX1s7KGAjT",
+    "original_commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "original_line": 27,
+    "original_position": 7,
+    "original_start_line": null,
+    "path": "scaletest/workspacetraffic/conn.go",
+    "position": 7,
+    "pull_request_review_id": 4470505619,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3390572755/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-10T18:21:50Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3390572755",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3390572978"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3390572978"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Renamed to readIgnoresClose in a8bef36883. (Coder Agents generated)",
+    "commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "created_at": "2026-06-10T18:21:52Z",
+    "diff_hunk": "@@ -0,0 +1,151 @@\n+package workspacetraffic\n+\n+import (\n+\t\"io\"\n+\t\"sync\"\n+\t\"testing\"\n+\t\"time\"\n+\n+\t\"github.com/stretchr/testify/require\"\n+\n+\t\"github.com/coder/coder/v2/testutil\"\n+)\n+\n+// stubConn simulates the server side of a reconnecting PTY connection.\n+type stubConn struct {\n+\t// closeOnWrite closes the connection on the first write, simulating a\n+\t// server that closes gracefully in response to Ctrl+C.\n+\tcloseOnWrite bool\n+\t// ignoreClose prevents reads from unblocking when the connection is\n+\t// closed, simulating a misbehaving connection.\n+\tignoreClose bool",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3390572978",
+    "id": 3390572978,
+    "in_reply_to_id": 3384191327,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7KGAmy",
+    "original_commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "original_line": 21,
+    "original_position": 21,
+    "original_start_line": null,
+    "path": "scaletest/workspacetraffic/conn_internal_test.go",
+    "position": 1,
+    "pull_request_review_id": 4470505884,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3390572978/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-10T18:21:52Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3390572978",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3390573192"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3390573192"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Switched to testutil.Context + testutil.TryReceive in a8bef36883. (Coder Agents generated)",
+    "commit_id": "9d252c5c98347bfbb52e8b9bf3adbaf26ee01c89",
+    "created_at": "2026-06-10T18:21:53Z",
+    "diff_hunk": "@@ -0,0 +1,151 @@\n+package workspacetraffic\n+\n+import (\n+\t\"io\"\n+\t\"sync\"\n+\t\"testing\"\n+\t\"time\"\n+\n+\t\"github.com/stretchr/testify/require\"\n+\n+\t\"github.com/coder/coder/v2/testutil\"\n+)\n+\n+// stubConn simulates the server side of a reconnecting PTY connection.\n+type stubConn struct {\n+\t// closeOnWrite closes the connection on the first write, simulating a\n+\t// server that closes gracefully in response to Ctrl+C.\n+\tcloseOnWrite bool\n+\t// ignoreClose prevents reads from unblocking when the connection is\n+\t// closed, simulating a misbehaving connection.\n+\tignoreClose bool\n+\n+\tcloseOnce sync.Once\n+\tclosedCh  chan struct{}\n+\t// releaseCh unblocks reads when ignoreClose is set, allowing the test to\n+\t// clean up the read goroutine.\n+\treleaseCh chan struct{}\n+}\n+\n+func newStubConn() *stubConn {\n+\treturn &stubConn{\n+\t\tclosedCh:  make(chan struct{}),\n+\t\treleaseCh: make(chan struct{}),\n+\t}\n+}\n+\n+func (s *stubConn) Read(_ []byte) (int, error) {\n+\tif s.ignoreClose {\n+\t\t<-s.releaseCh\n+\t\treturn 0, io.EOF\n+\t}\n+\t<-s.closedCh\n+\treturn 0, io.EOF\n+}\n+\n+func (s *stubConn) Write(p []byte) (int, error) {\n+\tif s.closeOnWrite {\n+\t\t_ = s.Close()\n+\t}\n+\treturn len(p), nil\n+}\n+\n+func (s *stubConn) Close() error {\n+\ts.closeOnce.Do(func() {\n+\t\tclose(s.closedCh)\n+\t})\n+\treturn nil\n+}\n+\n+// startDrain reads from rc until it errors, mirroring the drain goroutine in\n+// Runner.Run. It returns a channel that is closed when the read finishes.\n+func startDrain(t *testing.T, rc *rptyConn) <-chan struct{} {\n+\tt.Helper()\n+\tdone := make(chan struct{})\n+\tgo func() {\n+\t\tdefer close(done)\n+\t\t_, _ = io.Copy(io.Discard, rc)\n+\t}()\n+\treturn done\n+}\n+\n+func waitDone(t *testing.T, done <-chan struct{}) {",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3390573192",
+    "id": 3390573192,
+    "in_reply_to_id": 3384191331,
+    "line": 78,
+    "node_id": "PRRC_kwDOGkVX1s7KGAqI",
+    "original_commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "original_line": 72,
+    "original_position": 72,
+    "original_start_line": null,
+    "path": "scaletest/workspacetraffic/conn_internal_test.go",
+    "position": 78,
+    "pull_request_review_id": 4470506105,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3390573192/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-10T18:21:54Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3390573192",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3396803839"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3396803839"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Leaving as-is.",
+    "commit_id": "9d252c5c98347bfbb52e8b9bf3adbaf26ee01c89",
+    "created_at": "2026-06-11T14:39:46Z",
+    "diff_hunk": "@@ -21,8 +21,12 @@ import (\n const (\n \t// Set a timeout for graceful close of the connection.\n \tconnCloseTimeout = 30 * time.Second\n+\t// Set a timeout for the read to unblock after a force close. Closing the\n+\t// connection unblocks a pending read, so this should never be hit unless\n+\t// the underlying connection misbehaves.\n+\tforceCloseReadTimeout = 5 * time.Second\n \t// Set a timeout for waiting for the connection to close.\n-\twaitCloseTimeout = connCloseTimeout + 5*time.Second\n+\twaitCloseTimeout = connCloseTimeout + forceCloseReadTimeout + 5*time.Second",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3396803839",
+    "id": 3396803839,
+    "in_reply_to_id": 3384191325,
+    "line": 29,
+    "node_id": "PRRC_kwDOGkVX1s7Kdxz_",
+    "original_commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "original_line": 29,
+    "original_position": 10,
+    "original_start_line": null,
+    "path": "scaletest/workspacetraffic/conn.go",
+    "position": 10,
+    "pull_request_review_id": 4477798547,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3396803839/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-11T14:39:46Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3396803839",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3399023106"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3399023106"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Any desire to add some context here? `return xerrors.Errorf(\"force close: %w\", err)` or similar",
+    "commit_id": "70cf874b56e56431d7e0a34d51d721dc1a4a2542",
+    "created_at": "2026-06-11T20:37:21Z",
+    "diff_hunk": "@@ -124,21 +149,49 @@ func (c *rptyConn) Close() (err error) {\n \tc.closed = true\n \tc.mu.Unlock()\n \n-\tdefer c.conn.Close()\n-\n-\t// Send Ctrl+C to interrupt the command.\n-\t_, err = c.writeNoLock([]byte(\"\\u0003\"))\n-\tif err != nil {\n-\t\treturn xerrors.Errorf(\"write ctrl+c: %w\", err)\n+\t// Send Ctrl+C to interrupt the command, giving the server a chance to\n+\t// flush remaining output and close the connection gracefully.\n+\tif _, err = c.writeNoLock([]byte(\"\\u0003\")); err != nil {\n+\t\t// We couldn't interrupt the command, force close the connection to\n+\t\t// unblock the read before returning.\n+\t\tcerr := c.forceClose()\n+\t\treturn errors.Join(xerrors.Errorf(\"write ctrl+c: %w\", err), cerr)\n \t}\n+\n+\t// Wait for the server to close the connection, which unblocks the read. If\n+\t// the server doesn't close in time, force close the connection ourselves.\n+\tt := time.NewTimer(c.closeTimeout)\n+\tdefer t.Stop()\n \tselect {\n-\tcase <-time.After(connCloseTimeout):\n-\t\treturn xerrors.Errorf(\"timeout waiting for read to finish\")\n \tcase err = <-c.readErr:\n+\t\t_ = c.conn.Close()\n \t\tif errors.Is(err, io.EOF) {\n \t\t\treturn nil\n \t\t}\n \t\treturn err\n+\tcase <-t.C:\n+\t\tif err := c.forceClose(); err != nil {\n+\t\t\treturn err",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3399023106",
+    "id": 3399023106,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7KmPoC",
+    "original_commit_id": "70cf874b56e56431d7e0a34d51d721dc1a4a2542",
+    "original_line": 174,
+    "original_position": 95,
+    "original_start_line": null,
+    "path": "scaletest/workspacetraffic/conn.go",
+    "position": 1,
+    "pull_request_review_id": 4480425224,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3399023106/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-11T20:50:03Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3399023106",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/3724288?v=4",
+      "events_url": "https://api.github.com/users/zedkipp/events{/privacy}",
+      "followers_url": "https://api.github.com/users/zedkipp/followers",
+      "following_url": "https://api.github.com/users/zedkipp/following{/other_user}",
+      "gists_url": "https://api.github.com/users/zedkipp/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/zedkipp",
+      "id": 3724288,
+      "login": "zedkipp",
+      "node_id": "MDQ6VXNlcjM3MjQyODg=",
+      "organizations_url": "https://api.github.com/users/zedkipp/orgs",
+      "received_events_url": "https://api.github.com/users/zedkipp/received_events",
+      "repos_url": "https://api.github.com/users/zedkipp/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/zedkipp/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/zedkipp/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/zedkipp",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3399238080"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3399238080"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "At present there is only one possible error type from `forceClose`, though it's a pretty funky case and a little extra context might help. I'll add it.",
+    "commit_id": "70cf874b56e56431d7e0a34d51d721dc1a4a2542",
+    "created_at": "2026-06-11T21:18:39Z",
+    "diff_hunk": "@@ -124,21 +149,49 @@ func (c *rptyConn) Close() (err error) {\n \tc.closed = true\n \tc.mu.Unlock()\n \n-\tdefer c.conn.Close()\n-\n-\t// Send Ctrl+C to interrupt the command.\n-\t_, err = c.writeNoLock([]byte(\"\\u0003\"))\n-\tif err != nil {\n-\t\treturn xerrors.Errorf(\"write ctrl+c: %w\", err)\n+\t// Send Ctrl+C to interrupt the command, giving the server a chance to\n+\t// flush remaining output and close the connection gracefully.\n+\tif _, err = c.writeNoLock([]byte(\"\\u0003\")); err != nil {\n+\t\t// We couldn't interrupt the command, force close the connection to\n+\t\t// unblock the read before returning.\n+\t\tcerr := c.forceClose()\n+\t\treturn errors.Join(xerrors.Errorf(\"write ctrl+c: %w\", err), cerr)\n \t}\n+\n+\t// Wait for the server to close the connection, which unblocks the read. If\n+\t// the server doesn't close in time, force close the connection ourselves.\n+\tt := time.NewTimer(c.closeTimeout)\n+\tdefer t.Stop()\n \tselect {\n-\tcase <-time.After(connCloseTimeout):\n-\t\treturn xerrors.Errorf(\"timeout waiting for read to finish\")\n \tcase err = <-c.readErr:\n+\t\t_ = c.conn.Close()\n \t\tif errors.Is(err, io.EOF) {\n \t\t\treturn nil\n \t\t}\n \t\treturn err\n+\tcase <-t.C:\n+\t\tif err := c.forceClose(); err != nil {\n+\t\t\treturn err",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3399238080",
+    "id": 3399238080,
+    "in_reply_to_id": 3399023106,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7KnEHA",
+    "original_commit_id": "70cf874b56e56431d7e0a34d51d721dc1a4a2542",
+    "original_line": 174,
+    "original_position": 95,
+    "original_start_line": null,
+    "path": "scaletest/workspacetraffic/conn.go",
+    "position": 1,
+    "pull_request_review_id": 4480680092,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3399238080/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-11T21:18:39Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3399238080",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#discussion_r3399261458"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3399261458"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Added `force close: %w` wrapping at both forceClose call sites in 9d252c5c98. (Coder Agents generated)",
+    "commit_id": "70cf874b56e56431d7e0a34d51d721dc1a4a2542",
+    "created_at": "2026-06-11T21:23:27Z",
+    "diff_hunk": "@@ -124,21 +149,49 @@ func (c *rptyConn) Close() (err error) {\n \tc.closed = true\n \tc.mu.Unlock()\n \n-\tdefer c.conn.Close()\n-\n-\t// Send Ctrl+C to interrupt the command.\n-\t_, err = c.writeNoLock([]byte(\"\\u0003\"))\n-\tif err != nil {\n-\t\treturn xerrors.Errorf(\"write ctrl+c: %w\", err)\n+\t// Send Ctrl+C to interrupt the command, giving the server a chance to\n+\t// flush remaining output and close the connection gracefully.\n+\tif _, err = c.writeNoLock([]byte(\"\\u0003\")); err != nil {\n+\t\t// We couldn't interrupt the command, force close the connection to\n+\t\t// unblock the read before returning.\n+\t\tcerr := c.forceClose()\n+\t\treturn errors.Join(xerrors.Errorf(\"write ctrl+c: %w\", err), cerr)\n \t}\n+\n+\t// Wait for the server to close the connection, which unblocks the read. If\n+\t// the server doesn't close in time, force close the connection ourselves.\n+\tt := time.NewTimer(c.closeTimeout)\n+\tdefer t.Stop()\n \tselect {\n-\tcase <-time.After(connCloseTimeout):\n-\t\treturn xerrors.Errorf(\"timeout waiting for read to finish\")\n \tcase err = <-c.readErr:\n+\t\t_ = c.conn.Close()\n \t\tif errors.Is(err, io.EOF) {\n \t\t\treturn nil\n \t\t}\n \t\treturn err\n+\tcase <-t.C:\n+\t\tif err := c.forceClose(); err != nil {\n+\t\t\treturn err",
+    "html_url": "https://github.com/coder/coder/pull/26199#discussion_r3399261458",
+    "id": 3399261458,
+    "in_reply_to_id": 3399023106,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7KnJ0S",
+    "original_commit_id": "70cf874b56e56431d7e0a34d51d721dc1a4a2542",
+    "original_line": 174,
+    "original_position": 95,
+    "original_start_line": null,
+    "path": "scaletest/workspacetraffic/conn.go",
+    "position": 1,
+    "pull_request_review_id": 4480709870,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3399261458/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-06-11T21:23:27Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3399261458",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/ab9dd48f4acda2ca9adf3ed3fe247fa4115673d5/site%2Fsrc%2Fpages%2FTemplateSettingsPage%2FTemplateVariablesPage%2FTemplateVariablesPage.test.tsx",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FTemplateSettingsPage%2FTemplateVariablesPage%2FTemplateVariablesPage.test.tsx?ref=ab9dd48f4acda2ca9adf3ed3fe247fa4115673d5",
+    "deletions": 1,
+    "filename": "site/src/pages/TemplateSettingsPage/TemplateVariablesPage/TemplateVariablesPage.test.tsx",
+    "patch": "@@ -62,7 +62,13 @@ describe(\"TemplateVariablesPage\", () => {\n \t});\n \n \tit(\"user submits the form successfully\", async () => {\n-\t\tvi.spyOn(API, \"getTemplateByName\").mockResolvedValueOnce(MockTemplate);\n+\t\t// Use mockResolvedValue (not Once) because the\n+\t\t// updateActiveTemplateVersion mutation's onSuccess callback calls\n+\t\t// queryClient.invalidateQueries, which refetches this query. With\n+\t\t// mockResolvedValueOnce the refetch falls through to the real\n+\t\t// implementation (axios \u2192 MSW), adding non-deterministic latency\n+\t\t// that can push toast.success past the waitFor timeout under CI load.\n+\t\tvi.spyOn(API, \"getTemplateByName\").mockResolvedValue(MockTemplate);\n \t\tvi.spyOn(API, \"getTemplateVersion\").mockResolvedValue(MockTemplateVersion);\n \t\tvi.spyOn(API, \"getTemplateVersionVariables\").mockResolvedValueOnce([\n \t\t\tMockTemplateVersionVariable1,",
+    "raw_url": "https://github.com/coder/coder/raw/ab9dd48f4acda2ca9adf3ed3fe247fa4115673d5/site%2Fsrc%2Fpages%2FTemplateSettingsPage%2FTemplateVariablesPage%2FTemplateVariablesPage.test.tsx",
+    "sha": "02bee156da019fbaf82a152c443bf2e0d875797a",
+    "status": "modified"
+  }
+]

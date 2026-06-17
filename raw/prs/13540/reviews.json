@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/13540#pullrequestreview-2110379390"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/13540"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Yikes! Thanks a lot",
+    "commit_id": "f93ab807f2c0cf22ffd54b1e91ca8928b842beed",
+    "html_url": "https://github.com/coder/coder/pull/13540#pullrequestreview-2110379390",
+    "id": 2110379390,
+    "node_id": "PRR_kwDOGkVX1s59ydV-",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/13540",
+    "state": "APPROVED",
+    "submitted_at": "2024-06-11T12:54:10Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?u=4c3e3776b7cc9cb346e9f43196fb387c845a4adc&v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  }
+]

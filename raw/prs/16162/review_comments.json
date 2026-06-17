@@ -1,0 +1,71 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16162#discussion_r1918664716"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16162"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1918664716"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I had to [pin the version of `remarshal`](https://github.com/ThomasK33/pnpm2nix-nzbr/commit/c1f0ceeb759af20c5c232a9414036fda29a28a53) to 0.17 as the 0.20 version does not support yaml 1.1 anymore, and would fail our frontend build.\r\n\r\nOpening a PR to upstream soon.",
+    "commit_id": "c66bb6690270fa191b7941e6a1d2e5d8cb83cf43",
+    "created_at": "2025-01-16T14:31:07Z",
+    "diff_hunk": "@@ -6,7 +6,7 @@\n     nixpkgs-pinned.url = \"github:nixos/nixpkgs/5deee6281831847857720668867729617629ef1f\";\n     flake-utils.url = \"github:numtide/flake-utils\";\n     pnpm2nix = {\n-      url = \"github:nzbr/pnpm2nix-nzbr\";",
+    "html_url": "https://github.com/coder/coder/pull/16162#discussion_r1918664716",
+    "id": 1918664716,
+    "line": 9,
+    "node_id": "PRRC_kwDOGkVX1s5yXIAM",
+    "original_commit_id": "58fd773afe40962453035181eb0c164411ae7e03",
+    "original_line": 9,
+    "original_position": 4,
+    "original_start_line": null,
+    "path": "flake.nix",
+    "position": 4,
+    "pull_request_review_id": 2556341204,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16162",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1918664716/reactions"
+    },
+    "side": "LEFT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-01-16T14:31:21Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1918664716",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/2198487?v=4",
+      "events_url": "https://api.github.com/users/ThomasK33/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ThomasK33/followers",
+      "following_url": "https://api.github.com/users/ThomasK33/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ThomasK33/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ThomasK33",
+      "id": 2198487,
+      "login": "ThomasK33",
+      "node_id": "MDQ6VXNlcjIxOTg0ODc=",
+      "organizations_url": "https://api.github.com/users/ThomasK33/orgs",
+      "received_events_url": "https://api.github.com/users/ThomasK33/received_events",
+      "repos_url": "https://api.github.com/users/ThomasK33/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ThomasK33/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ThomasK33/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ThomasK33",
+      "user_view_type": "public"
+    }
+  }
+]

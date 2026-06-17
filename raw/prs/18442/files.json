@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/cb40f9b80ea56bab46e6f8a7bcef74a4f5c37379/coderd%2Fprovisionerdserver%2Fprovisionerdserver.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fprovisionerdserver%2Fprovisionerdserver.go?ref=cb40f9b80ea56bab46e6f8a7bcef74a4f5c37379",
+    "deletions": 1,
+    "filename": "coderd/provisionerdserver/provisionerdserver.go",
+    "patch": "@@ -321,7 +321,7 @@ func (s *server) AcquireJob(ctx context.Context, _ *proto.Empty) (*proto.Acquire\n \tacqCtx, acqCancel := context.WithTimeout(ctx, s.acquireJobLongPollDur)\n \tdefer acqCancel()\n \tjob, err := s.Acquirer.AcquireJob(acqCtx, s.OrganizationID, s.ID, s.Provisioners, s.Tags)\n-\tif xerrors.Is(err, context.DeadlineExceeded) {\n+\tif database.IsQueryCanceledError(err) {\n \t\ts.Logger.Debug(ctx, \"successful cancel\")\n \t\treturn &proto.AcquiredJob{}, nil\n \t}",
+    "raw_url": "https://github.com/coder/coder/raw/cb40f9b80ea56bab46e6f8a7bcef74a4f5c37379/coderd%2Fprovisionerdserver%2Fprovisionerdserver.go",
+    "sha": "01a377503d09aefb767274459c82f27914662b2e",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/3873404e9acf94d4bd16e3722485529a6192b424/coderd%2Fturnconn%2Fturnconn_test.go",
+    "changes": 13,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fturnconn%2Fturnconn_test.go?ref=3873404e9acf94d4bd16e3722485529a6192b424",
+    "deletions": 6,
+    "filename": "coderd/turnconn/turnconn_test.go",
+    "patch": "@@ -44,6 +44,9 @@ func TestTURNConn(t *testing.T) {\n \t\tLogger:        logger.Named(\"client\"),\n \t})\n \trequire.NoError(t, err)\n+\tdefer func() {\n+\t\t_ = client.Close()\n+\t}()\n \n \tserverDialer, serverTURN := net.Pipe()\n \tturnServer.Accept(serverTURN, &net.TCPAddr{\n@@ -62,6 +65,9 @@ func TestTURNConn(t *testing.T) {\n \t\tLogger:        logger.Named(\"server\"),\n \t})\n \trequire.NoError(t, err)\n+\tdefer func() {\n+\t\t_ = server.Close()\n+\t}()\n \texchange(t, client, server)\n \n \t_, err = client.Ping()\n@@ -71,12 +77,7 @@ func TestTURNConn(t *testing.T) {\n func exchange(t *testing.T, client, server *peer.Conn) {\n \tvar wg sync.WaitGroup\n \twg.Add(2)\n-\tt.Cleanup(func() {\n-\t\t_ = client.Close()\n-\t\t_ = server.Close()\n-\n-\t\twg.Wait()\n-\t})\n+\tt.Cleanup(wg.Wait)\n \tgo func() {\n \t\tdefer wg.Done()\n \t\tfor {",
+    "raw_url": "https://github.com/coder/coder/raw/3873404e9acf94d4bd16e3722485529a6192b424/coderd%2Fturnconn%2Fturnconn_test.go",
+    "sha": "6a8d0411cb7b13ab893dd30743c16957407d87d9",
+    "status": "modified"
+  }
+]

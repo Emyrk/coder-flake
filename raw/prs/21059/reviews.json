@@ -1,0 +1,122 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21059#pullrequestreview-3530455824"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21059"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "73cfd4df159724dadf7c89f08a282e68bff00353",
+    "html_url": "https://github.com/coder/coder/pull/21059#pullrequestreview-3530455824",
+    "id": 3530455824,
+    "node_id": "PRR_kwDOGkVX1s7SbnsQ",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21059",
+    "state": "COMMENTED",
+    "submitted_at": "2025-12-02T14:34:24Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21059#pullrequestreview-3530458518"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21059"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "a30e1fb5f839b274bf0ef8e5b93d60f74fca274c",
+    "html_url": "https://github.com/coder/coder/pull/21059#pullrequestreview-3530458518",
+    "id": 3530458518,
+    "node_id": "PRR_kwDOGkVX1s7SboWW",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21059",
+    "state": "COMMENTED",
+    "submitted_at": "2025-12-02T14:34:50Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21059#pullrequestreview-3530690197"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21059"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "stamp \ud83d\udc4d ",
+    "commit_id": "c65ab291f2a9f5faee51e7bd9b7a0b14e83111a4",
+    "html_url": "https://github.com/coder/coder/pull/21059#pullrequestreview-3530690197",
+    "id": 3530690197,
+    "node_id": "PRR_kwDOGkVX1s7Scg6V",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21059",
+    "state": "APPROVED",
+    "submitted_at": "2025-12-02T15:18:05Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/14044910?u=ab8e348fdbb38191ff1d799c3487f7f6051fff7c&v=4",
+      "events_url": "https://api.github.com/users/mtojek/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mtojek/followers",
+      "following_url": "https://api.github.com/users/mtojek/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mtojek/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mtojek",
+      "id": 14044910,
+      "login": "mtojek",
+      "node_id": "MDQ6VXNlcjE0MDQ0OTEw",
+      "organizations_url": "https://api.github.com/users/mtojek/orgs",
+      "received_events_url": "https://api.github.com/users/mtojek/received_events",
+      "repos_url": "https://api.github.com/users/mtojek/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mtojek/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mtojek/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mtojek",
+      "user_view_type": "public"
+    }
+  }
+]

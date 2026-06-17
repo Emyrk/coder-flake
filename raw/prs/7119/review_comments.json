@@ -1,0 +1,489 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/7119#discussion_r1165826672"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/7119"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1165826672"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "This code implicitly assumes that there are only 2 classes of errors that could be returned from `auth.Authorize`\r\n\r\n1. the authorization completed, but the subject is not authorized\r\n2. the context is Done\r\n\r\nPrior to this change, this code implicitly assumed that there was only 1 class of errors.\r\n\r\nIt is difficult to be sure that the right answer is 2.  Could it be 3 classes?  4?\r\n\r\nHonestly, I think a better design would be for `auth.Authorize` to return two values --- one that tells you whether the subject is authorized, and another to tell you whether or not there was an error checking the authorization.\r\n\r\nFailing that, it's generally better for error checking to be explicit and specific:\r\n\r\n```\r\nerr := auth.Authorize(...)\r\nif xerrors.Is(err, rbac.Unauthorized) {\r\n    continue\r\n}\r\nif err != nil {\r\n    return nil, err\r\n}\r\nfiltered = append(filtered, o)\r\n```",
+    "commit_id": "75b840aab57362b30d9bac7b1c672f9b010daba7",
+    "created_at": "2023-04-13T17:21:55Z",
+    "diff_hunk": "@@ -137,6 +137,9 @@ func Filter[O Objecter](ctx context.Context, auth Authorizer, subject Subject, a\n \t\t\terr := auth.Authorize(ctx, subject, action, o.RBACObject())\n \t\t\tif err == nil {\n \t\t\t\tfiltered = append(filtered, o)\n+\t\t\t} else if ctx.Err() != nil {\n+\t\t\t\t// Exit early if the error comes from the context\n+\t\t\t\treturn nil, ctx.Err()",
+    "html_url": "https://github.com/coder/coder/pull/7119#discussion_r1165826672",
+    "id": 1165826672,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5FfRpw",
+    "original_commit_id": "6d41edceae37ac6e0494d3951944674b8f881dda",
+    "original_line": 142,
+    "original_position": 6,
+    "original_start_line": null,
+    "path": "coderd/rbac/authz.go",
+    "position": 1,
+    "pull_request_review_id": 1383885591,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/7119",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1165826672/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2023-04-13T17:23:16Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1165826672",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/7119#discussion_r1165845331"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/7119"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1165845331"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Actually, thinking about this more, it's not about implicit vs explicit.  It's about how the code reacts if `Authorize()` returns an _unexpected_ error.  By only handling the context case, we'd be the in the same boat again of swallowing the unexpected error and treating it like an unauthorized response.\r\n\r\nIf we instead handle the _expected_ errors, and return any others, we're less likely to incorrectly ignore them.",
+    "commit_id": "75b840aab57362b30d9bac7b1c672f9b010daba7",
+    "created_at": "2023-04-13T17:41:44Z",
+    "diff_hunk": "@@ -137,6 +137,9 @@ func Filter[O Objecter](ctx context.Context, auth Authorizer, subject Subject, a\n \t\t\terr := auth.Authorize(ctx, subject, action, o.RBACObject())\n \t\t\tif err == nil {\n \t\t\t\tfiltered = append(filtered, o)\n+\t\t\t} else if ctx.Err() != nil {\n+\t\t\t\t// Exit early if the error comes from the context\n+\t\t\t\treturn nil, ctx.Err()",
+    "html_url": "https://github.com/coder/coder/pull/7119#discussion_r1165845331",
+    "id": 1165845331,
+    "in_reply_to_id": 1165826672,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5FfWNT",
+    "original_commit_id": "6d41edceae37ac6e0494d3951944674b8f881dda",
+    "original_line": 142,
+    "original_position": 6,
+    "original_start_line": null,
+    "path": "coderd/rbac/authz.go",
+    "position": 1,
+    "pull_request_review_id": 1383923237,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/7119",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1165845331/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2023-04-13T17:41:44Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1165845331",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/7119#discussion_r1165865143"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/7119"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1165865143"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Here are the 2 classes of error returned by `authorize`:\r\n\r\nhttps://github.com/coder/coder/blob/6d41edceae37ac6e0494d3951944674b8f881dda/coderd/rbac/authz.go#L326-L333\r\n\r\nRight now both are `ForbiddenWithInternal`. Maybe the correct solution here is to return something different on the `Eval` error.",
+    "commit_id": "75b840aab57362b30d9bac7b1c672f9b010daba7",
+    "created_at": "2023-04-13T18:01:40Z",
+    "diff_hunk": "@@ -137,6 +137,9 @@ func Filter[O Objecter](ctx context.Context, auth Authorizer, subject Subject, a\n \t\t\terr := auth.Authorize(ctx, subject, action, o.RBACObject())\n \t\t\tif err == nil {\n \t\t\t\tfiltered = append(filtered, o)\n+\t\t\t} else if ctx.Err() != nil {\n+\t\t\t\t// Exit early if the error comes from the context\n+\t\t\t\treturn nil, ctx.Err()",
+    "html_url": "https://github.com/coder/coder/pull/7119#discussion_r1165865143",
+    "id": 1165865143,
+    "in_reply_to_id": 1165826672,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5FfbC3",
+    "original_commit_id": "6d41edceae37ac6e0494d3951944674b8f881dda",
+    "original_line": 142,
+    "original_position": 6,
+    "original_start_line": null,
+    "path": "coderd/rbac/authz.go",
+    "position": 1,
+    "pull_request_review_id": 1383955243,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/7119",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1165865143/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2023-04-13T18:01:40Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1165865143",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/7119#discussion_r1165865705"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/7119"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1165865705"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Then I can check for `rbac.IsUnauthorizedError()` on the `Filter` function loop",
+    "commit_id": "75b840aab57362b30d9bac7b1c672f9b010daba7",
+    "created_at": "2023-04-13T18:02:15Z",
+    "diff_hunk": "@@ -137,6 +137,9 @@ func Filter[O Objecter](ctx context.Context, auth Authorizer, subject Subject, a\n \t\t\terr := auth.Authorize(ctx, subject, action, o.RBACObject())\n \t\t\tif err == nil {\n \t\t\t\tfiltered = append(filtered, o)\n+\t\t\t} else if ctx.Err() != nil {\n+\t\t\t\t// Exit early if the error comes from the context\n+\t\t\t\treturn nil, ctx.Err()",
+    "html_url": "https://github.com/coder/coder/pull/7119#discussion_r1165865705",
+    "id": 1165865705,
+    "in_reply_to_id": 1165826672,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5FfbLp",
+    "original_commit_id": "6d41edceae37ac6e0494d3951944674b8f881dda",
+    "original_line": 142,
+    "original_position": 6,
+    "original_start_line": null,
+    "path": "coderd/rbac/authz.go",
+    "position": 1,
+    "pull_request_review_id": 1383956188,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/7119",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1165865705/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2023-04-13T18:02:16Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1165865705",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/7119#discussion_r1166967722"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/7119"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1166967722"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Actually it gets a bit more annoying in the prepared one.\r\n\r\nhttps://github.com/coder/coder/blob/6d41edceae37ac6e0494d3951944674b8f881dda/coderd/rbac/authz.go#L434-L434\r\n\r\n:thinking: ",
+    "commit_id": "75b840aab57362b30d9bac7b1c672f9b010daba7",
+    "created_at": "2023-04-14T15:18:46Z",
+    "diff_hunk": "@@ -137,6 +137,9 @@ func Filter[O Objecter](ctx context.Context, auth Authorizer, subject Subject, a\n \t\t\terr := auth.Authorize(ctx, subject, action, o.RBACObject())\n \t\t\tif err == nil {\n \t\t\t\tfiltered = append(filtered, o)\n+\t\t\t} else if ctx.Err() != nil {\n+\t\t\t\t// Exit early if the error comes from the context\n+\t\t\t\treturn nil, ctx.Err()",
+    "html_url": "https://github.com/coder/coder/pull/7119#discussion_r1166967722",
+    "id": 1166967722,
+    "in_reply_to_id": 1165826672,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5FjoOq",
+    "original_commit_id": "6d41edceae37ac6e0494d3951944674b8f881dda",
+    "original_line": 142,
+    "original_position": 6,
+    "original_start_line": null,
+    "path": "coderd/rbac/authz.go",
+    "position": 1,
+    "pull_request_review_id": 1385664416,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/7119",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1166967722/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2023-04-14T15:18:47Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1166967722",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/7119#discussion_r1166989022"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/7119"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1166989022"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "For authorize single items.",
+    "commit_id": "75b840aab57362b30d9bac7b1c672f9b010daba7",
+    "created_at": "2023-04-14T15:36:37Z",
+    "diff_hunk": "@@ -319,7 +327,8 @@ func (a RegoAuthorizer) authorize(ctx context.Context, subject Subject, action A\n \n \tresults, err := a.query.Eval(ctx, rego.EvalParsedInput(astV))\n \tif err != nil {\n-\t\treturn ForbiddenWithInternal(xerrors.Errorf(\"eval rego: %w\", err), subject, action, object, results)\n+\t\terr = correctCancelError(err)\n+\t\treturn xerrors.Errorf(\"evaluate rego: %w\", err)",
+    "html_url": "https://github.com/coder/coder/pull/7119#discussion_r1166989022",
+    "id": 1166989022,
+    "line": 331,
+    "node_id": "PRRC_kwDOGkVX1s5Fjtbe",
+    "original_commit_id": "46b50997faca5b6216908076a55303ea6c9e3528",
+    "original_line": 331,
+    "original_position": 28,
+    "original_start_line": 330,
+    "path": "coderd/rbac/authz.go",
+    "position": 28,
+    "pull_request_review_id": 1385695165,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/7119",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1166989022/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 330,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2023-04-14T15:37:15Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1166989022",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/7119#discussion_r1166989115"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/7119"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1166989115"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "For prepared.",
+    "commit_id": "75b840aab57362b30d9bac7b1c672f9b010daba7",
+    "created_at": "2023-04-14T15:36:43Z",
+    "diff_hunk": "@@ -430,7 +439,8 @@ EachQueryLoop:\n \t\t// We need to eval each query with the newly known fields.\n \t\tresults, err := q.Eval(ctx, rego.EvalParsedInput(parsed))\n \t\tif err != nil {\n-\t\t\tcontinue EachQueryLoop\n+\t\t\terr = correctCancelError(err)\n+\t\t\treturn xerrors.Errorf(\"eval error: %w\", err)",
+    "html_url": "https://github.com/coder/coder/pull/7119#discussion_r1166989115",
+    "id": 1166989115,
+    "line": 443,
+    "node_id": "PRRC_kwDOGkVX1s5Fjtc7",
+    "original_commit_id": "46b50997faca5b6216908076a55303ea6c9e3528",
+    "original_line": 443,
+    "original_position": 38,
+    "original_start_line": 442,
+    "path": "coderd/rbac/authz.go",
+    "position": 38,
+    "pull_request_review_id": 1385695165,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/7119",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1166989115/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 442,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2023-04-14T15:37:15Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1166989115",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  }
+]

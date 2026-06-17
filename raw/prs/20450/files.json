@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/b81b735cf9fbc262d7c456b433fc6c844500392c/agent%2Fagent_test.go",
+    "changes": 23,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagent_test.go?ref=b81b735cf9fbc262d7c456b433fc6c844500392c",
+    "deletions": 15,
+    "filename": "agent/agent_test.go",
+    "patch": "@@ -3462,11 +3462,7 @@ func TestAgent_Metrics_SSH(t *testing.T) {\n \tregistry := prometheus.NewRegistry()\n \n \t//nolint:dogsled\n-\tconn, _, _, _, _ := setupAgent(t, agentsdk.Manifest{\n-\t\t// Make sure we always get a DERP connection for\n-\t\t// currently_reachable_peers.\n-\t\tDisableDirectConnections: true,\n-\t}, 0, func(_ *agenttest.Client, o *agent.Options) {\n+\tconn, _, _, _, _ := setupAgent(t, agentsdk.Manifest{}, 0, func(_ *agenttest.Client, o *agent.Options) {\n \t\to.PrometheusRegistry = registry\n \t})\n \n@@ -3550,11 +3546,11 @@ func TestAgent_Metrics_SSH(t *testing.T) {\n \t\t{\n \t\t\tName: \"coderd_agentstats_currently_reachable_peers\",\n \t\t\tType: proto.Stats_Metric_GAUGE,\n-\t\t\tCheckFn: func(v float64) error {\n-\t\t\t\tif v == 1 {\n-\t\t\t\t\treturn nil\n-\t\t\t\t}\n-\t\t\t\treturn xerrors.Errorf(\"expected 1, got %f\", v)\n+\t\t\tCheckFn: func(float64) error {\n+\t\t\t\t// We can't reliably ping a peer here, and networking is out of\n+\t\t\t\t// scope of this test, so we just test that the metric exists\n+\t\t\t\t// with the correct labels.\n+\t\t\t\treturn nil\n \t\t\t},\n \t\t\tLabels: []*proto.Stats_Metric_Label{\n \t\t\t\t{\n@@ -3566,11 +3562,8 @@ func TestAgent_Metrics_SSH(t *testing.T) {\n \t\t{\n \t\t\tName: \"coderd_agentstats_currently_reachable_peers\",\n \t\t\tType: proto.Stats_Metric_GAUGE,\n-\t\t\tCheckFn: func(f float64) error {\n-\t\t\t\tif f == 0 {\n-\t\t\t\t\treturn nil\n-\t\t\t\t}\n-\t\t\t\treturn xerrors.Errorf(\"expected 0, got %f\", f)\n+\t\t\tCheckFn: func(float64) error {\n+\t\t\t\treturn nil\n \t\t\t},\n \t\t\tLabels: []*proto.Stats_Metric_Label{\n \t\t\t\t{",
+    "raw_url": "https://github.com/coder/coder/raw/b81b735cf9fbc262d7c456b433fc6c844500392c/agent%2Fagent_test.go",
+    "sha": "d4d40b56bb92e8ef8fec1a5d5d8fff6c69373843",
+    "status": "modified"
+  }
+]

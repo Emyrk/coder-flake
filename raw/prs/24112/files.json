@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/c2dd65426009245d7f1b406c866b46d4c64fdd50/enterprise%2Fcoderd%2Fconnectionlog%2Fconnectionlog.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcoderd%2Fconnectionlog%2Fconnectionlog.go?ref=c2dd65426009245d7f1b406c866b46d4c64fdd50",
+    "deletions": 1,
+    "filename": "enterprise/coderd/connectionlog/connectionlog.go",
+    "patch": "@@ -468,9 +468,10 @@ func (b *DBBatcher) retryLoop() {\n func (b *DBBatcher) retryBatch(params database.BatchUpsertConnectionLogsParams) {\n \tcount := len(params.ID)\n \tfor attempt := range maxRetries {\n-\t\tt := time.NewTimer(retryInterval)\n+\t\tt := b.clock.NewTimer(retryInterval, \"connectionLogBatcher\", \"retryBackoff\")\n \t\tselect {\n \t\tcase <-b.ctx.Done():\n+\t\t\tt.Stop()\n \t\t\tb.shutdownBatch(params)\n \t\t\treturn\n \t\tcase <-t.C:",
+    "raw_url": "https://github.com/coder/coder/raw/c2dd65426009245d7f1b406c866b46d4c64fdd50/enterprise%2Fcoderd%2Fconnectionlog%2Fconnectionlog.go",
+    "sha": "6668373f1b62809247ed6470b6862f79f31bffd4",
+    "status": "modified"
+  },
+  {
+    "additions": 23,
+    "blob_url": "https://github.com/coder/coder/blob/c2dd65426009245d7f1b406c866b46d4c64fdd50/enterprise%2Fcoderd%2Fconnectionlog%2Fconnectionlog_internal_test.go",
+    "changes": 41,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcoderd%2Fconnectionlog%2Fconnectionlog_internal_test.go?ref=c2dd65426009245d7f1b406c866b46d4c64fdd50",
+    "deletions": 18,
+    "filename": "enterprise/coderd/connectionlog/connectionlog_internal_test.go",
+    "patch": "@@ -355,15 +355,20 @@ func Test_batcherFlush(t *testing.T) {\n \t\tstore := dbmock.NewMockStore(ctrl)\n \t\tclock := quartz.NewMock(t)\n \n-\t\tscheduledTrap := clock.Trap().TimerReset(\"connectionLogBatcher\", \"scheduledFlush\")\n-\t\tdefer scheduledTrap.Close()\n+\t\t// Trap the capacity flush (fires when batch reaches maxBatchSize).\n+\t\tcapacityTrap := clock.Trap().TimerReset(\"connectionLogBatcher\", \"capacityFlush\")\n+\t\tdefer capacityTrap.Close()\n \n-\t\tb := NewDBBatcher(ctx, store, log, WithClock(clock), WithBatchSize(100))\n+\t\t// Trap the retry backoff timer created by retryBatch.\n+\t\tretryTrap := clock.Trap().NewTimer(\"connectionLogBatcher\", \"retryBackoff\")\n+\t\tdefer retryTrap.Close()\n+\n+\t\t// Batch size of 1: consuming the item triggers an immediate\n+\t\t// capacity flush, avoiding the timer/itemCh select race.\n+\t\tb := NewDBBatcher(ctx, store, log, WithClock(clock), WithBatchSize(1))\n \n \t\tevt := fakeConnectEvent(uuid.New(), \"agent1\", uuid.New())\n \n-\t\t// First call (synchronous in flush) fails, then the\n-\t\t// retry worker retries after the backoff and succeeds.\n \t\tgomock.InOrder(\n \t\t\tstore.EXPECT().\n \t\t\t\tBatchUpsertConnectionLogs(gomock.Any(), gomock.Any()).\n@@ -380,14 +385,15 @@ func Test_batcherFlush(t *testing.T) {\n \n \t\trequire.NoError(t, b.Upsert(ctx, evt))\n \n-\t\t// Trigger a scheduled flush while the batcher is still\n-\t\t// running. The synchronous write fails and queues to\n-\t\t// retryCh. The retry worker picks it up after a real-\n-\t\t// time 1s delay and succeeds.\n-\t\tclock.Advance(defaultFlushInterval).MustWait(ctx)\n-\t\tscheduledTrap.MustWait(ctx).MustRelease(ctx)\n+\t\t// Item consumed \u2192 capacity flush fires \u2192 transient error \u2192\n+\t\t// batch queued to retryCh \u2192 timer reset trapped.\n+\t\tcapacityTrap.MustWait(ctx).MustRelease(ctx)\n+\n+\t\t// Retry worker creates a timer \u2014 trap it, release, advance.\n+\t\tretryCall := retryTrap.MustWait(ctx)\n+\t\tretryCall.MustRelease(ctx)\n+\t\tclock.Advance(retryInterval).MustWait(ctx)\n \n-\t\t// Wait for the retry to complete (real-time 1s delay).\n \t\trequire.NoError(t, b.Close())\n \t})\n \n@@ -400,10 +406,10 @@ func Test_batcherFlush(t *testing.T) {\n \t\tstore := dbmock.NewMockStore(ctrl)\n \t\tclock := quartz.NewMock(t)\n \n-\t\tscheduledTrap := clock.Trap().TimerReset(\"connectionLogBatcher\", \"scheduledFlush\")\n-\t\tdefer scheduledTrap.Close()\n+\t\tcapacityTrap := clock.Trap().TimerReset(\"connectionLogBatcher\", \"capacityFlush\")\n+\t\tdefer capacityTrap.Close()\n \n-\t\tb := NewDBBatcher(ctx, store, log, WithClock(clock), WithBatchSize(100))\n+\t\tb := NewDBBatcher(ctx, store, log, WithClock(clock), WithBatchSize(1))\n \n \t\tevt := fakeConnectEvent(uuid.New(), \"agent1\", uuid.New())\n \n@@ -428,10 +434,9 @@ func Test_batcherFlush(t *testing.T) {\n \t\t\t}).\n \t\t\tAnyTimes()\n \n-\t\t// Send event and trigger flush \u2014 fails, queues.\n+\t\t// Send event \u2014 capacity flush triggers immediately.\n \t\trequire.NoError(t, b.Upsert(ctx, evt))\n-\t\tclock.Advance(defaultFlushInterval).MustWait(ctx)\n-\t\tscheduledTrap.MustWait(ctx).MustRelease(ctx)\n+\t\tcapacityTrap.MustWait(ctx).MustRelease(ctx)\n \n \t\t// Close triggers shutdown. The retry worker drains\n \t\t// retryCh and writes the batch via writeBatch.",
+    "raw_url": "https://github.com/coder/coder/raw/c2dd65426009245d7f1b406c866b46d4c64fdd50/enterprise%2Fcoderd%2Fconnectionlog%2Fconnectionlog_internal_test.go",
+    "sha": "2e165451ba961c340d9c1dc4077699c8ab324804",
+    "status": "modified"
+  }
+]

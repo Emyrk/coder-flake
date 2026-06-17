@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/0c866981384f7a1c9f2cb8ae44c6ed65c8e14aaa/site%2Fsrc%2Fpages%2FUsersPage%2FUsersPage.stories.tsx",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FUsersPage%2FUsersPage.stories.tsx?ref=0c866981384f7a1c9f2cb8ae44c6ed65c8e14aaa",
+    "deletions": 0,
+    "filename": "site/src/pages/UsersPage/UsersPage.stories.tsx",
+    "patch": "@@ -72,6 +72,9 @@ const meta: Meta<typeof UsersPage> = {\n \tcomponent: UsersPage,\n \tparameters,\n \tdecorators: [withGlobalSnackbar, withAuthProvider, withDashboardProvider],\n+\targs: {\n+\t\tdefaultNewPassword: \"edWbqYiaVpEiEWwI\",\n+\t},\n };\n \n export default meta;",
+    "raw_url": "https://github.com/coder/coder/raw/0c866981384f7a1c9f2cb8ae44c6ed65c8e14aaa/site%2Fsrc%2Fpages%2FUsersPage%2FUsersPage.stories.tsx",
+    "sha": "9a426be53042ca45c681e40a3676b949ddfa9e05",
+    "status": "modified"
+  },
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/0c866981384f7a1c9f2cb8ae44c6ed65c8e14aaa/site%2Fsrc%2Fpages%2FUsersPage%2FUsersPage.tsx",
+    "changes": 10,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FUsersPage%2FUsersPage.tsx?ref=0c866981384f7a1c9f2cb8ae44c6ed65c8e14aaa",
+    "deletions": 2,
+    "filename": "site/src/pages/UsersPage/UsersPage.tsx",
+    "patch": "@@ -35,7 +35,13 @@ import { ResetPasswordDialog } from \"./ResetPasswordDialog\";\n import { useStatusFilterMenu } from \"./UsersFilter\";\n import { UsersPageView } from \"./UsersPageView\";\n \n-const UsersPage: FC = () => {\n+type UserPageProps = {\n+\t// Used by Storybook to prevent generating a new password each time the story\n+\t// loads, avoiding Chromatic snapshot differences.\n+\tdefaultNewPassword?: string;\n+};\n+\n+const UsersPage: FC<UserPageProps> = ({ defaultNewPassword }) => {\n \tconst queryClient = useQueryClient();\n \tconst navigate = useNavigate();\n \tconst location = useLocation();\n@@ -134,7 +140,7 @@ const UsersPage: FC = () => {\n \t\t\t\tonResetUserPassword={(user) => {\n \t\t\t\t\tsetConfirmResetPassword({\n \t\t\t\t\t\tuser,\n-\t\t\t\t\t\tnewPassword: generateRandomString(12),\n+\t\t\t\t\t\tnewPassword: defaultNewPassword ?? generateRandomString(12),\n \t\t\t\t\t});\n \t\t\t\t}}\n \t\t\t\tonUpdateUserRoles={async (userId, roles) => {",
+    "raw_url": "https://github.com/coder/coder/raw/0c866981384f7a1c9f2cb8ae44c6ed65c8e14aaa/site%2Fsrc%2Fpages%2FUsersPage%2FUsersPage.tsx",
+    "sha": "e4337f9242216ad89a3d098f38067ae26d766af1",
+    "status": "modified"
+  },
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/0c866981384f7a1c9f2cb8ae44c6ed65c8e14aaa/site%2Fsrc%2Fpages%2FUsersPage%2FUsersPageView.stories.tsx",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FUsersPage%2FUsersPageView.stories.tsx?ref=0c866981384f7a1c9f2cb8ae44c6ed65c8e14aaa",
+    "deletions": 1,
+    "filename": "site/src/pages/UsersPage/UsersPageView.stories.tsx",
+    "patch": "@@ -34,7 +34,6 @@ const meta: Meta<typeof UsersPageView> = {\n \t\tisNonInitialPage: false,\n \t\tusers: [MockUser, MockUser2],\n \t\troles: MockAssignableSiteRoles,\n-\n \t\tcanEditUsers: true,\n \t\tfilterProps: defaultFilterProps,\n \t\tauthMethods: MockAuthMethodsPasswordOnly,",
+    "raw_url": "https://github.com/coder/coder/raw/0c866981384f7a1c9f2cb8ae44c6ed65c8e14aaa/site%2Fsrc%2Fpages%2FUsersPage%2FUsersPageView.stories.tsx",
+    "sha": "81e557221edffd4db0fb4d87ac859602eb748f8c",
+    "status": "modified"
+  }
+]

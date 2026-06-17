@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/d7f918a85132c75798bc8aa6329175ed4970cfc9/site%2Fe2e%2Fhelpers.ts",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fe2e%2Fhelpers.ts?ref=d7f918a85132c75798bc8aa6329175ed4970cfc9",
+    "deletions": 2,
+    "filename": "site/e2e/helpers.ts",
+    "patch": "@@ -207,8 +207,7 @@ export const verifyParameters = async (\n \t\t\tcase \"number\":\n \t\t\t\t{\n \t\t\t\t\tconst parameterField = parameterLabel.locator(\"input\");\n-\t\t\t\t\tconst value = await parameterField.inputValue();\n-\t\t\t\t\texpect(value).toEqual(buildParameter.value);\n+\t\t\t\t\tawait expect(parameterField).toHaveValue(buildParameter.value);\n \t\t\t\t}\n \t\t\t\tbreak;\n \t\t\tdefault:",
+    "raw_url": "https://github.com/coder/coder/raw/d7f918a85132c75798bc8aa6329175ed4970cfc9/site%2Fe2e%2Fhelpers.ts",
+    "sha": "cda6966a56c91557c9263b7c0110701eac883ee5",
+    "status": "modified"
+  }
+]

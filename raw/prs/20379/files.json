@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/5055131f236e91cd4858cfca5be5df4989e39f99/.github%2Fworkflows%2Fci.yaml",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Fci.yaml?ref=5055131f236e91cd4858cfca5be5df4989e39f99",
+    "deletions": 1,
+    "filename": ".github/workflows/ci.yaml",
+    "patch": "@@ -1537,7 +1537,7 @@ jobs:\n     steps:\n       - name: Send Slack notification\n         run: |\n-          ESCAPED_PROMPT=$(printf \"%s\" \"<@A09M3J8FK1U> $BLINK_CI_FAILURE_PROMPT\" | jq -Rsa .)\n+          ESCAPED_PROMPT=$(printf \"%s\" \"<@U09LQ75AHKR> $BLINK_CI_FAILURE_PROMPT\" | jq -Rsa .)\n           curl -X POST -H 'Content-type: application/json' \\\n           --data '{\n             \"blocks\": [",
+    "raw_url": "https://github.com/coder/coder/raw/5055131f236e91cd4858cfca5be5df4989e39f99/.github%2Fworkflows%2Fci.yaml",
+    "sha": "4199b64f6b68372285036bf54614611e845f8aaf",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/5055131f236e91cd4858cfca5be5df4989e39f99/.github%2Fworkflows%2Fnightly-gauntlet.yaml",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Fnightly-gauntlet.yaml?ref=5055131f236e91cd4858cfca5be5df4989e39f99",
+    "deletions": 1,
+    "filename": ".github/workflows/nightly-gauntlet.yaml",
+    "patch": "@@ -170,7 +170,7 @@ jobs:\n     steps:\n       - name: Send Slack notification\n         run: |\n-          ESCAPED_PROMPT=$(printf \"%s\" \"<@A09M3J8FK1U> $BLINK_CI_FAILURE_PROMPT\" | jq -Rsa .)\n+          ESCAPED_PROMPT=$(printf \"%s\" \"<@U09LQ75AHKR> $BLINK_CI_FAILURE_PROMPT\" | jq -Rsa .)\n           curl -X POST -H 'Content-type: application/json' \\\n           --data '{\n             \"blocks\": [",
+    "raw_url": "https://github.com/coder/coder/raw/5055131f236e91cd4858cfca5be5df4989e39f99/.github%2Fworkflows%2Fnightly-gauntlet.yaml",
+    "sha": "f27e7038000869249cc0fa5fadc587457a2bd95f",
+    "status": "modified"
+  }
+]

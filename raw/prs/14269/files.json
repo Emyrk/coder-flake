@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/25c1ba2fdc308e3bba325203c446d1ccfa250e58/site%2Fsrc%2Fpages%2FTerminalPage%2FTerminalPage.stories.tsx",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FTerminalPage%2FTerminalPage.stories.tsx?ref=25c1ba2fdc308e3bba325203c446d1ccfa250e58",
+    "deletions": 0,
+    "filename": "site/src/pages/TerminalPage/TerminalPage.stories.tsx",
+    "patch": "@@ -77,6 +77,7 @@ const meta = {\n         data: { editWorkspaceProxies: true },\n       },\n     ],\n+    chromatic: { delay: 300 },\n   },\n   decorators: [\n     (Story) => (",
+    "raw_url": "https://github.com/coder/coder/raw/25c1ba2fdc308e3bba325203c446d1ccfa250e58/site%2Fsrc%2Fpages%2FTerminalPage%2FTerminalPage.stories.tsx",
+    "sha": "c1977f8ef09a5037e48eb8e7ea3f95239ab6f083",
+    "status": "modified"
+  }
+]

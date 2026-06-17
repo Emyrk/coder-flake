@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/23951e949728b81969cf66e4fb50a850fe1eeb95/enterprise%2Fcoderd%2Fcoderd.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcoderd%2Fcoderd.go?ref=23951e949728b81969cf66e4fb50a850fe1eeb95",
+    "deletions": 2,
+    "filename": "enterprise/coderd/coderd.go",
+    "patch": "@@ -830,7 +830,7 @@ func (api *API) updateEntitlements(ctx context.Context) error {\n \t\t\t\t\t\t}\n \t\t\t\t\t\tapi.derpMesh.SetAddresses(addresses, false)\n \t\t\t\t\t}\n-\t\t\t\t\t_ = api.updateEntitlements(ctx)\n+\t\t\t\t\t_ = api.updateEntitlements(api.ctx)\n \t\t\t\t})\n \t\t\t} else {\n \t\t\t\tcoordinator = agpltailnet.NewCoordinator(api.Logger)\n@@ -840,7 +840,7 @@ func (api *API) updateEntitlements(ctx context.Context) error {\n \t\t\t\tapi.replicaManager.SetCallback(func() {\n \t\t\t\t\t// If the amount of replicas change, so should our entitlements.\n \t\t\t\t\t// This is to display a warning in the UI if the user is unlicensed.\n-\t\t\t\t\t_ = api.updateEntitlements(ctx)\n+\t\t\t\t\t_ = api.updateEntitlements(api.ctx)\n \t\t\t\t})\n \t\t\t}\n ",
+    "raw_url": "https://github.com/coder/coder/raw/23951e949728b81969cf66e4fb50a850fe1eeb95/enterprise%2Fcoderd%2Fcoderd.go",
+    "sha": "9583e14cd7fd3330e6fe36d00c552b0592dd7b88",
+    "status": "modified"
+  },
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/23951e949728b81969cf66e4fb50a850fe1eeb95/enterprise%2Fcoderd%2Flicense%2Flicense.go",
+    "changes": 9,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcoderd%2Flicense%2Flicense.go?ref=23951e949728b81969cf66e4fb50a850fe1eeb95",
+    "deletions": 2,
+    "filename": "enterprise/coderd/license/license.go",
+    "patch": "@@ -432,10 +432,15 @@ func LicensesEntitlements(\n \t\tif featureArguments.ManagedAgentCountFn != nil {\n \t\t\tmanagedAgentCount, err = featureArguments.ManagedAgentCountFn(ctx, agentLimit.UsagePeriod.Start, agentLimit.UsagePeriod.End)\n \t\t}\n-\t\tif err != nil {\n+\t\tswitch {\n+\t\tcase xerrors.Is(err, context.Canceled) || xerrors.Is(err, context.DeadlineExceeded):\n+\t\t\t// If the context is canceled, we want to bail the entire\n+\t\t\t// LicensesEntitlements call.\n+\t\t\treturn entitlements, xerrors.Errorf(\"get managed agent count: %w\", err)\n+\t\tcase err != nil:\n \t\t\tentitlements.Errors = append(entitlements.Errors,\n \t\t\t\tfmt.Sprintf(\"Error getting managed agent count: %s\", err.Error()))\n-\t\t} else {\n+\t\tdefault:\n \t\t\tagentLimit.Actual = &managedAgentCount\n \t\t\tentitlements.AddFeature(codersdk.FeatureManagedAgentLimit, agentLimit)\n ",
+    "raw_url": "https://github.com/coder/coder/raw/23951e949728b81969cf66e4fb50a850fe1eeb95/enterprise%2Fcoderd%2Flicense%2Flicense.go",
+    "sha": "bc5c174d9fc3aff6bdeab3b7096d6733908c3e80",
+    "status": "modified"
+  }
+]

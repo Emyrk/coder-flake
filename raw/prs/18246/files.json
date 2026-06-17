@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/3864e86d48862772b6a16d59d18d605a9ee6ecf1/cli%2Fclitest%2Fclitest.go",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fclitest%2Fclitest.go?ref=3864e86d48862772b6a16d59d18d605a9ee6ecf1",
+    "deletions": 0,
+    "filename": "cli/clitest/clitest.go",
+    "patch": "@@ -168,6 +168,12 @@ func StartWithAssert(t *testing.T, inv *serpent.Invocation, assertCallback func(\n \t\tswitch {\n \t\tcase errors.Is(err, context.Canceled):\n \t\t\treturn\n+\t\tcase err != nil && strings.Contains(err.Error(), \"driver: bad connection\"):\n+\t\t\t// When we cancel the context on a query that's being executed within\n+\t\t\t// a transaction, sometimes, instead of a context.Canceled error we get\n+\t\t\t// a \"driver: bad connection\" error.\n+\t\t\t// https://github.com/lib/pq/issues/1137\n+\t\t\treturn\n \t\tdefault:\n \t\t\tassert.NoError(t, err)\n \t\t}",
+    "raw_url": "https://github.com/coder/coder/raw/3864e86d48862772b6a16d59d18d605a9ee6ecf1/cli%2Fclitest%2Fclitest.go",
+    "sha": "8d1f5302ce7baf7a8776c9454d9d40d970459581",
+    "status": "modified"
+  },
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/3864e86d48862772b6a16d59d18d605a9ee6ecf1/cli%2Fserver.go",
+    "changes": 5,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fserver.go?ref=3864e86d48862772b6a16d59d18d605a9ee6ecf1",
+    "deletions": 1,
+    "filename": "cli/server.go",
+    "patch": "@@ -2359,6 +2359,10 @@ func ConnectToPostgres(ctx context.Context, logger slog.Logger, driver string, d\n \tif err != nil {\n \t\treturn nil, xerrors.Errorf(\"get postgres version: %w\", err)\n \t}\n+\tdefer version.Close()\n+\tif version.Err() != nil {\n+\t\treturn nil, xerrors.Errorf(\"version select: %w\", version.Err())\n+\t}\n \tif !version.Next() {\n \t\treturn nil, xerrors.Errorf(\"no rows returned for version select\")\n \t}\n@@ -2367,7 +2371,6 @@ func ConnectToPostgres(ctx context.Context, logger slog.Logger, driver string, d\n \tif err != nil {\n \t\treturn nil, xerrors.Errorf(\"scan version: %w\", err)\n \t}\n-\t_ = version.Close()\n \n \tif versionNum < 130000 {\n \t\treturn nil, xerrors.Errorf(\"PostgreSQL version must be v13.0.0 or higher! Got: %d\", versionNum)",
+    "raw_url": "https://github.com/coder/coder/raw/3864e86d48862772b6a16d59d18d605a9ee6ecf1/cli%2Fserver.go",
+    "sha": "d9badd02d9fbf1c0d9a451c544dcc3f43d809cc5",
+    "status": "modified"
+  },
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/3864e86d48862772b6a16d59d18d605a9ee6ecf1/coderd%2Fdatabase%2Fpubsub%2Fpubsub.go",
+    "changes": 15,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdatabase%2Fpubsub%2Fpubsub.go?ref=3864e86d48862772b6a16d59d18d605a9ee6ecf1",
+    "deletions": 8,
+    "filename": "coderd/database/pubsub/pubsub.go",
+    "patch": "@@ -552,15 +552,14 @@ func (p *PGPubsub) startListener(ctx context.Context, connectURL string) error {\n \t\t\tsentErrCh = true\n \t\t}),\n \t}\n-\tselect {\n-\tcase err = <-errCh:\n-\t\tif err != nil {\n-\t\t\t_ = p.pgListener.Close()\n-\t\t\treturn xerrors.Errorf(\"create pq listener: %w\", err)\n-\t\t}\n-\tcase <-ctx.Done():\n+\t// We don't respect context cancellation here. There's a bug in the pq library\n+\t// where if you close the listener before or while the connection is being\n+\t// established, the connection will be established anyway, and will not be\n+\t// closed.\n+\t// https://github.com/lib/pq/issues/1192\n+\tif err := <-errCh; err != nil {\n \t\t_ = p.pgListener.Close()\n-\t\treturn ctx.Err()\n+\t\treturn xerrors.Errorf(\"create pq listener: %w\", err)\n \t}\n \treturn nil\n }",
+    "raw_url": "https://github.com/coder/coder/raw/3864e86d48862772b6a16d59d18d605a9ee6ecf1/coderd%2Fdatabase%2Fpubsub%2Fpubsub.go",
+    "sha": "c4b454abdfbdafe951a68488a1b6e1e202b86f9d",
+    "status": "modified"
+  }
+]

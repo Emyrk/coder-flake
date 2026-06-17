@@ -1,0 +1,48 @@
+[
+  {
+    "author_association": "MEMBER",
+    "body": "spotted also here: https://github.com/coder/coder/actions/runs/9856429623/job/27213431086\r\n\r\n```\r\n=== FAIL: coderd/database/dbpurge TestDeleteOldWorkspaceAgentLogs (0.22s)\r\n    t.go:99: 2024-07-09 11:49:21.115 [info]  pubsub: pubsub dialing postgres  network=tcp  address=127.0.0.1:5432  timeout_ms=0\r\n    t.go:99: 2024-07-09 11:49:21.115 [info]  pubsub: pubsub postgres TCP connection established  network=tcp  address=127.0.0.1:5432  timeout_ms=0  elapsed_ms=0\r\n    t.go:99: 2024-07-09 11:49:21.130 [info]  pubsub: pubsub connected to postgres\r\n    t.go:99: 2024-07-09 11:49:21.130 [info]  pubsub: pubsub has started\r\n    t.go:99: 2024-07-09 11:49:21.251 [info]  purged old database entries  duration=28.014231ms\r\n    t.go:102: 2024-07-09 11:49:21.251 [erro]  failed to purge old database entries ...\r\n        error= commit transaction:\r\n                   github.com/coder/coder/v2/coderd/database.(*sqlQuerier).runTx\r\n                       /home/runner/work/coder/coder/coderd/database/db.go:149\r\n                 - driver: bad connection\r\n```\r\n\r\nI might be wrong, but if 2 tests are running at the same time, they may try to lock `database.LockIDDBPurge` at the same time, hence `bad connection`? I will disable parallel tests to see if it improves.\r\n",
+    "created_at": "2024-07-09T12:08:38Z",
+    "html_url": "https://github.com/coder/coder/issues/13801#issuecomment-2217474173",
+    "id": 2217474173,
+    "issue_url": "https://api.github.com/repos/coder/coder/issues/13801",
+    "node_id": "IC_kwDOGkVX1s6EK_h9",
+    "performed_via_github_app": null,
+    "pin": null,
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/issues/comments/2217474173/reactions"
+    },
+    "updated_at": "2024-07-09T12:08:38Z",
+    "url": "https://api.github.com/repos/coder/coder/issues/comments/2217474173",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/14044910?v=4",
+      "events_url": "https://api.github.com/users/mtojek/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mtojek/followers",
+      "following_url": "https://api.github.com/users/mtojek/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mtojek/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mtojek",
+      "id": 14044910,
+      "login": "mtojek",
+      "node_id": "MDQ6VXNlcjE0MDQ0OTEw",
+      "organizations_url": "https://api.github.com/users/mtojek/orgs",
+      "received_events_url": "https://api.github.com/users/mtojek/received_events",
+      "repos_url": "https://api.github.com/users/mtojek/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mtojek/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mtojek/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mtojek",
+      "user_view_type": "public"
+    }
+  }
+]

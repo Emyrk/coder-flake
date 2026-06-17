@@ -1,0 +1,210 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24666#discussion_r3130475628"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24666"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3130475628"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "**Nit** [DEREM-2] \"Without this\" is a forward reference; the reader hasn't seen the `InvalidateProviders()` call yet when they read the comment. Consider restructuring so the comment is prescriptive rather than conditional:\n\n```go\n// The direct DB insert above bypasses the pubsub event that\n// production uses to invalidate the provider cache. Explicitly\n// invalidate here so the background processing goroutine does\n// not serve a stale provider list (OpenAI only) that was cached\n// before the Anthropic provider was inserted.\nserver.configCache.InvalidateProviders()\n```\n\n*(Leorio)*\n\n> \ud83e\udd16",
+    "commit_id": "a70763de2301d4cb1512b55c516970710c946b76",
+    "created_at": "2026-04-23T11:39:34Z",
+    "diff_hunk": "@@ -477,6 +477,13 @@ func TestSpawnComputerUseAgentInheritsContext(t *testing.T) {\n \tctx := chatdTestContext(t)\n \tparentChat := createParentChatWithInheritedContext(ctx, t, db, server)\n \tinsertEnabledAnthropicProvider(ctx, t, db, parentChat.OwnerID)\n+\t// The direct DB insert above bypasses the pubsub event that\n+\t// production uses to invalidate the provider cache. Without\n+\t// this, the background processing goroutine may have already\n+\t// cached the provider list (OpenAI only) before the Anthropic\n+\t// provider was inserted, causing isAnthropicConfigured to\n+\t// return false.\n+\tserver.configCache.InvalidateProviders()",
+    "html_url": "https://github.com/coder/coder/pull/24666#discussion_r3130475628",
+    "id": 3130475628,
+    "line": 485,
+    "node_id": "PRRC_kwDOGkVX1s66l0Rs",
+    "original_commit_id": "6b05d12dc0817d57aa951d71a919dfe51d145647",
+    "original_line": 486,
+    "original_position": 10,
+    "original_start_line": 480,
+    "path": "coderd/x/chatd/subagent_context_internal_test.go",
+    "position": 9,
+    "pull_request_review_id": 4162033039,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24666",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3130475628/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 480,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2026-04-23T11:39:34Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3130475628",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24666#discussion_r3130487835"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24666"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3130487835"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "```suggestion\n\t// The direct DB insert above bypasses the pubsub event that\n\t// production uses to invalidate the provider cache. Explicitly\n\t// invalidate here so the background processing goroutine does\n\t// not serve a stale provider list (OpenAI only) that was cached\n\t// before the Anthropic provider was inserted.\n\tserver.configCache.InvalidateProviders()\n```",
+    "commit_id": "a70763de2301d4cb1512b55c516970710c946b76",
+    "created_at": "2026-04-23T11:42:03Z",
+    "diff_hunk": "@@ -477,6 +477,13 @@ func TestSpawnComputerUseAgentInheritsContext(t *testing.T) {\n \tctx := chatdTestContext(t)\n \tparentChat := createParentChatWithInheritedContext(ctx, t, db, server)\n \tinsertEnabledAnthropicProvider(ctx, t, db, parentChat.OwnerID)\n+\t// The direct DB insert above bypasses the pubsub event that\n+\t// production uses to invalidate the provider cache. Without\n+\t// this, the background processing goroutine may have already\n+\t// cached the provider list (OpenAI only) before the Anthropic\n+\t// provider was inserted, causing isAnthropicConfigured to\n+\t// return false.\n+\tserver.configCache.InvalidateProviders()",
+    "html_url": "https://github.com/coder/coder/pull/24666#discussion_r3130487835",
+    "id": 3130487835,
+    "line": 485,
+    "node_id": "PRRC_kwDOGkVX1s66l3Qb",
+    "original_commit_id": "6b05d12dc0817d57aa951d71a919dfe51d145647",
+    "original_line": 486,
+    "original_position": 10,
+    "original_start_line": 480,
+    "path": "coderd/x/chatd/subagent_context_internal_test.go",
+    "position": 9,
+    "pull_request_review_id": 4162045687,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24666",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3130487835/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 480,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2026-04-23T11:42:04Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3130487835",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24666#discussion_r3130494598"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24666"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3130494598"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "suggestion applied",
+    "commit_id": "a70763de2301d4cb1512b55c516970710c946b76",
+    "created_at": "2026-04-23T11:43:21Z",
+    "diff_hunk": "@@ -477,6 +477,13 @@ func TestSpawnComputerUseAgentInheritsContext(t *testing.T) {\n \tctx := chatdTestContext(t)\n \tparentChat := createParentChatWithInheritedContext(ctx, t, db, server)\n \tinsertEnabledAnthropicProvider(ctx, t, db, parentChat.OwnerID)\n+\t// The direct DB insert above bypasses the pubsub event that\n+\t// production uses to invalidate the provider cache. Without\n+\t// this, the background processing goroutine may have already\n+\t// cached the provider list (OpenAI only) before the Anthropic\n+\t// provider was inserted, causing isAnthropicConfigured to\n+\t// return false.\n+\tserver.configCache.InvalidateProviders()",
+    "html_url": "https://github.com/coder/coder/pull/24666#discussion_r3130494598",
+    "id": 3130494598,
+    "in_reply_to_id": 3130475628,
+    "line": 485,
+    "node_id": "PRRC_kwDOGkVX1s66l46G",
+    "original_commit_id": "6b05d12dc0817d57aa951d71a919dfe51d145647",
+    "original_line": 486,
+    "original_position": 10,
+    "original_start_line": 480,
+    "path": "coderd/x/chatd/subagent_context_internal_test.go",
+    "position": 9,
+    "pull_request_review_id": 4162053339,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24666",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3130494598/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 480,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2026-04-23T11:43:21Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3130494598",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 15,
+    "blob_url": "https://github.com/coder/coder/blob/c9a680ab4c12d31be70a98033c1ad5548f7ca04a/coderd%2Fx%2Fchatd%2Fsubagent_internal_test.go",
+    "changes": 23,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fx%2Fchatd%2Fsubagent_internal_test.go?ref=c9a680ab4c12d31be70a98033c1ad5548f7ca04a",
+    "deletions": 8,
+    "filename": "coderd/x/chatd/subagent_internal_test.go",
+    "patch": "@@ -1146,15 +1146,22 @@ func TestAwaitSubagentCompletion(t *testing.T) {\n \n \t\tparent, child := createParentChildChats(ctx, t, server, user, model)\n \n-\t\t// signalWake from CreateChat may have triggered background\n-\t\t// processing that transitions the child to \"error\". Wait\n-\t\t// for that to finish, then reset to \"running\" so the test\n-\t\t// exercises the context-cancellation path. Using \"running\"\n-\t\t// (not \"pending\") prevents re-acquisition by the shared\n-\t\t// server's background loop.\n-\t\tserver.inflight.Wait()\n+\t\t// signalWake from CreateChat triggers background\n+\t\t// processing. drainInflight waits for in-flight goroutines\n+\t\t// but can't guarantee a pending DB row has been acquired\n+\t\t// yet \u2014 the child chat may still be pending if the second\n+\t\t// wake signal hasn't been consumed. Poll until the child\n+\t\t// reaches a terminal DB state so processChat has fully\n+\t\t// finished, then reset to running for the cancellation\n+\t\t// test.\n+\t\ttestutil.Eventually(ctx, t, func(ctx context.Context) bool {\n+\t\t\tc, err := db.GetChatByID(ctx, child.ID)\n+\t\t\tif err != nil {\n+\t\t\t\treturn false\n+\t\t\t}\n+\t\t\treturn c.Status != database.ChatStatusPending && c.Status != database.ChatStatusRunning\n+\t\t}, testutil.IntervalFast)\n \t\tsetChatStatus(ctx, t, db, child.ID, database.ChatStatusRunning, \"\")\n-\n \t\t// Use a short-lived context instead of goroutine + sleep.\n \t\tshortCtx, cancel := context.WithTimeout(ctx, testutil.IntervalMedium)\n \t\tdefer cancel()",
+    "raw_url": "https://github.com/coder/coder/raw/c9a680ab4c12d31be70a98033c1ad5548f7ca04a/coderd%2Fx%2Fchatd%2Fsubagent_internal_test.go",
+    "sha": "83248800b774fbdf4271d096d6dfb350c3df721d",
+    "status": "modified"
+  }
+]

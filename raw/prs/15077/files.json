@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/b7789cfe773249748bf5d4f4c4b419859623ffbb/coderd%2Fworkspacebuilds_test.go",
+    "changes": 17,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspacebuilds_test.go?ref=b7789cfe773249748bf5d4f4c4b419859623ffbb",
+    "deletions": 9,
+    "filename": "coderd/workspacebuilds_test.go",
+    "patch": "@@ -1214,16 +1214,15 @@ func TestWorkspaceBuildTimings(t *testing.T) {\n \t\tActiveVersionID: version.ID,\n \t\tCreatedBy:       owner.UserID,\n \t})\n-\tws := dbgen.Workspace(t, db, database.Workspace{\n-\t\tOwnerID:        owner.UserID,\n-\t\tOrganizationID: owner.OrganizationID,\n-\t\tTemplateID:     template.ID,\n-\t})\n \n-\t// Create a build to attach timings\n-\tvar buildNumber int32\n+\t// Tests will run in parallel. To avoid conflicts and race conditions on the\n+\t// build number, each test will have its own workspace and build.\n \tmakeBuild := func() database.WorkspaceBuild {\n-\t\tbuildNumber++\n+\t\tws := dbgen.Workspace(t, db, database.Workspace{\n+\t\t\tOwnerID:        owner.UserID,\n+\t\t\tOrganizationID: owner.OrganizationID,\n+\t\t\tTemplateID:     template.ID,\n+\t\t})\n \t\tjobID := uuid.New()\n \t\tjob := dbgen.ProvisionerJob(t, db, pubsub, database.ProvisionerJob{\n \t\t\tID:             jobID,\n@@ -1235,7 +1234,7 @@ func TestWorkspaceBuildTimings(t *testing.T) {\n \t\t\tTemplateVersionID: version.ID,\n \t\t\tInitiatorID:       owner.UserID,\n \t\t\tJobID:             job.ID,\n-\t\t\tBuildNumber:       buildNumber,\n+\t\t\tBuildNumber:       1,\n \t\t})\n \t}\n ",
+    "raw_url": "https://github.com/coder/coder/raw/b7789cfe773249748bf5d4f4c4b419859623ffbb/coderd%2Fworkspacebuilds_test.go",
+    "sha": "87c0dfe6b43ee42f1982ee8e19826a0ebed78597",
+    "status": "modified"
+  }
+]

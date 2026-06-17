@@ -1,0 +1,141 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/22147#discussion_r2821212479"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/22147"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2821212479"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "We could add a second command to read the value just so it can be verified it has changed. Not sure if necessary if the write would fail.",
+    "commit_id": "96acdd29e2ba3ecb91a72b8f3c571fb486c3fe81",
+    "created_at": "2026-02-18T09:16:18Z",
+    "diff_hunk": "@@ -489,6 +489,14 @@ jobs:\n           # macOS will output \"The default interactive shell is now zsh\" intermittently in CI.\n           touch ~/.bash_profile && echo \"export BASH_SILENCE_DEPRECATION_WARNING=1\" >> ~/.bash_profile\n \n+      - name: Increase PTY limit (macOS)\n+        if: runner.os == 'macOS'\n+        shell: bash\n+        run: |\n+          # Increase PTY limit to avoid exhaustion during tests.\n+          # Default is 511; 999 is the maximum value on CI runner.\n+          sudo sysctl -w kern.tty.ptmx_max=999",
+    "html_url": "https://github.com/coder/coder/pull/22147#discussion_r2821212479",
+    "id": 2821212479,
+    "line": 498,
+    "node_id": "PRRC_kwDOGkVX1s6oKEk_",
+    "original_commit_id": "96acdd29e2ba3ecb91a72b8f3c571fb486c3fe81",
+    "original_line": 498,
+    "original_position": 10,
+    "original_start_line": null,
+    "path": ".github/workflows/ci.yaml",
+    "position": 10,
+    "pull_request_review_id": 3818667455,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/22147",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2821212479/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-02-18T09:16:34Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2821212479",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/22147#discussion_r2822397584"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/22147"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2822397584"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "It returns non-zero exit code if it fails, so CI job should fail",
+    "commit_id": "96acdd29e2ba3ecb91a72b8f3c571fb486c3fe81",
+    "created_at": "2026-02-18T13:38:07Z",
+    "diff_hunk": "@@ -489,6 +489,14 @@ jobs:\n           # macOS will output \"The default interactive shell is now zsh\" intermittently in CI.\n           touch ~/.bash_profile && echo \"export BASH_SILENCE_DEPRECATION_WARNING=1\" >> ~/.bash_profile\n \n+      - name: Increase PTY limit (macOS)\n+        if: runner.os == 'macOS'\n+        shell: bash\n+        run: |\n+          # Increase PTY limit to avoid exhaustion during tests.\n+          # Default is 511; 999 is the maximum value on CI runner.\n+          sudo sysctl -w kern.tty.ptmx_max=999",
+    "html_url": "https://github.com/coder/coder/pull/22147#discussion_r2822397584",
+    "id": 2822397584,
+    "in_reply_to_id": 2821212479,
+    "line": 498,
+    "node_id": "PRRC_kwDOGkVX1s6oOl6Q",
+    "original_commit_id": "96acdd29e2ba3ecb91a72b8f3c571fb486c3fe81",
+    "original_line": 498,
+    "original_position": 10,
+    "original_start_line": null,
+    "path": ".github/workflows/ci.yaml",
+    "position": 10,
+    "pull_request_review_id": 3819960323,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/22147",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2822397584/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-02-18T13:38:08Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2822397584",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/37836031?v=4",
+      "events_url": "https://api.github.com/users/evgeniy-scherbina/events{/privacy}",
+      "followers_url": "https://api.github.com/users/evgeniy-scherbina/followers",
+      "following_url": "https://api.github.com/users/evgeniy-scherbina/following{/other_user}",
+      "gists_url": "https://api.github.com/users/evgeniy-scherbina/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/evgeniy-scherbina",
+      "id": 37836031,
+      "login": "evgeniy-scherbina",
+      "node_id": "MDQ6VXNlcjM3ODM2MDMx",
+      "organizations_url": "https://api.github.com/users/evgeniy-scherbina/orgs",
+      "received_events_url": "https://api.github.com/users/evgeniy-scherbina/received_events",
+      "repos_url": "https://api.github.com/users/evgeniy-scherbina/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/evgeniy-scherbina/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/evgeniy-scherbina/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/evgeniy-scherbina",
+      "user_view_type": "public"
+    }
+  }
+]

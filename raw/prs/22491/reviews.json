@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/22491#pullrequestreview-3880995578"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/22491"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I'm impressed that you were able to track this down! It would have taken me a while \ud83d\ude05 ",
+    "commit_id": "e447c245d192f8e1116c6c8f859ebc4c2e8d97ab",
+    "html_url": "https://github.com/coder/coder/pull/22491#pullrequestreview-3880995578",
+    "id": 3880995578,
+    "node_id": "PRR_kwDOGkVX1s7nU0r6",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/22491",
+    "state": "APPROVED",
+    "submitted_at": "2026-03-03T08:20:29Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/14309333?u=f72659e722fbc681bc8a08380a0f242346e02cfb&v=4",
+      "events_url": "https://api.github.com/users/SasSwart/events{/privacy}",
+      "followers_url": "https://api.github.com/users/SasSwart/followers",
+      "following_url": "https://api.github.com/users/SasSwart/following{/other_user}",
+      "gists_url": "https://api.github.com/users/SasSwart/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/SasSwart",
+      "id": 14309333,
+      "login": "SasSwart",
+      "node_id": "MDQ6VXNlcjE0MzA5MzMz",
+      "organizations_url": "https://api.github.com/users/SasSwart/orgs",
+      "received_events_url": "https://api.github.com/users/SasSwart/received_events",
+      "repos_url": "https://api.github.com/users/SasSwart/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/SasSwart/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/SasSwart/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/SasSwart",
+      "user_view_type": "public"
+    }
+  }
+]

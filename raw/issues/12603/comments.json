@@ -1,0 +1,48 @@
+[
+  {
+    "author_association": "MEMBER",
+    "body": "@sreya Closing during issue cleaning.",
+    "created_at": "2024-05-31T14:18:25Z",
+    "html_url": "https://github.com/coder/coder/issues/12603#issuecomment-2142323056",
+    "id": 2142323056,
+    "issue_url": "https://api.github.com/repos/coder/coder/issues/12603",
+    "node_id": "IC_kwDOGkVX1s5_sUFw",
+    "performed_via_github_app": null,
+    "pin": null,
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/issues/comments/2142323056/reactions"
+    },
+    "updated_at": "2024-05-31T14:18:25Z",
+    "url": "https://api.github.com/repos/coder/coder/issues/comments/2142323056",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/58410745?v=4",
+      "events_url": "https://api.github.com/users/stirby/events{/privacy}",
+      "followers_url": "https://api.github.com/users/stirby/followers",
+      "following_url": "https://api.github.com/users/stirby/following{/other_user}",
+      "gists_url": "https://api.github.com/users/stirby/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/stirby",
+      "id": 58410745,
+      "login": "stirby",
+      "node_id": "MDQ6VXNlcjU4NDEwNzQ1",
+      "organizations_url": "https://api.github.com/users/stirby/orgs",
+      "received_events_url": "https://api.github.com/users/stirby/received_events",
+      "repos_url": "https://api.github.com/users/stirby/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/stirby/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/stirby/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/stirby",
+      "user_view_type": "public"
+    }
+  }
+]

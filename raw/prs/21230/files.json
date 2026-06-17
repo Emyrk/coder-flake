@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/280d7488cbc6baebf9ce65bb2e0c612740e11c9c/cli%2Fgitssh_test.go",
+    "changes": 15,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fgitssh_test.go?ref=280d7488cbc6baebf9ce65bb2e0c612740e11c9c",
+    "deletions": 8,
+    "filename": "cli/gitssh_test.go",
+    "patch": "@@ -116,10 +116,8 @@ func TestGitSSH(t *testing.T) {\n \tt.Run(\"Dial\", func(t *testing.T) {\n \t\tt.Parallel()\n \n-\t\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitLong)\n-\t\tdefer cancel()\n-\n-\t\tclient, token, pubkey := prepareTestGitSSH(ctx, t)\n+\t\tsetupCtx := testutil.Context(t, testutil.WaitLong)\n+\t\tclient, token, pubkey := prepareTestGitSSH(setupCtx, t)\n \t\tvar inc int64\n \t\terrC := make(chan error, 1)\n \t\taddr := serveSSHForGitSSH(t, func(s ssh.Session) {\n@@ -143,6 +141,7 @@ func TestGitSSH(t *testing.T) {\n \t\t\t\"-o\", \"IdentitiesOnly=yes\",\n \t\t\t\"127.0.0.1\",\n \t\t)\n+\t\tctx := testutil.Context(t, testutil.WaitMedium)\n \t\terr := inv.WithContext(ctx).Run()\n \t\trequire.NoError(t, err)\n \t\trequire.EqualValues(t, 1, inc)\n@@ -166,10 +165,8 @@ func TestGitSSH(t *testing.T) {\n \t\trequire.NoError(t, err)\n \t\twritePrivateKeyToFile(t, idFile, privkey)\n \n-\t\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitLong)\n-\t\tdefer cancel()\n-\n-\t\tclient, token, coderPubkey := prepareTestGitSSH(ctx, t)\n+\t\tsetupCtx := testutil.Context(t, testutil.WaitLong)\n+\t\tclient, token, coderPubkey := prepareTestGitSSH(setupCtx, t)\n \n \t\tauthkey := make(chan gossh.PublicKey, 1)\n \t\taddr := serveSSHForGitSSH(t, func(s ssh.Session) {\n@@ -208,6 +205,7 @@ func TestGitSSH(t *testing.T) {\n \t\tinv, _ := clitest.New(t, cmdArgs...)\n \t\tinv.Stdout = pty.Output()\n \t\tinv.Stderr = pty.Output()\n+\t\tctx := testutil.Context(t, testutil.WaitMedium)\n \t\terr = inv.WithContext(ctx).Run()\n \t\trequire.NoError(t, err)\n \t\tselect {\n@@ -225,6 +223,7 @@ func TestGitSSH(t *testing.T) {\n \t\tinv, _ = clitest.New(t, cmdArgs...)\n \t\tinv.Stdout = pty.Output()\n \t\tinv.Stderr = pty.Output()\n+\t\tctx = testutil.Context(t, testutil.WaitMedium) // Reset context for second cmd test.\n \t\terr = inv.WithContext(ctx).Run()\n \t\trequire.NoError(t, err)\n \t\tselect {",
+    "raw_url": "https://github.com/coder/coder/raw/280d7488cbc6baebf9ce65bb2e0c612740e11c9c/cli%2Fgitssh_test.go",
+    "sha": "c71f5cfd68a1140976b48b85ec563b307b710bed",
+    "status": "modified"
+  }
+]

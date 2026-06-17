@@ -1,0 +1,86 @@
+[
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636/coderd%2Fdatabase%2Fdbgen%2Fdbgen.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdatabase%2Fdbgen%2Fdbgen.go?ref=6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636",
+    "deletions": 1,
+    "filename": "coderd/database/dbgen/dbgen.go",
+    "patch": "@@ -446,7 +446,6 @@ func WorkspaceBuild(t testing.TB, db database.Store, orig database.WorkspaceBuil\n \t\t\tUpdatedAt:         takeFirst(orig.UpdatedAt, dbtime.Now()),\n \t\t\tWorkspaceID:       takeFirst(orig.WorkspaceID, uuid.New()),\n \t\t\tTemplateVersionID: takeFirst(orig.TemplateVersionID, uuid.New()),\n-\t\t\tBuildNumber:       takeFirst(orig.BuildNumber, 1),\n \t\t\tTransition:        takeFirst(orig.Transition, database.WorkspaceTransitionStart),\n \t\t\tInitiatorID:       takeFirst(orig.InitiatorID, uuid.New()),\n \t\t\tJobID:             jobID,",
+    "raw_url": "https://github.com/coder/coder/raw/6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636/coderd%2Fdatabase%2Fdbgen%2Fdbgen.go",
+    "sha": "9f43bf84d4a4dbd301598eb530303d2ed66d91e8",
+    "status": "modified"
+  },
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636/coderd%2Fdatabase%2Fqueries.sql.go",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdatabase%2Fqueries.sql.go?ref=6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636",
+    "deletions": 3,
+    "filename": "coderd/database/queries.sql.go",
+    "patch": "@@ -19356,7 +19356,9 @@ INSERT INTO\n \t\ttemplate_version_preset_id\n \t)\n VALUES\n-\t($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)\n+\t($1, $2, $3, $4, $5,\n+\tCOALESCE((SELECT MAX(\"build_number\") + 1 FROM workspace_builds WHERE workspace_id = $4), 1),\n+\t$6, $7, $8, $9, $10, $11, $12, $13)\n `\n \n type InsertWorkspaceBuildParams struct {\n@@ -19365,7 +19367,6 @@ type InsertWorkspaceBuildParams struct {\n \tUpdatedAt               time.Time           `db:\"updated_at\" json:\"updated_at\"`\n \tWorkspaceID             uuid.UUID           `db:\"workspace_id\" json:\"workspace_id\"`\n \tTemplateVersionID       uuid.UUID           `db:\"template_version_id\" json:\"template_version_id\"`\n-\tBuildNumber             int32               `db:\"build_number\" json:\"build_number\"`\n \tTransition              WorkspaceTransition `db:\"transition\" json:\"transition\"`\n \tInitiatorID             uuid.UUID           `db:\"initiator_id\" json:\"initiator_id\"`\n \tJobID                   uuid.UUID           `db:\"job_id\" json:\"job_id\"`\n@@ -19383,7 +19384,6 @@ func (q *sqlQuerier) InsertWorkspaceBuild(ctx context.Context, arg InsertWorkspa\n \t\targ.UpdatedAt,\n \t\targ.WorkspaceID,\n \t\targ.TemplateVersionID,\n-\t\targ.BuildNumber,\n \t\targ.Transition,\n \t\targ.InitiatorID,\n \t\targ.JobID,",
+    "raw_url": "https://github.com/coder/coder/raw/6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636/coderd%2Fdatabase%2Fqueries.sql.go",
+    "sha": "c7a2dfeac1f458f0d24466ed688fea8e3149bbd3",
+    "status": "modified"
+  },
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636/coderd%2Fdatabase%2Fqueries%2Fworkspacebuilds.sql",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdatabase%2Fqueries%2Fworkspacebuilds.sql?ref=6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636",
+    "deletions": 1,
+    "filename": "coderd/database/queries/workspacebuilds.sql",
+    "patch": "@@ -110,7 +110,9 @@ INSERT INTO\n \t\ttemplate_version_preset_id\n \t)\n VALUES\n-\t($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14);\n+\t($1, $2, $3, $4, $5,\n+\tCOALESCE((SELECT MAX(\"build_number\") + 1 FROM workspace_builds WHERE workspace_id = $4), 1),\n+\t$6, $7, $8, $9, $10, $11, $12, $13);\n \n -- name: UpdateWorkspaceBuildCostByID :exec\n UPDATE",
+    "raw_url": "https://github.com/coder/coder/raw/6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636/coderd%2Fdatabase%2Fqueries%2Fworkspacebuilds.sql",
+    "sha": "876c0ee69fe1d73fd970bac645bdb8e3bb8ed692",
+    "status": "modified"
+  },
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636/coderd%2Fprometheusmetrics%2Fprometheusmetrics_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fprometheusmetrics%2Fprometheusmetrics_test.go?ref=6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636",
+    "deletions": 1,
+    "filename": "coderd/prometheusmetrics/prometheusmetrics_test.go",
+    "patch": "@@ -893,7 +893,6 @@ func insertRunning(t *testing.T, db database.Store, u database.User, org databas\n \t\tID:                uuid.New(),\n \t\tWorkspaceID:       workspace.ID,\n \t\tJobID:             job.ID,\n-\t\tBuildNumber:       1,\n \t\tTransition:        database.WorkspaceTransitionStart,\n \t\tReason:            database.BuildReasonInitiator,\n \t\tTemplateVersionID: templateVersionID,",
+    "raw_url": "https://github.com/coder/coder/raw/6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636/coderd%2Fprometheusmetrics%2Fprometheusmetrics_test.go",
+    "sha": "2510d20f2eaee1f6074b5cc7c21893185141d15c",
+    "status": "modified"
+  },
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636/coderd%2Fworkspacestats%2Factivitybump_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspacestats%2Factivitybump_test.go?ref=6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636",
+    "deletions": 1,
+    "filename": "coderd/workspacestats/activitybump_test.go",
+    "patch": "@@ -241,7 +241,6 @@ func Test_ActivityBumpWorkspace(t *testing.T) {\n \t\t\t\t\tID:                buildID,\n \t\t\t\t\tCreatedAt:         dbtime.Now(),\n \t\t\t\t\tUpdatedAt:         dbtime.Now(),\n-\t\t\t\t\tBuildNumber:       buildNumber,\n \t\t\t\t\tInitiatorID:       user.ID,\n \t\t\t\t\tReason:            database.BuildReasonInitiator,\n \t\t\t\t\tWorkspaceID:       ws.ID,",
+    "raw_url": "https://github.com/coder/coder/raw/6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636/coderd%2Fworkspacestats%2Factivitybump_test.go",
+    "sha": "2df055f4e60bd4334a3872a8abf71e54a98a5ba5",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636/coderd%2Fwsbuilder%2Fwsbuilder.go",
+    "changes": 18,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fwsbuilder%2Fwsbuilder.go?ref=6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636",
+    "deletions": 17,
+    "filename": "coderd/wsbuilder/wsbuilder.go",
+    "patch": "@@ -432,10 +432,7 @@ func (b *Builder) buildTx(authFunc func(action policy.Action, object rbac.Object\n \tif err != nil {\n \t\treturn nil, nil, nil, BuildError{http.StatusInternalServerError, \"compute template version ID\", err}\n \t}\n-\tbuildNum, err := b.getBuildNumber()\n-\tif err != nil {\n-\t\treturn nil, nil, nil, BuildError{http.StatusInternalServerError, \"compute build number\", err}\n-\t}\n+\n \tstate, err := b.getState()\n \tif err != nil {\n \t\treturn nil, nil, nil, BuildError{http.StatusInternalServerError, \"compute build state\", err}\n@@ -463,7 +460,6 @@ func (b *Builder) buildTx(authFunc func(action policy.Action, object rbac.Object\n \t\t\tUpdatedAt:         now,\n \t\t\tWorkspaceID:       b.workspace.ID,\n \t\t\tTemplateVersionID: templateVersionID,\n-\t\t\tBuildNumber:       buildNum,\n \t\t\tProvisionerState:  state,\n \t\t\tInitiatorID:       b.initiator,\n \t\t\tTransition:        b.trans,\n@@ -716,18 +712,6 @@ func (b *Builder) firstBuild() (bool, error) {\n \treturn false, nil\n }\n \n-func (b *Builder) getBuildNumber() (int32, error) {\n-\tbld, err := b.getLastBuild()\n-\tif xerrors.Is(err, sql.ErrNoRows) {\n-\t\t// first build!\n-\t\treturn 1, nil\n-\t}\n-\tif err != nil {\n-\t\treturn 0, xerrors.Errorf(\"get last build to compute build number: %w\", err)\n-\t}\n-\treturn bld.BuildNumber + 1, nil\n-}\n-\n func (b *Builder) getState() ([]byte, error) {\n \tif b.state.orphan {\n \t\t// Orphan means empty state.",
+    "raw_url": "https://github.com/coder/coder/raw/6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636/coderd%2Fwsbuilder%2Fwsbuilder.go",
+    "sha": "eb4500f7842c5c7e164150d262967286be60b3d8",
+    "status": "modified"
+  },
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636/coderd%2Fwsbuilder%2Fwsbuilder_test.go",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fwsbuilder%2Fwsbuilder_test.go?ref=6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636",
+    "deletions": 6,
+    "filename": "coderd/wsbuilder/wsbuilder_test.go",
+    "patch": "@@ -86,7 +86,6 @@ func TestBuilder_NoOptions(t *testing.T) {\n \t\texpectBuild(func(bld database.InsertWorkspaceBuildParams) {\n \t\t\tasrt.Equal(inactiveVersionID, bld.TemplateVersionID)\n \t\t\tasrt.Equal(workspaceID, bld.WorkspaceID)\n-\t\t\tasrt.Equal(int32(2), bld.BuildNumber)\n \t\t\tasrt.Equal(\"last build state\", string(bld.ProvisionerState))\n \t\t\tasrt.Equal(userID, bld.InitiatorID)\n \t\t\tasrt.Equal(database.WorkspaceTransitionStart, bld.Transition)\n@@ -268,8 +267,6 @@ func TestBuilder_ActiveVersion(t *testing.T) {\n \t\texpectFindMatchingPresetID(uuid.Nil, sql.ErrNoRows),\n \t\texpectBuild(func(bld database.InsertWorkspaceBuildParams) {\n \t\t\tasrt.Equal(activeVersionID, bld.TemplateVersionID)\n-\t\t\t// no previous build...\n-\t\t\tasrt.Equal(int32(1), bld.BuildNumber)\n \t\t\tasrt.Len(bld.ProvisionerState, 0)\n \t\t}),\n \t\texpectBuildParameters(func(params database.InsertWorkspaceBuildParametersParams) {\n@@ -851,7 +848,6 @@ func TestWorkspaceBuildWithPreset(t *testing.T) {\n \t\texpectBuild(func(bld database.InsertWorkspaceBuildParams) {\n \t\t\tasrt.Equal(activeVersionID, bld.TemplateVersionID)\n \t\t\tasrt.Equal(workspaceID, bld.WorkspaceID)\n-\t\t\tasrt.Equal(int32(1), bld.BuildNumber)\n \t\t\tasrt.Equal(userID, bld.InitiatorID)\n \t\t\tasrt.Equal(database.WorkspaceTransitionStart, bld.Transition)\n \t\t\tasrt.Equal(database.BuildReasonInitiator, bld.Reason)\n@@ -921,7 +917,6 @@ func TestWorkspaceBuildDeleteOrphan(t *testing.T) {\n \t\t\texpectBuild(func(bld database.InsertWorkspaceBuildParams) {\n \t\t\t\tasrt.Equal(inactiveVersionID, bld.TemplateVersionID)\n \t\t\t\tasrt.Equal(workspaceID, bld.WorkspaceID)\n-\t\t\t\tasrt.Equal(int32(2), bld.BuildNumber)\n \t\t\t\tasrt.Empty(string(bld.ProvisionerState))\n \t\t\t\tasrt.Equal(userID, bld.InitiatorID)\n \t\t\t\tasrt.Equal(database.WorkspaceTransitionDelete, bld.Transition)\n@@ -984,7 +979,6 @@ func TestWorkspaceBuildDeleteOrphan(t *testing.T) {\n \t\t\texpectBuild(func(bld database.InsertWorkspaceBuildParams) {\n \t\t\t\tasrt.Equal(inactiveVersionID, bld.TemplateVersionID)\n \t\t\t\tasrt.Equal(workspaceID, bld.WorkspaceID)\n-\t\t\t\tasrt.Equal(int32(2), bld.BuildNumber)\n \t\t\t\tasrt.Empty(string(bld.ProvisionerState))\n \t\t\t\tasrt.Equal(userID, bld.InitiatorID)\n \t\t\t\tasrt.Equal(database.WorkspaceTransitionDelete, bld.Transition)",
+    "raw_url": "https://github.com/coder/coder/raw/6941f9e9f8ea4aa6e4ef2b3d8f51384fae25b636/coderd%2Fwsbuilder%2Fwsbuilder_test.go",
+    "sha": "d3f80e05cdf639d1ecb2962c7d563d5a2669fdcf",
+    "status": "modified"
+  }
+]

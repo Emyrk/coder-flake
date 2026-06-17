@@ -1,0 +1,82 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/7211#pullrequestreview-1392935188"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/7211"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "0cab353af9f42d012da614bb9c6660980ee79181",
+    "html_url": "https://github.com/coder/coder/pull/7211#pullrequestreview-1392935188",
+    "id": 1392935188,
+    "node_id": "PRR_kwDOGkVX1s5TBoEU",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/7211",
+    "state": "APPROVED",
+    "submitted_at": "2023-04-19T21:52:57Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?u=260538c7d8b8c3c5350dba175ebb8294358441e0&v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/7211#pullrequestreview-1393437360"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/7211"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "6f54a913cf53659bbc838f49cb08c487a0ff0d74",
+    "html_url": "https://github.com/coder/coder/pull/7211#pullrequestreview-1393437360",
+    "id": 1393437360,
+    "node_id": "PRR_kwDOGkVX1s5TDiqw",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/7211",
+    "state": "COMMENTED",
+    "submitted_at": "2023-04-20T08:05:31Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/a8da101e52e490acd9f3e7d38fecad62c469afc5/go.mod",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/go.mod?ref=a8da101e52e490acd9f3e7d38fecad62c469afc5",
+    "deletions": 2,
+    "filename": "go.mod",
+    "patch": "@@ -111,7 +111,7 @@ require (\n \tgithub.com/opencontainers/image-spec v1.0.2 // indirect\n \tgithub.com/opencontainers/runc v1.1.0 // indirect\n \tgithub.com/pion/dtls/v2 v2.1.3 // indirect\n-\tgithub.com/pion/ice/v2 v2.2.1 // indirect\n+\tgithub.com/pion/ice/v2 v2.2.2 // indirect\n \tgithub.com/pion/interceptor v0.1.7 // indirect\n \tgithub.com/pion/mdns v0.0.5 // indirect\n \tgithub.com/pion/randutil v0.1.0 // indirect\n@@ -133,7 +133,7 @@ require (\n \tgithub.com/zclconf/go-cty v1.10.0 // indirect\n \tgithub.com/zeebo/errs v1.2.2 // indirect\n \tgo.opencensus.io v0.23.0 // indirect\n-\tgolang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect\n+\tgolang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect\n \tgolang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect\n \tgolang.org/x/text v0.3.7 // indirect\n \tgoogle.golang.org/appengine v1.6.7 // indirect",
+    "raw_url": "https://github.com/coder/coder/raw/a8da101e52e490acd9f3e7d38fecad62c469afc5/go.mod",
+    "sha": "7f1c3d109ed1fc29a782ba5eb99388ce6ecb8400",
+    "status": "modified"
+  },
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/a8da101e52e490acd9f3e7d38fecad62c469afc5/go.sum",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/go.sum?ref=a8da101e52e490acd9f3e7d38fecad62c469afc5",
+    "deletions": 2,
+    "filename": "go.sum",
+    "patch": "@@ -1052,8 +1052,9 @@ github.com/pion/datachannel v1.5.2/go.mod h1:FTGQWaHrdCwIJ1rw6xBIfZVkslikjShim5y\n github.com/pion/dtls/v2 v2.1.2/go.mod h1:o6+WvyLDAlXF7YiPB/RlskRoeK+/JtuaZa5emwQcWus=\n github.com/pion/dtls/v2 v2.1.3 h1:3UF7udADqous+M2R5Uo2q/YaP4EzUoWKdfX2oscCUio=\n github.com/pion/dtls/v2 v2.1.3/go.mod h1:o6+WvyLDAlXF7YiPB/RlskRoeK+/JtuaZa5emwQcWus=\n-github.com/pion/ice/v2 v2.2.1 h1:R3MeuJZpU1ty3diPqpD5OxaxcZ15eprAc+EtUiSoFxg=\n github.com/pion/ice/v2 v2.2.1/go.mod h1:Op8jlPtjeiycsXh93Cs4jK82C9j/kh7vef6ztIOvtIQ=\n+github.com/pion/ice/v2 v2.2.2 h1:UfmAslxZ0u0itVjA4x7aw7WeQIv22FdF8VjW9cM+74g=\n+github.com/pion/ice/v2 v2.2.2/go.mod h1:vLI7dFqxw8zMSb9J+ca74XU7JjLhddgfQB9+BbTydCo=\n github.com/pion/interceptor v0.1.7 h1:HThW0tIIKT9RRoDWGURe8rlZVOx0fJHxBHpA0ej0+bo=\n github.com/pion/interceptor v0.1.7/go.mod h1:Lh3JSl/cbJ2wP8I3ccrjh1K/deRGRn3UlSPuOTiHb6U=\n github.com/pion/logging v0.2.2 h1:M9+AIj/+pxNsDfAT64+MAVgJO0rsyLnoJKCqf//DoeY=\n@@ -1468,8 +1469,9 @@ golang.org/x/net v0.0.0-20211013171255-e13a2654a71e/go.mod h1:9nx3DQGgdP8bBQD5qx\n golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2/go.mod h1:9nx3DQGgdP8bBQD5qxJ1jj9UTztislL4KSBs9R2vV5Y=\n golang.org/x/net v0.0.0-20211201190559-0a0e4e1bb54c/go.mod h1:9nx3DQGgdP8bBQD5qxJ1jj9UTztislL4KSBs9R2vV5Y=\n golang.org/x/net v0.0.0-20220111093109-d55c255bac03/go.mod h1:9nx3DQGgdP8bBQD5qxJ1jj9UTztislL4KSBs9R2vV5Y=\n-golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd h1:O7DYs+zxREGLKzKoMQrtrEacpb0ZVXA5rIwylE2Xchk=\n golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd/go.mod h1:CfG3xpIq0wQ8r1q4Su4UZFWDARRcnwPjda9FqA0JpMk=\n+golang.org/x/net v0.0.0-20220225172249-27dd8689420f h1:oA4XRj0qtSt8Yo1Zms0CUlsT3KG69V2UGQWPBxujDmc=\n+golang.org/x/net v0.0.0-20220225172249-27dd8689420f/go.mod h1:CfG3xpIq0wQ8r1q4Su4UZFWDARRcnwPjda9FqA0JpMk=\n golang.org/x/oauth2 v0.0.0-20180227000427-d7d64896b5ff/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=\n golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=\n golang.org/x/oauth2 v0.0.0-20181106182150-f42d05182288/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=",
+    "raw_url": "https://github.com/coder/coder/raw/a8da101e52e490acd9f3e7d38fecad62c469afc5/go.sum",
+    "sha": "addf01046e29a2ce6e4f709c4165fc26c48521cf",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/1aab1aa6578578d1f4294682e00999e2bf0b2ce4/cli%2Fexp_mcp_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fexp_mcp_test.go?ref=1aab1aa6578578d1f4294682e00999e2bf0b2ce4",
+    "deletions": 0,
+    "filename": "cli/exp_mcp_test.go",
+    "patch": "@@ -148,6 +148,7 @@ func TestExpMcpServer(t *testing.T) {\n //nolint:tparallel,paralleltest\n func TestExpMcpConfigureClaudeCode(t *testing.T) {\n \tt.Run(\"NoReportTaskWhenNoAgentToken\", func(t *testing.T) {\n+\t\tt.Setenv(\"CODER_AGENT_TOKEN\", \"\")\n \t\tctx := testutil.Context(t, testutil.WaitShort)\n \t\tcancelCtx, cancel := context.WithCancel(ctx)\n \t\tt.Cleanup(cancel)",
+    "raw_url": "https://github.com/coder/coder/raw/1aab1aa6578578d1f4294682e00999e2bf0b2ce4/cli%2Fexp_mcp_test.go",
+    "sha": "8d1b2d8b89146ab6ad3cf27d23081d6793f9d161",
+    "status": "modified"
+  }
+]

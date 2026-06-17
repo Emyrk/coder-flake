@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/96f2a63cdfef724c681fec6fe342807449f4cf67/coderd%2Fcoderdtest%2Fcoderdtest.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fcoderdtest%2Fcoderdtest.go?ref=96f2a63cdfef724c681fec6fe342807449f4cf67",
+    "deletions": 1,
+    "filename": "coderd/coderdtest/coderdtest.go",
+    "patch": "@@ -1018,7 +1018,7 @@ func (w WorkspaceAgentWaiter) Wait() []codersdk.WorkspaceResource {\n \trequire.Eventually(w.t, func() bool {\n \t\tvar err error\n \t\tworkspace, err := w.client.Workspace(ctx, w.workspaceID)\n-\t\tif !assert.NoError(w.t, err) {\n+\t\tif err != nil {\n \t\t\treturn false\n \t\t}\n \t\tif workspace.LatestBuild.Job.CompletedAt == nil {",
+    "raw_url": "https://github.com/coder/coder/raw/96f2a63cdfef724c681fec6fe342807449f4cf67/coderd%2Fcoderdtest%2Fcoderdtest.go",
+    "sha": "b379cedd1834a1b8d16b0b1d585f0e4e0a7b0684",
+    "status": "modified"
+  }
+]

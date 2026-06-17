@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/7fc179aeddf9554cef69b851c0f59cac39e6ed6c/provisionerd%2Fprovisionerd_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/provisionerd%2Fprovisionerd_test.go?ref=7fc179aeddf9554cef69b851c0f59cac39e6ed6c",
+    "deletions": 1,
+    "filename": "provisionerd/provisionerd_test.go",
+    "patch": "@@ -174,7 +174,7 @@ func TestProvisionerd(t *testing.T) {\n \t\t}, provisionerd.LocalProvisioners{\n \t\t\t\"someprovisioner\": createProvisionerClient(t, done, provisionerTestServer{}),\n \t\t})\n-\t\trequire.Condition(t, closedWithin(completeChan, testutil.WaitShort))\n+\t\trequire.Condition(t, closedWithin(completeChan, testutil.WaitMedium))\n \t\trequire.NoError(t, closer.Close())\n \t})\n ",
+    "raw_url": "https://github.com/coder/coder/raw/7fc179aeddf9554cef69b851c0f59cac39e6ed6c/provisionerd%2Fprovisionerd_test.go",
+    "sha": "8d5ba1621b8b7a2c19b6f0e7bbe5af4555cf54ac",
+    "status": "modified"
+  }
+]

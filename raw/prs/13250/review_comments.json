@@ -1,0 +1,141 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/13250#discussion_r1600754950"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/13250"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1600754950"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "is there a reason we can't use `spyOn` or something? feels like jest could be helping with this",
+    "commit_id": "58beffc2c71a08092ec4926d994644a972ef495b",
+    "created_at": "2024-05-14T22:50:11Z",
+    "diff_hunk": "@@ -133,88 +135,120 @@ function renderUseClipboard(inputs: UseClipboardInput) {\n   );\n }\n \n-type ScheduleConfig = Readonly<{ isHttps: boolean }>;\n+const secureContextValues: readonly boolean[] = [true, false];\n \n-export function scheduleClipboardTests({ isHttps }: ScheduleConfig) {\n-  const mockClipboardInstance = makeMockClipboard(isHttps);\n-  const originalNavigator = window.navigator;\n+// Not a big fan of describe.each most of the time, but since we need to test\n+// the exact same test cases against different inputs, and we want them to run\n+// as sequentially as possible to minimize flakes, they make sense here\n+describe.each(secureContextValues)(\"useClipboard - secure: %j\", (isSecure) => {\n+  const {\n+    mockClipboard,\n+    mockExecCommand,\n+    getClipboardText,\n+    setSimulateFailure,\n+    resetClipboardMocks,\n+  } = setupMockClipboard(isSecure);\n \n   beforeEach(() => {\n     jest.useFakeTimers();\n+    global.document.execCommand = mockExecCommand;\n     jest.spyOn(window, \"navigator\", \"get\").mockImplementation(() => ({\n       ...originalNavigator,\n-      clipboard: mockClipboardInstance,\n+      clipboard: mockClipboard,\n     }));\n \n-    if (!isHttps) {\n-      // Not the biggest fan of exposing implementation details like this, but\n-      // making any kind of mock for execCommand is really gnarly in general\n-      global.document.execCommand = jest.fn(() => {\n-        if (mockClipboardInstance.simulateFailure) {\n-          return false;\n-        }\n-\n-        const dummyInput = document.querySelector(\"input[data-testid=dummy]\");\n-        const inputIsFocused =\n-          dummyInput instanceof HTMLInputElement &&\n-          document.activeElement === dummyInput;\n-\n-        let copySuccessful = false;\n-        if (inputIsFocused) {\n-          mockClipboardInstance.setMockText(dummyInput.value);\n-          copySuccessful = true;\n-        }\n-\n-        return copySuccessful;\n-      });\n-    }\n+    console.error = (errorValue, ...rest) => {\n+      const canIgnore =\n+        errorValue instanceof Error &&\n+        errorValue.message === COPY_FAILED_MESSAGE;\n+\n+      if (!canIgnore) {\n+        originalConsoleError(errorValue, ...rest);\n+      }\n+    };",
+    "html_url": "https://github.com/coder/coder/pull/13250#discussion_r1600754950",
+    "id": 1600754950,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5faZUG",
+    "original_commit_id": "186f6c89ee905c7c81ba85194bc5efcd8cdb774c",
+    "original_line": 168,
+    "original_position": 283,
+    "original_start_line": 160,
+    "path": "site/src/hooks/useClipboard.test.tsx",
+    "position": 1,
+    "pull_request_review_id": 2056598112,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/13250",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1600754950/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2024-05-14T22:52:00Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1600754950",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/418348?v=4",
+      "events_url": "https://api.github.com/users/aslilac/events{/privacy}",
+      "followers_url": "https://api.github.com/users/aslilac/followers",
+      "following_url": "https://api.github.com/users/aslilac/following{/other_user}",
+      "gists_url": "https://api.github.com/users/aslilac/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/aslilac",
+      "id": 418348,
+      "login": "aslilac",
+      "node_id": "MDQ6VXNlcjQxODM0OA==",
+      "organizations_url": "https://api.github.com/users/aslilac/orgs",
+      "received_events_url": "https://api.github.com/users/aslilac/received_events",
+      "repos_url": "https://api.github.com/users/aslilac/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/aslilac/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/aslilac/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/aslilac",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/13250#discussion_r1601657501"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/13250"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1601657501"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "Oh, yeah, good call \u2013\u00a0just wasn't thinking straight when I wrote that. Just fixed things",
+    "commit_id": "58beffc2c71a08092ec4926d994644a972ef495b",
+    "created_at": "2024-05-15T13:31:53Z",
+    "diff_hunk": "@@ -133,88 +135,120 @@ function renderUseClipboard(inputs: UseClipboardInput) {\n   );\n }\n \n-type ScheduleConfig = Readonly<{ isHttps: boolean }>;\n+const secureContextValues: readonly boolean[] = [true, false];\n \n-export function scheduleClipboardTests({ isHttps }: ScheduleConfig) {\n-  const mockClipboardInstance = makeMockClipboard(isHttps);\n-  const originalNavigator = window.navigator;\n+// Not a big fan of describe.each most of the time, but since we need to test\n+// the exact same test cases against different inputs, and we want them to run\n+// as sequentially as possible to minimize flakes, they make sense here\n+describe.each(secureContextValues)(\"useClipboard - secure: %j\", (isSecure) => {\n+  const {\n+    mockClipboard,\n+    mockExecCommand,\n+    getClipboardText,\n+    setSimulateFailure,\n+    resetClipboardMocks,\n+  } = setupMockClipboard(isSecure);\n \n   beforeEach(() => {\n     jest.useFakeTimers();\n+    global.document.execCommand = mockExecCommand;\n     jest.spyOn(window, \"navigator\", \"get\").mockImplementation(() => ({\n       ...originalNavigator,\n-      clipboard: mockClipboardInstance,\n+      clipboard: mockClipboard,\n     }));\n \n-    if (!isHttps) {\n-      // Not the biggest fan of exposing implementation details like this, but\n-      // making any kind of mock for execCommand is really gnarly in general\n-      global.document.execCommand = jest.fn(() => {\n-        if (mockClipboardInstance.simulateFailure) {\n-          return false;\n-        }\n-\n-        const dummyInput = document.querySelector(\"input[data-testid=dummy]\");\n-        const inputIsFocused =\n-          dummyInput instanceof HTMLInputElement &&\n-          document.activeElement === dummyInput;\n-\n-        let copySuccessful = false;\n-        if (inputIsFocused) {\n-          mockClipboardInstance.setMockText(dummyInput.value);\n-          copySuccessful = true;\n-        }\n-\n-        return copySuccessful;\n-      });\n-    }\n+    console.error = (errorValue, ...rest) => {\n+      const canIgnore =\n+        errorValue instanceof Error &&\n+        errorValue.message === COPY_FAILED_MESSAGE;\n+\n+      if (!canIgnore) {\n+        originalConsoleError(errorValue, ...rest);\n+      }\n+    };",
+    "html_url": "https://github.com/coder/coder/pull/13250#discussion_r1601657501",
+    "id": 1601657501,
+    "in_reply_to_id": 1600754950,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5fd1qd",
+    "original_commit_id": "186f6c89ee905c7c81ba85194bc5efcd8cdb774c",
+    "original_line": 168,
+    "original_position": 283,
+    "original_start_line": 160,
+    "path": "site/src/hooks/useClipboard.test.tsx",
+    "position": 1,
+    "pull_request_review_id": 2058036505,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/13250",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1601657501/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2024-05-15T13:31:58Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1601657501",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/28937484?v=4",
+      "events_url": "https://api.github.com/users/buenos-nachos/events{/privacy}",
+      "followers_url": "https://api.github.com/users/buenos-nachos/followers",
+      "following_url": "https://api.github.com/users/buenos-nachos/following{/other_user}",
+      "gists_url": "https://api.github.com/users/buenos-nachos/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/buenos-nachos",
+      "id": 28937484,
+      "login": "buenos-nachos",
+      "node_id": "MDQ6VXNlcjI4OTM3NDg0",
+      "organizations_url": "https://api.github.com/users/buenos-nachos/orgs",
+      "received_events_url": "https://api.github.com/users/buenos-nachos/received_events",
+      "repos_url": "https://api.github.com/users/buenos-nachos/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/buenos-nachos/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/buenos-nachos/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/buenos-nachos",
+      "user_view_type": "public"
+    }
+  }
+]

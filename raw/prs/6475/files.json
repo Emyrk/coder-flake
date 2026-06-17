@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/e5cb7ffdd46ff13d051a86e4c472af970687d61a/tailnet%2Fconn.go",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/tailnet%2Fconn.go?ref=e5cb7ffdd46ff13d051a86e4c472af970687d61a",
+    "deletions": 2,
+    "filename": "tailnet/conn.go",
+    "patch": "@@ -657,11 +657,13 @@ func (c *Conn) selfNode() *Node {\n \t}\n \tvar preferredDERP int\n \tvar derpLatency map[string]float64\n-\tvar derpForcedWebsocket map[int]string\n+\tderpForcedWebsocket := make(map[int]string, 0)\n \tif c.lastNetInfo != nil {\n \t\tpreferredDERP = c.lastNetInfo.PreferredDERP\n \t\tderpLatency = c.lastNetInfo.DERPLatency\n-\t\tderpForcedWebsocket = c.lastDERPForcedWebsockets\n+\t\tfor k, v := range c.lastDERPForcedWebsockets {\n+\t\t\tderpForcedWebsocket[k] = v\n+\t\t}\n \t}\n \n \tnode := &Node{",
+    "raw_url": "https://github.com/coder/coder/raw/e5cb7ffdd46ff13d051a86e4c472af970687d61a/tailnet%2Fconn.go",
+    "sha": "703e783e8f18aa79fe825dcc00c599cbbc2f34ef",
+    "status": "modified"
+  }
+]

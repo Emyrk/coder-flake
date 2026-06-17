@@ -1,0 +1,98 @@
+[
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/1e916df9af1ae077edc1e8946e714bc8aef9705d/site%2Fsrc%2Fpages%2FDeploymentSettingsPage%2FOverviewPage%2FOverviewPageView.stories.tsx",
+    "changes": 5,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FDeploymentSettingsPage%2FOverviewPage%2FOverviewPageView.stories.tsx?ref=1e916df9af1ae077edc1e8946e714bc8aef9705d",
+    "deletions": 0,
+    "filename": "site/src/pages/DeploymentSettingsPage/OverviewPage/OverviewPageView.stories.tsx",
+    "patch": "@@ -39,6 +39,11 @@ const meta: Meta<typeof OverviewPageView> = {\n \t\tinvalidExperiments: [],\n \t\tsafeExperiments: [],\n \t},\n+\tparameters: {\n+\t\tchromatic: {\n+\t\t\tdiffThreshold: 0.5,\n+\t\t},\n+\t},\n };\n \n export default meta;",
+    "raw_url": "https://github.com/coder/coder/raw/1e916df9af1ae077edc1e8946e714bc8aef9705d/site%2Fsrc%2Fpages%2FDeploymentSettingsPage%2FOverviewPage%2FOverviewPageView.stories.tsx",
+    "sha": "3535d4ffd1d4797fedc4d6baa994f620d93d3122",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/1e916df9af1ae077edc1e8946e714bc8aef9705d/site%2Fsrc%2Fpages%2FDeploymentSettingsPage%2FOverviewPage%2FUserEngagementChart.tsx",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FDeploymentSettingsPage%2FOverviewPage%2FUserEngagementChart.tsx?ref=1e916df9af1ae077edc1e8946e714bc8aef9705d",
+    "deletions": 0,
+    "filename": "site/src/pages/DeploymentSettingsPage/OverviewPage/UserEngagementChart.tsx",
+    "patch": "@@ -156,6 +156,7 @@ export const UserEngagementChart: FC<UserEngagementChartProps> = ({ data }) => {\n \t\t\t\t\t\t\t\t\t</defs>\n \n \t\t\t\t\t\t\t\t\t<Area\n+\t\t\t\t\t\t\t\t\t\tisAnimationActive={false}\n \t\t\t\t\t\t\t\t\t\tdataKey=\"users\"\n \t\t\t\t\t\t\t\t\t\ttype=\"linear\"\n \t\t\t\t\t\t\t\t\t\tfill=\"url(#fillUsers)\"",
+    "raw_url": "https://github.com/coder/coder/raw/1e916df9af1ae077edc1e8946e714bc8aef9705d/site%2Fsrc%2Fpages%2FDeploymentSettingsPage%2FOverviewPage%2FUserEngagementChart.tsx",
+    "sha": "711e57242ce884e3947eba5fd03d5d3a21ef61e0",
+    "status": "modified"
+  },
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/1e916df9af1ae077edc1e8946e714bc8aef9705d/site%2Fsrc%2Fpages%2FOrganizationSettingsPage%2FCustomRolesPage%2FPermissionPillsList.stories.tsx",
+    "changes": 7,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FOrganizationSettingsPage%2FCustomRolesPage%2FPermissionPillsList.stories.tsx?ref=1e916df9af1ae077edc1e8946e714bc8aef9705d",
+    "deletions": 0,
+    "filename": "site/src/pages/OrganizationSettingsPage/CustomRolesPage/PermissionPillsList.stories.tsx",
+    "patch": "@@ -6,6 +6,13 @@ import { PermissionPillsList } from \"./PermissionPillsList\";\n const meta: Meta<typeof PermissionPillsList> = {\n \ttitle: \"pages/OrganizationCustomRolesPage/PermissionPillsList\",\n \tcomponent: PermissionPillsList,\n+\tdecorators: [\n+\t\t(Story) => (\n+\t\t\t<div style={{ width: \"800px\" }}>\n+\t\t\t\t<Story />\n+\t\t\t</div>\n+\t\t),\n+\t],\n };\n \n export default meta;",
+    "raw_url": "https://github.com/coder/coder/raw/1e916df9af1ae077edc1e8946e714bc8aef9705d/site%2Fsrc%2Fpages%2FOrganizationSettingsPage%2FCustomRolesPage%2FPermissionPillsList.stories.tsx",
+    "sha": "5a4d896c2c425430cc1e28089f92da3ce6362432",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/1e916df9af1ae077edc1e8946e714bc8aef9705d/site%2Fsrc%2Fpages%2FOrganizationSettingsPage%2FOrganizationProvisionerJobsPage%2FJobRow.tsx",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FOrganizationSettingsPage%2FOrganizationProvisionerJobsPage%2FJobRow.tsx?ref=1e916df9af1ae077edc1e8946e714bc8aef9705d",
+    "deletions": 1,
+    "filename": "site/src/pages/OrganizationSettingsPage/OrganizationProvisionerJobsPage/JobRow.tsx",
+    "patch": "@@ -121,7 +121,7 @@ export const JobRow: FC<JobRowProps> = ({ job }) => {\n \t\t\t\t\t\t\t<dd>{job.metadata.workspace_name ?? \"null\"}</dd>\n \n \t\t\t\t\t\t\t<dt>Creation time:</dt>\n-\t\t\t\t\t\t\t<dd>{job.created_at}</dd>\n+\t\t\t\t\t\t\t<dd data-chromatic=\"ignore\">{job.created_at}</dd>\n \n \t\t\t\t\t\t\t<dt>Queue:</dt>\n \t\t\t\t\t\t\t<dd>",
+    "raw_url": "https://github.com/coder/coder/raw/1e916df9af1ae077edc1e8946e714bc8aef9705d/site%2Fsrc%2Fpages%2FOrganizationSettingsPage%2FOrganizationProvisionerJobsPage%2FJobRow.tsx",
+    "sha": "3e20863b25d51bc482291593dbd38eef9a86c030",
+    "status": "modified"
+  },
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/1e916df9af1ae077edc1e8946e714bc8aef9705d/site%2Fsrc%2Fpages%2FOrganizationSettingsPage%2FOrganizationProvisionersPage%2FProvisionerRow.tsx",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FOrganizationSettingsPage%2FOrganizationProvisionersPage%2FProvisionerRow.tsx?ref=1e916df9af1ae077edc1e8946e714bc8aef9705d",
+    "deletions": 2,
+    "filename": "site/src/pages/OrganizationSettingsPage/OrganizationProvisionersPage/ProvisionerRow.tsx",
+    "patch": "@@ -111,10 +111,10 @@ export const ProvisionerRow: FC<ProvisionerRowProps> = ({\n \t\t\t\t\t\t\t])}\n \t\t\t\t\t\t>\n \t\t\t\t\t\t\t<dt>Last seen:</dt>\n-\t\t\t\t\t\t\t<dd>{provisioner.last_seen_at}</dd>\n+\t\t\t\t\t\t\t<dd data-chromatic=\"ignore\">{provisioner.last_seen_at}</dd>\n \n \t\t\t\t\t\t\t<dt>Creation time:</dt>\n-\t\t\t\t\t\t\t<dd>{provisioner.created_at}</dd>\n+\t\t\t\t\t\t\t<dd data-chromatic=\"ignore\">{provisioner.created_at}</dd>\n \n \t\t\t\t\t\t\t<dt>Version:</dt>\n \t\t\t\t\t\t\t<dd>",
+    "raw_url": "https://github.com/coder/coder/raw/1e916df9af1ae077edc1e8946e714bc8aef9705d/site%2Fsrc%2Fpages%2FOrganizationSettingsPage%2FOrganizationProvisionersPage%2FProvisionerRow.tsx",
+    "sha": "2c47578f67a6ad52a23ae97eb5120f4987556a1e",
+    "status": "modified"
+  },
+  {
+    "additions": 17,
+    "blob_url": "https://github.com/coder/coder/blob/1e916df9af1ae077edc1e8946e714bc8aef9705d/site%2Fsrc%2Fpages%2FTerminalPage%2FTerminalPage.stories.tsx",
+    "changes": 19,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FTerminalPage%2FTerminalPage.stories.tsx?ref=1e916df9af1ae077edc1e8946e714bc8aef9705d",
+    "deletions": 2,
+    "filename": "site/src/pages/TerminalPage/TerminalPage.stories.tsx",
+    "patch": "@@ -14,6 +14,7 @@ import {\n \tMockAuthMethodsAll,\n \tMockBuildInfo,\n \tMockDefaultOrganization,\n+\tMockDeploymentConfig,\n \tMockEntitlements,\n \tMockExperiments,\n \tMockUser,\n@@ -78,13 +79,27 @@ const meta = {\n \t\t\t\tdata: { editWorkspaceProxies: true },\n \t\t\t},\n \t\t\t{ key: [\"me\", \"appearance\"], data: MockUserAppearanceSettings },\n+\t\t\t{\n+\t\t\t\tkey: [\"deployment\", \"config\"],\n+\t\t\t\tdata: {\n+\t\t\t\t\t...MockDeploymentConfig,\n+\t\t\t\t\tconfig: {\n+\t\t\t\t\t\t...MockDeploymentConfig.config,\n+\t\t\t\t\t\tweb_terminal_renderer: \"canvas\",\n+\t\t\t\t\t},\n+\t\t\t\t},\n+\t\t\t},\n \t\t],\n-\t\tchromatic: { delay: 300 },\n+\t\tchromatic: {\n+\t\t\tdiffThreshold: 0.3,\n+\t\t},\n \t},\n \tdecorators: [\n \t\t(Story) => (\n \t\t\t<AuthProvider>\n-\t\t\t\t<Story />\n+\t\t\t\t<div style={{ width: 1170, height: 880 }}>\n+\t\t\t\t\t<Story />\n+\t\t\t\t</div>\n \t\t\t</AuthProvider>\n \t\t),\n \t],",
+    "raw_url": "https://github.com/coder/coder/raw/1e916df9af1ae077edc1e8946e714bc8aef9705d/site%2Fsrc%2Fpages%2FTerminalPage%2FTerminalPage.stories.tsx",
+    "sha": "2eed419423c12631e2c377dd4377fbe44cd138ca",
+    "status": "modified"
+  },
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/1e916df9af1ae077edc1e8946e714bc8aef9705d/site%2Fsrc%2Fpages%2FWorkspacePage%2FWorkspaceTopbar.stories.tsx",
+    "changes": 5,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FWorkspacePage%2FWorkspaceTopbar.stories.tsx?ref=1e916df9af1ae077edc1e8946e714bc8aef9705d",
+    "deletions": 0,
+    "filename": "site/src/pages/WorkspacePage/WorkspaceTopbar.stories.tsx",
+    "patch": "@@ -316,6 +316,11 @@ export const TemplateInfoPopover: Story = {\n \t\t\t);\n \t\t});\n \t},\n+\tparameters: {\n+\t\tchromatic: {\n+\t\t\tdiffThreshold: 0.3,\n+\t\t},\n+\t},\n };\n \n export const TemplateInfoPopoverWithoutDisplayName: Story = {",
+    "raw_url": "https://github.com/coder/coder/raw/1e916df9af1ae077edc1e8946e714bc8aef9705d/site%2Fsrc%2Fpages%2FWorkspacePage%2FWorkspaceTopbar.stories.tsx",
+    "sha": "482abc9d6fad1f43b50e2000586fa215f2c3d587",
+    "status": "modified"
+  },
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/1e916df9af1ae077edc1e8946e714bc8aef9705d/site%2Fsrc%2Futils%2Fschedule.tsx",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Futils%2Fschedule.tsx?ref=1e916df9af1ae077edc1e8946e714bc8aef9705d",
+    "deletions": 4,
+    "filename": "site/src/utils/schedule.tsx",
+    "patch": "@@ -148,26 +148,26 @@ export const autostopDisplay = (\n \t\tif (template.autostop_requirement && template.allow_user_autostop) {\n \t\t\ttitle = <HelpTooltipTitle>Autostop schedule</HelpTooltipTitle>;\n \t\t\treason = (\n-\t\t\t\t<>\n+\t\t\t\t<span data-chromatic=\"ignore\">\n \t\t\t\t\t{\" \"}\n \t\t\t\t\tbecause this workspace has enabled autostop. You can disable autostop\n \t\t\t\t\tfrom this workspace&apos;s{\" \"}\n \t\t\t\t\t<Link component={RouterLink} to=\"settings/schedule\">\n \t\t\t\t\t\tschedule settings\n \t\t\t\t\t</Link>\n \t\t\t\t\t.\n-\t\t\t\t</>\n+\t\t\t\t</span>\n \t\t\t);\n \t\t}\n \t\treturn {\n \t\t\tmessage: `Stop ${deadline.fromNow()}`,\n \t\t\ttooltip: (\n-\t\t\t\t<>\n+\t\t\t\t<span data-chromatic=\"ignore\">\n \t\t\t\t\t{title}\n \t\t\t\t\tThis workspace will be stopped on{\" \"}\n \t\t\t\t\t{deadline.format(\"MMMM D [at] h:mm A\")}\n \t\t\t\t\t{reason}\n-\t\t\t\t</>\n+\t\t\t\t</span>\n \t\t\t),\n \t\t\tdanger: isShutdownSoon(workspace),\n \t\t};",
+    "raw_url": "https://github.com/coder/coder/raw/1e916df9af1ae077edc1e8946e714bc8aef9705d/site%2Fsrc%2Futils%2Fschedule.tsx",
+    "sha": "21a112137ade0243de60963b308346e05ed62e1d",
+    "status": "modified"
+  }
+]

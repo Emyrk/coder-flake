@@ -1,0 +1,48 @@
+[
+  {
+    "author_association": "MEMBER",
+    "body": "Looks kinda related: https://github.com/coder/coder/actions/runs/10525544872/job/29164557410",
+    "created_at": "2024-08-23T13:12:31Z",
+    "html_url": "https://github.com/coder/coder/issues/7752#issuecomment-2307068818",
+    "id": 2307068818,
+    "issue_url": "https://api.github.com/repos/coder/coder/issues/7752",
+    "node_id": "IC_kwDOGkVX1s6JgxOS",
+    "performed_via_github_app": null,
+    "pin": null,
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/issues/comments/2307068818/reactions"
+    },
+    "updated_at": "2024-08-23T13:12:31Z",
+    "url": "https://api.github.com/repos/coder/coder/issues/comments/2307068818",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  }
+]

@@ -1,0 +1,210 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/15629#discussion_r1857736639"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/15629"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1857736639"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I'm guessing you didn't mean to add leave this loop",
+    "commit_id": "6363475c1334cfae9b837649606ad9b92bf54598",
+    "created_at": "2024-11-26T04:00:46Z",
+    "diff_hunk": "@@ -220,16 +220,28 @@ func WorkspaceAgentScriptTimings(t testing.TB, db database.Store, script databas\n }\n \n func WorkspaceAgentScriptTiming(t testing.TB, db database.Store, orig database.WorkspaceAgentScriptTiming) database.WorkspaceAgentScriptTiming {\n-\ttiming, err := db.InsertWorkspaceAgentScriptTimings(genCtx, database.InsertWorkspaceAgentScriptTimingsParams{\n-\t\tStartedAt: takeFirst(orig.StartedAt, dbtime.Now()),\n-\t\tEndedAt:   takeFirst(orig.EndedAt, dbtime.Now()),\n-\t\tStage:     takeFirst(orig.Stage, database.WorkspaceAgentScriptTimingStageStart),\n-\t\tScriptID:  takeFirst(orig.ScriptID, uuid.New()),\n-\t\tExitCode:  takeFirst(orig.ExitCode, 0),\n-\t\tStatus:    takeFirst(orig.Status, database.WorkspaceAgentScriptTimingStatusOk),\n-\t})\n-\trequire.NoError(t, err, \"insert workspace agent script\")\n-\treturn timing\n+\tfor i := 0; i < 2500; i++ {",
+    "html_url": "https://github.com/coder/coder/pull/15629#discussion_r1857736639",
+    "id": 1857736639,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5uus-_",
+    "original_commit_id": "b06bae2e6be6f00ab27694f1e1b77bbc517b18e6",
+    "original_line": 223,
+    "original_position": 14,
+    "original_start_line": null,
+    "path": "coderd/database/dbgen/dbgen.go",
+    "position": 1,
+    "pull_request_review_id": 2460244301,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/15629",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1857736639/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-11-26T04:05:49Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1857736639",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/15629#discussion_r1857739574"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/15629"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1857739574"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "\ud83d\udc80 ",
+    "commit_id": "6363475c1334cfae9b837649606ad9b92bf54598",
+    "created_at": "2024-11-26T04:05:37Z",
+    "diff_hunk": "@@ -7,18 +7,18 @@ import \"time\"\n //\n // Windows durations are adjusted for slow CI workers.\n const (\n-\tWaitShort     = 15 * time.Second\n-\tWaitMedium    = 20 * time.Second\n-\tWaitLong      = 35 * time.Second\n-\tWaitSuperLong = 120 * time.Second\n+\tWaitShort     = 30 * time.Second\n+\tWaitMedium    = 40 * time.Second\n+\tWaitLong      = 70 * time.Second\n+\tWaitSuperLong = 240 * time.Second",
+    "html_url": "https://github.com/coder/coder/pull/15629#discussion_r1857739574",
+    "id": 1857739574,
+    "line": 13,
+    "node_id": "PRRC_kwDOGkVX1s5uuts2",
+    "original_commit_id": "b06bae2e6be6f00ab27694f1e1b77bbc517b18e6",
+    "original_line": 13,
+    "original_position": 11,
+    "original_start_line": 10,
+    "path": "testutil/duration_windows.go",
+    "position": 11,
+    "pull_request_review_id": 2460244301,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/15629",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1857739574/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 10,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2024-11-26T04:05:49Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1857739574",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/15629#discussion_r1858250102"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/15629"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1858250102"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "2500 retries was a little excessive, lowered it to 10",
+    "commit_id": "6363475c1334cfae9b837649606ad9b92bf54598",
+    "created_at": "2024-11-26T10:48:23Z",
+    "diff_hunk": "@@ -220,16 +220,28 @@ func WorkspaceAgentScriptTimings(t testing.TB, db database.Store, script databas\n }\n \n func WorkspaceAgentScriptTiming(t testing.TB, db database.Store, orig database.WorkspaceAgentScriptTiming) database.WorkspaceAgentScriptTiming {\n-\ttiming, err := db.InsertWorkspaceAgentScriptTimings(genCtx, database.InsertWorkspaceAgentScriptTimingsParams{\n-\t\tStartedAt: takeFirst(orig.StartedAt, dbtime.Now()),\n-\t\tEndedAt:   takeFirst(orig.EndedAt, dbtime.Now()),\n-\t\tStage:     takeFirst(orig.Stage, database.WorkspaceAgentScriptTimingStageStart),\n-\t\tScriptID:  takeFirst(orig.ScriptID, uuid.New()),\n-\t\tExitCode:  takeFirst(orig.ExitCode, 0),\n-\t\tStatus:    takeFirst(orig.Status, database.WorkspaceAgentScriptTimingStatusOk),\n-\t})\n-\trequire.NoError(t, err, \"insert workspace agent script\")\n-\treturn timing\n+\tfor i := 0; i < 2500; i++ {",
+    "html_url": "https://github.com/coder/coder/pull/15629#discussion_r1858250102",
+    "id": 1858250102,
+    "in_reply_to_id": 1857736639,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5uwqV2",
+    "original_commit_id": "b06bae2e6be6f00ab27694f1e1b77bbc517b18e6",
+    "original_line": 223,
+    "original_position": 14,
+    "original_start_line": null,
+    "path": "coderd/database/dbgen/dbgen.go",
+    "position": 1,
+    "pull_request_review_id": 2461096815,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/15629",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1858250102/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-11-26T10:48:23Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1858250102",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/28019628?v=4",
+      "events_url": "https://api.github.com/users/hugodutka/events{/privacy}",
+      "followers_url": "https://api.github.com/users/hugodutka/followers",
+      "following_url": "https://api.github.com/users/hugodutka/following{/other_user}",
+      "gists_url": "https://api.github.com/users/hugodutka/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/hugodutka",
+      "id": 28019628,
+      "login": "hugodutka",
+      "node_id": "MDQ6VXNlcjI4MDE5NjI4",
+      "organizations_url": "https://api.github.com/users/hugodutka/orgs",
+      "received_events_url": "https://api.github.com/users/hugodutka/received_events",
+      "repos_url": "https://api.github.com/users/hugodutka/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/hugodutka/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/hugodutka/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/hugodutka",
+      "user_view_type": "public"
+    }
+  }
+]

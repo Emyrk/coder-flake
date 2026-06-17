@@ -1,0 +1,122 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21660#pullrequestreview-3699455593"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21660"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "0feb68679e7df5218da9154048c2a6c94176cd84",
+    "html_url": "https://github.com/coder/coder/pull/21660#pullrequestreview-3699455593",
+    "id": 3699455593,
+    "node_id": "PRR_kwDOGkVX1s7cgTZp",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21660",
+    "state": "APPROVED",
+    "submitted_at": "2026-01-23T20:20:04Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/3724288?v=4",
+      "events_url": "https://api.github.com/users/zedkipp/events{/privacy}",
+      "followers_url": "https://api.github.com/users/zedkipp/followers",
+      "following_url": "https://api.github.com/users/zedkipp/following{/other_user}",
+      "gists_url": "https://api.github.com/users/zedkipp/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/zedkipp",
+      "id": 3724288,
+      "login": "zedkipp",
+      "node_id": "MDQ6VXNlcjM3MjQyODg=",
+      "organizations_url": "https://api.github.com/users/zedkipp/orgs",
+      "received_events_url": "https://api.github.com/users/zedkipp/received_events",
+      "repos_url": "https://api.github.com/users/zedkipp/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/zedkipp/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/zedkipp/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/zedkipp",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21660#pullrequestreview-3699459269"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21660"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "0feb68679e7df5218da9154048c2a6c94176cd84",
+    "html_url": "https://github.com/coder/coder/pull/21660#pullrequestreview-3699459269",
+    "id": 3699459269,
+    "node_id": "PRR_kwDOGkVX1s7cgUTF",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21660",
+    "state": "COMMENTED",
+    "submitted_at": "2026-01-23T20:21:10Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/3724288?v=4",
+      "events_url": "https://api.github.com/users/zedkipp/events{/privacy}",
+      "followers_url": "https://api.github.com/users/zedkipp/followers",
+      "following_url": "https://api.github.com/users/zedkipp/following{/other_user}",
+      "gists_url": "https://api.github.com/users/zedkipp/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/zedkipp",
+      "id": 3724288,
+      "login": "zedkipp",
+      "node_id": "MDQ6VXNlcjM3MjQyODg=",
+      "organizations_url": "https://api.github.com/users/zedkipp/orgs",
+      "received_events_url": "https://api.github.com/users/zedkipp/received_events",
+      "repos_url": "https://api.github.com/users/zedkipp/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/zedkipp/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/zedkipp/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/zedkipp",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21660#pullrequestreview-3699470339"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21660"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "0feb68679e7df5218da9154048c2a6c94176cd84",
+    "html_url": "https://github.com/coder/coder/pull/21660#pullrequestreview-3699470339",
+    "id": 3699470339,
+    "node_id": "PRR_kwDOGkVX1s7cgXAD",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21660",
+    "state": "COMMENTED",
+    "submitted_at": "2026-01-23T20:24:24Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/37836031?u=c3a87352a1782a71d372d8d26016ea5a1a7f88fb&v=4",
+      "events_url": "https://api.github.com/users/evgeniy-scherbina/events{/privacy}",
+      "followers_url": "https://api.github.com/users/evgeniy-scherbina/followers",
+      "following_url": "https://api.github.com/users/evgeniy-scherbina/following{/other_user}",
+      "gists_url": "https://api.github.com/users/evgeniy-scherbina/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/evgeniy-scherbina",
+      "id": 37836031,
+      "login": "evgeniy-scherbina",
+      "node_id": "MDQ6VXNlcjM3ODM2MDMx",
+      "organizations_url": "https://api.github.com/users/evgeniy-scherbina/orgs",
+      "received_events_url": "https://api.github.com/users/evgeniy-scherbina/received_events",
+      "repos_url": "https://api.github.com/users/evgeniy-scherbina/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/evgeniy-scherbina/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/evgeniy-scherbina/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/evgeniy-scherbina",
+      "user_view_type": "public"
+    }
+  }
+]

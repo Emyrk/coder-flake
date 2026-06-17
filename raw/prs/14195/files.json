@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/98cf24c28c7f14f7ea6df78135e55cbf2676f94e/tailnet%2Fconn.go",
+    "changes": 9,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/tailnet%2Fconn.go?ref=98cf24c28c7f14f7ea6df78135e55cbf2676f94e",
+    "deletions": 1,
+    "filename": "tailnet/conn.go",
+    "patch": "@@ -556,7 +556,6 @@ func (c *Conn) Closed() <-chan struct{} {\n func (c *Conn) Close() error {\n \tc.logger.Info(context.Background(), \"closing tailnet Conn\")\n \tc.watchCancel()\n-\tc.telemetryWg.Wait()\n \tc.configMaps.close()\n \tc.nodeUpdater.close()\n \tc.mutex.Lock()\n@@ -567,6 +566,7 @@ func (c *Conn) Close() error {\n \tdefault:\n \t}\n \tclose(c.closed)\n+\tc.telemetryWg.Wait()\n \tc.mutex.Unlock()\n \n \tvar wg sync.WaitGroup\n@@ -783,6 +783,13 @@ func (c *Conn) newTelemetryEvent() *proto.TelemetryEvent {\n }\n \n func (c *Conn) sendTelemetryBackground(e *proto.TelemetryEvent) {\n+\tc.mutex.Lock()\n+\tdefer c.mutex.Unlock()\n+\tselect {\n+\tcase <-c.closed:\n+\t\treturn\n+\tdefault:\n+\t}\n \tc.telemetryWg.Add(1)\n \tgo func() {\n \t\tdefer c.telemetryWg.Done()",
+    "raw_url": "https://github.com/coder/coder/raw/98cf24c28c7f14f7ea6df78135e55cbf2676f94e/tailnet%2Fconn.go",
+    "sha": "4646c2f02cbebe1d7ce2edc42dcd9cd051f43d8b",
+    "status": "modified"
+  }
+]

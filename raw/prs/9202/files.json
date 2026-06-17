@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/754d1df9826f0a38e31ef9c6de4c27ce170484c0/flake.nix",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=754d1df9826f0a38e31ef9c6de4c27ce170484c0",
+    "deletions": 1,
+    "filename": "flake.nix",
+    "patch": "@@ -53,6 +53,7 @@\n           protobuf\n           protoc-gen-go\n           ripgrep\n+          sapling\n           shellcheck\n           shfmt\n           sqlc\n@@ -109,10 +110,11 @@\n             mkdir -p /etc/init.d\n           '';\n         };\n+        allPackages = devShellPackages ++ devImagePackages;\n         # Environment variables that live in `/etc/environment` in the container.\n         # These will also be applied to the container config.\n         devEnvVars = [\n-          \"PATH=${pkgs.lib.makeBinPath (devShellPackages ++ devImagePackages)}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/coder/go/bin\"\n+          \"PATH=${pkgs.lib.makeBinPath (allPackages)}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/coder/go/bin\"\n           # This setting prevents Go from using the public checksum database for\n           # our module path prefixes. It is required because these are in private\n           # repositories that require authentication.",
+    "raw_url": "https://github.com/coder/coder/raw/754d1df9826f0a38e31ef9c6de4c27ce170484c0/flake.nix",
+    "sha": "7194d808b2dfc10c2c05d40bdad66af848e281c2",
+    "status": "modified"
+  }
+]

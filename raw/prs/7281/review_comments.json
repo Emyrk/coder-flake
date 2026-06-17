@@ -1,0 +1,141 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/7281#discussion_r1176726071"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/7281"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1176726071"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I guess we can't expect prompt first? If we could set env PS1=> then we'd have something to look for.",
+    "commit_id": "4ca7953a8544ae048435e8a5b6a433fca26b3507",
+    "created_at": "2023-04-25T15:56:35Z",
+    "diff_hunk": "@@ -125,29 +130,42 @@ func Run(t *testing.T, factory DeploymentFactory) {\n \t\t\t})\n \t\t\trequire.NoError(t, err)\n \n-\t\t\t// Try to connect to the endpoint with the signed token and no other\n-\t\t\t// authentication.\n-\t\t\tq := u.Query()\n-\t\t\tq.Set(\"reconnect\", uuid.NewString())\n-\t\t\tq.Set(\"height\", strconv.Itoa(24))\n-\t\t\tq.Set(\"width\", strconv.Itoa(80))\n-\t\t\tq.Set(\"command\", `/bin/sh -c \"echo test\"`)\n-\t\t\tq.Set(codersdk.SignedAppTokenQueryParameter, issueRes.SignedToken)\n-\t\t\tu.RawQuery = q.Encode()\n-\n-\t\t\t//nolint:bodyclose\n-\t\t\twsConn, res, err := websocket.Dial(ctx, u.String(), nil)\n-\t\t\tif !assert.NoError(t, err) {\n-\t\t\t\tdump, err := httputil.DumpResponse(res, true)\n-\t\t\t\tif err == nil {\n-\t\t\t\t\tt.Log(string(dump))\n-\t\t\t\t}\n-\t\t\t\treturn\n-\t\t\t}\n-\t\t\tdefer wsConn.Close(websocket.StatusNormalClosure, \"\")\n-\t\t\tconn := websocket.NetConn(ctx, wsConn, websocket.MessageBinary)\n+\t\t\t// Make an unauthenticated client.\n+\t\t\tunauthedAppClient := codersdk.New(appDetails.AppClient(t).URL)\n+\t\t\tconn, err := unauthedAppClient.WorkspaceAgentReconnectingPTY(ctx, codersdk.WorkspaceAgentReconnectingPTYOpts{\n+\t\t\t\tAgentID:     appDetails.Agent.ID,\n+\t\t\t\tReconnect:   uuid.New(),\n+\t\t\t\tHeight:      80,\n+\t\t\t\tWidth:       80,\n+\t\t\t\tCommand:     \"/bin/bash\",\n+\t\t\t\tSignedToken: issueRes.SignedToken,\n+\t\t\t})\n+\t\t\trequire.NoError(t, err)\n+\t\t\tdefer conn.Close()\n+\n+\t\t\t// First attempt to resize the TTY.\n+\t\t\t// The websocket will close if it fails!\n+\t\t\tdata, err := json.Marshal(codersdk.ReconnectingPTYRequest{\n+\t\t\t\tHeight: 250,\n+\t\t\t\tWidth:  250,\n+\t\t\t})\n+\t\t\trequire.NoError(t, err)\n+\t\t\t_, err = conn.Write(data)\n+\t\t\trequire.NoError(t, err)\n \t\t\tbufRead := bufio.NewReader(conn)\n \n+\t\t\t// Brief pause to reduce the likelihood that we send keystrokes while\n+\t\t\t// the shell is simultaneously sending a prompt.\n+\t\t\ttime.Sleep(100 * time.Millisecond)",
+    "html_url": "https://github.com/coder/coder/pull/7281#discussion_r1176726071",
+    "id": 1176726071,
+    "line": 159,
+    "node_id": "PRRC_kwDOGkVX1s5GI2o3",
+    "original_commit_id": "4ca7953a8544ae048435e8a5b6a433fca26b3507",
+    "original_line": 159,
+    "original_position": 74,
+    "original_start_line": null,
+    "path": "coderd/workspaceapps/apptest/apptest.go",
+    "position": 74,
+    "pull_request_review_id": 1400250046,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/7281",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1176726071/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2023-04-25T15:58:35Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1176726071",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/7281#discussion_r1177180709"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/7281"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1177180709"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "PS1 doesn't seem to be accepted through env in bash, only as a variable",
+    "commit_id": "4ca7953a8544ae048435e8a5b6a433fca26b3507",
+    "created_at": "2023-04-26T00:22:26Z",
+    "diff_hunk": "@@ -125,29 +130,42 @@ func Run(t *testing.T, factory DeploymentFactory) {\n \t\t\t})\n \t\t\trequire.NoError(t, err)\n \n-\t\t\t// Try to connect to the endpoint with the signed token and no other\n-\t\t\t// authentication.\n-\t\t\tq := u.Query()\n-\t\t\tq.Set(\"reconnect\", uuid.NewString())\n-\t\t\tq.Set(\"height\", strconv.Itoa(24))\n-\t\t\tq.Set(\"width\", strconv.Itoa(80))\n-\t\t\tq.Set(\"command\", `/bin/sh -c \"echo test\"`)\n-\t\t\tq.Set(codersdk.SignedAppTokenQueryParameter, issueRes.SignedToken)\n-\t\t\tu.RawQuery = q.Encode()\n-\n-\t\t\t//nolint:bodyclose\n-\t\t\twsConn, res, err := websocket.Dial(ctx, u.String(), nil)\n-\t\t\tif !assert.NoError(t, err) {\n-\t\t\t\tdump, err := httputil.DumpResponse(res, true)\n-\t\t\t\tif err == nil {\n-\t\t\t\t\tt.Log(string(dump))\n-\t\t\t\t}\n-\t\t\t\treturn\n-\t\t\t}\n-\t\t\tdefer wsConn.Close(websocket.StatusNormalClosure, \"\")\n-\t\t\tconn := websocket.NetConn(ctx, wsConn, websocket.MessageBinary)\n+\t\t\t// Make an unauthenticated client.\n+\t\t\tunauthedAppClient := codersdk.New(appDetails.AppClient(t).URL)\n+\t\t\tconn, err := unauthedAppClient.WorkspaceAgentReconnectingPTY(ctx, codersdk.WorkspaceAgentReconnectingPTYOpts{\n+\t\t\t\tAgentID:     appDetails.Agent.ID,\n+\t\t\t\tReconnect:   uuid.New(),\n+\t\t\t\tHeight:      80,\n+\t\t\t\tWidth:       80,\n+\t\t\t\tCommand:     \"/bin/bash\",\n+\t\t\t\tSignedToken: issueRes.SignedToken,\n+\t\t\t})\n+\t\t\trequire.NoError(t, err)\n+\t\t\tdefer conn.Close()\n+\n+\t\t\t// First attempt to resize the TTY.\n+\t\t\t// The websocket will close if it fails!\n+\t\t\tdata, err := json.Marshal(codersdk.ReconnectingPTYRequest{\n+\t\t\t\tHeight: 250,\n+\t\t\t\tWidth:  250,\n+\t\t\t})\n+\t\t\trequire.NoError(t, err)\n+\t\t\t_, err = conn.Write(data)\n+\t\t\trequire.NoError(t, err)\n \t\t\tbufRead := bufio.NewReader(conn)\n \n+\t\t\t// Brief pause to reduce the likelihood that we send keystrokes while\n+\t\t\t// the shell is simultaneously sending a prompt.\n+\t\t\ttime.Sleep(100 * time.Millisecond)",
+    "html_url": "https://github.com/coder/coder/pull/7281#discussion_r1177180709",
+    "id": 1177180709,
+    "in_reply_to_id": 1176726071,
+    "line": 159,
+    "node_id": "PRRC_kwDOGkVX1s5GKlol",
+    "original_commit_id": "4ca7953a8544ae048435e8a5b6a433fca26b3507",
+    "original_line": 159,
+    "original_position": 74,
+    "original_start_line": null,
+    "path": "coderd/workspaceapps/apptest/apptest.go",
+    "position": 74,
+    "pull_request_review_id": 1400927134,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/7281",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1177180709/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2023-04-26T00:22:26Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1177180709",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  }
+]

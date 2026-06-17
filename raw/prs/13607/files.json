@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/cdb767f6631f573184725ccf386aa5e6c668c7f3/agent%2Fapphealth_test.go",
+    "changes": 11,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fapphealth_test.go?ref=cdb767f6631f573184725ccf386aa5e6c668c7f3",
+    "deletions": 5,
+    "filename": "agent/apphealth_test.go",
+    "patch": "@@ -56,15 +56,16 @@ func TestAppHealth_Healthy(t *testing.T) {\n \t\t\tHealth: codersdk.WorkspaceAppHealthInitializing,\n \t\t},\n \t}\n-\tchecks := make(map[string]int)\n+\tchecks2 := 0\n+\tchecks3 := 0\n \thandlers := []http.Handler{\n \t\tnil,\n \t\thttp.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n-\t\t\tchecks[\"app2\"]++\n+\t\t\tchecks2++\n \t\t\thttpapi.Write(r.Context(), w, http.StatusOK, nil)\n \t\t}),\n \t\thttp.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n-\t\t\tchecks[\"app3\"]++\n+\t\t\tchecks3++\n \t\t\thttpapi.Write(r.Context(), w, http.StatusOK, nil)\n \t\t}),\n \t}\n@@ -109,8 +110,8 @@ func TestAppHealth_Healthy(t *testing.T) {\n \trequire.Equal(t, codersdk.WorkspaceAppHealthHealthy, apps[2].Health)\n \n \t// ensure we aren't spamming\n-\trequire.Equal(t, 2, checks[\"app2\"])\n-\trequire.Equal(t, 1, checks[\"app3\"])\n+\trequire.Equal(t, 2, checks2)\n+\trequire.Equal(t, 1, checks3)\n }\n \n func TestAppHealth_500(t *testing.T) {",
+    "raw_url": "https://github.com/coder/coder/raw/cdb767f6631f573184725ccf386aa5e6c668c7f3/agent%2Fapphealth_test.go",
+    "sha": "ff411433e3821ebd173b9d6f01291dbebe09f287",
+    "status": "modified"
+  }
+]

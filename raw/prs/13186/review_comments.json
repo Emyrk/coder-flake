@@ -1,0 +1,210 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/13186#discussion_r1591522633"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/13186"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1591522633"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Looks to be unused now.\r\n\r\n```suggestion\r\n```",
+    "commit_id": "eff4eaf24838cb35fdf73b7f38f202151c086549",
+    "created_at": "2024-05-06T20:30:59Z",
+    "diff_hunk": "@@ -4,55 +4,55 @@\n   inputs = {\n     nixpkgs.url = \"github:nixos/nixpkgs/nixos-unstable\";\n     flake-utils.url = \"github:numtide/flake-utils\";\n+    pnpm2nix.url = \"github:nzbr/pnpm2nix-nzbr\";\n     drpc.url = \"github:storj/drpc/v0.0.33\";\n   };\n \n-  outputs = { self, nixpkgs, flake-utils, drpc }:\n+  outputs = { self, nixpkgs, flake-utils, drpc, pnpm2nix }:\n     flake-utils.lib.eachDefaultSystem (system:\n       let\n         # Workaround for: terraform has an unfree license (\u2018bsl11\u2019), refusing to evaluate.\n         pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };\n         formatter = pkgs.nixpkgs-fmt;",
+    "html_url": "https://github.com/coder/coder/pull/13186#discussion_r1591522633",
+    "id": 1591522633,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5e3LVJ",
+    "original_commit_id": "397e54a0a1eabe5c5a682b731b622dcf2c79e42d",
+    "original_line": 16,
+    "original_position": 14,
+    "original_start_line": null,
+    "path": "flake.nix",
+    "position": 1,
+    "pull_request_review_id": 2041623661,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/13186",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1591522633/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-05-06T20:55:13Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1591522633",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/45609798?v=4",
+      "events_url": "https://api.github.com/users/code-asher/events{/privacy}",
+      "followers_url": "https://api.github.com/users/code-asher/followers",
+      "following_url": "https://api.github.com/users/code-asher/following{/other_user}",
+      "gists_url": "https://api.github.com/users/code-asher/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/code-asher",
+      "id": 45609798,
+      "login": "code-asher",
+      "node_id": "MDQ6VXNlcjQ1NjA5Nzk4",
+      "organizations_url": "https://api.github.com/users/code-asher/orgs",
+      "received_events_url": "https://api.github.com/users/code-asher/received_events",
+      "repos_url": "https://api.github.com/users/code-asher/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/code-asher/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/code-asher/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/code-asher",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/13186#discussion_r1591542200"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/13186"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1591542200"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "We might want to either remove `yarn` from the packages below (since otherwise it could use the wrong Node version) or put this line back.  Maybe remove makes more sense since `pnpm` should be used anyway!",
+    "commit_id": "eff4eaf24838cb35fdf73b7f38f202151c086549",
+    "created_at": "2024-05-06T20:50:39Z",
+    "diff_hunk": "@@ -4,25 +4,30 @@\n   inputs = {\n     nixpkgs.url = \"github:nixos/nixpkgs/nixos-unstable\";\n     flake-utils.url = \"github:numtide/flake-utils\";\n+    pnpm2nix.url = \"github:nzbr/pnpm2nix-nzbr\";\n     drpc.url = \"github:storj/drpc/v0.0.33\";\n   };\n \n-  outputs = { self, nixpkgs, flake-utils, drpc }:\n+  outputs = { self, nixpkgs, flake-utils, drpc, pnpm2nix }:\n     flake-utils.lib.eachDefaultSystem (system:\n       let\n         # Workaround for: terraform has an unfree license (\u2018bsl11\u2019), refusing to evaluate.\n         pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };\n         formatter = pkgs.nixpkgs-fmt;\n         nodejs = pkgs.nodejs-18_x;\n-        yarn = pkgs.yarn.override { inherit nodejs; };",
+    "html_url": "https://github.com/coder/coder/pull/13186#discussion_r1591542200",
+    "id": 1591542200,
+    "line": 17,
+    "node_id": "PRRC_kwDOGkVX1s5e3QG4",
+    "original_commit_id": "186e25176ed12a6b788922db3e949376385db4e0",
+    "original_line": 17,
+    "original_position": 16,
+    "original_start_line": null,
+    "path": "flake.nix",
+    "position": 16,
+    "pull_request_review_id": 2041623661,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/13186",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1591542200/reactions"
+    },
+    "side": "LEFT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-05-06T20:55:13Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1591542200",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/45609798?v=4",
+      "events_url": "https://api.github.com/users/code-asher/events{/privacy}",
+      "followers_url": "https://api.github.com/users/code-asher/followers",
+      "following_url": "https://api.github.com/users/code-asher/following{/other_user}",
+      "gists_url": "https://api.github.com/users/code-asher/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/code-asher",
+      "id": 45609798,
+      "login": "code-asher",
+      "node_id": "MDQ6VXNlcjQ1NjA5Nzk4",
+      "organizations_url": "https://api.github.com/users/code-asher/orgs",
+      "received_events_url": "https://api.github.com/users/code-asher/received_events",
+      "repos_url": "https://api.github.com/users/code-asher/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/code-asher/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/code-asher/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/code-asher",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/13186#discussion_r1591547591"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/13186"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1591547591"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Yeah, remove",
+    "commit_id": "eff4eaf24838cb35fdf73b7f38f202151c086549",
+    "created_at": "2024-05-06T20:56:31Z",
+    "diff_hunk": "@@ -4,25 +4,30 @@\n   inputs = {\n     nixpkgs.url = \"github:nixos/nixpkgs/nixos-unstable\";\n     flake-utils.url = \"github:numtide/flake-utils\";\n+    pnpm2nix.url = \"github:nzbr/pnpm2nix-nzbr\";\n     drpc.url = \"github:storj/drpc/v0.0.33\";\n   };\n \n-  outputs = { self, nixpkgs, flake-utils, drpc }:\n+  outputs = { self, nixpkgs, flake-utils, drpc, pnpm2nix }:\n     flake-utils.lib.eachDefaultSystem (system:\n       let\n         # Workaround for: terraform has an unfree license (\u2018bsl11\u2019), refusing to evaluate.\n         pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };\n         formatter = pkgs.nixpkgs-fmt;\n         nodejs = pkgs.nodejs-18_x;\n-        yarn = pkgs.yarn.override { inherit nodejs; };",
+    "html_url": "https://github.com/coder/coder/pull/13186#discussion_r1591547591",
+    "id": 1591547591,
+    "in_reply_to_id": 1591542200,
+    "line": 17,
+    "node_id": "PRRC_kwDOGkVX1s5e3RbH",
+    "original_commit_id": "186e25176ed12a6b788922db3e949376385db4e0",
+    "original_line": 17,
+    "original_position": 16,
+    "original_start_line": null,
+    "path": "flake.nix",
+    "position": 16,
+    "pull_request_review_id": 2041663558,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/13186",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1591547591/reactions"
+    },
+    "side": "LEFT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-05-06T20:56:31Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1591547591",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  }
+]

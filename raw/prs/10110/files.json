@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/d8a8819d4f060facb0f1769cb811a810b4934fa7/coderd%2Ftailnet.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Ftailnet.go?ref=d8a8819d4f060facb0f1769cb811a810b4934fa7",
+    "deletions": 0,
+    "filename": "coderd/tailnet.go",
+    "patch": "@@ -229,6 +229,10 @@ func (s *ServerTailnet) watchAgentUpdates() {\n \n \t\terr := s.conn.UpdateNodes(nodes, false)\n \t\tif err != nil {\n+\t\t\tif xerrors.Is(err, tailnet.ErrConnClosed) {\n+\t\t\t\ts.logger.Warn(context.Background(), \"tailnet conn closed, exiting watchAgentUpdates\", slog.Error(err))\n+\t\t\t\treturn\n+\t\t\t}\n \t\t\ts.logger.Error(context.Background(), \"update node in server tailnet\", slog.Error(err))\n \t\t\treturn\n \t\t}",
+    "raw_url": "https://github.com/coder/coder/raw/d8a8819d4f060facb0f1769cb811a810b4934fa7/coderd%2Ftailnet.go",
+    "sha": "c5b234572860631a7fff4e836ec188885437e2c9",
+    "status": "modified"
+  },
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/d8a8819d4f060facb0f1769cb811a810b4934fa7/tailnet%2Fconn.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/tailnet%2Fconn.go?ref=d8a8819d4f060facb0f1769cb811a810b4934fa7",
+    "deletions": 3,
+    "filename": "tailnet/conn.go",
+    "patch": "@@ -47,6 +47,8 @@ import (\n \t\"github.com/coder/coder/v2/cryptorand\"\n )\n \n+var ErrConnClosed = xerrors.New(\"connection closed\")\n+\n const (\n \tWorkspaceAgentSSHPort             = 1\n \tWorkspaceAgentReconnectingPTYPort = 2\n@@ -496,7 +498,7 @@ func (c *Conn) UpdateNodes(nodes []*Node, replacePeers bool) error {\n \tdefer c.mutex.Unlock()\n \n \tif c.isClosed() {\n-\t\treturn xerrors.New(\"connection closed\")\n+\t\treturn ErrConnClosed\n \t}\n \n \tstatus := c.Status()\n@@ -590,7 +592,7 @@ func (c *Conn) RemovePeer(selector PeerSelector) (deleted bool, err error) {\n \tdefer c.mutex.Unlock()\n \n \tif c.isClosed() {\n-\t\treturn false, xerrors.New(\"connection closed\")\n+\t\treturn false, ErrConnClosed\n \t}\n \n \tdeleted = false\n@@ -919,7 +921,7 @@ func (c *Conn) Listen(network, addr string) (net.Listener, error) {\n \tc.mutex.Lock()\n \tif c.isClosed() {\n \t\tc.mutex.Unlock()\n-\t\treturn nil, xerrors.New(\"closed\")\n+\t\treturn nil, ErrConnClosed\n \t}\n \tif c.listeners == nil {\n \t\tc.listeners = map[listenKey]*listener{}",
+    "raw_url": "https://github.com/coder/coder/raw/d8a8819d4f060facb0f1769cb811a810b4934fa7/tailnet%2Fconn.go",
+    "sha": "8808fab775d7825a9a51244f45bffbb8f7712c98",
+    "status": "modified"
+  }
+]

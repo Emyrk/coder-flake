@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/a90b40f5f9c36747f1319acdf09d4879e18d0570/agent%2Fagent_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagent_test.go?ref=a90b40f5f9c36747f1319acdf09d4879e18d0570",
+    "deletions": 1,
+    "filename": "agent/agent_test.go",
+    "patch": "@@ -694,7 +694,7 @@ func setupAgent(t *testing.T, metadata agent.Metadata, ptyTimeout time.Duration)\n \t\tconn, err := tailnet.NewConn(&tailnet.Options{\n \t\t\tAddresses: []netip.Prefix{netip.PrefixFrom(tailnet.IP(), 128)},\n \t\t\tDERPMap:   metadata.DERPMap,\n-\t\t\tLogger:    slogtest.Make(t, nil).Named(\"tailnet\"),\n+\t\t\tLogger:    slogtest.Make(t, nil).Named(\"client\").Leveled(slog.LevelDebug),\n \t\t})\n \t\trequire.NoError(t, err)\n \t\tclientConn, serverConn := net.Pipe()",
+    "raw_url": "https://github.com/coder/coder/raw/a90b40f5f9c36747f1319acdf09d4879e18d0570/agent%2Fagent_test.go",
+    "sha": "ec791505ba28d1be8b17375310ab21381f8c158d",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/a90b40f5f9c36747f1319acdf09d4879e18d0570/go.mod",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/go.mod?ref=a90b40f5f9c36747f1319acdf09d4879e18d0570",
+    "deletions": 1,
+    "filename": "go.mod",
+    "patch": "@@ -49,7 +49,7 @@ replace github.com/tcnksm/go-httpstat => github.com/kylecarbs/go-httpstat v0.0.0\n \n // There are a few minor changes we make to Tailscale that we're slowly upstreaming. Compare here:\n // https://github.com/tailscale/tailscale/compare/main...coder:tailscale:main\n-replace tailscale.com => github.com/coder/tailscale v1.1.1-0.20220907030728-c713fe41e3e6\n+replace tailscale.com => github.com/coder/tailscale v1.1.1-0.20220907140144-9abacd14802f\n \n require (\n \tcdr.dev/slog v1.4.2-0.20220525200111-18dce5c2cd5f",
+    "raw_url": "https://github.com/coder/coder/raw/a90b40f5f9c36747f1319acdf09d4879e18d0570/go.mod",
+    "sha": "90c2c735f50584c052720c852ae1fdda83b0d932",
+    "status": "modified"
+  },
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/a90b40f5f9c36747f1319acdf09d4879e18d0570/go.sum",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/go.sum?ref=a90b40f5f9c36747f1319acdf09d4879e18d0570",
+    "deletions": 2,
+    "filename": "go.sum",
+    "patch": "@@ -352,8 +352,8 @@ github.com/coder/glog v1.0.1-0.20220322161911-7365fe7f2cd1 h1:UqBrPWSYvRI2s5RtOu\n github.com/coder/glog v1.0.1-0.20220322161911-7365fe7f2cd1/go.mod h1:EWib/APOK0SL3dFbYqvxE3UYd8E6s1ouQ7iEp/0LWV4=\n github.com/coder/retry v1.3.0 h1:5lAAwt/2Cm6lVmnfBY7sOMXcBOwcwJhmV5QGSELIVWY=\n github.com/coder/retry v1.3.0/go.mod h1:tXuRgZgWjUnU5LZPT4lJh4ew2elUhexhlnXzrJWdyFY=\n-github.com/coder/tailscale v1.1.1-0.20220907030728-c713fe41e3e6 h1:N1n4dt29RNITCOIbzEMyDgJooAhhVvCbU9OT045HKag=\n-github.com/coder/tailscale v1.1.1-0.20220907030728-c713fe41e3e6/go.mod h1:MO+tWkQp2YIF3KBnnej/mQvgYccRS5Xk/IrEpZ4Z3BU=\n+github.com/coder/tailscale v1.1.1-0.20220907140144-9abacd14802f h1:iWOlTwTwh1hCr6I0D2bWFHKRaPb7PmcxPISFkkj3DdM=\n+github.com/coder/tailscale v1.1.1-0.20220907140144-9abacd14802f/go.mod h1:MO+tWkQp2YIF3KBnnej/mQvgYccRS5Xk/IrEpZ4Z3BU=\n github.com/coder/wireguard-go/tun/netstack v0.0.0-20220823170024-a78136eb0cab h1:9yEvRWXXfyKzXu8AqywCi+tFZAoqCy4wVcsXwuvZNMc=\n github.com/coder/wireguard-go/tun/netstack v0.0.0-20220823170024-a78136eb0cab/go.mod h1:TCJ66NtXh3urJotTdoYQOHHkyE899vOQl5TuF+WLSes=\n github.com/containerd/aufs v0.0.0-20200908144142-dab0cbea06f4/go.mod h1:nukgQABAEopAHvB6j7cnP5zJ+/3aVcE7hCYqvIwAHyE=",
+    "raw_url": "https://github.com/coder/coder/raw/a90b40f5f9c36747f1319acdf09d4879e18d0570/go.sum",
+    "sha": "310ff8b4f143c34c201788face2fd65a3f9bb2a8",
+    "status": "modified"
+  }
+]

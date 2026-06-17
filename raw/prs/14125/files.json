@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/1e3bc6ab11576c7f2bc8de1b6833f4fcae72ed81/codersdk%2Fworkspacesdk%2Fconnector.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/codersdk%2Fworkspacesdk%2Fconnector.go?ref=1e3bc6ab11576c7f2bc8de1b6833f4fcae72ed81",
+    "deletions": 1,
+    "filename": "codersdk/workspacesdk/connector.go",
+    "patch": "@@ -267,7 +267,9 @@ func (tac *tailnetAPIConnector) derpMap(client proto.DRPCTailnetClient) error {\n \t\t\tif xerrors.Is(err, context.Canceled) || xerrors.Is(err, context.DeadlineExceeded) {\n \t\t\t\treturn nil\n \t\t\t}\n-\t\t\ttac.logger.Error(tac.ctx, \"error receiving DERP Map\", slog.Error(err))\n+\t\t\tif !xerrors.Is(err, io.EOF) {\n+\t\t\t\ttac.logger.Error(tac.ctx, \"error receiving DERP Map\", slog.Error(err))\n+\t\t\t}\n \t\t\treturn err\n \t\t}\n \t\ttac.logger.Debug(tac.ctx, \"got new DERP Map\", slog.F(\"derp_map\", dmp))",
+    "raw_url": "https://github.com/coder/coder/raw/1e3bc6ab11576c7f2bc8de1b6833f4fcae72ed81/codersdk%2Fworkspacesdk%2Fconnector.go",
+    "sha": "5e5f528af6888644e528f03acaae608bd3be9306",
+    "status": "modified"
+  }
+]

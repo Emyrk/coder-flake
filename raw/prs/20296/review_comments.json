@@ -1,0 +1,629 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/20296#discussion_r2431398207"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/20296"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2431398207"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "This is too spooky, surprising, and unconstrained in its scope. It affects all our tests, not just the ones that are currently flaking. Any integration or system tests that use the go test framework will get different behavior than they would in production, withoutout any explicit configuration.\n\nIf you need to adjust these timeouts, pipe them thru the front door like all the other options we have.",
+    "commit_id": "f02c77a21bbbc8fdcc3738aac6d6e6b121b348ad",
+    "created_at": "2025-10-15T07:17:54Z",
+    "diff_hunk": "@@ -482,7 +483,13 @@ func (s *Server) handleRegister(res wsproxysdk.RegisterWorkspaceProxyResponse) e\n }\n \n func (s *Server) pingSiblingReplicas(replicas []codersdk.Replica) {\n-\tctx, cancel := context.WithTimeout(s.ctx, 10*time.Second)\n+\t// Use a larger timeout for peer connectivity tests during testing.\n+\ttimeout := 10 * time.Second\n+\tif flag.Lookup(\"test.v\") != nil {",
+    "html_url": "https://github.com/coder/coder/pull/20296#discussion_r2431398207",
+    "id": 2431398207,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6Q7DE_",
+    "original_commit_id": "f02c77a21bbbc8fdcc3738aac6d6e6b121b348ad",
+    "original_line": 488,
+    "original_position": 26,
+    "original_start_line": null,
+    "path": "enterprise/wsproxy/wsproxy.go",
+    "position": 1,
+    "pull_request_review_id": 3338762329,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/20296",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2431398207/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-10-15T08:05:55Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2431398207",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/20296#discussion_r2431425447"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/20296"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2431425447"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "We use go 1.24.6, so I'm not sure why we are using a `Timer` here instead of `After`. It seems like you are claiming that `After()` leaves a goroutine running?\n\nThis doesn't square with the Go stdlib docs that are pretty unequivocal: \"There is no reason to prefer NewTimer when After will do.\" https://pkg.go.dev/time#After",
+    "commit_id": "6e756b44ae6191c3487cba7c33cb7284974a412c",
+    "created_at": "2025-10-15T07:27:30Z",
+    "diff_hunk": "@@ -553,6 +567,34 @@ func pingSiblingReplicas(ctx context.Context, logger slog.Logger, sf *singleflig\n \treturn errStrInterface.(string)\n }\n \n+// pingReplica pings a replica over it's internal relay address to ensure it's\n+// reachable and alive for health purposes. It will try to ping the replica\n+// twice if the first ping fails, with a short delay between attempts.\n+func pingReplica(ctx context.Context, client http.Client, replica codersdk.Replica) error {\n+\tconst attempts = 2\n+\tvar err error\n+\tfor i := 0; i < attempts; i++ {\n+\t\terr = replicasync.PingPeerReplica(ctx, client, replica.RelayAddress)\n+\t\tif err == nil {\n+\t\t\treturn nil\n+\t\t}\n+\t\tif i < attempts-1 {\n+\t\t\t// Use a timer to avoid a goroutine remaining after the test. Newer\n+\t\t\t// versions of Go will garbage collect unused timers, but the\n+\t\t\t// goroutine may still be running after the test completes.\n+\t\t\ttimer := time.NewTimer(1 * time.Second)",
+    "html_url": "https://github.com/coder/coder/pull/20296#discussion_r2431425447",
+    "id": 2431425447,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6Q7Jun",
+    "original_commit_id": "f02c77a21bbbc8fdcc3738aac6d6e6b121b348ad",
+    "original_line": 585,
+    "original_position": 81,
+    "original_start_line": null,
+    "path": "enterprise/wsproxy/wsproxy.go",
+    "position": 1,
+    "pull_request_review_id": 3338762329,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/20296",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2431425447/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-10-15T08:05:55Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2431425447",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/20296#discussion_r2431535605"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/20296"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2431535605"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Furthermore, I think that you have mis-diagnosed the flake as one of network timeouts.\n\nIn the instances of the flake, the test completes in about 1 second, and the test log \"all replicas have pinged\" drops.\n\nSo, it's not that resource contention is causing pings to time out. The test completes successfully and then cancels the proxy server context (`s.ctx`) here.\n\nBut, the workspace proxy registers itself once at startup and then also kicks off a registration loop, which does a second registration and goes back through this code again. You can logs like this\n\n```\n     t.go:106: 2025-09-03 06:43:17.027 [debu]  re-registering workspace proxy with Coder primary  server_url=http://127.0.0.1:44777  req={\"access_url\":\"https://proxy1.test.coder.com\",\"wildcard_hostname\":\"\",\"derp_enabled\":true,\"derp_only\":false,\"replica_id\":\"8f914332-cde6-4707-8beb-91ed51236aee\",\"hostname\":\"depot-machine\",\"replica_error\":\"\",\"replica_relay_address\":\"http://127.0.0.1:44777\",\"version\":\"v0.0.0-devel\"}  timeout=10s  failed_attempts=0\n```\n\nThe race is that sometimes this second set of pings tied to re-registration happens with an expired `s.ctx` which immediately returns an error when we do the HTTP request. Thru the callback we eventually asserted that we got no error.",
+    "commit_id": "f02c77a21bbbc8fdcc3738aac6d6e6b121b348ad",
+    "created_at": "2025-10-15T08:05:50Z",
+    "diff_hunk": "@@ -482,7 +483,13 @@ func (s *Server) handleRegister(res wsproxysdk.RegisterWorkspaceProxyResponse) e\n }\n \n func (s *Server) pingSiblingReplicas(replicas []codersdk.Replica) {\n-\tctx, cancel := context.WithTimeout(s.ctx, 10*time.Second)\n+\t// Use a larger timeout for peer connectivity tests during testing.\n+\ttimeout := 10 * time.Second\n+\tif flag.Lookup(\"test.v\") != nil {",
+    "html_url": "https://github.com/coder/coder/pull/20296#discussion_r2431535605",
+    "id": 2431535605,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6Q7kn1",
+    "original_commit_id": "f02c77a21bbbc8fdcc3738aac6d6e6b121b348ad",
+    "original_line": 488,
+    "original_position": 26,
+    "original_start_line": null,
+    "path": "enterprise/wsproxy/wsproxy.go",
+    "position": 1,
+    "pull_request_review_id": 3338762329,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/20296",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2431535605/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-10-15T08:05:55Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2431535605",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/20296#discussion_r2434662393"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/20296"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2434662393"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "After doesn't leak a goroutine in the sense that it can be garbage collected now, but that doesn't mean it wouldn't cause the leak detector to trigger. If the context expires before the timer fires, the After goroutine could continue running after the test completes.\r\n\r\nMaybe I'm wrong on that but the docs don't seem to disagree.",
+    "commit_id": "6e756b44ae6191c3487cba7c33cb7284974a412c",
+    "created_at": "2025-10-16T05:56:14Z",
+    "diff_hunk": "@@ -553,6 +567,34 @@ func pingSiblingReplicas(ctx context.Context, logger slog.Logger, sf *singleflig\n \treturn errStrInterface.(string)\n }\n \n+// pingReplica pings a replica over it's internal relay address to ensure it's\n+// reachable and alive for health purposes. It will try to ping the replica\n+// twice if the first ping fails, with a short delay between attempts.\n+func pingReplica(ctx context.Context, client http.Client, replica codersdk.Replica) error {\n+\tconst attempts = 2\n+\tvar err error\n+\tfor i := 0; i < attempts; i++ {\n+\t\terr = replicasync.PingPeerReplica(ctx, client, replica.RelayAddress)\n+\t\tif err == nil {\n+\t\t\treturn nil\n+\t\t}\n+\t\tif i < attempts-1 {\n+\t\t\t// Use a timer to avoid a goroutine remaining after the test. Newer\n+\t\t\t// versions of Go will garbage collect unused timers, but the\n+\t\t\t// goroutine may still be running after the test completes.\n+\t\t\ttimer := time.NewTimer(1 * time.Second)",
+    "html_url": "https://github.com/coder/coder/pull/20296#discussion_r2434662393",
+    "id": 2434662393,
+    "in_reply_to_id": 2431425447,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6RHf_5",
+    "original_commit_id": "f02c77a21bbbc8fdcc3738aac6d6e6b121b348ad",
+    "original_line": 585,
+    "original_position": 81,
+    "original_start_line": null,
+    "path": "enterprise/wsproxy/wsproxy.go",
+    "position": 1,
+    "pull_request_review_id": 3343164415,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/20296",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2434662393/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-10-16T05:56:14Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2434662393",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/20296#discussion_r2434675185"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/20296"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2434675185"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I removed the error assertion from the callback, so I don't understand what you're trying to say with this comment. AFAIK my changes fix the problem you describe. I bumped the timeouts to avoid potential future flakes because I noticed they were very short.",
+    "commit_id": "f02c77a21bbbc8fdcc3738aac6d6e6b121b348ad",
+    "created_at": "2025-10-16T06:03:52Z",
+    "diff_hunk": "@@ -482,7 +483,13 @@ func (s *Server) handleRegister(res wsproxysdk.RegisterWorkspaceProxyResponse) e\n }\n \n func (s *Server) pingSiblingReplicas(replicas []codersdk.Replica) {\n-\tctx, cancel := context.WithTimeout(s.ctx, 10*time.Second)\n+\t// Use a larger timeout for peer connectivity tests during testing.\n+\ttimeout := 10 * time.Second\n+\tif flag.Lookup(\"test.v\") != nil {",
+    "html_url": "https://github.com/coder/coder/pull/20296#discussion_r2434675185",
+    "id": 2434675185,
+    "in_reply_to_id": 2431535605,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6RHjHx",
+    "original_commit_id": "f02c77a21bbbc8fdcc3738aac6d6e6b121b348ad",
+    "original_line": 488,
+    "original_position": 26,
+    "original_start_line": null,
+    "path": "enterprise/wsproxy/wsproxy.go",
+    "position": 1,
+    "pull_request_review_id": 3343181300,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/20296",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2434675185/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-10-16T06:03:52Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2434675185",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/20296#discussion_r2434686287"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/20296"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2434686287"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Moved to `wsproxy.Options` and set by `coderdenttest.NewWorkspaceProxyReplica`",
+    "commit_id": "f02c77a21bbbc8fdcc3738aac6d6e6b121b348ad",
+    "created_at": "2025-10-16T06:09:54Z",
+    "diff_hunk": "@@ -482,7 +483,13 @@ func (s *Server) handleRegister(res wsproxysdk.RegisterWorkspaceProxyResponse) e\n }\n \n func (s *Server) pingSiblingReplicas(replicas []codersdk.Replica) {\n-\tctx, cancel := context.WithTimeout(s.ctx, 10*time.Second)\n+\t// Use a larger timeout for peer connectivity tests during testing.\n+\ttimeout := 10 * time.Second\n+\tif flag.Lookup(\"test.v\") != nil {",
+    "html_url": "https://github.com/coder/coder/pull/20296#discussion_r2434686287",
+    "id": 2434686287,
+    "in_reply_to_id": 2431398207,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6RHl1P",
+    "original_commit_id": "f02c77a21bbbc8fdcc3738aac6d6e6b121b348ad",
+    "original_line": 488,
+    "original_position": 26,
+    "original_start_line": null,
+    "path": "enterprise/wsproxy/wsproxy.go",
+    "position": 1,
+    "pull_request_review_id": 3343196626,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/20296",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2434686287/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-10-16T06:09:54Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2434686287",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/20296#discussion_r2434696081"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/20296"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2434696081"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I assumed, perhaps incorrectly, that you bumped the timeouts in response to the flake this purports to fix. What I'm trying to say is that I don't think that flake has anything to do with these timeouts.",
+    "commit_id": "f02c77a21bbbc8fdcc3738aac6d6e6b121b348ad",
+    "created_at": "2025-10-16T06:15:34Z",
+    "diff_hunk": "@@ -482,7 +483,13 @@ func (s *Server) handleRegister(res wsproxysdk.RegisterWorkspaceProxyResponse) e\n }\n \n func (s *Server) pingSiblingReplicas(replicas []codersdk.Replica) {\n-\tctx, cancel := context.WithTimeout(s.ctx, 10*time.Second)\n+\t// Use a larger timeout for peer connectivity tests during testing.\n+\ttimeout := 10 * time.Second\n+\tif flag.Lookup(\"test.v\") != nil {",
+    "html_url": "https://github.com/coder/coder/pull/20296#discussion_r2434696081",
+    "id": 2434696081,
+    "in_reply_to_id": 2431535605,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6RHoOR",
+    "original_commit_id": "f02c77a21bbbc8fdcc3738aac6d6e6b121b348ad",
+    "original_line": 488,
+    "original_position": 26,
+    "original_start_line": null,
+    "path": "enterprise/wsproxy/wsproxy.go",
+    "position": 1,
+    "pull_request_review_id": 3343208681,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/20296",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2434696081/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-10-16T06:15:34Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2434696081",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/20296#discussion_r2434772029"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/20296"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2434772029"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "On further investigation timers aren't actually goroutines, TIL! Switched to time.After",
+    "commit_id": "6e756b44ae6191c3487cba7c33cb7284974a412c",
+    "created_at": "2025-10-16T06:52:22Z",
+    "diff_hunk": "@@ -553,6 +567,34 @@ func pingSiblingReplicas(ctx context.Context, logger slog.Logger, sf *singleflig\n \treturn errStrInterface.(string)\n }\n \n+// pingReplica pings a replica over it's internal relay address to ensure it's\n+// reachable and alive for health purposes. It will try to ping the replica\n+// twice if the first ping fails, with a short delay between attempts.\n+func pingReplica(ctx context.Context, client http.Client, replica codersdk.Replica) error {\n+\tconst attempts = 2\n+\tvar err error\n+\tfor i := 0; i < attempts; i++ {\n+\t\terr = replicasync.PingPeerReplica(ctx, client, replica.RelayAddress)\n+\t\tif err == nil {\n+\t\t\treturn nil\n+\t\t}\n+\t\tif i < attempts-1 {\n+\t\t\t// Use a timer to avoid a goroutine remaining after the test. Newer\n+\t\t\t// versions of Go will garbage collect unused timers, but the\n+\t\t\t// goroutine may still be running after the test completes.\n+\t\t\ttimer := time.NewTimer(1 * time.Second)",
+    "html_url": "https://github.com/coder/coder/pull/20296#discussion_r2434772029",
+    "id": 2434772029,
+    "in_reply_to_id": 2431425447,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6RH6w9",
+    "original_commit_id": "f02c77a21bbbc8fdcc3738aac6d6e6b121b348ad",
+    "original_line": 585,
+    "original_position": 81,
+    "original_start_line": null,
+    "path": "enterprise/wsproxy/wsproxy.go",
+    "position": 1,
+    "pull_request_review_id": 3343306179,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/20296",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2434772029/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-10-16T06:52:22Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2434772029",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/20296#discussion_r2434774063"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/20296"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2434774063"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "The new timeouts aren't super important and I agree that the existing timeouts + the new retry functionality is probably enough, so I reverted the timeouts and removed the configurability in tests",
+    "commit_id": "f02c77a21bbbc8fdcc3738aac6d6e6b121b348ad",
+    "created_at": "2025-10-16T06:53:18Z",
+    "diff_hunk": "@@ -482,7 +483,13 @@ func (s *Server) handleRegister(res wsproxysdk.RegisterWorkspaceProxyResponse) e\n }\n \n func (s *Server) pingSiblingReplicas(replicas []codersdk.Replica) {\n-\tctx, cancel := context.WithTimeout(s.ctx, 10*time.Second)\n+\t// Use a larger timeout for peer connectivity tests during testing.\n+\ttimeout := 10 * time.Second\n+\tif flag.Lookup(\"test.v\") != nil {",
+    "html_url": "https://github.com/coder/coder/pull/20296#discussion_r2434774063",
+    "id": 2434774063,
+    "in_reply_to_id": 2431535605,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6RH7Qv",
+    "original_commit_id": "f02c77a21bbbc8fdcc3738aac6d6e6b121b348ad",
+    "original_line": 488,
+    "original_position": 26,
+    "original_start_line": null,
+    "path": "enterprise/wsproxy/wsproxy.go",
+    "position": 1,
+    "pull_request_review_id": 3343308572,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/20296",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2434774063/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-10-16T06:53:18Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2434774063",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  }
+]

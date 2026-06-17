@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 12,
+    "blob_url": "https://github.com/coder/coder/blob/6d90e991a3a9bc8a18ce19eba061dc08d3fbd0c0/tailnet%2Fconn.go",
+    "changes": 12,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/tailnet%2Fconn.go?ref=6d90e991a3a9bc8a18ce19eba061dc08d3fbd0c0",
+    "deletions": 0,
+    "filename": "tailnet/conn.go",
+    "patch": "@@ -216,7 +216,18 @@ func NewConn(options *Options) (*Conn, error) {\n \t\tserver.sendNode()\n \t})\n \twireguardEngine.SetNetInfoCallback(func(ni *tailcfg.NetInfo) {\n+\t\tserver.logger.Info(context.Background(), \"netinfo callback\", slog.F(\"netinfo\", ni))\n+\t\t// If the lastMutex is blocked, it's possible that\n+\t\t// multiple NetInfo callbacks occur at the same time.\n+\t\t//\n+\t\t// We need to ensure only the latest is sent!\n+\t\tasOf := time.Now()\n \t\tserver.lastMutex.Lock()\n+\t\tif asOf.Before(server.lastNetInfo) {\n+\t\t\tserver.lastMutex.Unlock()\n+\t\t\treturn\n+\t\t}\n+\t\tserver.lastNetInfo = asOf\n \t\tserver.lastPreferredDERP = ni.PreferredDERP\n \t\tserver.lastDERPLatency = ni.DERPLatency\n \t\tserver.lastMutex.Unlock()\n@@ -269,6 +280,7 @@ type Conn struct {\n \t// It's only possible to store these values via status functions,\n \t// so the values must be stored for retrieval later on.\n \tlastStatus        time.Time\n+\tlastNetInfo       time.Time\n \tlastEndpoints     []string\n \tlastPreferredDERP int\n \tlastDERPLatency   map[string]float64",
+    "raw_url": "https://github.com/coder/coder/raw/6d90e991a3a9bc8a18ce19eba061dc08d3fbd0c0/tailnet%2Fconn.go",
+    "sha": "76577c8f566bb526d016ef577a8c3bccfb12d180",
+    "status": "modified"
+  }
+]

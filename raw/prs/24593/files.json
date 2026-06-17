@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 15,
+    "blob_url": "https://github.com/coder/coder/blob/1ad588c46d8dea025db89149ad847d338cea7a0e/cli%2Fexp_agents_e2e_helpers_test.go",
+    "changes": 15,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fexp_agents_e2e_helpers_test.go?ref=1ad588c46d8dea025db89149ad847d338cea7a0e",
+    "deletions": 0,
+    "filename": "cli/exp_agents_e2e_helpers_test.go",
+    "patch": "@@ -11,6 +11,7 @@ import (\n \n \t\"github.com/coder/coder/v2/cli/clitest\"\n \t\"github.com/coder/coder/v2/coderd/coderdtest\"\n+\t\"github.com/coder/coder/v2/coderd/x/chatd/chattest\"\n \t\"github.com/coder/coder/v2/codersdk\"\n \t\"github.com/coder/coder/v2/pty/ptytest\"\n \t\"github.com/coder/coder/v2/testutil\"\n@@ -26,6 +27,19 @@ func setupExpAgentsBackend(t *testing.T) (*codersdk.Client, *codersdk.Experiment\n \tvalues := coderdtest.DeploymentValues(t)\n \tvalues.Experiments = []string{string(codersdk.ExperimentAgents)}\n \n+\t// Use a mock OpenAI server so chatd does not hit the real API\n+\t// with a fake key. Without this, seedChat triggers background\n+\t// processing that fails with an auth error, injecting noise\n+\t// into the TUI output and causing flaky PTY expects.\n+\t// The non-streaming handler returns unparseable title JSON so\n+\t// the original seed-based chat title is preserved.\n+\topenAIURL := chattest.NewOpenAI(t, func(req *chattest.OpenAIRequest) chattest.OpenAIResponse {\n+\t\tif req.Stream {\n+\t\t\treturn chattest.OpenAIStreamingResponse(chattest.OpenAITextChunks(\"ok\")...)\n+\t\t}\n+\t\treturn chattest.OpenAINonStreamingResponse(\"ok\")\n+\t})\n+\n \tclient := coderdtest.New(t, &coderdtest.Options{\n \t\tDeploymentValues: values,\n \t})\n@@ -37,6 +51,7 @@ func setupExpAgentsBackend(t *testing.T) (*codersdk.Client, *codersdk.Experiment\n \t_, err := expClient.CreateChatProvider(ctx, codersdk.CreateChatProviderConfigRequest{\n \t\tProvider: \"openai\",\n \t\tAPIKey:   \"test-api-key\",\n+\t\tBaseURL:  openAIURL,\n \t})\n \trequire.NoError(t, err)\n ",
+    "raw_url": "https://github.com/coder/coder/raw/1ad588c46d8dea025db89149ad847d338cea7a0e/cli%2Fexp_agents_e2e_helpers_test.go",
+    "sha": "0649ed9f0f5a502bbb5c012c2a93f3cefc194351",
+    "status": "modified"
+  },
+  {
+    "additions": 10,
+    "blob_url": "https://github.com/coder/coder/blob/1ad588c46d8dea025db89149ad847d338cea7a0e/cli%2Fexp_agents_e2e_test.go",
+    "changes": 12,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fexp_agents_e2e_test.go?ref=1ad588c46d8dea025db89149ad847d338cea7a0e",
+    "deletions": 2,
+    "filename": "cli/exp_agents_e2e_test.go",
+    "patch": "@@ -77,8 +77,16 @@ func TestExpAgentsE2E(t *testing.T) {\n \t\tchat := seedChat(t, ctx, expClient, orgID, \"direct open seed\")\n \t\tsession := startExpAgentsSession(t, ctx, client, chat.ID.String())\n \n-\t\tsession.expect(ctx, \"direct open seed\")\n-\t\tsession.expect(ctx, \"esc\")\n+\t\t// Match the short chat ID in the header. The mock's title\n+\t\t// generation may have already replaced the seed text, so\n+\t\t// the short ID is the only stable identifier.\n+\t\tshortID := chat.ID.String()[:8]\n+\t\tsession.expect(ctx, shortID)\n+\t\t// Wait for the full chat view render including the help\n+\t\t// row. In the initial render the help row (containing\n+\t\t// \"esc back\") follows the header in the byte stream, so\n+\t\t// this expect succeeds without consuming text out of order.\n+\t\tsession.expect(ctx, \"esc back\")\n \t\tsession.esc()\n \t\tsession.expect(ctx, \"enter: open\")\n \t\tsession.quit()",
+    "raw_url": "https://github.com/coder/coder/raw/1ad588c46d8dea025db89149ad847d338cea7a0e/cli%2Fexp_agents_e2e_test.go",
+    "sha": "7fa8ed521089ec6b78520fd4d01e0c89fc72719f",
+    "status": "modified"
+  },
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/1ad588c46d8dea025db89149ad847d338cea7a0e/testutil%2Fgoleak.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/testutil%2Fgoleak.go?ref=1ad588c46d8dea025db89149ad847d338cea7a0e",
+    "deletions": 0,
+    "filename": "testutil/goleak.go",
+    "patch": "@@ -21,4 +21,8 @@ var GoleakOptions []goleak.Option = []goleak.Option{\n \t// The go-winio library starts a process-level I/O completion port\n \t// goroutine via sync.Once that is never terminated.\n \tgoleak.IgnoreAnyFunction(\"github.com/Microsoft/go-winio.ioCompletionProcessor\"),\n+\t// Bubble Tea cursor blink goroutine waits on an internal timer\n+\t// (~530ms) and cannot be canceled. When a TUI test exits faster\n+\t// than the blink interval the goroutine is still pending.\n+\tgoleak.IgnoreTopFunction(\"github.com/charmbracelet/bubbles/cursor.(*Model).BlinkCmd.func1\"),\n }",
+    "raw_url": "https://github.com/coder/coder/raw/1ad588c46d8dea025db89149ad847d338cea7a0e/testutil%2Fgoleak.go",
+    "sha": "112fa533c9bfc30449de816d853d0f0edb58c9a7",
+    "status": "modified"
+  }
+]

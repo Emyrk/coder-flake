@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/b1633008b7ecbcd8b144267af8f60811d6c83f45/site%2Fsrc%2Fpages%2FOrganizationSettingsPage%2FCustomRolesPage%2FPermissionPillsList.stories.tsx",
+    "changes": 5,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FOrganizationSettingsPage%2FCustomRolesPage%2FPermissionPillsList.stories.tsx?ref=b1633008b7ecbcd8b144267af8f60811d6c83f45",
+    "deletions": 0,
+    "filename": "site/src/pages/OrganizationSettingsPage/CustomRolesPage/PermissionPillsList.stories.tsx",
+    "patch": "@@ -13,6 +13,11 @@ const meta: Meta<typeof PermissionPillsList> = {\n \t\t\t</div>\n \t\t),\n \t],\n+\tparameters: {\n+\t\tchromatic: {\n+\t\t\tdiffThreshold: 0.5,\n+\t\t},\n+\t},\n };\n \n export default meta;",
+    "raw_url": "https://github.com/coder/coder/raw/b1633008b7ecbcd8b144267af8f60811d6c83f45/site%2Fsrc%2Fpages%2FOrganizationSettingsPage%2FCustomRolesPage%2FPermissionPillsList.stories.tsx",
+    "sha": "56eb382067d847da4567ba35524208ad9880bff6",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/b1633008b7ecbcd8b144267af8f60811d6c83f45/site%2Fsrc%2Fpages%2FTerminalPage%2FTerminalPage.stories.tsx",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FTerminalPage%2FTerminalPage.stories.tsx?ref=b1633008b7ecbcd8b144267af8f60811d6c83f45",
+    "deletions": 1,
+    "filename": "site/src/pages/TerminalPage/TerminalPage.stories.tsx",
+    "patch": "@@ -91,7 +91,7 @@ const meta = {\n \t\t\t},\n \t\t],\n \t\tchromatic: {\n-\t\t\tdiffThreshold: 0.3,\n+\t\t\tdiffThreshold: 0.5,\n \t\t},\n \t},\n \tdecorators: [",
+    "raw_url": "https://github.com/coder/coder/raw/b1633008b7ecbcd8b144267af8f60811d6c83f45/site%2Fsrc%2Fpages%2FTerminalPage%2FTerminalPage.stories.tsx",
+    "sha": "7a34d57fbf83d6071ad9417f606365d0286d3383",
+    "status": "modified"
+  },
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/b1633008b7ecbcd8b144267af8f60811d6c83f45/site%2Fsrc%2Fpages%2FWorkspacePage%2FWorkspaceTopbar.stories.tsx",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FWorkspacePage%2FWorkspaceTopbar.stories.tsx?ref=b1633008b7ecbcd8b144267af8f60811d6c83f45",
+    "deletions": 0,
+    "filename": "site/src/pages/WorkspacePage/WorkspaceTopbar.stories.tsx",
+    "patch": "@@ -38,6 +38,9 @@ const meta: Meta<typeof WorkspaceTopbar> = {\n \tparameters: {\n \t\tlayout: \"fullscreen\",\n \t\tfeatures: [\"advanced_template_scheduling\"],\n+\t\tchromatic: {\n+\t\t\tdiffThreshold: 0.3,\n+\t\t},\n \t},\n };\n ",
+    "raw_url": "https://github.com/coder/coder/raw/b1633008b7ecbcd8b144267af8f60811d6c83f45/site%2Fsrc%2Fpages%2FWorkspacePage%2FWorkspaceTopbar.stories.tsx",
+    "sha": "1ae3ff9e2ebc9e66fd5188a3b3597275276b7555",
+    "status": "modified"
+  }
+]

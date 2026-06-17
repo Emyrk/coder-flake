@@ -1,0 +1,122 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21396#pullrequestreview-3615954778"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21396"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "76109c0825b4e838db267606f30a3b3c968fdd30",
+    "html_url": "https://github.com/coder/coder/pull/21396#pullrequestreview-3615954778",
+    "id": 3615954778,
+    "node_id": "PRR_kwDOGkVX1s7Xhxda",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21396",
+    "state": "COMMENTED",
+    "submitted_at": "2025-12-29T14:03:01Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/40153966?u=f9361ea910fccdf9e76c3ee799b9f0791ef74f9e&v=4",
+      "events_url": "https://api.github.com/users/DanielleMaywood/events{/privacy}",
+      "followers_url": "https://api.github.com/users/DanielleMaywood/followers",
+      "following_url": "https://api.github.com/users/DanielleMaywood/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DanielleMaywood/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/DanielleMaywood",
+      "id": 40153966,
+      "login": "DanielleMaywood",
+      "node_id": "MDQ6VXNlcjQwMTUzOTY2",
+      "organizations_url": "https://api.github.com/users/DanielleMaywood/orgs",
+      "received_events_url": "https://api.github.com/users/DanielleMaywood/received_events",
+      "repos_url": "https://api.github.com/users/DanielleMaywood/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/DanielleMaywood/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DanielleMaywood/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/DanielleMaywood",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21396#pullrequestreview-3615989229"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21396"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "76109c0825b4e838db267606f30a3b3c968fdd30",
+    "html_url": "https://github.com/coder/coder/pull/21396#pullrequestreview-3615989229",
+    "id": 3615989229,
+    "node_id": "PRR_kwDOGkVX1s7Xh53t",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21396",
+    "state": "APPROVED",
+    "submitted_at": "2025-12-29T14:16:34Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?u=bd1828de93463cc139feb1dc4b4f6871dec2a7b3&v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21396#pullrequestreview-3616003340"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21396"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "LGTM \ud83d\udc4d ",
+    "commit_id": "76109c0825b4e838db267606f30a3b3c968fdd30",
+    "html_url": "https://github.com/coder/coder/pull/21396#pullrequestreview-3616003340",
+    "id": 3616003340,
+    "node_id": "PRR_kwDOGkVX1s7Xh9UM",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21396",
+    "state": "APPROVED",
+    "submitted_at": "2025-12-29T14:23:49Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5222392?u=ad9b4e827e055907c47449851892f096623687aa&v=4",
+      "events_url": "https://api.github.com/users/ssncferreira/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ssncferreira/followers",
+      "following_url": "https://api.github.com/users/ssncferreira/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ssncferreira/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ssncferreira",
+      "id": 5222392,
+      "login": "ssncferreira",
+      "node_id": "MDQ6VXNlcjUyMjIzOTI=",
+      "organizations_url": "https://api.github.com/users/ssncferreira/orgs",
+      "received_events_url": "https://api.github.com/users/ssncferreira/received_events",
+      "repos_url": "https://api.github.com/users/ssncferreira/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ssncferreira/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ssncferreira/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ssncferreira",
+      "user_view_type": "public"
+    }
+  }
+]

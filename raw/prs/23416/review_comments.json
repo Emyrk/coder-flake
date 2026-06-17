@@ -1,0 +1,71 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/23416#discussion_r2973554027"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/23416"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2973554027"
+      }
+    },
+    "author_association": "NONE",
+    "body": "**<sub><sub>![P1 Badge](https://img.shields.io/badge/P1-orange?style=flat)</sub></sub>  Wait on a detail-only selector in drill-in story**\n\n`findByText(\"@alice\")` is still ambiguous here and can resolve against the list row before the detail view mounts, because the list itself renders `@${user.username}` in `UserRow` (`site/src/pages/AgentsPage/AgentSettingsPageView.tsx`, subtitle prop). That means the next synchronous `getByText(\"Alice Liddell\")`/`getByText(\"@alice\")` assertions can still race exactly like before in Chromatic. Use a selector that exists only in the detail panel (or assert list disappearance first) so this wait actually gates on the transition.\n\nUseful? React with \ud83d\udc4d\u00a0/ \ud83d\udc4e.",
+    "commit_id": "bc902883af35d281864956e185c7fad2596e8109",
+    "created_at": "2026-03-23T08:28:19Z",
+    "diff_hunk": "@@ -487,9 +487,10 @@ export const UsageUserDrillIn: Story = {\n \t\t// Wait for the user list to load.\n \t\tawait userEvent.click(await body.findByText(\"Alice Liddell\"));\n \n-\t\t// The detail view should show the user header with name\n-\t\t// and username subtitle.\n-\t\tawait expect(await body.findByText(\"Alice Liddell\")).toBeInTheDocument();\n+\t\t// Wait for the detail view to mount before asserting on\n+\t\t// its header content.\n+\t\tawait body.findByText(\"@alice\");",
+    "html_url": "https://github.com/coder/coder/pull/23416#discussion_r2973554027",
+    "id": 2973554027,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6xPNVr",
+    "original_commit_id": "bc902883af35d281864956e185c7fad2596e8109",
+    "original_line": 492,
+    "original_position": 9,
+    "original_start_line": null,
+    "path": "site/src/pages/AgentsPage/AgentSettingsPageView.stories.tsx",
+    "position": 1,
+    "pull_request_review_id": 3990070874,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/23416",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2973554027/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-03-23T08:28:19Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2973554027",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/1144995?v=4",
+      "events_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/chatgpt-codex-connector",
+      "id": 199175422,
+      "login": "chatgpt-codex-connector[bot]",
+      "node_id": "BOT_kgDOC98s_g",
+      "organizations_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  }
+]

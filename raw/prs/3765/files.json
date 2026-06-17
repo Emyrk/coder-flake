@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/1d47765350eddca48edc6484d4510c98bcb05558/enterprise%2Fcoderd%2Ffeatures_internal_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcoderd%2Ffeatures_internal_test.go?ref=1d47765350eddca48edc6484d4510c98bcb05558",
+    "deletions": 2,
+    "filename": "enterprise/coderd/features_internal_test.go",
+    "patch": "@@ -86,7 +86,7 @@ func TestFeaturesService_EntitlementsAPI(t *testing.T) {\n \t\t\t\tauditLogs: entitlement{entitled},\n \t\t\t},\n \t\t}\n-\t\t_, err = db.InsertUser(ctx, database.InsertUserParams{\n+\t\t_, err := db.InsertUser(ctx, database.InsertUserParams{\n \t\t\tID:             uuid.UUID{},\n \t\t\tEmail:          \"\",\n \t\t\tUsername:       \"\",\n@@ -136,7 +136,7 @@ func TestFeaturesService_EntitlementsAPI(t *testing.T) {\n \t\t\t},\n \t\t}\n \t\tfor i := byte(0); i < 5; i++ {\n-\t\t\t_, err = db.InsertUser(ctx, database.InsertUserParams{\n+\t\t\t_, err := db.InsertUser(ctx, database.InsertUserParams{\n \t\t\t\tID:             uuid.UUID{i},\n \t\t\t\tEmail:          \"\",\n \t\t\t\tUsername:       \"\",",
+    "raw_url": "https://github.com/coder/coder/raw/1d47765350eddca48edc6484d4510c98bcb05558/enterprise%2Fcoderd%2Ffeatures_internal_test.go",
+    "sha": "b8fbe7d30e8e901b148622d0941a769202355f8d",
+    "status": "modified"
+  }
+]

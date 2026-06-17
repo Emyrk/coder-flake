@@ -1,0 +1,140 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2309#discussion_r896248554"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2309"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/896248554"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "did a lil bit of formatting here",
+    "commit_id": "44c96dcefa70df141842ace641e964ce56c7d65e",
+    "created_at": "2022-06-13T23:25:46Z",
+    "diff_hunk": "@@ -85,7 +85,8 @@ echo_latest_version() {\n \n echo_standalone_postinstall() {\n \tcath <<EOF\n-\tStandalone release has been installed into $STANDALONE_INSTALL_PREFIX/bin/$STANDALONE_BINARY_NAME\n+\n+Standalone release has been installed into $STANDALONE_INSTALL_PREFIX/bin/$STANDALONE_BINARY_NAME",
+    "html_url": "https://github.com/coder/coder/pull/2309#discussion_r896248554",
+    "id": 896248554,
+    "line": 89,
+    "node_id": "PRRC_kwDOGkVX1s41a6rq",
+    "original_commit_id": "ddb95a3701946b39c350d854a8fb19f9cb975a34",
+    "original_line": 89,
+    "original_position": 6,
+    "original_start_line": 88,
+    "path": "install.sh",
+    "position": 6,
+    "pull_request_review_id": 1005066178,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2309",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/896248554/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 88,
+    "start_side": "LEFT",
+    "subject_type": "line",
+    "updated_at": "2022-06-13T23:25:46Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/896248554",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/22407953?v=4",
+      "events_url": "https://api.github.com/users/bpmct/events{/privacy}",
+      "followers_url": "https://api.github.com/users/bpmct/followers",
+      "following_url": "https://api.github.com/users/bpmct/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bpmct/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/bpmct",
+      "id": 22407953,
+      "login": "bpmct",
+      "node_id": "MDQ6VXNlcjIyNDA3OTUz",
+      "organizations_url": "https://api.github.com/users/bpmct/orgs",
+      "received_events_url": "https://api.github.com/users/bpmct/received_events",
+      "repos_url": "https://api.github.com/users/bpmct/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/bpmct/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bpmct/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/bpmct",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2309#discussion_r896249578"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2309"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/896249578"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "mv would also work here instead of cp.\r\n\r\nhttps://developer.apple.com/forums/thread/130313?answerId=410704022#410704022",
+    "commit_id": "44c96dcefa70df141842ace641e964ce56c7d65e",
+    "created_at": "2022-06-13T23:28:21Z",
+    "diff_hunk": "@@ -391,7 +392,16 @@ install_standalone() {\n \t\t\"$sh_c\" unzip -d \"$CACHE_DIR\" -o \"$CACHE_DIR/coder_${VERSION}_${OS}_${ARCH}.zip\"\n \tfi\n \n-\t\"$sh_c\" cp \"$CACHE_DIR/coder\" \"$STANDALONE_INSTALL_PREFIX/bin/$STANDALONE_BINARY_NAME\"\n+\tCOPY_LOCATION=\"$STANDALONE_INSTALL_PREFIX/bin/$STANDALONE_BINARY_NAME\"\n+\n+\t# Remove the file if it already exists to\n+\t# avoid https://github.com/coder/coder/issues/2086\n+\tif [ -f \"$COPY_LOCATION\" ]; then\n+    \t\"$sh_c\" rm $COPY_LOCATION\n+\tfi",
+    "html_url": "https://github.com/coder/coder/pull/2309#discussion_r896249578",
+    "id": 896249578,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s41a67q",
+    "original_commit_id": "ddb95a3701946b39c350d854a8fb19f9cb975a34",
+    "original_line": 401,
+    "original_position": 21,
+    "original_start_line": 397,
+    "path": "install.sh",
+    "position": 1,
+    "pull_request_review_id": 1005067563,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2309",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/896249578/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 397,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-06-13T23:28:21Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/896249578",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/22407953?v=4",
+      "events_url": "https://api.github.com/users/bpmct/events{/privacy}",
+      "followers_url": "https://api.github.com/users/bpmct/followers",
+      "following_url": "https://api.github.com/users/bpmct/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bpmct/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/bpmct",
+      "id": 22407953,
+      "login": "bpmct",
+      "node_id": "MDQ6VXNlcjIyNDA3OTUz",
+      "organizations_url": "https://api.github.com/users/bpmct/orgs",
+      "received_events_url": "https://api.github.com/users/bpmct/received_events",
+      "repos_url": "https://api.github.com/users/bpmct/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/bpmct/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bpmct/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/bpmct",
+      "user_view_type": "public"
+    }
+  }
+]

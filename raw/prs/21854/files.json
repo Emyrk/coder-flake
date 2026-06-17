@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/b96b51d83a4c758a190c8f1cc247f5c1e62e9a33/provisioner%2Fterraform%2Fmodules_internal_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/provisioner%2Fterraform%2Fmodules_internal_test.go?ref=b96b51d83a4c758a190c8f1cc247f5c1e62e9a33",
+    "deletions": 1,
+    "filename": "provisioner/terraform/modules_internal_test.go",
+    "patch": "@@ -200,7 +200,7 @@ func TestGetModulesArchive(t *testing.T) {\n \t\trequire.Empty(t, skipped)\n \t\tactualSize := int64(len(archive))\n \n-\t\toriginalDef[\"extra\"] = moduleDef{payload: bytes.Repeat([]byte(\"X\"), 1001)}\n+\t\toriginalDef[\"extra\"] = moduleDef{payload: bytes.Repeat([]byte(\"X\"), 2000)}\n \t\tmemFS = moduleArchiveFS(t, originalDef)\n \n \t\t// Now test with exact size - should just fit",
+    "raw_url": "https://github.com/coder/coder/raw/b96b51d83a4c758a190c8f1cc247f5c1e62e9a33/provisioner%2Fterraform%2Fmodules_internal_test.go",
+    "sha": "c55ad1d8e8b0548190880cf35e2a8bbfc7cf7db0",
+    "status": "modified"
+  }
+]

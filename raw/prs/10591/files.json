@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/136ac3a003428baa5cdb252844ef6a83ff7b4986/flake.nix",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=136ac3a003428baa5cdb252844ef6a83ff7b4986",
+    "deletions": 1,
+    "filename": "flake.nix",
+    "patch": "@@ -64,7 +64,7 @@\n           shfmt\n           sqlc\n           # strace is not available on OSX\n-          (if system == \"aarch64-darwin\" then null else strace)\n+          (if pkgs.stdenv.hostPlatform.isDarwin then null else strace)\n           terraform\n           typos\n           vim",
+    "raw_url": "https://github.com/coder/coder/raw/136ac3a003428baa5cdb252844ef6a83ff7b4986/flake.nix",
+    "sha": "172f91d271aad56bd2c40535f939c45cfe1ab542",
+    "status": "modified"
+  }
+]

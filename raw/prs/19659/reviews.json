@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19659#pullrequestreview-3224564350"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19659"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "LGTM with the `Eventually` removed (the root cause for the 500 having been fixed in another PR)",
+    "commit_id": "560a32441878987e48423c81d5e71b50e1df4e51",
+    "html_url": "https://github.com/coder/coder/pull/19659#pullrequestreview-3224564350",
+    "id": 3224564350,
+    "node_id": "PRR_kwDOGkVX1s7AMvJ-",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19659",
+    "state": "APPROVED",
+    "submitted_at": "2025-09-15T13:17:06Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/39577870?u=1eb1bf0a337525e45f5f0e1b60c8f32c81d56855&v=4",
+      "events_url": "https://api.github.com/users/ethanndickson/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ethanndickson/followers",
+      "following_url": "https://api.github.com/users/ethanndickson/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ethanndickson/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ethanndickson",
+      "id": 39577870,
+      "login": "ethanndickson",
+      "node_id": "MDQ6VXNlcjM5NTc3ODcw",
+      "organizations_url": "https://api.github.com/users/ethanndickson/orgs",
+      "received_events_url": "https://api.github.com/users/ethanndickson/received_events",
+      "repos_url": "https://api.github.com/users/ethanndickson/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ethanndickson/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ethanndickson/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ethanndickson",
+      "user_view_type": "public"
+    }
+  }
+]

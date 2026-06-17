@@ -1,0 +1,82 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16715#pullrequestreview-2644970589"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16715"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Downgrading the version of playwright in `site/package.json` means we're missing the fixes for four regressions fixed in v1.47.1 and v1.47.2:\r\n\r\n- https://github.com/microsoft/playwright/releases/tag/v1.47.1\r\n- https://github.com/microsoft/playwright/releases/tag/v1.47.2\r\n\r\nIs there any other alternative to this approach?",
+    "commit_id": "2da521bce34e5b00a89347291f9c06c0c278059b",
+    "html_url": "https://github.com/coder/coder/pull/16715#pullrequestreview-2644970589",
+    "id": 2644970589,
+    "node_id": "PRR_kwDOGkVX1s6dpwxd",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16715",
+    "state": "COMMENTED",
+    "submitted_at": "2025-02-26T15:40:35Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?u=bd1828de93463cc139feb1dc4b4f6871dec2a7b3&v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16715#pullrequestreview-2673865994"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16715"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561",
+    "html_url": "https://github.com/coder/coder/pull/16715#pullrequestreview-2673865994",
+    "id": 2673865994,
+    "node_id": "PRR_kwDOGkVX1s6fX_UK",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16715",
+    "state": "APPROVED",
+    "submitted_at": "2025-03-11T10:39:40Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?u=bd1828de93463cc139feb1dc4b4f6871dec2a7b3&v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  }
+]

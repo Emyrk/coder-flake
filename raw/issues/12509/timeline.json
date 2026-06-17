@@ -1,0 +1,69 @@
+[
+  {
+    "actor": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/843202?v=4",
+      "events_url": "https://api.github.com/users/coder-labeler%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-labeler%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-labeler%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-labeler%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-labeler",
+      "id": 161500314,
+      "login": "coder-labeler[bot]",
+      "node_id": "BOT_kgDOCaBMmg",
+      "organizations_url": "https://api.github.com/users/coder-labeler%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-labeler%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-labeler%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-labeler%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-labeler%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-labeler%5Bbot%5D",
+      "user_view_type": "public"
+    },
+    "commit_id": null,
+    "commit_url": null,
+    "created_at": "2024-03-11T08:24:47Z",
+    "event": "labeled",
+    "id": 12069793150,
+    "label": {
+      "color": "D98F0B",
+      "name": "flake"
+    },
+    "node_id": "LE_lADOGkVX1s6B2Y03zwAAAALPam1-",
+    "performed_via_github_app": null,
+    "url": "https://api.github.com/repos/coder/coder/issues/events/12069793150"
+  },
+  {
+    "actor": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    },
+    "commit_id": null,
+    "commit_url": null,
+    "created_at": "2024-03-11T12:54:40Z",
+    "event": "closed",
+    "id": 12073208843,
+    "node_id": "CE_lADOGkVX1s6B2Y03zwAAAALPnowL",
+    "performed_via_github_app": null,
+    "state_reason": null,
+    "url": "https://api.github.com/repos/coder/coder/issues/events/12073208843"
+  }
+]

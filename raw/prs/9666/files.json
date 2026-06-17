@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/28ae27faaeca0b35a73d244d207d0bba23549d65/coderd%2Ftemplates_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Ftemplates_test.go?ref=28ae27faaeca0b35a73d244d207d0bba23549d65",
+    "deletions": 0,
+    "filename": "coderd/templates_test.go",
+    "patch": "@@ -1161,6 +1161,7 @@ func TestDeleteTemplate(t *testing.T) {\n \t\tuser := coderdtest.CreateFirstUser(t, client)\n \t\tversion := coderdtest.CreateTemplateVersion(t, client, user.OrganizationID, nil)\n \t\ttemplate := coderdtest.CreateTemplate(t, client, user.OrganizationID, version.ID)\n+\t\tcoderdtest.AwaitTemplateVersionJob(t, client, version.ID)\n \n \t\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitLong)\n \t\tdefer cancel()",
+    "raw_url": "https://github.com/coder/coder/raw/28ae27faaeca0b35a73d244d207d0bba23549d65/coderd%2Ftemplates_test.go",
+    "sha": "528485ac2faf5567a8034d4e84ddc20b9c35cc72",
+    "status": "modified"
+  }
+]

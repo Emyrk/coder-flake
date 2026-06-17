@@ -1,0 +1,93 @@
+[
+  {
+    "author_association": "CONTRIBUTOR",
+    "body": "## Documentation Check\n\n### No Changes Needed\n\nThis PR only removes a flaky pagination test from `site/src/pages/WorkspacesPage/WorkspacesPage.test.tsx`. It contains no user-facing changes, API modifications, CLI flag additions, or configuration updates that would require documentation.\n\n---\n*Automated review via [Coder Tasks](https://coder.com/docs/ai-coder/tasks)*",
+    "created_at": "2026-05-12T21:53:51Z",
+    "html_url": "https://github.com/coder/coder/pull/25237#issuecomment-4435131818",
+    "id": 4435131818,
+    "issue_url": "https://api.github.com/repos/coder/coder/issues/25237",
+    "node_id": "IC_kwDOGkVX1s8AAAABCFq9qg",
+    "performed_via_github_app": {
+      "client_id": "Iv23liUogVj6076OvXoo",
+      "created_at": "2026-01-13T22:22:55Z",
+      "description": "Coder Doc Check Bot in charge of ensuring that all PR's are merged without missing documentation",
+      "events": [
+        "commit_comment",
+        "issue_comment"
+      ],
+      "external_url": "https://coder.com",
+      "html_url": "https://github.com/apps/coder-tasks",
+      "id": 2652121,
+      "name": "Coder Tasks",
+      "node_id": "A_kwDOCorOWM4AKHfZ",
+      "owner": {
+        "avatar_url": "https://avatars.githubusercontent.com/u/176868952?v=4",
+        "events_url": "https://api.github.com/users/DevelopmentCats/events{/privacy}",
+        "followers_url": "https://api.github.com/users/DevelopmentCats/followers",
+        "following_url": "https://api.github.com/users/DevelopmentCats/following{/other_user}",
+        "gists_url": "https://api.github.com/users/DevelopmentCats/gists{/gist_id}",
+        "gravatar_id": "",
+        "html_url": "https://github.com/DevelopmentCats",
+        "id": 176868952,
+        "login": "DevelopmentCats",
+        "node_id": "U_kgDOCorOWA",
+        "organizations_url": "https://api.github.com/users/DevelopmentCats/orgs",
+        "received_events_url": "https://api.github.com/users/DevelopmentCats/received_events",
+        "repos_url": "https://api.github.com/users/DevelopmentCats/repos",
+        "site_admin": false,
+        "starred_url": "https://api.github.com/users/DevelopmentCats/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/DevelopmentCats/subscriptions",
+        "type": "User",
+        "url": "https://api.github.com/users/DevelopmentCats",
+        "user_view_type": "public"
+      },
+      "permissions": {
+        "actions": "read",
+        "artifact_metadata": "read",
+        "contents": "read",
+        "issues": "write",
+        "metadata": "read",
+        "pull_requests": "write",
+        "security_events": "read",
+        "statuses": "read"
+      },
+      "slug": "coder-tasks",
+      "updated_at": "2026-01-27T19:34:09Z"
+    },
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/issues/comments/4435131818/reactions"
+    },
+    "updated_at": "2026-05-12T21:53:51Z",
+    "url": "https://api.github.com/repos/coder/coder/issues/comments/4435131818",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/2652121?v=4",
+      "events_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-tasks",
+      "id": 254784001,
+      "login": "coder-tasks[bot]",
+      "node_id": "BOT_kgDODy-yAQ",
+      "organizations_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-tasks%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  }
+]

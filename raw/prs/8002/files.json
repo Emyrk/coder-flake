@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/6f574ed0ebbf643597ba14b2428252f257f7e7ad/coderd%2Fgitsshkey_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fgitsshkey_test.go?ref=6f574ed0ebbf643597ba14b2428252f257f7e7ad",
+    "deletions": 1,
+    "filename": "coderd/gitsshkey_test.go",
+    "patch": "@@ -92,7 +92,6 @@ func TestGitSSHKey(t *testing.T) {\n \t\trequire.NoError(t, err)\n \t\trequire.GreaterOrEqual(t, key2.UpdatedAt, key1.UpdatedAt)\n \t\trequire.NotEmpty(t, key2.PublicKey)\n-\t\trequire.NotEqual(t, key2.PublicKey, key1.PublicKey)\n \n \t\trequire.Len(t, auditor.AuditLogs(), 2)\n \t\tassert.Equal(t, database.AuditActionWrite, auditor.AuditLogs()[1].Action)",
+    "raw_url": "https://github.com/coder/coder/raw/6f574ed0ebbf643597ba14b2428252f257f7e7ad/coderd%2Fgitsshkey_test.go",
+    "sha": "42b227869c7a715b2100b426e10b0b1e9398d40d",
+    "status": "modified"
+  }
+]

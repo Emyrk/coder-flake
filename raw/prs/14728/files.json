@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 24,
+    "blob_url": "https://github.com/coder/coder/blob/c86ca8607b4a0be6030419a744ee0c5df3f87a63/flake.nix",
+    "changes": 26,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=c86ca8607b4a0be6030419a744ee0c5df3f87a63",
+    "deletions": 2,
+    "filename": "flake.nix",
+    "patch": "@@ -40,6 +40,27 @@\n         # From https://nixos.wiki/wiki/Google_Cloud_SDK\n         gdk = pkgs.google-cloud-sdk.withExtraComponents ([ pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin ]);\n \n+        proto_gen_go_1_30 = pkgs.buildGoModule rec {\n+          name = \"protoc-gen-go\";\n+          owner = \"protocolbuffers\";\n+          repo = \"protobuf-go\";\n+          rev = \"v1.30.0\"; \n+          src = pkgs.fetchFromGitHub {\n+            owner = \"protocolbuffers\";\n+            repo = \"protobuf-go\";\n+            rev = rev;\n+            # Updated with ./scripts/update-flake.sh`.\n+            sha256 = \"sha256-GTZQ40uoi62Im2F4YvlZWiSNNJ4fEAkRojYa0EYz9HU=\";\n+          };\n+          subPackages = [ \"cmd/protoc-gen-go\" ];\n+          vendorHash = null;\n+          proxyVendor = true;\n+          preBuild = ''\n+            export GOPROXY=https://proxy.golang.org,direct\n+            go mod download\n+          '';\n+        };\n+\n         # The minimal set of packages to build Coder.\n         devShellPackages = with pkgs; [\n           # google-chrome is not available on OSX and aarch64 linux\n@@ -80,7 +101,7 @@\n           playwright-driver.browsers\n           postgresql_16\n           protobuf\n-          protoc-gen-go\n+          proto_gen_go_1_30\n           ripgrep\n           # This doesn't build on latest nixpkgs (July 10 2024)\n           (pinnedPkgs.sapling)\n@@ -117,7 +138,7 @@\n             name = \"coder-${osArch}\";\n             # Updated with ./scripts/update-flake.sh`.\n             # This should be updated whenever go.mod changes!\n-            vendorHash = \"sha256-KyMqZxav64rbybUUFoBsOlB6XH7y8aQ7ekaYm0QD4Ew=\";\n+            vendorHash = \"sha256-kPXRp7l05iJd4IdvQeOFOgg2UNzBcloy3tA9Meep9VI=\";\n             proxyVendor = true;\n             src = ./.;\n             nativeBuildInputs = with pkgs; [ getopt openssl zstd ];\n@@ -151,6 +172,7 @@\n           '';\n         };\n         packages = {\n+          proto_gen_go = proto_gen_go_1_30;  \n           all = pkgs.buildEnv {\n             name = \"all-packages\";\n             paths = devShellPackages;",
+    "raw_url": "https://github.com/coder/coder/raw/c86ca8607b4a0be6030419a744ee0c5df3f87a63/flake.nix",
+    "sha": "f2d138c2b3aa7fdaa2cf63607a257ab58dd17fc7",
+    "status": "modified"
+  },
+  {
+    "additions": 24,
+    "blob_url": "https://github.com/coder/coder/blob/c86ca8607b4a0be6030419a744ee0c5df3f87a63/scripts%2Fupdate-flake.sh",
+    "changes": 24,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scripts%2Fupdate-flake.sh?ref=c86ca8607b4a0be6030419a744ee0c5df3f87a63",
+    "deletions": 0,
+    "filename": "scripts/update-flake.sh",
+    "patch": "@@ -5,6 +5,20 @@ set -eu\n \n cd \"$(dirname \"${BASH_SOURCE[0]}\")/..\"\n \n+check_and_install() {\n+\tif ! command -v \"$1\" &>/dev/null; then\n+\t\techo \"$1 is not installed. Attempting to install...\"\n+\t\tif ! nix-env -iA nixpkgs.\"$1\"; then\n+\t\t\techo \"Failed to install $1. Please install it manually and try again.\"\n+\t\t\texit 1\n+\t\tfi\n+\t\techo \"$1 has been installed successfully.\"\n+\tfi\n+}\n+\n+check_and_install jq\n+check_and_install nix-prefetch-git\n+\n OUT=$(mktemp -d -t nar-hash-XXXXXX)\n \n echo \"Downloading Go modules...\"\n@@ -13,4 +27,14 @@ echo \"Calculating SRI hash...\"\n HASH=$(go run tailscale.com/cmd/nardump --sri \"$OUT/pkg/mod/cache/download\")\n sudo rm -rf \"$OUT\"\n \n+echo \"Updating go.mod vendorHash\"\n sed -i \"s#\\(vendorHash = \\\"\\)[^\\\"]*#\\1${HASH}#\" ./flake.nix\n+\n+# Update protoc-gen-go sha256\n+echo \"Updating protoc-gen-go sha256...\"\n+PROTOC_GEN_GO_REV=$(nix eval --extra-experimental-features nix-command --extra-experimental-features flakes --raw .#proto_gen_go.rev)\n+echo \"protoc-gen-go version: $PROTOC_GEN_GO_REV\"\n+PROTOC_GEN_GO_SHA256=$(nix-prefetch-git https://github.com/protocolbuffers/protobuf-go --rev \"$PROTOC_GEN_GO_REV\" | jq -r .hash)\n+sed -i \"s#\\(sha256 = \\\"\\)[^\\\"]*#\\1${PROTOC_GEN_GO_SHA256}#\" ./flake.nix\n+\n+echo \"Flake updated successfully!\"",
+    "raw_url": "https://github.com/coder/coder/raw/c86ca8607b4a0be6030419a744ee0c5df3f87a63/scripts%2Fupdate-flake.sh",
+    "sha": "9287a820b85620c7363e5828eb09bff861af7008",
+    "status": "modified"
+  }
+]

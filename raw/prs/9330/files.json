@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/2d3bd031b369f4c3e28a04f5bc63d97a4bafb915/coderd%2Ftemplateversions_test.go",
+    "changes": 10,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Ftemplateversions_test.go?ref=2d3bd031b369f4c3e28a04f5bc63d97a4bafb915",
+    "deletions": 4,
+    "filename": "coderd/templateversions_test.go",
+    "patch": "@@ -308,11 +308,13 @@ func TestPatchCancelTemplateVersion(t *testing.T) {\n \t\trequire.Eventually(t, func() bool {\n \t\t\tvar err error\n \t\t\tversion, err = client.TemplateVersion(ctx, version.ID)\n+\t\t\t// job gets marked Failed when there is an Error; in practice we never get to Status = Canceled\n+\t\t\t// because provisioners report an Error when canceled. We check the Error string to ensure we don't mask\n+\t\t\t// other errors in this test.\n+\t\t\tt.Logf(\"got version %s | %s\", version.Job.Error, version.Job.Status)\n \t\t\treturn assert.NoError(t, err) &&\n-\t\t\t\t// The job will never actually cancel successfully because it will never send a\n-\t\t\t\t// provision complete response.\n-\t\t\t\tassert.Empty(t, version.Job.Error) &&\n-\t\t\t\tversion.Job.Status == codersdk.ProvisionerJobCanceling\n+\t\t\t\tstrings.HasSuffix(version.Job.Error, \"canceled\") &&\n+\t\t\t\tversion.Job.Status == codersdk.ProvisionerJobFailed\n \t\t}, testutil.WaitShort, testutil.IntervalFast)\n \t})\n }",
+    "raw_url": "https://github.com/coder/coder/raw/2d3bd031b369f4c3e28a04f5bc63d97a4bafb915/coderd%2Ftemplateversions_test.go",
+    "sha": "2ca934e2d408574ce25bd825b40b35dff498eb4d",
+    "status": "modified"
+  },
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/2d3bd031b369f4c3e28a04f5bc63d97a4bafb915/coderd%2Fworkspacebuilds_test.go",
+    "changes": 7,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspacebuilds_test.go?ref=2d3bd031b369f4c3e28a04f5bc63d97a4bafb915",
+    "deletions": 1,
+    "filename": "coderd/workspacebuilds_test.go",
+    "patch": "@@ -14,6 +14,8 @@ import (\n \t\"github.com/stretchr/testify/require\"\n \t\"golang.org/x/xerrors\"\n \n+\t\"cdr.dev/slog\"\n+\t\"cdr.dev/slog/sloggers/slogtest\"\n \t\"github.com/coder/coder/v2/coderd/audit\"\n \t\"github.com/coder/coder/v2/coderd/coderdtest\"\n \t\"github.com/coder/coder/v2/coderd/database\"\n@@ -412,7 +414,10 @@ func TestPatchCancelWorkspaceBuild(t *testing.T) {\n \tt.Run(\"User is not allowed to cancel\", func(t *testing.T) {\n \t\tt.Parallel()\n \n-\t\tclient := coderdtest.New(t, &coderdtest.Options{IncludeProvisionerDaemon: true})\n+\t\t// need to include our own logger because the provisioner (rightly) drops error logs when we shut down the\n+\t\t// test with a build in progress.\n+\t\tlogger := slogtest.Make(t, &slogtest.Options{IgnoreErrors: true}).Leveled(slog.LevelDebug)\n+\t\tclient := coderdtest.New(t, &coderdtest.Options{IncludeProvisionerDaemon: true, Logger: &logger})\n \t\towner := coderdtest.CreateFirstUser(t, client)\n \t\tversion := coderdtest.CreateTemplateVersion(t, client, owner.OrganizationID, &echo.Responses{\n \t\t\tParse: echo.ParseComplete,",
+    "raw_url": "https://github.com/coder/coder/raw/2d3bd031b369f4c3e28a04f5bc63d97a4bafb915/coderd%2Fworkspacebuilds_test.go",
+    "sha": "2c32f9ac39b7afe3e18a9246767b9a894920188f",
+    "status": "modified"
+  },
+  {
+    "additions": 10,
+    "blob_url": "https://github.com/coder/coder/blob/2d3bd031b369f4c3e28a04f5bc63d97a4bafb915/scaletest%2Fcreateworkspaces%2Frun_test.go",
+    "changes": 13,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scaletest%2Fcreateworkspaces%2Frun_test.go?ref=2d3bd031b369f4c3e28a04f5bc63d97a4bafb915",
+    "deletions": 3,
+    "filename": "scaletest/createworkspaces/run_test.go",
+    "patch": "@@ -163,8 +163,12 @@ func Test_Runner(t *testing.T) {\n \t\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitLong)\n \t\tdefer cancel()\n \n+\t\t// need to include our own logger because the provisioner (rightly) drops error logs when we shut down the\n+\t\t// test with a build in progress.\n+\t\tlogger := slogtest.Make(t, &slogtest.Options{IgnoreErrors: true}).Leveled(slog.LevelDebug)\n \t\tclient := coderdtest.New(t, &coderdtest.Options{\n \t\t\tIncludeProvisionerDaemon: true,\n+\t\t\tLogger:                   &logger,\n \t\t})\n \t\tuser := coderdtest.CreateFirstUser(t, client)\n \n@@ -251,14 +255,17 @@ func Test_Runner(t *testing.T) {\n \t\t\tif err != nil {\n \t\t\t\treturn false\n \t\t\t}\n-\t\t\tfor _, build := range builds {\n+\t\t\tfor i, build := range builds {\n+\t\t\t\tt.Logf(\"checking build #%d: %s | %s\", i, build.Transition, build.Job.Status)\n \t\t\t\t// One of the builds should be for creating the workspace,\n \t\t\t\tif build.Transition != codersdk.WorkspaceTransitionStart {\n \t\t\t\t\tcontinue\n \t\t\t\t}\n \n-\t\t\t\t// And it should be either canceled or canceling\n-\t\t\t\tif build.Job.Status == codersdk.ProvisionerJobCanceled || build.Job.Status == codersdk.ProvisionerJobCanceling {\n+\t\t\t\t// And it should be either failed (Echo returns an error when job is canceled), canceling, or canceled.\n+\t\t\t\tif build.Job.Status == codersdk.ProvisionerJobFailed ||\n+\t\t\t\t\tbuild.Job.Status == codersdk.ProvisionerJobCanceling ||\n+\t\t\t\t\tbuild.Job.Status == codersdk.ProvisionerJobCanceled {\n \t\t\t\t\treturn true\n \t\t\t\t}\n \t\t\t}",
+    "raw_url": "https://github.com/coder/coder/raw/2d3bd031b369f4c3e28a04f5bc63d97a4bafb915/scaletest%2Fcreateworkspaces%2Frun_test.go",
+    "sha": "d5e96e22fcc830758ff1293df6a41dc04fb05e1a",
+    "status": "modified"
+  }
+]

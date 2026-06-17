@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 24,
+    "blob_url": "https://github.com/coder/coder/blob/7c9718c33d2beebe8bde321375e7eac0f4524ac0/coderd%2Fdevtunnel%2Ftunnel_test.go",
+    "changes": 37,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdevtunnel%2Ftunnel_test.go?ref=7c9718c33d2beebe8bde321375e7eac0f4524ac0",
+    "deletions": 13,
+    "filename": "coderd/devtunnel/tunnel_test.go",
+    "patch": "@@ -189,23 +189,34 @@ func newTunnelServer(t *testing.T) *tunnelServer {\n \trequire.Equal(t, \"https\", baseURLParsed.Scheme)\n \tbaseURLParsed.Host = net.JoinHostPort(\"tunnel.coder.com\", baseURLParsed.Port())\n \n-\twireguardPort := freeUDPPort(t)\n-\n \tkey, err := tunnelsdk.GeneratePrivateKey()\n \trequire.NoError(t, err)\n \n-\toptions := &tunneld.Options{\n-\t\tBaseURL:                baseURLParsed,\n-\t\tWireguardEndpoint:      fmt.Sprintf(\"127.0.0.1:%d\", wireguardPort),\n-\t\tWireguardPort:          wireguardPort,\n-\t\tWireguardKey:           key,\n-\t\tWireguardMTU:           tunneld.DefaultWireguardMTU,\n-\t\tWireguardServerIP:      tunneld.DefaultWireguardServerIP,\n-\t\tWireguardNetworkPrefix: tunneld.DefaultWireguardNetworkPrefix,\n-\t}\n+\t// Sadly the tunnel server needs to be passed a port number and can't be\n+\t// passed an active listener (because wireguard needs to make the listener),\n+\t// so we may need to try a few times to get a free port.\n+\tvar td *tunneld.API\n+\tfor i := 0; i < 10; i++ {\n+\t\twireguardPort := freeUDPPort(t)\n+\t\toptions := &tunneld.Options{\n+\t\t\tBaseURL:                baseURLParsed,\n+\t\t\tWireguardEndpoint:      fmt.Sprintf(\"127.0.0.1:%d\", wireguardPort),\n+\t\t\tWireguardPort:          wireguardPort,\n+\t\t\tWireguardKey:           key,\n+\t\t\tWireguardMTU:           tunneld.DefaultWireguardMTU,\n+\t\t\tWireguardServerIP:      tunneld.DefaultWireguardServerIP,\n+\t\t\tWireguardNetworkPrefix: tunneld.DefaultWireguardNetworkPrefix,\n+\t\t}\n \n-\ttd, err := tunneld.New(options)\n-\trequire.NoError(t, err)\n+\t\ttd, err = tunneld.New(options)\n+\t\tif err == nil {\n+\t\t\tbreak\n+\t\t}\n+\t\tt.Logf(\"failed to create tunnel server on port %d: %s\", wireguardPort, err)\n+\t}\n+\tif td == nil {\n+\t\tt.Fatal(\"failed to create tunnel server in 10 attempts\")\n+\t}\n \thandler = td.Router()\n \tt.Cleanup(func() {\n \t\t_ = td.Close()",
+    "raw_url": "https://github.com/coder/coder/raw/7c9718c33d2beebe8bde321375e7eac0f4524ac0/coderd%2Fdevtunnel%2Ftunnel_test.go",
+    "sha": "a1a7c3b7642fb6ada09a2b3f8375f00d7c5807b3",
+    "status": "modified"
+  }
+]

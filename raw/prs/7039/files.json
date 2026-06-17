@@ -1,0 +1,62 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/f92e1f12247bcf39449d1b984994aa67624a1c53/agent%2Freaper%2Freaper_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Freaper%2Freaper_test.go?ref=f92e1f12247bcf39449d1b984994aa67624a1c53",
+    "deletions": 2,
+    "filename": "agent/reaper/reaper_test.go",
+    "patch": "@@ -23,7 +23,7 @@ func TestReap(t *testing.T) {\n \t// Don't run the reaper test in CI. It does weird\n \t// things like forkexecing which may have unintended\n \t// consequences in CI.\n-\tif _, ok := os.LookupEnv(\"CI\"); ok {\n+\tif testutil.InCI() {\n \t\tt.Skip(\"Detected CI, skipping reaper tests\")\n \t}\n \n@@ -73,7 +73,7 @@ func TestReapInterrupt(t *testing.T) {\n \t// Don't run the reaper test in CI. It does weird\n \t// things like forkexecing which may have unintended\n \t// consequences in CI.\n-\tif _, ok := os.LookupEnv(\"CI\"); ok {\n+\tif testutil.InCI() {\n \t\tt.Skip(\"Detected CI, skipping reaper tests\")\n \t}\n ",
+    "raw_url": "https://github.com/coder/coder/raw/f92e1f12247bcf39449d1b984994aa67624a1c53/agent%2Freaper%2Freaper_test.go",
+    "sha": "528c029dc5f91f430e20f2d366c4cee2ebb4dcbd",
+    "status": "modified"
+  },
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/f92e1f12247bcf39449d1b984994aa67624a1c53/coderd%2Fworkspaceagents_test.go",
+    "changes": 10,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaceagents_test.go?ref=f92e1f12247bcf39449d1b984994aa67624a1c53",
+    "deletions": 3,
+    "filename": "coderd/workspaceagents_test.go",
+    "patch": "@@ -1353,16 +1353,20 @@ func TestWorkspaceAgent_Metadata(t *testing.T) {\n \tvar update []codersdk.WorkspaceAgentMetadata\n \n \tcheck := func(want codersdk.WorkspaceAgentMetadataResult, got codersdk.WorkspaceAgentMetadata) {\n-\t\trequire.Greater(t, got.Result.CollectedAt, want.CollectedAt)\n+\t\trequire.Equal(t, want.Value, got.Result.Value)\n+\t\trequire.Equal(t, want.Error, got.Result.Error)\n \n+\t\tif testutil.InCI() && (runtime.GOOS == \"windows\" || testutil.InRaceMode()) {\n+\t\t\t// Avoid testing timings when flake chance is high.\n+\t\t\treturn\n+\t\t}\n+\t\trequire.WithinDuration(t, got.Result.CollectedAt, want.CollectedAt, time.Second)\n \t\tageImpliedNow := got.Result.CollectedAt.Add(time.Duration(got.Result.Age) * time.Second)\n \t\t// We use a long WithinDuration to tolerate slow CI, but we're still making sure\n \t\t// that Age is within the ballpark.\n \t\trequire.WithinDuration(\n \t\t\tt, time.Now(), ageImpliedNow, time.Second*10,\n \t\t)\n-\t\trequire.Equal(t, want.Value, got.Result.Value)\n-\t\trequire.Equal(t, want.Error, got.Result.Error)\n \t}\n \n \twantMetadata1 := codersdk.WorkspaceAgentMetadataResult{",
+    "raw_url": "https://github.com/coder/coder/raw/f92e1f12247bcf39449d1b984994aa67624a1c53/coderd%2Fworkspaceagents_test.go",
+    "sha": "34a57b4181624b27dc67b5f6f002eb81e7166f7a",
+    "status": "modified"
+  },
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/f92e1f12247bcf39449d1b984994aa67624a1c53/helm%2Ftests%2Fchart_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/helm%2Ftests%2Fchart_test.go?ref=f92e1f12247bcf39449d1b984994aa67624a1c53",
+    "deletions": 1,
+    "filename": "helm/tests/chart_test.go",
+    "patch": "@@ -11,6 +11,8 @@ import (\n \n \t\"github.com/stretchr/testify/require\"\n \t\"golang.org/x/xerrors\"\n+\n+\t\"github.com/coder/coder/testutil\"\n )\n \n // These tests run `helm template` with the values file specified in each test\n@@ -54,7 +56,7 @@ func TestRenderChart(t *testing.T) {\n \tif *UpdateGoldenFiles {\n \t\tt.Skip(\"Golden files are being updated. Skipping test.\")\n \t}\n-\tif _, runningInCI := os.LookupEnv(\"CI\"); runningInCI {\n+\tif testutil.InCI() {\n \t\tswitch runtime.GOOS {\n \t\tcase \"windows\", \"darwin\":\n \t\t\tt.Skip(\"Skipping tests on Windows and macOS in CI\")",
+    "raw_url": "https://github.com/coder/coder/raw/f92e1f12247bcf39449d1b984994aa67624a1c53/helm%2Ftests%2Fchart_test.go",
+    "sha": "8bcde97c4a46ec6aed179e364fde197d958c8a74",
+    "status": "modified"
+  },
+  {
+    "additions": 16,
+    "blob_url": "https://github.com/coder/coder/blob/f92e1f12247bcf39449d1b984994aa67624a1c53/testutil%2Fci.go",
+    "changes": 16,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/testutil%2Fci.go?ref=f92e1f12247bcf39449d1b984994aa67624a1c53",
+    "deletions": 0,
+    "filename": "testutil/ci.go",
+    "patch": "@@ -0,0 +1,16 @@\n+package testutil\n+\n+import (\n+\t\"flag\"\n+\t\"os\"\n+)\n+\n+func InCI() bool {\n+\t_, ok := os.LookupEnv(\"CI\")\n+\treturn ok\n+}\n+\n+func InRaceMode() bool {\n+\tfl := flag.Lookup(\"race\")\n+\treturn fl != nil && fl.Value.String() == \"true\"\n+}",
+    "raw_url": "https://github.com/coder/coder/raw/f92e1f12247bcf39449d1b984994aa67624a1c53/testutil%2Fci.go",
+    "sha": "d11d8a22241d6b73a4a941f87b20819e317e57bf",
+    "status": "added"
+  },
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/f92e1f12247bcf39449d1b984994aa67624a1c53/testutil%2Fduration.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/testutil%2Fduration.go?ref=f92e1f12247bcf39449d1b984994aa67624a1c53",
+    "deletions": 1,
+    "filename": "testutil/duration.go",
+    "patch": "@@ -2,7 +2,9 @@\n \n package testutil\n \n-import \"time\"\n+import (\n+\t\"time\"\n+)\n \n // Constants for timing out operations, usable for creating contexts\n // that timeout or in require.Eventually.",
+    "raw_url": "https://github.com/coder/coder/raw/f92e1f12247bcf39449d1b984994aa67624a1c53/testutil%2Fduration.go",
+    "sha": "a45f425a6e1fbe9253b3f23e70410500fcbe46b2",
+    "status": "modified"
+  }
+]

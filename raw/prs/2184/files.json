@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/b5087b9249da11220f66b6ba8172d5b2a17e7df7/site%2Fsrc%2Fcomponents%2FWorkspaceSchedule%2FWorkspaceSchedule.tsx",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fcomponents%2FWorkspaceSchedule%2FWorkspaceSchedule.tsx?ref=b5087b9249da11220f66b6ba8172d5b2a17e7df7",
+    "deletions": 1,
+    "filename": "site/src/components/WorkspaceSchedule/WorkspaceSchedule.tsx",
+    "patch": "@@ -97,7 +97,9 @@ export const WorkspaceSchedule: FC<WorkspaceScheduleProps> = ({ workspace }) =>\n         </div>\n         <div>\n           <span className={styles.scheduleLabel}>Shutdown</span>\n-          <span className={styles.scheduleValue}>{Language.autoStopDisplay(workspace)}</span>\n+          <span className={styles.scheduleValue} data-chromatic=\"ignore\">\n+            {Language.autoStopDisplay(workspace)}\n+          </span>\n         </div>\n         <div>\n           <Link",
+    "raw_url": "https://github.com/coder/coder/raw/b5087b9249da11220f66b6ba8172d5b2a17e7df7/site%2Fsrc%2Fcomponents%2FWorkspaceSchedule%2FWorkspaceSchedule.tsx",
+    "sha": "3861ae94d6e1c96cb242debb97f3e60b2e045eb3",
+    "status": "modified"
+  }
+]

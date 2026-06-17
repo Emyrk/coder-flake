@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/bd0c5f93969d82f2d95281a22580ae07fc41d41b/site%2Fsrc%2Fpages%2FWorkspaceSettingsPage%2FWorkspaceSchedulePage%2FWorkspaceSchedulePage.test.tsx",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FWorkspaceSettingsPage%2FWorkspaceSchedulePage%2FWorkspaceSchedulePage.test.tsx?ref=bd0c5f93969d82f2d95281a22580ae07fc41d41b",
+    "deletions": 1,
+    "filename": "site/src/pages/WorkspaceSettingsPage/WorkspaceSchedulePage/WorkspaceSchedulePage.test.tsx",
+    "patch": "@@ -250,7 +250,7 @@ describe(\"WorkspaceSchedulePage\", () => {\n   });\n \n   describe(\"autostop\", () => {\n-    it(\"uses template default ttl when first enabled\", async () => {\n+    it.skip(\"uses template default ttl when first enabled\", async () => {\n       // have autostop disabled\n       server.use(\n         rest.get(",
+    "raw_url": "https://github.com/coder/coder/raw/bd0c5f93969d82f2d95281a22580ae07fc41d41b/site%2Fsrc%2Fpages%2FWorkspaceSettingsPage%2FWorkspaceSchedulePage%2FWorkspaceSchedulePage.test.tsx",
+    "sha": "dccceec47aaca2bd2a9d2a091b645b9feafbdfb8",
+    "status": "modified"
+  }
+]

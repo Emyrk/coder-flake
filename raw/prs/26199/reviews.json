@@ -1,0 +1,442 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#pullrequestreview-4462857087"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "Well-built fix for a real flake. The root-cause analysis is sharp: the deferred `conn.Close()` only ran after the 30s wait returned, so nothing unblocked the read within the window. Replacing the defer with explicit close at each exit point is the right correction, and `forceClose` keeps the new structure clean. Four unit tests cover four distinct `Close()` paths, timeouts are struct fields for deterministic testing, and the sentinel design keeps signal for genuine failures.\n\nSeverity count: 1 P3, 2 P4, 4 Nit.\n\nAs Bisky put it: \"Three are genuine gems, one is genuine, and one case never got cut.\"\n\nNotable observations from the panel (not posted inline):\n\n- The SSH close path (`closeFn` at conn.go:251) has the same stall vulnerability this PR fixes for RPTY: `<-time.After(connCloseTimeout)` with no force-close fallback. Noted by Knov and Mafu-san as informational; the PR is correctly scoped to PLAT-116.\n- If both `c.readErr` and `t.C` are ready in the graceful select (conn.go:159), Go picks randomly. Timer winning when the read already completed produces a false `errRPTYGracefulCloseTimeout`. Harmless because the sentinel is non-fatal, and the window is vanishingly narrow (Pariston).\n- `forceClose` discards the read error unconditionally. The error is also surfaced through the drain path in `run.go`, so information is not truly lost at the system level (Mafuuu, Meruem).\n- The graceful close path discards the `c.conn.Close()` error with `_ =` (conn.go:161). Consistent with `forceClose` and acceptable for a scale test utility where the connection is being torn down (Chopper).\n\n\n---\n\n`scaletest/workspacetraffic/conn.go:95-99`\n\n**P4** [CRF-3] `readErr` is only populated inside `Read()`. If no goroutine is calling `Read`, both the graceful wait and `forceClose` time out after 35s, producing misleading \"timeout waiting for read\" errors even though the connection was successfully closed underneath.\n\nCurrently satisfied by the runner's drain goroutine and the test's `startDrain`, but the contract is invisible at the type boundary. Since `rptyConn` is unexported and used in one place, the risk is bounded.\n\n> \"Anyone who reuses `rptyConn` in a new context will discover this as a 35s hang.\" *(Hisoka)*\n\nA doc comment on `newPTYConn` stating the caller must have an active Read loop for `Close` to complete would make the assumption visible. *(Meruem P4, Hisoka Note)*\n\n> \ud83e\udd16\n\n> \ud83e\udd16 This review was automatically generated with Coder Agents.\n",
+    "commit_id": "bfb6122dd4d6f0c5fd70379e978c39586ea844a2",
+    "html_url": "https://github.com/coder/coder/pull/26199#pullrequestreview-4462857087",
+    "id": 4462857087,
+    "node_id": "PRR_kwDOGkVX1s8AAAABCgHLfw",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "state": "COMMENTED",
+    "submitted_at": "2026-06-09T22:18:15Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#pullrequestreview-4470504913"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "a8bef368838e26134900d59b5290e972df7b371d",
+    "html_url": "https://github.com/coder/coder/pull/26199#pullrequestreview-4470504913",
+    "id": 4470504913,
+    "node_id": "PRR_kwDOGkVX1s8AAAABCnZ90Q",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "state": "COMMENTED",
+    "submitted_at": "2026-06-10T18:21:44Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#pullrequestreview-4470505155"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "a8bef368838e26134900d59b5290e972df7b371d",
+    "html_url": "https://github.com/coder/coder/pull/26199#pullrequestreview-4470505155",
+    "id": 4470505155,
+    "node_id": "PRR_kwDOGkVX1s8AAAABCnZ-ww",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "state": "COMMENTED",
+    "submitted_at": "2026-06-10T18:21:46Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#pullrequestreview-4470505421"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "a8bef368838e26134900d59b5290e972df7b371d",
+    "html_url": "https://github.com/coder/coder/pull/26199#pullrequestreview-4470505421",
+    "id": 4470505421,
+    "node_id": "PRR_kwDOGkVX1s8AAAABCnZ_zQ",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "state": "COMMENTED",
+    "submitted_at": "2026-06-10T18:21:48Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#pullrequestreview-4470505619"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "a8bef368838e26134900d59b5290e972df7b371d",
+    "html_url": "https://github.com/coder/coder/pull/26199#pullrequestreview-4470505619",
+    "id": 4470505619,
+    "node_id": "PRR_kwDOGkVX1s8AAAABCnaAkw",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "state": "COMMENTED",
+    "submitted_at": "2026-06-10T18:21:50Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#pullrequestreview-4470505884"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "a8bef368838e26134900d59b5290e972df7b371d",
+    "html_url": "https://github.com/coder/coder/pull/26199#pullrequestreview-4470505884",
+    "id": 4470505884,
+    "node_id": "PRR_kwDOGkVX1s8AAAABCnaBnA",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "state": "COMMENTED",
+    "submitted_at": "2026-06-10T18:21:52Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#pullrequestreview-4470506105"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "a8bef368838e26134900d59b5290e972df7b371d",
+    "html_url": "https://github.com/coder/coder/pull/26199#pullrequestreview-4470506105",
+    "id": 4470506105,
+    "node_id": "PRR_kwDOGkVX1s8AAAABCnaCeQ",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "state": "COMMENTED",
+    "submitted_at": "2026-06-10T18:21:54Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#pullrequestreview-4477798547"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "65a665323bf3fa6ff9f07b5bc337250ff9e84983",
+    "html_url": "https://github.com/coder/coder/pull/26199#pullrequestreview-4477798547",
+    "id": 4477798547,
+    "node_id": "PRR_kwDOGkVX1s8AAAABCuXIkw",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "state": "COMMENTED",
+    "submitted_at": "2026-06-11T14:39:46Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#pullrequestreview-4480425224"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Making the client resilient to a slow/absent server-side close seems sane, but I'm not entirely sure if we know the root cause (why the server didn't close).",
+    "commit_id": "70cf874b56e56431d7e0a34d51d721dc1a4a2542",
+    "html_url": "https://github.com/coder/coder/pull/26199#pullrequestreview-4480425224",
+    "id": 4480425224,
+    "node_id": "PRR_kwDOGkVX1s8AAAABCw3dCA",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "state": "APPROVED",
+    "submitted_at": "2026-06-11T20:50:03Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/3724288?v=4",
+      "events_url": "https://api.github.com/users/zedkipp/events{/privacy}",
+      "followers_url": "https://api.github.com/users/zedkipp/followers",
+      "following_url": "https://api.github.com/users/zedkipp/following{/other_user}",
+      "gists_url": "https://api.github.com/users/zedkipp/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/zedkipp",
+      "id": 3724288,
+      "login": "zedkipp",
+      "node_id": "MDQ6VXNlcjM3MjQyODg=",
+      "organizations_url": "https://api.github.com/users/zedkipp/orgs",
+      "received_events_url": "https://api.github.com/users/zedkipp/received_events",
+      "repos_url": "https://api.github.com/users/zedkipp/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/zedkipp/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/zedkipp/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/zedkipp",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#pullrequestreview-4480680092"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "70cf874b56e56431d7e0a34d51d721dc1a4a2542",
+    "html_url": "https://github.com/coder/coder/pull/26199#pullrequestreview-4480680092",
+    "id": 4480680092,
+    "node_id": "PRR_kwDOGkVX1s8AAAABCxHAnA",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "state": "COMMENTED",
+    "submitted_at": "2026-06-11T21:18:39Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26199#pullrequestreview-4480709870"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26199"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "9d252c5c98347bfbb52e8b9bf3adbaf26ee01c89",
+    "html_url": "https://github.com/coder/coder/pull/26199#pullrequestreview-4480709870",
+    "id": 4480709870,
+    "node_id": "PRR_kwDOGkVX1s8AAAABCxI07g",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26199",
+    "state": "COMMENTED",
+    "submitted_at": "2026-06-11T21:23:27Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/307209?v=4",
+      "events_url": "https://api.github.com/users/jscottmiller/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jscottmiller/followers",
+      "following_url": "https://api.github.com/users/jscottmiller/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jscottmiller/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jscottmiller",
+      "id": 307209,
+      "login": "jscottmiller",
+      "node_id": "MDQ6VXNlcjMwNzIwOQ==",
+      "organizations_url": "https://api.github.com/users/jscottmiller/orgs",
+      "received_events_url": "https://api.github.com/users/jscottmiller/received_events",
+      "repos_url": "https://api.github.com/users/jscottmiller/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jscottmiller/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jscottmiller/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jscottmiller",
+      "user_view_type": "public"
+    }
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/2be38fcd6278e42a763d81eb41dc9059fdefa7b2/coderd%2Fworkspacebuilds_test.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspacebuilds_test.go?ref=2be38fcd6278e42a763d81eb41dc9059fdefa7b2",
+    "deletions": 2,
+    "filename": "coderd/workspacebuilds_test.go",
+    "patch": "@@ -577,8 +577,12 @@ func TestPatchCancelWorkspaceBuild(t *testing.T) {\n \t\t\tbuild, err = client.WorkspaceBuild(ctx, workspace.LatestBuild.ID)\n \t\t\treturn assert.NoError(t, err) && build.Job.Status == codersdk.ProvisionerJobRunning\n \t\t}, testutil.WaitShort, testutil.IntervalFast)\n-\t\terr := client.CancelWorkspaceBuild(ctx, build.ID, codersdk.CancelWorkspaceBuildParams{})\n-\t\trequire.NoError(t, err)\n+\n+\t\trequire.Eventually(t, func() bool {\n+\t\t\terr := client.CancelWorkspaceBuild(ctx, build.ID, codersdk.CancelWorkspaceBuildParams{})\n+\t\t\treturn assert.NoError(t, err)\n+\t\t}, testutil.WaitShort, testutil.IntervalMedium)\n+\n \t\trequire.Eventually(t, func() bool {\n \t\t\tvar err error\n \t\t\tbuild, err = client.WorkspaceBuild(ctx, build.ID)",
+    "raw_url": "https://github.com/coder/coder/raw/2be38fcd6278e42a763d81eb41dc9059fdefa7b2/coderd%2Fworkspacebuilds_test.go",
+    "sha": "994411a8b38179dc2ba02d89372b4cfda96be85f",
+    "status": "modified"
+  }
+]

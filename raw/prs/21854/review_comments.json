@@ -1,0 +1,71 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21854#discussion_r2755754056"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21854"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2755754056"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "Consider adding a comment explaining why 2000 bytes was chosen:\n\n```suggestion\n\t\t// Use 2000 bytes to ensure 'extra' module is large enough that it won't fit\n\t\t// after tar block alignment (tar uses 512-byte blocks)\n\t\toriginalDef[\"extra\"] = moduleDef{payload: bytes.Repeat([]byte(\"X\"), 2000)}\n```\n\nThis helps future maintainers understand why 2000 specifically, rather than any arbitrary number > 1001.",
+    "commit_id": "b96b51d83a4c758a190c8f1cc247f5c1e62e9a33",
+    "created_at": "2026-02-02T18:45:17Z",
+    "diff_hunk": "@@ -200,7 +200,7 @@ func TestGetModulesArchive(t *testing.T) {\n \t\trequire.Empty(t, skipped)\n \t\tactualSize := int64(len(archive))\n \n-\t\toriginalDef[\"extra\"] = moduleDef{payload: bytes.Repeat([]byte(\"X\"), 1001)}\n+\t\toriginalDef[\"extra\"] = moduleDef{payload: bytes.Repeat([]byte(\"X\"), 2000)}",
+    "html_url": "https://github.com/coder/coder/pull/21854#discussion_r2755754056",
+    "id": 2755754056,
+    "line": 203,
+    "node_id": "PRRC_kwDOGkVX1s6kQXhI",
+    "original_commit_id": "b96b51d83a4c758a190c8f1cc247f5c1e62e9a33",
+    "original_line": 203,
+    "original_position": 5,
+    "original_start_line": null,
+    "path": "provisioner/terraform/modules_internal_test.go",
+    "position": 5,
+    "pull_request_review_id": 3741269646,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21854",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2755754056/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-02-02T18:45:18Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2755754056",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/2652121?v=4",
+      "events_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-tasks",
+      "id": 254784001,
+      "login": "coder-tasks[bot]",
+      "node_id": "BOT_kgDODy-yAQ",
+      "organizations_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-tasks%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  }
+]

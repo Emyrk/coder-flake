@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21230#pullrequestreview-3568700548"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21230"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "280d7488cbc6baebf9ce65bb2e0c612740e11c9c",
+    "html_url": "https://github.com/coder/coder/pull/21230#pullrequestreview-3568700548",
+    "id": 3568700548,
+    "node_id": "PRR_kwDOGkVX1s7UtgyE",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21230",
+    "state": "APPROVED",
+    "submitted_at": "2025-12-11T18:10:27Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/40153966?u=f9361ea910fccdf9e76c3ee799b9f0791ef74f9e&v=4",
+      "events_url": "https://api.github.com/users/DanielleMaywood/events{/privacy}",
+      "followers_url": "https://api.github.com/users/DanielleMaywood/followers",
+      "following_url": "https://api.github.com/users/DanielleMaywood/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DanielleMaywood/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/DanielleMaywood",
+      "id": 40153966,
+      "login": "DanielleMaywood",
+      "node_id": "MDQ6VXNlcjQwMTUzOTY2",
+      "organizations_url": "https://api.github.com/users/DanielleMaywood/orgs",
+      "received_events_url": "https://api.github.com/users/DanielleMaywood/received_events",
+      "repos_url": "https://api.github.com/users/DanielleMaywood/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/DanielleMaywood/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DanielleMaywood/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/DanielleMaywood",
+      "user_view_type": "public"
+    }
+  }
+]

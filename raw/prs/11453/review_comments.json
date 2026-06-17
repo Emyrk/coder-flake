@@ -1,0 +1,71 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/11453#discussion_r1443056352"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/11453"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1443056352"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "We already do a `select` on `ctx` in `heartbeat`, don't we have some other underlying problem if we need to check err here as well? It's still as racy and it only increases the check time by a minor amount.",
+    "commit_id": "efdfc9435a12323f3f46a3f6554826257b71d4f8",
+    "created_at": "2024-01-05T16:09:02Z",
+    "diff_hunk": "@@ -271,6 +271,9 @@ func (s *server) heartbeat(ctx context.Context) error {\n }\n \n func (s *server) defaultHeartbeat(ctx context.Context) error {\n+\tif ctx.Err() != nil {",
+    "html_url": "https://github.com/coder/coder/pull/11453#discussion_r1443056352",
+    "id": 1443056352,
+    "line": 275,
+    "node_id": "PRRC_kwDOGkVX1s5WA0rg",
+    "original_commit_id": "676fbdd905765b27dd706818063361ccd2501d2f",
+    "original_line": 275,
+    "original_position": 4,
+    "original_start_line": null,
+    "path": "coderd/provisionerdserver/provisionerdserver.go",
+    "position": 4,
+    "pull_request_review_id": 1806248003,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/11453",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1443056352/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-01-05T16:09:02Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1443056352",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  }
+]

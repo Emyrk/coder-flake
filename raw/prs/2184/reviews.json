@@ -1,0 +1,122 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2184#pullrequestreview-1000404940"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2184"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "9a9efacafb2d5d56e73a822abd0d4d2e8e8c12ac",
+    "html_url": "https://github.com/coder/coder/pull/2184#pullrequestreview-1000404940",
+    "id": 1000404940,
+    "node_id": "PRR_kwDOGkVX1s47oPfM",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2184",
+    "state": "APPROVED",
+    "submitted_at": "2022-06-08T20:25:43Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?u=bd1828de93463cc139feb1dc4b4f6871dec2a7b3&v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2184#pullrequestreview-1000566863"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2184"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "9a9efacafb2d5d56e73a822abd0d4d2e8e8c12ac",
+    "html_url": "https://github.com/coder/coder/pull/2184#pullrequestreview-1000566863",
+    "id": 1000566863,
+    "node_id": "PRR_kwDOGkVX1s47o3BP",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2184",
+    "state": "APPROVED",
+    "submitted_at": "2022-06-08T23:42:29Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2184#pullrequestreview-1001483135"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2184"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "b5087b9249da11220f66b6ba8172d5b2a17e7df7",
+    "html_url": "https://github.com/coder/coder/pull/2184#pullrequestreview-1001483135",
+    "id": 1001483135,
+    "node_id": "PRR_kwDOGkVX1s47sWt_",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2184",
+    "state": "APPROVED",
+    "submitted_at": "2022-06-09T14:54:26Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/19142439?u=89ef8c86dfb634d07ec36aeef594d7baa360b9e4&v=4",
+      "events_url": "https://api.github.com/users/Kira-Pilot/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Kira-Pilot/followers",
+      "following_url": "https://api.github.com/users/Kira-Pilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Kira-Pilot/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Kira-Pilot",
+      "id": 19142439,
+      "login": "Kira-Pilot",
+      "node_id": "MDQ6VXNlcjE5MTQyNDM5",
+      "organizations_url": "https://api.github.com/users/Kira-Pilot/orgs",
+      "received_events_url": "https://api.github.com/users/Kira-Pilot/received_events",
+      "repos_url": "https://api.github.com/users/Kira-Pilot/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Kira-Pilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Kira-Pilot/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Kira-Pilot",
+      "user_view_type": "public"
+    }
+  }
+]

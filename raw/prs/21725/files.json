@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 9,
+    "blob_url": "https://github.com/coder/coder/blob/55a422a88cf394484154bdd5f7c3f74e2772e022/cli%2Fgitssh_test.go",
+    "changes": 12,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fgitssh_test.go?ref=55a422a88cf394484154bdd5f7c3f74e2772e022",
+    "deletions": 3,
+    "filename": "cli/gitssh_test.go",
+    "patch": "@@ -141,7 +141,9 @@ func TestGitSSH(t *testing.T) {\n \t\t\t\"-o\", \"IdentitiesOnly=yes\",\n \t\t\t\"127.0.0.1\",\n \t\t)\n-\t\tctx := testutil.Context(t, testutil.WaitMedium)\n+\t\t// This occasionally times out at 15s on Windows CI runners. Use a\n+\t\t// longer timeout to reduce flakes.\n+\t\tctx := testutil.Context(t, testutil.WaitSuperLong)\n \t\terr := inv.WithContext(ctx).Run()\n \t\trequire.NoError(t, err)\n \t\trequire.EqualValues(t, 1, inc)\n@@ -205,7 +207,9 @@ func TestGitSSH(t *testing.T) {\n \t\tinv, _ := clitest.New(t, cmdArgs...)\n \t\tinv.Stdout = pty.Output()\n \t\tinv.Stderr = pty.Output()\n-\t\tctx := testutil.Context(t, testutil.WaitMedium)\n+\t\t// This occasionally times out at 15s on Windows CI runners. Use a\n+\t\t// longer timeout to reduce flakes.\n+\t\tctx := testutil.Context(t, testutil.WaitSuperLong)\n \t\terr = inv.WithContext(ctx).Run()\n \t\trequire.NoError(t, err)\n \t\tselect {\n@@ -223,7 +227,9 @@ func TestGitSSH(t *testing.T) {\n \t\tinv, _ = clitest.New(t, cmdArgs...)\n \t\tinv.Stdout = pty.Output()\n \t\tinv.Stderr = pty.Output()\n-\t\tctx = testutil.Context(t, testutil.WaitMedium) // Reset context for second cmd test.\n+\t\t// This occasionally times out at 15s on Windows CI runners. Use a\n+\t\t// longer timeout to reduce flakes.\n+\t\tctx = testutil.Context(t, testutil.WaitSuperLong) // Reset context for second cmd test.\n \t\terr = inv.WithContext(ctx).Run()\n \t\trequire.NoError(t, err)\n \t\tselect {",
+    "raw_url": "https://github.com/coder/coder/raw/55a422a88cf394484154bdd5f7c3f74e2772e022/cli%2Fgitssh_test.go",
+    "sha": "a1b5644ce1755db0b78ad4f179f8215b3cdfbb1e",
+    "status": "modified"
+  }
+]

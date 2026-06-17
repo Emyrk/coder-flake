@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/20f5342211a16d2cf6ffdc9bbdea54af53bcb9f7/enterprise%2Fcli%2Fboundary_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcli%2Fboundary_test.go?ref=20f5342211a16d2cf6ffdc9bbdea54af53bcb9f7",
+    "deletions": 0,
+    "filename": "enterprise/cli/boundary_test.go",
+    "patch": "@@ -25,6 +25,8 @@ import (\n // coder/boundary repo, since it's a dependency of coder.\n // Here we want to test basically that integrating it as a subcommand doesn't break anything.\n func TestBoundarySubcommand(t *testing.T) {\n+\tt.Skip()\n+\n \tt.Parallel()\n \tctx := testutil.Context(t, testutil.WaitShort)\n ",
+    "raw_url": "https://github.com/coder/coder/raw/20f5342211a16d2cf6ffdc9bbdea54af53bcb9f7/enterprise%2Fcli%2Fboundary_test.go",
+    "sha": "52282b463452d5841443c0f48354beed19b91fee",
+    "status": "modified"
+  }
+]

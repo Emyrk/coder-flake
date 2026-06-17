@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/20975#pullrequestreview-3527574417"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/20975"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "LGTM, thanks @ethanndickson !",
+    "commit_id": "9f05caa0e106045cd85ec280c9b93969b77faee3",
+    "html_url": "https://github.com/coder/coder/pull/20975#pullrequestreview-3527574417",
+    "id": 3527574417,
+    "node_id": "PRR_kwDOGkVX1s7SQoOR",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/20975",
+    "state": "APPROVED",
+    "submitted_at": "2025-12-01T23:52:10Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/3246492?u=05ed28ff3e8ac9df51eb5e4199fa7f888b92780a&v=4",
+      "events_url": "https://api.github.com/users/cstyan/events{/privacy}",
+      "followers_url": "https://api.github.com/users/cstyan/followers",
+      "following_url": "https://api.github.com/users/cstyan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/cstyan/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/cstyan",
+      "id": 3246492,
+      "login": "cstyan",
+      "node_id": "MDQ6VXNlcjMyNDY0OTI=",
+      "organizations_url": "https://api.github.com/users/cstyan/orgs",
+      "received_events_url": "https://api.github.com/users/cstyan/received_events",
+      "repos_url": "https://api.github.com/users/cstyan/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/cstyan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/cstyan/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/cstyan",
+      "user_view_type": "public"
+    }
+  }
+]

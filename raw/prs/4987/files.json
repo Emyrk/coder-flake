@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/5df102dfe95d8901dbd3becc242e112275a00b6b/agent%2Fagent_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagent_test.go?ref=5df102dfe95d8901dbd3becc242e112275a00b6b",
+    "deletions": 0,
+    "filename": "agent/agent_test.go",
+    "patch": "@@ -467,6 +467,7 @@ func TestAgent(t *testing.T) {\n \t\t\t{\n \t\t\t\tname: \"UDP\",\n \t\t\t\tsetup: func(t *testing.T) net.Listener {\n+\t\t\t\t\ttestutil.SkipIfWindows(t, \"UDP flakes on Windows\")\n \t\t\t\t\taddr := net.UDPAddr{\n \t\t\t\t\t\tIP:   net.ParseIP(\"127.0.0.1\"),\n \t\t\t\t\t\tPort: 0,",
+    "raw_url": "https://github.com/coder/coder/raw/5df102dfe95d8901dbd3becc242e112275a00b6b/agent%2Fagent_test.go",
+    "sha": "21bd1ddd12732270e8ab6bb05e87a64ba476e123",
+    "status": "modified"
+  },
+  {
+    "additions": 14,
+    "blob_url": "https://github.com/coder/coder/blob/5df102dfe95d8901dbd3becc242e112275a00b6b/testutil%2Fskip.go",
+    "changes": 14,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/testutil%2Fskip.go?ref=5df102dfe95d8901dbd3becc242e112275a00b6b",
+    "deletions": 0,
+    "filename": "testutil/skip.go",
+    "patch": "@@ -0,0 +1,14 @@\n+package testutil\n+\n+import (\n+\t\"fmt\"\n+\t\"runtime\"\n+\t\"testing\"\n+)\n+\n+func SkipIfWindows(t *testing.T, msg string) {\n+\tt.Helper()\n+\tif runtime.GOOS == \"windows\" {\n+\t\tt.Skip(fmt.Sprintf(\"skipping test on windows - %s\", msg))\n+\t}\n+}",
+    "raw_url": "https://github.com/coder/coder/raw/5df102dfe95d8901dbd3becc242e112275a00b6b/testutil%2Fskip.go",
+    "sha": "897a882c08cca881b89866013679e00ee6a6bd9b",
+    "status": "added"
+  }
+]

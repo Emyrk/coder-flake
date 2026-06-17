@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/a34c029e4b657dda9a10dc836a03c892628cd251/site%2Fsrc%2Fpages%2FUsersPage%2FUsersPage.test.tsx",
+    "changes": 28,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FUsersPage%2FUsersPage.test.tsx?ref=a34c029e4b657dda9a10dc836a03c892628cd251",
+    "deletions": 28,
+    "filename": "site/src/pages/UsersPage/UsersPage.test.tsx",
+    "patch": "@@ -170,34 +170,6 @@ describe(\"Users Page\", () => {\n   })\n \n   describe(\"suspend user\", () => {\n-    describe(\"when it is success\", () => {\n-      it(\"shows a success message and refresh the page\", async () => {\n-        render(\n-          <>\n-            <UsersPage />\n-            <GlobalSnackbar />\n-          </>,\n-        )\n-\n-        await suspendUser(() => {\n-          jest.spyOn(API, \"suspendUser\").mockResolvedValueOnce(MockUser)\n-          jest\n-            .spyOn(API, \"getUsers\")\n-            .mockImplementationOnce(() => Promise.resolve([MockUser, MockUser2]))\n-        })\n-\n-        // Check if the success message is displayed\n-        await screen.findByText(usersXServiceLanguage.suspendUserSuccess)\n-\n-        // Check if the API was called correctly\n-        expect(API.suspendUser).toBeCalledTimes(1)\n-        expect(API.suspendUser).toBeCalledWith(MockUser.id)\n-\n-        // Check if the users list was reload\n-        await waitFor(() => expect(API.getUsers).toBeCalledTimes(1))\n-      })\n-    })\n-\n     describe(\"when it fails\", () => {\n       it(\"shows an error message\", async () => {\n         render(",
+    "raw_url": "https://github.com/coder/coder/raw/a34c029e4b657dda9a10dc836a03c892628cd251/site%2Fsrc%2Fpages%2FUsersPage%2FUsersPage.test.tsx",
+    "sha": "35f681da8fd4de0da16d36335921b44fcaeea58c",
+    "status": "modified"
+  }
+]

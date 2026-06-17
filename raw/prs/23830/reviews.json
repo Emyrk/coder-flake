@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/23830#pullrequestreview-4042085582"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/23830"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "stamp",
+    "commit_id": "5fc8a117e9743c6256ebf37a04bf195ae9411c64",
+    "html_url": "https://github.com/coder/coder/pull/23830#pullrequestreview-4042085582",
+    "id": 4042085582,
+    "node_id": "PRR_kwDOGkVX1s7w7VTO",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/23830",
+    "state": "APPROVED",
+    "submitted_at": "2026-04-01T06:51:29Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/14044910?u=ab8e348fdbb38191ff1d799c3487f7f6051fff7c&v=4",
+      "events_url": "https://api.github.com/users/mtojek/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mtojek/followers",
+      "following_url": "https://api.github.com/users/mtojek/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mtojek/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mtojek",
+      "id": 14044910,
+      "login": "mtojek",
+      "node_id": "MDQ6VXNlcjE0MDQ0OTEw",
+      "organizations_url": "https://api.github.com/users/mtojek/orgs",
+      "received_events_url": "https://api.github.com/users/mtojek/received_events",
+      "repos_url": "https://api.github.com/users/mtojek/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mtojek/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mtojek/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mtojek",
+      "user_view_type": "public"
+    }
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/674e96d780ab168e7ac6383dc55d33e3b88002e7/coderd%2Fworkspaces_test.go",
+    "changes": 5,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaces_test.go?ref=674e96d780ab168e7ac6383dc55d33e3b88002e7",
+    "deletions": 2,
+    "filename": "coderd/workspaces_test.go",
+    "patch": "@@ -269,9 +269,10 @@ func TestPostWorkspacesByOrganization(t *testing.T) {\n \t\tversion := coderdtest.CreateTemplateVersion(t, client, user.OrganizationID, nil)\n \t\ttemplate := coderdtest.CreateTemplate(t, client, user.OrganizationID, version.ID)\n \t\tcoderdtest.AwaitTemplateVersionJob(t, client, version.ID)\n-\t\t_ = coderdtest.CreateWorkspace(t, client, user.OrganizationID, template.ID)\n+\t\tworkspace := coderdtest.CreateWorkspace(t, client, user.OrganizationID, template.ID)\n+\t\tcoderdtest.AwaitWorkspaceBuildJob(t, client, workspace.LatestBuild.ID)\n \n-\t\trequire.Len(t, auditor.AuditLogs, 5)\n+\t\trequire.Len(t, auditor.AuditLogs, 6)\n \t\tassert.Equal(t, database.AuditActionCreate, auditor.AuditLogs[4].Action)\n \t})\n ",
+    "raw_url": "https://github.com/coder/coder/raw/674e96d780ab168e7ac6383dc55d33e3b88002e7/coderd%2Fworkspaces_test.go",
+    "sha": "e7442751ed62dfe64b7c4f8a65879ec84f44332d",
+    "status": "modified"
+  }
+]

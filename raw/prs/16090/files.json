@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/5577757769ee31878fd658aed2afc7409dbee6d0/.github%2Fworkflows%2Fci.yaml",
+    "changes": 5,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Fci.yaml?ref=5577757769ee31878fd658aed2afc7409dbee6d0",
+    "deletions": 1,
+    "filename": ".github/workflows/ci.yaml",
+    "patch": "@@ -445,7 +445,10 @@ jobs:\n             # C: drive is extremely slow: https://github.com/actions/runner-images/issues/8755\n             mkdir -p \"R:/temp/embedded-pg\"\n             go run scripts/embedded-pg/main.go -path \"R:/temp/embedded-pg\"\n-            DB=ci gotestsum --format standard-quiet -- -v -short -count=1 ./...\n+            # Reduce test parallelism, mirroring what we do for race tests.\n+            # We'd been encountering issues with timing related flakes, and\n+            # this seems to help.\n+            DB=ci gotestsum --format standard-quiet -- -v -short -count=1 -parallel 4 -p 4 ./...\n           else\n             go run scripts/embedded-pg/main.go\n             DB=ci gotestsum --format standard-quiet -- -v -short -count=1 ./...",
+    "raw_url": "https://github.com/coder/coder/raw/5577757769ee31878fd658aed2afc7409dbee6d0/.github%2Fworkflows%2Fci.yaml",
+    "sha": "5492a2354ede6468de9118b5ee3fd903a5dbbc06",
+    "status": "modified"
+  },
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/5577757769ee31878fd658aed2afc7409dbee6d0/testutil%2Fduration.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/testutil%2Fduration.go?ref=5577757769ee31878fd658aed2afc7409dbee6d0",
+    "deletions": 2,
+    "filename": "testutil/duration.go",
+    "patch": "@@ -1,5 +1,3 @@\n-//go:build !windows\n-\n package testutil\n \n import (",
+    "raw_url": "https://github.com/coder/coder/raw/5577757769ee31878fd658aed2afc7409dbee6d0/testutil%2Fduration.go",
+    "sha": "a8c35030cdea26af90712bc2ab219bfb1aa72040",
+    "status": "modified"
+  },
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/630fd7c0a1ee44fa6ce61ac9cb4c76842dc247dd/testutil%2Fduration_windows.go",
+    "changes": 24,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/testutil%2Fduration_windows.go?ref=630fd7c0a1ee44fa6ce61ac9cb4c76842dc247dd",
+    "deletions": 24,
+    "filename": "testutil/duration_windows.go",
+    "patch": "@@ -1,24 +0,0 @@\n-package testutil\n-\n-import \"time\"\n-\n-// Constants for timing out operations, usable for creating contexts\n-// that timeout or in require.Eventually.\n-//\n-// Windows durations are adjusted for slow CI workers.\n-const (\n-\tWaitShort     = 30 * time.Second\n-\tWaitMedium    = 40 * time.Second\n-\tWaitLong      = 70 * time.Second\n-\tWaitSuperLong = 240 * time.Second\n-)\n-\n-// Constants for delaying repeated operations, e.g. in\n-// require.Eventually.\n-//\n-// Windows durations are adjusted for slow CI workers.\n-const (\n-\tIntervalFast   = 100 * time.Millisecond\n-\tIntervalMedium = 1000 * time.Millisecond\n-\tIntervalSlow   = 4 * time.Second\n-)",
+    "raw_url": "https://github.com/coder/coder/raw/630fd7c0a1ee44fa6ce61ac9cb4c76842dc247dd/testutil%2Fduration_windows.go",
+    "sha": "d363dae2ba596464437a46dabc796fe41b715050",
+    "status": "removed"
+  }
+]

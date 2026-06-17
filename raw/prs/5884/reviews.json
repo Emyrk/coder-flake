@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/5884#pullrequestreview-1272048062"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/5884"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "",
+    "commit_id": "c89a8cc41ddeae00b243007801b9728c23c139f2",
+    "html_url": "https://github.com/coder/coder/pull/5884#pullrequestreview-1272048062",
+    "id": 1272048062,
+    "node_id": "PRR_kwDOGkVX1s5L0em-",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/5884",
+    "state": "APPROVED",
+    "submitted_at": "2023-01-27T02:10:00Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/3165839?u=e28df5fd5d39125ad157c306dee46f148390d2b2&v=4",
+      "events_url": "https://api.github.com/users/BrunoQuaresma/events{/privacy}",
+      "followers_url": "https://api.github.com/users/BrunoQuaresma/followers",
+      "following_url": "https://api.github.com/users/BrunoQuaresma/following{/other_user}",
+      "gists_url": "https://api.github.com/users/BrunoQuaresma/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/BrunoQuaresma",
+      "id": 3165839,
+      "login": "BrunoQuaresma",
+      "node_id": "MDQ6VXNlcjMxNjU4Mzk=",
+      "organizations_url": "https://api.github.com/users/BrunoQuaresma/orgs",
+      "received_events_url": "https://api.github.com/users/BrunoQuaresma/received_events",
+      "repos_url": "https://api.github.com/users/BrunoQuaresma/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/BrunoQuaresma/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/BrunoQuaresma/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/BrunoQuaresma",
+      "user_view_type": "public"
+    }
+  }
+]

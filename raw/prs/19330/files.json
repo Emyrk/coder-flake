@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/5afaf251cdbfdcb158bc618d5ed72a8b80aa9696/coderd%2Fdatabase%2Fquerier_test.go",
+    "changes": 5,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdatabase%2Fquerier_test.go?ref=5afaf251cdbfdcb158bc618d5ed72a8b80aa9696",
+    "deletions": 2,
+    "filename": "coderd/database/querier_test.go",
+    "patch": "@@ -6009,10 +6009,10 @@ func TestUserSecretsCRUDOperations(t *testing.T) {\n \n \t// Use raw database without dbauthz wrapper for this test\n \tdb, _ := dbtestutil.NewDB(t)\n-\tctx := testutil.Context(t, testutil.WaitMedium)\n \n \tt.Run(\"FullCRUDWorkflow\", func(t *testing.T) {\n \t\tt.Parallel()\n+\t\tctx := testutil.Context(t, testutil.WaitMedium)\n \n \t\t// Create a new user for this test\n \t\ttestUser := dbgen.User(t, db, database.User{})\n@@ -6085,6 +6085,7 @@ func TestUserSecretsCRUDOperations(t *testing.T) {\n \n \tt.Run(\"UniqueConstraints\", func(t *testing.T) {\n \t\tt.Parallel()\n+\t\tctx := testutil.Context(t, testutil.WaitMedium)\n \n \t\t// Create a new user for this test\n \t\ttestUser := dbgen.User(t, db, database.User{})\n@@ -6156,7 +6157,6 @@ func TestUserSecretsAuthorization(t *testing.T) {\n \tdb, _ := dbtestutil.NewDB(t)\n \tauthorizer := rbac.NewStrictCachingAuthorizer(prometheus.NewRegistry())\n \tauthDB := dbauthz.New(db, authorizer, slogtest.Make(t, &slogtest.Options{}), coderdtest.AccessControlStorePointer())\n-\tctx := testutil.Context(t, testutil.WaitMedium)\n \n \t// Create test users\n \tuser1 := dbgen.User(t, db, database.User{})\n@@ -6234,6 +6234,7 @@ func TestUserSecretsAuthorization(t *testing.T) {\n \t\ttc := tc // capture range variable\n \t\tt.Run(tc.name, func(t *testing.T) {\n \t\t\tt.Parallel()\n+\t\t\tctx := testutil.Context(t, testutil.WaitMedium)\n \n \t\t\tauthCtx := dbauthz.As(ctx, tc.subject)\n ",
+    "raw_url": "https://github.com/coder/coder/raw/5afaf251cdbfdcb158bc618d5ed72a8b80aa9696/coderd%2Fdatabase%2Fquerier_test.go",
+    "sha": "0e11886765da6766f7707a16bc40b45bda4f0238",
+    "status": "modified"
+  }
+]

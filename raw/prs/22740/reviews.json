@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/22740#pullrequestreview-3906571809"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/22740"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "a15a0fcabb83be48e1b7ec86be565e1ef1a22937",
+    "html_url": "https://github.com/coder/coder/pull/22740#pullrequestreview-3906571809",
+    "id": 3906571809,
+    "node_id": "PRR_kwDOGkVX1s7o2Y4h",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/22740",
+    "state": "APPROVED",
+    "submitted_at": "2026-03-06T23:24:26Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/95866673?u=a1f8acbb1a7e04860f71f2d86348cf0e28faefbf&v=4",
+      "events_url": "https://api.github.com/users/mattvollmer/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mattvollmer/followers",
+      "following_url": "https://api.github.com/users/mattvollmer/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mattvollmer/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mattvollmer",
+      "id": 95866673,
+      "login": "mattvollmer",
+      "node_id": "U_kgDOBbbPMQ",
+      "organizations_url": "https://api.github.com/users/mattvollmer/orgs",
+      "received_events_url": "https://api.github.com/users/mattvollmer/received_events",
+      "repos_url": "https://api.github.com/users/mattvollmer/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mattvollmer/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mattvollmer/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mattvollmer",
+      "user_view_type": "public"
+    }
+  }
+]

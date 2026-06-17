@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/9839234573f58f9ccfa63f8e353a056db6525355/coderd%2Fworkspaces_test.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaces_test.go?ref=9839234573f58f9ccfa63f8e353a056db6525355",
+    "deletions": 0,
+    "filename": "coderd/workspaces_test.go",
+    "patch": "@@ -343,6 +343,9 @@ func TestWorkspaceByOwnerAndName(t *testing.T) {\n // to run various filters against for testing.\n func TestWorkspaceFilter(t *testing.T) {\n \tt.Parallel()\n+\t// Manual tests still occur below, so this is safe to disable.\n+\tt.Skip(\"This test is slow and flaky. See: https://github.com/coder/coder/issues/2854\")\n+\t// nolint:unused\n \ttype coderUser struct {\n \t\t*codersdk.Client\n \t\tUser codersdk.User",
+    "raw_url": "https://github.com/coder/coder/raw/9839234573f58f9ccfa63f8e353a056db6525355/coderd%2Fworkspaces_test.go",
+    "sha": "2d607a5e3fa0f8512873e9c78239042e03358d06",
+    "status": "modified"
+  }
+]

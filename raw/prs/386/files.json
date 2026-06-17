@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/8a2270d3940e1cb5212ae8ceccb86425aa3135a2/provisionerd%2Fprovisionerd_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/provisionerd%2Fprovisionerd_test.go?ref=8a2270d3940e1cb5212ae8ceccb86425aa3135a2",
+    "deletions": 3,
+    "filename": "provisionerd/provisionerd_test.go",
+    "patch": "@@ -466,15 +466,13 @@ func TestProvisionerd(t *testing.T) {\n \t\t\t\t\t})\n \t\t\t\t\trequire.NoError(t, err)\n \t\t\t\t\t<-shutdownCtx.Done()\n-\t\t\t\t\terr = stream.Send(&sdkproto.Provision_Response{\n+\t\t\t\t\treturn stream.Send(&sdkproto.Provision_Response{\n \t\t\t\t\t\tType: &sdkproto.Provision_Response_Complete{\n \t\t\t\t\t\t\tComplete: &sdkproto.Provision_Complete{\n \t\t\t\t\t\t\t\tError: \"some error\",\n \t\t\t\t\t\t\t},\n \t\t\t\t\t\t},\n \t\t\t\t\t})\n-\t\t\t\t\trequire.NoError(t, err)\n-\t\t\t\t\treturn nil\n \t\t\t\t},\n \t\t\t}),\n \t\t})",
+    "raw_url": "https://github.com/coder/coder/raw/8a2270d3940e1cb5212ae8ceccb86425aa3135a2/provisionerd%2Fprovisionerd_test.go",
+    "sha": "1eac1e77b49c4aef2d8ff33911900562a3934c6b",
+    "status": "modified"
+  }
+]

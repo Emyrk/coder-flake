@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 16,
+    "blob_url": "https://github.com/coder/coder/blob/95f37501cad4c28cf7776a709a29ce79a182781e/coderd%2Fworkspacebuilds_test.go",
+    "changes": 26,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspacebuilds_test.go?ref=95f37501cad4c28cf7776a709a29ce79a182781e",
+    "deletions": 10,
+    "filename": "coderd/workspacebuilds_test.go",
+    "patch": "@@ -494,11 +494,14 @@ func TestWorkspaceBuildsProvisionerState(t *testing.T) {\n \t\t\trequire.NoError(t, err)\n \t\t\tcoderdtest.AwaitWorkspaceBuildJobCompleted(t, client, build.ID)\n \n-\t\t\t// Validate that the deletion was audited.\n-\t\t\trequire.True(t, auditor.Contains(t, database.AuditLog{\n-\t\t\t\tResourceID: build.ID,\n-\t\t\t\tAction:     database.AuditActionDelete,\n-\t\t\t}))\n+\t\t\t// Validate that the deletion was audited. This happens after the transaction\n+\t\t\t// is committed, so it may not show up in the mock auditor immediately.\n+\t\t\ttestutil.Eventually(ctx, t, func(context.Context) bool {\n+\t\t\t\treturn auditor.Contains(t, database.AuditLog{\n+\t\t\t\t\tResourceID: build.ID,\n+\t\t\t\t\tAction:     database.AuditActionDelete,\n+\t\t\t\t})\n+\t\t\t}, testutil.IntervalFast)\n \t\t})\n \n \t\tt.Run(\"NoProvisioners\", func(t *testing.T) {\n@@ -535,11 +538,14 @@ func TestWorkspaceBuildsProvisionerState(t *testing.T) {\n \t\t\trequire.Empty(t, ws)\n \t\t\trequire.Equal(t, http.StatusGone, coderdtest.SDKError(t, err).StatusCode())\n \n-\t\t\t// Validate that the deletion was audited.\n-\t\t\trequire.True(t, auditor.Contains(t, database.AuditLog{\n-\t\t\t\tResourceID: build.ID,\n-\t\t\t\tAction:     database.AuditActionDelete,\n-\t\t\t}))\n+\t\t\t// Validate that the deletion was audited. This happens after the transaction\n+\t\t\t// is committed, so it may not show up in the mock auditor immediately.\n+\t\t\ttestutil.Eventually(ctx, t, func(context.Context) bool {\n+\t\t\t\treturn auditor.Contains(t, database.AuditLog{\n+\t\t\t\t\tResourceID: build.ID,\n+\t\t\t\t\tAction:     database.AuditActionDelete,\n+\t\t\t\t})\n+\t\t\t}, testutil.IntervalFast)\n \t\t})\n \t})\n }",
+    "raw_url": "https://github.com/coder/coder/raw/95f37501cad4c28cf7776a709a29ce79a182781e/coderd%2Fworkspacebuilds_test.go",
+    "sha": "0855d6091f7e4a89c424a1a27c86d4f4d2fd780e",
+    "status": "modified"
+  }
+]

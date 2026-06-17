@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/500b0f0fd06d622387e63a68265b18610a2a476e/site%2Fsrc%2Fpages%2FWorkspacesPage%2FWorkspacesPage.test.tsx",
+    "changes": 61,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FWorkspacesPage%2FWorkspacesPage.test.tsx?ref=500b0f0fd06d622387e63a68265b18610a2a476e",
+    "deletions": 61,
+    "filename": "site/src/pages/WorkspacesPage/WorkspacesPage.test.tsx",
+    "patch": "@@ -296,67 +296,6 @@ describe(\"WorkspacesPage\", () => {\n \t\t\tMockStoppedWorkspace.latest_build.template_version_id,\n \t\t);\n \t});\n-\n-\tit(\"correctly handles pagination by including pagination parameters in query key\", async () => {\n-\t\tconst totalWorkspaces = 50;\n-\t\tconst workspacesPage1 = Array.from({ length: 25 }, (_, i) => ({\n-\t\t\t...MockWorkspace,\n-\t\t\tid: `page1-workspace-${i}`,\n-\t\t\tname: `page1-workspace-${i}`,\n-\t\t}));\n-\t\tconst workspacesPage2 = Array.from({ length: 25 }, (_, i) => ({\n-\t\t\t...MockWorkspace,\n-\t\t\tid: `page2-workspace-${i}`,\n-\t\t\tname: `page2-workspace-${i}`,\n-\t\t}));\n-\n-\t\tconst getWorkspacesSpy = vi.spyOn(API, \"getWorkspaces\");\n-\n-\t\tgetWorkspacesSpy.mockImplementation(({ offset }) => {\n-\t\t\tswitch (offset) {\n-\t\t\t\tcase 0:\n-\t\t\t\t\treturn Promise.resolve({\n-\t\t\t\t\t\tworkspaces: workspacesPage1,\n-\t\t\t\t\t\tcount: totalWorkspaces,\n-\t\t\t\t\t});\n-\t\t\t\tcase 25:\n-\t\t\t\t\treturn Promise.resolve({\n-\t\t\t\t\t\tworkspaces: workspacesPage2,\n-\t\t\t\t\t\tcount: totalWorkspaces,\n-\t\t\t\t\t});\n-\t\t\t\tdefault:\n-\t\t\t\t\treturn Promise.reject(new Error(\"Unexpected offset\"));\n-\t\t\t}\n-\t\t});\n-\n-\t\tconst user = userEvent.setup();\n-\t\trenderWithAuth(<WorkspacesPage />);\n-\n-\t\tawait waitFor(() => {\n-\t\t\texpect(screen.getByText(\"page1-workspace-0\")).toBeInTheDocument();\n-\t\t});\n-\n-\t\texpect(getWorkspacesSpy).toHaveBeenLastCalledWith({\n-\t\t\tq: \"owner:me\",\n-\t\t\toffset: 0,\n-\t\t\tlimit: 25,\n-\t\t});\n-\n-\t\tconst nextPageButton = screen.getByRole(\"button\", { name: /next page/i });\n-\t\tawait user.click(nextPageButton);\n-\n-\t\tawait waitFor(() => {\n-\t\t\texpect(screen.getByText(\"page2-workspace-0\")).toBeInTheDocument();\n-\t\t});\n-\n-\t\texpect(getWorkspacesSpy).toHaveBeenLastCalledWith({\n-\t\t\tq: \"owner:me\",\n-\t\t\toffset: 25,\n-\t\t\tlimit: 25,\n-\t\t});\n-\n-\t\texpect(screen.queryByText(\"page1-workspace-0\")).not.toBeInTheDocument();\n-\t});\n });\n \n const getWorkspaceCheckbox = (workspace: Workspace) => {",
+    "raw_url": "https://github.com/coder/coder/raw/500b0f0fd06d622387e63a68265b18610a2a476e/site%2Fsrc%2Fpages%2FWorkspacesPage%2FWorkspacesPage.test.tsx",
+    "sha": "2c58fd1d5bfdeebaac6f99c389f2f848bfd1d622",
+    "status": "modified"
+  }
+]

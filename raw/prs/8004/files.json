@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/44be80e75eab379642562e97fd379a67e55fc83b/enterprise%2Fcoderd%2Fworkspaceproxy_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcoderd%2Fworkspaceproxy_test.go?ref=44be80e75eab379642562e97fd379a67e55fc83b",
+    "deletions": 2,
+    "filename": "enterprise/coderd/workspaceproxy_test.go",
+    "patch": "@@ -391,7 +391,7 @@ func TestIssueSignedAppToken(t *testing.T) {\n \t\tproxyClient.SetSessionToken(proxyRes.ProxyToken)\n \n \t\tctx := testutil.Context(t, testutil.WaitLong)\n-\t\t_, err = proxyClient.IssueSignedAppToken(ctx, workspaceapps.IssueTokenRequest{\n+\t\t_, err := proxyClient.IssueSignedAppToken(ctx, workspaceapps.IssueTokenRequest{\n \t\t\t// Invalid request.\n \t\t\tAppRequest:   workspaceapps.Request{},\n \t\t\tSessionToken: client.SessionToken(),\n@@ -413,7 +413,7 @@ func TestIssueSignedAppToken(t *testing.T) {\n \t\tproxyClient.SetSessionToken(proxyRes.ProxyToken)\n \n \t\tctx := testutil.Context(t, testutil.WaitLong)\n-\t\t_, err = proxyClient.IssueSignedAppToken(ctx, goodRequest)\n+\t\t_, err := proxyClient.IssueSignedAppToken(ctx, goodRequest)\n \t\trequire.NoError(t, err)\n \t})\n ",
+    "raw_url": "https://github.com/coder/coder/raw/44be80e75eab379642562e97fd379a67e55fc83b/enterprise%2Fcoderd%2Fworkspaceproxy_test.go",
+    "sha": "f96b1dd2bf81a31b34ceebea23697a07e7bf15f8",
+    "status": "modified"
+  }
+]

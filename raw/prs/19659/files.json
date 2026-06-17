@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/560a32441878987e48423c81d5e71b50e1df4e51/coderd%2Fworkspacebuilds_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspacebuilds_test.go?ref=560a32441878987e48423c81d5e71b50e1df4e51",
+    "deletions": 2,
+    "filename": "coderd/workspacebuilds_test.go",
+    "patch": "@@ -624,7 +624,7 @@ func TestPatchCancelWorkspaceBuild(t *testing.T) {\n \t\trequire.Eventually(t, func() bool {\n \t\t\tvar err error\n \t\t\tbuild, err = userClient.WorkspaceBuild(ctx, workspace.LatestBuild.ID)\n-\t\t\treturn assert.NoError(t, err) && build.Job.Status == codersdk.ProvisionerJobRunning\n+\t\t\treturn err == nil && build.Job.Status == codersdk.ProvisionerJobRunning\n \t\t}, testutil.WaitShort, testutil.IntervalFast)\n \t\terr := userClient.CancelWorkspaceBuild(ctx, build.ID, codersdk.CancelWorkspaceBuildParams{})\n \t\tvar apiErr *codersdk.Error\n@@ -715,7 +715,7 @@ func TestPatchCancelWorkspaceBuild(t *testing.T) {\n \t\trequire.Eventually(t, func() bool {\n \t\t\tvar err error\n \t\t\tbuild, err = client.WorkspaceBuild(ctx, workspace.LatestBuild.ID)\n-\t\t\treturn assert.NoError(t, err) && build.Job.Status == codersdk.ProvisionerJobRunning\n+\t\t\treturn err == nil && build.Job.Status == codersdk.ProvisionerJobRunning\n \t\t}, testutil.WaitShort, testutil.IntervalFast)\n \n \t\t// When: a cancel request is made with expect_state=pending",
+    "raw_url": "https://github.com/coder/coder/raw/560a32441878987e48423c81d5e71b50e1df4e51/coderd%2Fworkspacebuilds_test.go",
+    "sha": "067006f1045327e36e257f6d6672b7e9a3b12e4a",
+    "status": "modified"
+  }
+]

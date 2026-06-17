@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/91e1c7944084e666f3cf343b498bd268738b37fb/codersdk%2Fworkspaces_test.go",
+    "changes": 14,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/codersdk%2Fworkspaces_test.go?ref=91e1c7944084e666f3cf343b498bd268738b37fb",
+    "deletions": 6,
+    "filename": "codersdk/workspaces_test.go",
+    "patch": "@@ -13,8 +13,10 @@ import (\n \t\"github.com/google/uuid\"\n \t\"github.com/stretchr/testify/assert\"\n \t\"github.com/stretchr/testify/require\"\n+\t\"golang.org/x/xerrors\"\n \n \t\"github.com/coder/coder/v2/codersdk\"\n+\t\"github.com/coder/coder/v2/testutil\"\n )\n \n func TestResolveWorkspace(t *testing.T) {\n@@ -271,13 +273,13 @@ func TestResolveWorkspace(t *testing.T) {\n \tt.Run(\"TransportError\", func(t *testing.T) {\n \t\tt.Parallel()\n \n-\t\t// Close the server immediately so the transport layer fails.\n-\t\tsrv := httptest.NewServer(http.NotFoundHandler())\n-\t\tsrvURL, err := url.Parse(srv.URL)\n+\t\tbaseURL, err := url.Parse(\"http://example.com\")\n \t\trequire.NoError(t, err)\n-\t\tsrv.Close()\n-\n-\t\tclient := codersdk.New(srvURL)\n+\t\tclient := codersdk.New(baseURL, codersdk.WithHTTPClient(&http.Client{\n+\t\t\tTransport: testutil.RoundTripperFunc(func(*http.Request) (*http.Response, error) {\n+\t\t\t\treturn nil, xerrors.New(\"transport error\")\n+\t\t\t}),\n+\t\t}))\n \n \t\t_, err = client.ResolveWorkspace(t.Context(), uuid.NewString())\n \t\trequire.Error(t, err)",
+    "raw_url": "https://github.com/coder/coder/raw/91e1c7944084e666f3cf343b498bd268738b37fb/codersdk%2Fworkspaces_test.go",
+    "sha": "63cb99e06241c48d9ed53487d67d499fcf19661e",
+    "status": "modified"
+  },
+  {
+    "additions": 9,
+    "blob_url": "https://github.com/coder/coder/blob/91e1c7944084e666f3cf343b498bd268738b37fb/testutil%2Fhttp.go",
+    "changes": 9,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/testutil%2Fhttp.go?ref=91e1c7944084e666f3cf343b498bd268738b37fb",
+    "deletions": 0,
+    "filename": "testutil/http.go",
+    "patch": "@@ -9,6 +9,15 @@ import (\n \t\"github.com/stretchr/testify/require\"\n )\n \n+// RoundTripperFunc adapts a function to an http.RoundTripper.\n+type RoundTripperFunc func(*http.Request) (*http.Response, error)\n+\n+var _ http.RoundTripper = RoundTripperFunc(nil)\n+\n+func (f RoundTripperFunc) RoundTrip(req *http.Request) (*http.Response, error) {\n+\treturn f(req)\n+}\n+\n // RequireEventuallyResponseOK makes HTTP GET requests to the given endpoint until it returns\n // 200 OK with a valid JSON response that can be decoded into target, or until the context\n // times out. This is useful for waiting for HTTP servers to become ready during tests,",
+    "raw_url": "https://github.com/coder/coder/raw/91e1c7944084e666f3cf343b498bd268738b37fb/testutil%2Fhttp.go",
+    "sha": "0a764b46a9c04099215a963070090fc3b71087b6",
+    "status": "modified"
+  }
+]

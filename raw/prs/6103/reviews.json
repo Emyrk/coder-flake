@@ -1,0 +1,122 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/6103#pullrequestreview-1289241954"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/6103"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "\ud83d\udc4d\ud83c\udffb\r\n\r\nIf you want even more control of the timeout, you could use `pty.ExpectMatchContext()` with a context of predetermined length (say 1 minute).\r\n\r\nI suspect this would help since judging by the error in https://github.com/coder/coder/actions/runs/4112417865/jobs/7097301992, it looks like we encounter a expect match timeout, the test exits, and the cmd error is logged/flagged just as the test completes its teardown (between context cancel and postgres close).",
+    "commit_id": "786e36a21f8ac22805546ad52ddeb2e1ce3a602c",
+    "html_url": "https://github.com/coder/coder/pull/6103#pullrequestreview-1289241954",
+    "id": 1289241954,
+    "node_id": "PRR_kwDOGkVX1s5M2EVi",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/6103",
+    "state": "APPROVED",
+    "submitted_at": "2023-02-08T14:02:10Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/6103#pullrequestreview-1289258501"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/6103"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "dfdce8b94f07acdf69ed58a1042c93845e2a12a3",
+    "html_url": "https://github.com/coder/coder/pull/6103#pullrequestreview-1289258501",
+    "id": 1289258501,
+    "node_id": "PRR_kwDOGkVX1s5M2IYF",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/6103",
+    "state": "APPROVED",
+    "submitted_at": "2023-02-08T14:10:46Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/6103#pullrequestreview-1289261366"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/6103"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "dfdce8b94f07acdf69ed58a1042c93845e2a12a3",
+    "html_url": "https://github.com/coder/coder/pull/6103#pullrequestreview-1289261366",
+    "id": 1289261366,
+    "node_id": "PRR_kwDOGkVX1s5M2JE2",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/6103",
+    "state": "COMMENTED",
+    "submitted_at": "2023-02-08T14:11:59Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?u=260538c7d8b8c3c5350dba175ebb8294358441e0&v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  }
+]

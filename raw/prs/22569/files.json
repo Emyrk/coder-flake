@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 12,
+    "blob_url": "https://github.com/coder/coder/blob/42e2d76e743580da2b70f7f4d4081346fb8cc8bc/site%2Fe2e%2Fhooks.ts",
+    "changes": 12,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fe2e%2Fhooks.ts?ref=42e2d76e743580da2b70f7f4d4081346fb8cc8bc",
+    "deletions": 0,
+    "filename": "site/e2e/hooks.ts",
+    "patch": "@@ -39,6 +39,18 @@ export const beforeCoderTest = (page: Page) => {\n \t\t\t`[response] url=${response.url()} status=${response.status()} body=${responseText}`,\n \t\t);\n \t});\n+\n+\tpage.on(\"popup\", async (popup) => {\n+\t\tconsole.info(`[popup] url=${popup.url()}`);\n+\t});\n+\n+\tpage.on(\"pageerror\", async (error) => {\n+\t\tconsole.error(\"[pageerror]\", error);\n+\t});\n+\n+\tpage.on(\"crash\", async (page) => {\n+\t\tconsole.error(\"[crash]\", page.url());\n+\t});\n };\n \n export const resetExternalAuthKey = async (context: BrowserContext) => {",
+    "raw_url": "https://github.com/coder/coder/raw/42e2d76e743580da2b70f7f4d4081346fb8cc8bc/site%2Fe2e%2Fhooks.ts",
+    "sha": "8065bc40d31b0a11a52f23fbabbcf46b682bf380",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/9976295a63bb1226bfdb5c02aca339ec12b4fca3/site%2Fe2e%2Fhelpers.ts",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fe2e%2Fhelpers.ts?ref=9976295a63bb1226bfdb5c02aca339ec12b4fca3",
+    "deletions": 1,
+    "filename": "site/e2e/helpers.ts",
+    "patch": "@@ -1171,7 +1171,7 @@ export const updateTemplateSettings = async (\n \tawait page.getByRole(\"button\", { name: /save/i }).click();\n \n \tconst name = templateSettingValues.name ?? templateName;\n-\tawait expectUrl(page).toHavePathNameEndingWith(`/${name}`);\n+\tawait expectUrl(page).toHavePathNameEndingWith(`/${name}/docs`);\n };\n \n export const updateWorkspace = async (",
+    "raw_url": "https://github.com/coder/coder/raw/9976295a63bb1226bfdb5c02aca339ec12b4fca3/site%2Fe2e%2Fhelpers.ts",
+    "sha": "2e14620597a5894341d9c4fb0d1fc9dfded1ca3b",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,140 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21059#discussion_r2581454621"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21059"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2581454621"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "```suggestion\n\tlogger slog.Logger\n\n\tmu     sync.Mutex\n\tagents map[uuid.UUID]agentcontainers.SubAgent\n```",
+    "commit_id": "73cfd4df159724dadf7c89f08a282e68bff00353",
+    "created_at": "2025-12-02T14:34:24Z",
+    "diff_hunk": "@@ -233,6 +233,7 @@ func (w *fakeWatcher) sendEventWaitNextCalled(ctx context.Context, event fsnotif\n \n // fakeSubAgentClient implements SubAgentClient for testing purposes.\n type fakeSubAgentClient struct {\n+\tmu     sync.Mutex\n \tlogger slog.Logger\n \tagents map[uuid.UUID]agentcontainers.SubAgent",
+    "html_url": "https://github.com/coder/coder/pull/21059#discussion_r2581454621",
+    "id": 2581454621,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6Z3d8d",
+    "original_commit_id": "73cfd4df159724dadf7c89f08a282e68bff00353",
+    "original_line": 238,
+    "original_position": 6,
+    "original_start_line": 236,
+    "path": "agent/agentcontainers/api_test.go",
+    "position": 1,
+    "pull_request_review_id": 3530455824,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21059",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2581454621/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-12-02T14:34:25Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2581454621",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21059#discussion_r2581456686"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21059"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2581456686"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "```suggestion\n\tmu     sync.Mutex // Protects following.\n```",
+    "commit_id": "a30e1fb5f839b274bf0ef8e5b93d60f74fca274c",
+    "created_at": "2025-12-02T14:34:50Z",
+    "diff_hunk": "@@ -234,6 +234,8 @@ func (w *fakeWatcher) sendEventWaitNextCalled(ctx context.Context, event fsnotif\n // fakeSubAgentClient implements SubAgentClient for testing purposes.\n type fakeSubAgentClient struct {\n \tlogger slog.Logger\n+\n+\tmu     sync.Mutex",
+    "html_url": "https://github.com/coder/coder/pull/21059#discussion_r2581456686",
+    "id": 2581456686,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6Z3ecu",
+    "original_commit_id": "a30e1fb5f839b274bf0ef8e5b93d60f74fca274c",
+    "original_line": 238,
+    "original_position": 5,
+    "original_start_line": null,
+    "path": "agent/agentcontainers/api_test.go",
+    "position": 1,
+    "pull_request_review_id": 3530458518,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21059",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2581456686/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-12-02T14:34:51Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2581456686",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  }
+]

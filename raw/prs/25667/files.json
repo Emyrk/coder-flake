@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 82,
+    "blob_url": "https://github.com/coder/coder/blob/744582b69d28836994c84e14bf56e233c4a57a88/.github%2Fworkflows%2Fflake-go.yaml",
+    "changes": 82,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Fflake-go.yaml?ref=744582b69d28836994c84e14bf56e233c4a57a88",
+    "deletions": 0,
+    "filename": ".github/workflows/flake-go.yaml",
+    "patch": "@@ -0,0 +1,82 @@\n+name: flake-go\n+\n+on:\n+  pull_request:\n+  workflow_dispatch:\n+    inputs:\n+      base_sha:\n+        description: \"Base commit to diff against. Defaults to merge-base against origin/main.\"\n+        required: false\n+        type: string\n+      head_sha:\n+        description: \"Head commit to analyze. Defaults to the checked out HEAD.\"\n+        required: false\n+        type: string\n+\n+permissions:\n+  contents: read\n+\n+concurrency:\n+  group: ${{ github.workflow }}-${{ github.ref }}\n+  cancel-in-progress: true\n+\n+jobs:\n+  flake_go:\n+    name: Flake Check\n+    runs-on: ${{ github.repository_owner == 'coder' && 'depot-ubuntu-22.04-4' || 'ubuntu-latest' }}\n+    timeout-minutes: 20\n+    steps:\n+      - name: Harden Runner\n+        uses: step-security/harden-runner@f808768d1510423e83855289c910610ca9b43176 # v2.17.0\n+        with:\n+          egress-policy: audit\n+\n+      - name: Checkout\n+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2\n+        with:\n+          repository: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}\n+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.event.inputs.head_sha || github.sha }}\n+          fetch-depth: 0\n+          persist-credentials: false\n+\n+      - name: Setup Go\n+        uses: ./.github/actions/setup-go\n+\n+      - name: Install whichtests\n+        shell: bash\n+        run: ./.github/scripts/retry.sh -- go install github.com/coder/whichtests@ec33bab1ec04cd86beb7a61a069db4463dba63f5\n+\n+      - name: Select changed tests\n+        id: selector\n+        shell: bash\n+        run: |\n+          set -euo pipefail\n+          whichtests \\\n+            --repo-root . \\\n+            --github-actions \\\n+            --coalesce \\\n+            --out-matrix \"$RUNNER_TEMP/flake-matrix.json\"\n+\n+      - name: Setup Terraform\n+        if: ${{ fromJSON(steps.selector.outputs.matrix).include[0] != null }}\n+        uses: ./.github/actions/setup-tf\n+\n+      - name: Run targeted Go flake checks\n+        id: flake_check\n+        if: ${{ fromJSON(steps.selector.outputs.matrix).include[0] != null }}\n+        uses: ./.github/actions/test-go-pg\n+        with:\n+          postgres-version: \"13\"\n+          test-parallelism-packages: \"4\"\n+          test-parallelism-tests: \"16\"\n+          test-count: \"25\"\n+          test-packages: ${{ fromJSON(steps.selector.outputs.matrix).include[0].package }}\n+          run-regex: ${{ fromJSON(steps.selector.outputs.matrix).include[0].run_regex }}\n+          test-shuffle: \"on\"\n+          gotestsum-json-file: default\n+\n+      - name: Publish Go test failure report\n+        if: failure() && steps.flake_check.outcome == 'failure' && github.actor != 'dependabot[bot]' && runner.os == 'Linux' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork)\n+        uses: ./.github/actions/go-test-failure-report\n+        with:\n+          artifact-name: go-test-failures-${{ github.job }}-${{ github.sha }}",
+    "raw_url": "https://github.com/coder/coder/raw/744582b69d28836994c84e14bf56e233c4a57a88/.github%2Fworkflows%2Fflake-go.yaml",
+    "sha": "1c7eb96dd0a72029c497d03d1878c3cc5579493d",
+    "status": "added"
+  },
+  {
+    "additions": 9,
+    "blob_url": "https://github.com/coder/coder/blob/744582b69d28836994c84e14bf56e233c4a57a88/Makefile",
+    "changes": 10,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/Makefile?ref=744582b69d28836994c84e14bf56e233c4a57a88",
+    "deletions": 1,
+    "filename": "Makefile",
+    "patch": "@@ -1446,8 +1446,16 @@ ifdef TEST_SHORT\n GOTEST_FLAGS += -short\n endif\n \n+# RUN is single-quoted for the shell so regex metacharacters survive make.\n+# Embedded single quotes are not supported; whichtests only emits RUN values\n+# built from ASCII test names so generated regexes stay within this contract.\n ifdef RUN\n-GOTEST_FLAGS += -run $(RUN)\n+GOTEST_FLAGS += -run '$(RUN)'\n+endif\n+\n+# TEST_SHUFFLE values must be off, on, or an integer seed.\n+ifdef TEST_SHUFFLE\n+GOTEST_FLAGS += -shuffle=$(TEST_SHUFFLE)\n endif\n \n ifdef TEST_CPUPROFILE",
+    "raw_url": "https://github.com/coder/coder/raw/744582b69d28836994c84e14bf56e233c4a57a88/Makefile",
+    "sha": "b58f80eb68abcea7c36aa15b54e6141092d2430d",
+    "status": "modified"
+  }
+]

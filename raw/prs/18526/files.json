@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 10,
+    "blob_url": "https://github.com/coder/coder/blob/6f6a29e5221e9c3c538d7acf8c3f5fdb0ec4e535/agent%2Fagentcontainers%2Fapi.go",
+    "changes": 12,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagentcontainers%2Fapi.go?ref=6f6a29e5221e9c3c538d7acf8c3f5fdb0ec4e535",
+    "deletions": 2,
+    "filename": "agent/agentcontainers/api.go",
+    "patch": "@@ -378,7 +378,11 @@ func (api *API) updaterLoop() {\n \t// and anyone looking to interact with the API.\n \tapi.logger.Debug(api.ctx, \"performing initial containers update\")\n \tif err := api.updateContainers(api.ctx); err != nil {\n-\t\tapi.logger.Error(api.ctx, \"initial containers update failed\", slog.Error(err))\n+\t\tif errors.Is(err, context.Canceled) {\n+\t\t\tapi.logger.Warn(api.ctx, \"initial containers update canceled\", slog.Error(err))\n+\t\t} else {\n+\t\t\tapi.logger.Error(api.ctx, \"initial containers update failed\", slog.Error(err))\n+\t\t}\n \t} else {\n \t\tapi.logger.Debug(api.ctx, \"initial containers update complete\")\n \t}\n@@ -399,7 +403,11 @@ func (api *API) updaterLoop() {\n \t\tcase api.updateTrigger <- done:\n \t\t\terr := <-done\n \t\t\tif err != nil {\n-\t\t\t\tapi.logger.Error(api.ctx, \"updater loop ticker failed\", slog.Error(err))\n+\t\t\t\tif errors.Is(err, context.Canceled) {\n+\t\t\t\t\tapi.logger.Warn(api.ctx, \"updater loop ticker canceled\", slog.Error(err))\n+\t\t\t\t} else {\n+\t\t\t\t\tapi.logger.Error(api.ctx, \"updater loop ticker failed\", slog.Error(err))\n+\t\t\t\t}\n \t\t\t}\n \t\tdefault:\n \t\t\tapi.logger.Debug(api.ctx, \"updater loop ticker skipped, update in progress\")",
+    "raw_url": "https://github.com/coder/coder/raw/6f6a29e5221e9c3c538d7acf8c3f5fdb0ec4e535/agent%2Fagentcontainers%2Fapi.go",
+    "sha": "4a8413906e8ce3d1277cc44ada1c72fa7a2dcb70",
+    "status": "modified"
+  },
+  {
+    "additions": 10,
+    "blob_url": "https://github.com/coder/coder/blob/6f6a29e5221e9c3c538d7acf8c3f5fdb0ec4e535/agent%2Fagentcontainers%2Fcontainers_dockercli.go",
+    "changes": 10,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagentcontainers%2Fcontainers_dockercli.go?ref=6f6a29e5221e9c3c538d7acf8c3f5fdb0ec4e535",
+    "deletions": 0,
+    "filename": "agent/agentcontainers/containers_dockercli.go",
+    "patch": "@@ -311,6 +311,10 @@ func (dcli *dockerCLI) List(ctx context.Context) (codersdk.WorkspaceAgentListCon\n // container IDs and returns the parsed output.\n // The stderr output is also returned for logging purposes.\n func runDockerInspect(ctx context.Context, execer agentexec.Execer, ids ...string) (stdout, stderr []byte, err error) {\n+\tif ctx.Err() != nil {\n+\t\t// If the context is done, we don't want to run the command.\n+\t\treturn []byte{}, []byte{}, ctx.Err()\n+\t}\n \tvar stdoutBuf, stderrBuf bytes.Buffer\n \tcmd := execer.CommandContext(ctx, \"docker\", append([]string{\"inspect\"}, ids...)...)\n \tcmd.Stdout = &stdoutBuf\n@@ -319,6 +323,12 @@ func runDockerInspect(ctx context.Context, execer agentexec.Execer, ids ...strin\n \tstdout = bytes.TrimSpace(stdoutBuf.Bytes())\n \tstderr = bytes.TrimSpace(stderrBuf.Bytes())\n \tif err != nil {\n+\t\tif ctx.Err() != nil {\n+\t\t\t// If the context was canceled while running the command,\n+\t\t\t// return the context error instead of the command error,\n+\t\t\t// which is likely to be \"signal: killed\".\n+\t\t\treturn stdout, stderr, ctx.Err()\n+\t\t}\n \t\tif bytes.Contains(stderr, []byte(\"No such object:\")) {\n \t\t\t// This can happen if a container is deleted between the time we check for its existence and the time we inspect it.\n \t\t\treturn stdout, stderr, nil",
+    "raw_url": "https://github.com/coder/coder/raw/6f6a29e5221e9c3c538d7acf8c3f5fdb0ec4e535/agent%2Fagentcontainers%2Fcontainers_dockercli.go",
+    "sha": "58ca3901e2f239f05c40e2aa2b04d6b9c48287ae",
+    "status": "modified"
+  }
+]

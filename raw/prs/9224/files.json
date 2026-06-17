@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/631f414132666caf06d31555f7a6998b5923302c/flake.nix",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=631f414132666caf06d31555f7a6998b5923302c",
+    "deletions": 0,
+    "filename": "flake.nix",
+    "patch": "@@ -80,6 +80,9 @@\n         devImagePackages = with pkgs; [\n           docker\n           exa\n+          freetype\n+          glib\n+          harfbuzz\n           nix\n           nixpkgs-fmt\n           screen",
+    "raw_url": "https://github.com/coder/coder/raw/631f414132666caf06d31555f7a6998b5923302c/flake.nix",
+    "sha": "53db64e1002084d8575dc4490f8765b4caa73ae0",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 11,
+    "blob_url": "https://github.com/coder/coder/blob/fd8c84eaba6ce41cc9f4de0b70b2557b1d1c2114/coderd%2Fworkspacebuilds_test.go",
+    "changes": 16,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspacebuilds_test.go?ref=fd8c84eaba6ce41cc9f4de0b70b2557b1d1c2114",
+    "deletions": 5,
+    "filename": "coderd/workspacebuilds_test.go",
+    "patch": "@@ -51,9 +51,12 @@ func TestWorkspaceBuild(t *testing.T) {\n \t_ = coderdtest.AwaitWorkspaceBuildJobCompleted(t, client, workspace.LatestBuild.ID)\n \t// Create workspace will also start a build, so we need to wait for\n \t// it to ensure all events are recorded.\n-\trequire.Len(t, auditor.AuditLogs(), 2)\n-\trequire.Equal(t, auditor.AuditLogs()[0].Ip.IPNet.IP.String(), \"127.0.0.1\")\n-\trequire.Equal(t, auditor.AuditLogs()[1].Ip.IPNet.IP.String(), \"127.0.0.1\")\n+\trequire.Eventually(t, func() bool {\n+\t\tlogs := auditor.AuditLogs()\n+\t\treturn len(logs) == 2 &&\n+\t\t\tassert.Equal(t, logs[0].Ip.IPNet.IP.String(), \"127.0.0.1\") &&\n+\t\t\tassert.Equal(t, logs[1].Ip.IPNet.IP.String(), \"127.0.0.1\")\n+\t}, testutil.WaitShort, testutil.IntervalFast)\n }\n \n func TestWorkspaceBuildByBuildNumber(t *testing.T) {\n@@ -969,8 +972,11 @@ func TestPostWorkspaceBuild(t *testing.T) {\n \t\trequire.NoError(t, err)\n \t\tcoderdtest.AwaitWorkspaceBuildJobCompleted(t, client, build.ID)\n \n-\t\trequire.Len(t, auditor.AuditLogs(), 1)\n-\t\trequire.Equal(t, auditor.AuditLogs()[0].Ip.IPNet.IP.String(), \"127.0.0.1\")\n+\t\trequire.Eventually(t, func() bool {\n+\t\t\tlogs := auditor.AuditLogs()\n+\t\t\treturn len(logs) > 0 &&\n+\t\t\t\tassert.Equal(t, logs[0].Ip.IPNet.IP.String(), \"127.0.0.1\")\n+\t\t}, testutil.WaitShort, testutil.IntervalFast)\n \t})\n \n \tt.Run(\"IncrementBuildNumber\", func(t *testing.T) {",
+    "raw_url": "https://github.com/coder/coder/raw/fd8c84eaba6ce41cc9f4de0b70b2557b1d1c2114/coderd%2Fworkspacebuilds_test.go",
+    "sha": "977c073652c0acb2af0870b4896ad40b82b407dc",
+    "status": "modified"
+  }
+]

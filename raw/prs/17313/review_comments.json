@@ -1,0 +1,141 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/17313#discussion_r2035760454"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/17313"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2035760454"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "nit: maybe we should only sleep on `runtime.GOOS == \"darwin\"`? ",
+    "commit_id": "e11ac70665c9fd5e7f7d3008f3f214792f737077",
+    "created_at": "2025-04-09T16:47:27Z",
+    "diff_hunk": "@@ -200,7 +201,11 @@ func TestNewServer_CloseActiveConnections(t *testing.T) {\n \t\t\t\t}\n \t\t\t\tassert.NoError(t, err)\n \n+\t\t\t\t// Allow the session to settle (i.e. reach echo).\n \t\t\t\tpty.ExpectMatchContext(ctx, \"started\")\n+\t\t\t\t// Sleep a bit to ensure the sleep has started.\n+\t\t\t\ttime.Sleep(testutil.IntervalMedium)",
+    "html_url": "https://github.com/coder/coder/pull/17313#discussion_r2035760454",
+    "id": 2035760454,
+    "line": 207,
+    "node_id": "PRRC_kwDOGkVX1s55Vz1G",
+    "original_commit_id": "e11ac70665c9fd5e7f7d3008f3f214792f737077",
+    "original_line": 207,
+    "original_position": 15,
+    "original_start_line": null,
+    "path": "agent/agentssh/agentssh_test.go",
+    "position": 15,
+    "pull_request_review_id": 2754128375,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/17313",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2035760454/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-04-09T16:47:33Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2035760454",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/17313#discussion_r2035787415"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/17313"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2035787415"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I kind of agree, but also worry about this being a very hard to trigger edge case on other OS's as well :/.",
+    "commit_id": "e11ac70665c9fd5e7f7d3008f3f214792f737077",
+    "created_at": "2025-04-09T17:05:01Z",
+    "diff_hunk": "@@ -200,7 +201,11 @@ func TestNewServer_CloseActiveConnections(t *testing.T) {\n \t\t\t\t}\n \t\t\t\tassert.NoError(t, err)\n \n+\t\t\t\t// Allow the session to settle (i.e. reach echo).\n \t\t\t\tpty.ExpectMatchContext(ctx, \"started\")\n+\t\t\t\t// Sleep a bit to ensure the sleep has started.\n+\t\t\t\ttime.Sleep(testutil.IntervalMedium)",
+    "html_url": "https://github.com/coder/coder/pull/17313#discussion_r2035787415",
+    "id": 2035787415,
+    "in_reply_to_id": 2035760454,
+    "line": 207,
+    "node_id": "PRRC_kwDOGkVX1s55V6aX",
+    "original_commit_id": "e11ac70665c9fd5e7f7d3008f3f214792f737077",
+    "original_line": 207,
+    "original_position": 15,
+    "original_start_line": null,
+    "path": "agent/agentssh/agentssh_test.go",
+    "position": 15,
+    "pull_request_review_id": 2754171510,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/17313",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2035787415/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-04-09T17:05:01Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2035787415",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  }
+]

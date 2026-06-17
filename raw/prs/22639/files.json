@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/6b8e4ab8da191973cfb7038eea4713ab028c7685/coderd%2Finsights_test.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Finsights_test.go?ref=6b8e4ab8da191973cfb7038eea4713ab028c7685",
+    "deletions": 1,
+    "filename": "coderd/insights_test.go",
+    "patch": "@@ -2495,9 +2495,15 @@ func TestGetUserStatusCounts(t *testing.T) {\n \t\trequire.Len(t, resp.StatusCounts, 1)\n \t\trequire.NotNil(t, resp.StatusCounts[codersdk.UserStatusActive])\n \t\trequire.Len(t, resp.StatusCounts[codersdk.UserStatusActive], 61)\n-\t\tfor _, count := range resp.StatusCounts[codersdk.UserStatusActive] {\n+\t\t// Depending on the current time of day relative to the\n+\t\t// timezone/offset, the first user's creation may land on the\n+\t\t// last date in the range. All earlier dates must be zero; the\n+\t\t// last date may be 0 or 1.\n+\t\tcounts := resp.StatusCounts[codersdk.UserStatusActive]\n+\t\tfor _, count := range counts[:len(counts)-1] {\n \t\t\trequire.Zero(t, count.Count)\n \t\t}\n+\t\trequire.LessOrEqual(t, counts[len(counts)-1].Count, int64(1))\n \t}\n \ttestcases := []testCase{\n \t\t{",
+    "raw_url": "https://github.com/coder/coder/raw/6b8e4ab8da191973cfb7038eea4713ab028c7685/coderd%2Finsights_test.go",
+    "sha": "33e6d195ec71bb3470b548ecce30df92063dc636",
+    "status": "modified"
+  }
+]

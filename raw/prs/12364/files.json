@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/67787fb8c7c75b81e3eafefd7fce9eb756e4fe62/cli%2Fssh_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fssh_test.go?ref=67787fb8c7c75b81e3eafefd7fce9eb756e4fe62",
+    "deletions": 0,
+    "filename": "cli/ssh_test.go",
+    "patch": "@@ -361,6 +361,7 @@ func TestSSH(t *testing.T) {\n \t\ttemplate := coderdtest.CreateTemplate(t, client, owner.OrganizationID, version.ID)\n \t\tworkspace := coderdtest.CreateWorkspace(t, client, owner.OrganizationID, template.ID)\n \t\tcoderdtest.AwaitWorkspaceBuildJobCompleted(t, client, workspace.LatestBuild.ID)\n+\t\tcoderdtest.NewWorkspaceAgentWaiter(t, client, workspace.ID).Wait()\n \t\t// Stop the workspace\n \t\tworkspaceBuild := coderdtest.CreateWorkspaceBuild(t, client, workspace, database.WorkspaceTransitionStop)\n \t\tcoderdtest.AwaitWorkspaceBuildJobCompleted(t, client, workspaceBuild.ID)",
+    "raw_url": "https://github.com/coder/coder/raw/67787fb8c7c75b81e3eafefd7fce9eb756e4fe62/cli%2Fssh_test.go",
+    "sha": "71a580565123a8fa86301c7784dd911c89ca60d1",
+    "status": "modified"
+  }
+]

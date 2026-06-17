@@ -1,0 +1,697 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21874#discussion_r2757867598"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21874"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2757867598"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "Consider using the same error handling pattern as `ptyWindows.Close()`. Currently this returns the first error encountered, but `ptyWindows.Close()` (lines 181-210) sets a `closed` flag and closes the console handle before closing pipes.\n\nWhile the current approach is simpler and probably fine for pipe-based PTYs, consistency would improve maintainability. You could either:\n1. Add the same `closed` flag check early (though the mutex already protects against races)\n2. Or add a comment explaining why this simpler pattern is sufficient for pipe PTYs\n\nNot a blocker, but worth considering for consistency.",
+    "commit_id": "939ab2798362a22730059b28b012412e29641f33",
+    "created_at": "2026-02-03T08:31:39Z",
+    "diff_hunk": "@@ -83,6 +101,93 @@ func newPty(opt ...Option) (*ptyWindows, error) {\n \treturn pty, nil\n }\n \n+// pipePty is a simple pipe-based PTY implementation for Windows that doesn't\n+// use ConPTY. It's used for in-process CLI testing where no real process is\n+// attached to the PTY.\n+type pipePty struct {\n+\t// The pipe for \"input\" - what would be stdin for a process.\n+\t// Test writes to inputWriter, CLI reads from inputReader.\n+\tinputReader *os.File\n+\tinputWriter *os.File\n+\n+\t// The pipe for \"output\" - what would be stdout for a process.\n+\t// CLI writes to outputWriter, test reads from outputReader.\n+\toutputReader *os.File\n+\toutputWriter *os.File\n+\n+\tcloseMutex sync.Mutex\n+\tclosed     bool\n+}\n+\n+func newPipePty() (*pipePty, error) {\n+\tp := &pipePty{}\n+\n+\tvar err error\n+\tp.inputReader, p.inputWriter, err = os.Pipe()\n+\tif err != nil {\n+\t\treturn nil, xerrors.Errorf(\"create input pipe: %w\", err)\n+\t}\n+\tp.outputReader, p.outputWriter, err = os.Pipe()\n+\tif err != nil {\n+\t\t_ = p.inputReader.Close()\n+\t\t_ = p.inputWriter.Close()\n+\t\treturn nil, xerrors.Errorf(\"create output pipe: %w\", err)\n+\t}\n+\n+\treturn p, nil\n+}\n+\n+func (*pipePty) Name() string {\n+\treturn \"\"\n+}\n+\n+// Input returns a ReadWriter for the input pipe. The test writes to this\n+// (simulating user input), and the CLI reads from it.\n+func (p *pipePty) Input() ReadWriter {\n+\treturn ReadWriter{\n+\t\tReader: p.inputReader,\n+\t\tWriter: p.inputWriter,\n+\t}\n+}\n+\n+// Output returns a ReadWriter for the output pipe. The CLI writes to this,\n+// and the test reads from it to verify output.\n+func (p *pipePty) Output() ReadWriter {\n+\treturn ReadWriter{\n+\t\tReader: p.outputReader,\n+\t\tWriter: p.outputWriter,\n+\t}\n+}\n+\n+func (*pipePty) Resize(uint16, uint16) error {\n+\t// Resize is a no-op for pipe-based PTY since there's no real terminal.\n+\treturn nil\n+}\n+\n+func (p *pipePty) Close() error {\n+\tp.closeMutex.Lock()\n+\tdefer p.closeMutex.Unlock()\n+\tif p.closed {\n+\t\treturn nil\n+\t}\n+\tp.closed = true\n+\n+\tvar firstErr error\n+\tif err := p.outputWriter.Close(); err != nil && firstErr == nil {\n+\t\tfirstErr = err\n+\t}\n+\tif err := p.outputReader.Close(); err != nil && firstErr == nil {\n+\t\tfirstErr = err\n+\t}\n+\tif err := p.inputWriter.Close(); err != nil && firstErr == nil {\n+\t\tfirstErr = err\n+\t}\n+\tif err := p.inputReader.Close(); err != nil && firstErr == nil {\n+\t\tfirstErr = err\n+\t}\n+\treturn firstErr",
+    "html_url": "https://github.com/coder/coder/pull/21874#discussion_r2757867598",
+    "id": 2757867598,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6kYbhO",
+    "original_commit_id": "be371907d6245880241bd71cd9535378fe3e37ff",
+    "original_line": 188,
+    "original_position": 122,
+    "original_start_line": null,
+    "path": "pty/pty_windows.go",
+    "position": 1,
+    "pull_request_review_id": 3743815590,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21874",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2757867598/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-02-03T08:55:02Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2757867598",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/2652121?v=4",
+      "events_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-tasks",
+      "id": 254784001,
+      "login": "coder-tasks[bot]",
+      "node_id": "BOT_kgDODy-yAQ",
+      "organizations_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-tasks%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21874#discussion_r2757867603"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21874"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2757867603"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "The comment here is excellent and explains the rationale well. Consider adding a brief note about the return type change from `*ptyWindows` to `PTY` to make it explicit that this is intentional (the pipe-based implementation is a different type).\n\nSomething like:\n```suggestion\n\t// For cases where no process will be attached (e.g., ptytest.New() used with\n\t// Attach() for in-process CLI testing), we use a pipe-based implementation\n\t// that doesn't require ConPTY. ConPTY requires an attached process to function\n\t// correctly - without one, the pipe handles become invalid intermittently.\n\t//\n\t// When Start() is called, it creates its own ConPTY with the process properly\n\t// attached, so this pipe-based PTY is only for the Attach() use case.\n\t//\n\t// Note: Returns PTY interface implemented by pipePty, not *ptyWindows.\n\treturn newPipePty()\n```\n\nThis makes the type change more explicit for future readers.",
+    "commit_id": "939ab2798362a22730059b28b012412e29641f33",
+    "created_at": "2026-02-03T08:31:39Z",
+    "diff_hunk": "@@ -37,6 +37,24 @@ func newPty(opt ...Option) (*ptyWindows, error) {\n \t\treturn nil, xerrors.Errorf(\"pty not supported\")\n \t}\n \n+\t// For cases where no process will be attached (e.g., ptytest.New() used with\n+\t// Attach() for in-process CLI testing), we use a pipe-based implementation\n+\t// that doesn't require ConPTY. ConPTY requires an attached process to function\n+\t// correctly - without one, the pipe handles become invalid intermittently.\n+\t//\n+\t// When Start() is called, it creates its own ConPTY with the process properly\n+\t// attached, so this pipe-based PTY is only for the Attach() use case.",
+    "html_url": "https://github.com/coder/coder/pull/21874#discussion_r2757867603",
+    "id": 2757867603,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6kYbhT",
+    "original_commit_id": "be371907d6245880241bd71cd9535378fe3e37ff",
+    "original_line": 46,
+    "original_position": 19,
+    "original_start_line": 40,
+    "path": "pty/pty_windows.go",
+    "position": 1,
+    "pull_request_review_id": 3743815590,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21874",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2757867603/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2026-02-03T08:54:44Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2757867603",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/2652121?v=4",
+      "events_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-tasks",
+      "id": 254784001,
+      "login": "coder-tasks[bot]",
+      "node_id": "BOT_kgDODy-yAQ",
+      "organizations_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-tasks%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-tasks%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21874#discussion_r2757938153"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21874"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2757938153"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "It's not immediately obvious new that `newPty` returns a type that should **only be used in tests**.",
+    "commit_id": "354d3ef4400b21c47f819bfa75089a551282e484",
+    "created_at": "2026-02-03T08:48:10Z",
+    "diff_hunk": "@@ -22,7 +22,7 @@ var (\n )\n \n // See: https://docs.microsoft.com/en-us/windows/console/creating-a-pseudoconsole-session\n-func newPty(opt ...Option) (*ptyWindows, error) {\n+func newPty(opt ...Option) (PTY, error) {",
+    "html_url": "https://github.com/coder/coder/pull/21874#discussion_r2757938153",
+    "id": 2757938153,
+    "line": 25,
+    "node_id": "PRRC_kwDOGkVX1s6kYsvp",
+    "original_commit_id": "be371907d6245880241bd71cd9535378fe3e37ff",
+    "original_line": 25,
+    "original_position": 5,
+    "original_start_line": null,
+    "path": "pty/pty_windows.go",
+    "position": 5,
+    "pull_request_review_id": 3743901088,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21874",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2757938153/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-02-03T08:50:23Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2757938153",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21874#discussion_r2757943810"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21874"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2757943810"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Since `pipePty` is only meant to be used in tests, `newPipePty` should probably have a `*testing.T` argument. I would also argue in favour of moving this to the `ptytest` package.",
+    "commit_id": "be371907d6245880241bd71cd9535378fe3e37ff",
+    "created_at": "2026-02-03T08:49:28Z",
+    "diff_hunk": "@@ -83,6 +101,93 @@ func newPty(opt ...Option) (*ptyWindows, error) {\n \treturn pty, nil\n }\n \n+// pipePty is a simple pipe-based PTY implementation for Windows that doesn't\n+// use ConPTY. It's used for in-process CLI testing where no real process is\n+// attached to the PTY.\n+type pipePty struct {\n+\t// The pipe for \"input\" - what would be stdin for a process.\n+\t// Test writes to inputWriter, CLI reads from inputReader.\n+\tinputReader *os.File\n+\tinputWriter *os.File\n+\n+\t// The pipe for \"output\" - what would be stdout for a process.\n+\t// CLI writes to outputWriter, test reads from outputReader.\n+\toutputReader *os.File\n+\toutputWriter *os.File\n+\n+\tcloseMutex sync.Mutex\n+\tclosed     bool\n+}\n+\n+func newPipePty() (*pipePty, error) {",
+    "html_url": "https://github.com/coder/coder/pull/21874#discussion_r2757943810",
+    "id": 2757943810,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6kYuIC",
+    "original_commit_id": "be371907d6245880241bd71cd9535378fe3e37ff",
+    "original_line": 122,
+    "original_position": 56,
+    "original_start_line": null,
+    "path": "pty/pty_windows.go",
+    "position": 1,
+    "pull_request_review_id": 3743901088,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21874",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2757943810/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-02-03T08:50:23Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2757943810",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21874#discussion_r2757976890"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21874"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2757976890"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Addressed in 939ab2798.",
+    "commit_id": "354d3ef4400b21c47f819bfa75089a551282e484",
+    "created_at": "2026-02-03T08:57:31Z",
+    "diff_hunk": "@@ -22,7 +22,7 @@ var (\n )\n \n // See: https://docs.microsoft.com/en-us/windows/console/creating-a-pseudoconsole-session\n-func newPty(opt ...Option) (*ptyWindows, error) {\n+func newPty(opt ...Option) (PTY, error) {",
+    "html_url": "https://github.com/coder/coder/pull/21874#discussion_r2757976890",
+    "id": 2757976890,
+    "in_reply_to_id": 2757938153,
+    "line": 25,
+    "node_id": "PRRC_kwDOGkVX1s6kY2M6",
+    "original_commit_id": "be371907d6245880241bd71cd9535378fe3e37ff",
+    "original_line": 25,
+    "original_position": 5,
+    "original_start_line": null,
+    "path": "pty/pty_windows.go",
+    "position": 5,
+    "pull_request_review_id": 3743946993,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21874",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2757976890/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-02-03T08:57:31Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2757976890",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21874#discussion_r2757979035"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21874"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2757979035"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Addressed in 939ab2798; I think this is probably clear enough? WDYT?\r\n\r\nEdit: on second thought, I'll look into the feasibility of moving it to `ptytest`; it'll fit better there.",
+    "commit_id": "be371907d6245880241bd71cd9535378fe3e37ff",
+    "created_at": "2026-02-03T08:57:57Z",
+    "diff_hunk": "@@ -83,6 +101,93 @@ func newPty(opt ...Option) (*ptyWindows, error) {\n \treturn pty, nil\n }\n \n+// pipePty is a simple pipe-based PTY implementation for Windows that doesn't\n+// use ConPTY. It's used for in-process CLI testing where no real process is\n+// attached to the PTY.\n+type pipePty struct {\n+\t// The pipe for \"input\" - what would be stdin for a process.\n+\t// Test writes to inputWriter, CLI reads from inputReader.\n+\tinputReader *os.File\n+\tinputWriter *os.File\n+\n+\t// The pipe for \"output\" - what would be stdout for a process.\n+\t// CLI writes to outputWriter, test reads from outputReader.\n+\toutputReader *os.File\n+\toutputWriter *os.File\n+\n+\tcloseMutex sync.Mutex\n+\tclosed     bool\n+}\n+\n+func newPipePty() (*pipePty, error) {",
+    "html_url": "https://github.com/coder/coder/pull/21874#discussion_r2757979035",
+    "id": 2757979035,
+    "in_reply_to_id": 2757943810,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6kY2ub",
+    "original_commit_id": "be371907d6245880241bd71cd9535378fe3e37ff",
+    "original_line": 122,
+    "original_position": 56,
+    "original_start_line": null,
+    "path": "pty/pty_windows.go",
+    "position": 1,
+    "pull_request_review_id": 3743949820,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21874",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2757979035/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-02-03T09:05:43Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2757979035",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21874#discussion_r2758113417"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21874"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2758113417"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "@johnstcn is 354d3ef44 to your liking?",
+    "commit_id": "be371907d6245880241bd71cd9535378fe3e37ff",
+    "created_at": "2026-02-03T09:29:15Z",
+    "diff_hunk": "@@ -83,6 +101,93 @@ func newPty(opt ...Option) (*ptyWindows, error) {\n \treturn pty, nil\n }\n \n+// pipePty is a simple pipe-based PTY implementation for Windows that doesn't\n+// use ConPTY. It's used for in-process CLI testing where no real process is\n+// attached to the PTY.\n+type pipePty struct {\n+\t// The pipe for \"input\" - what would be stdin for a process.\n+\t// Test writes to inputWriter, CLI reads from inputReader.\n+\tinputReader *os.File\n+\tinputWriter *os.File\n+\n+\t// The pipe for \"output\" - what would be stdout for a process.\n+\t// CLI writes to outputWriter, test reads from outputReader.\n+\toutputReader *os.File\n+\toutputWriter *os.File\n+\n+\tcloseMutex sync.Mutex\n+\tclosed     bool\n+}\n+\n+func newPipePty() (*pipePty, error) {",
+    "html_url": "https://github.com/coder/coder/pull/21874#discussion_r2758113417",
+    "id": 2758113417,
+    "in_reply_to_id": 2757943810,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6kZXiJ",
+    "original_commit_id": "be371907d6245880241bd71cd9535378fe3e37ff",
+    "original_line": 122,
+    "original_position": 56,
+    "original_start_line": null,
+    "path": "pty/pty_windows.go",
+    "position": 1,
+    "pull_request_review_id": 3744112814,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21874",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2758113417/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-02-03T09:29:15Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2758113417",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21874#discussion_r2758134186"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21874"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2758134186"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Shouldn't this just return `newConPty(opt)`?",
+    "commit_id": "354d3ef4400b21c47f819bfa75089a551282e484",
+    "created_at": "2026-02-03T09:34:01Z",
+    "diff_hunk": "@@ -37,6 +37,21 @@ func newPty(opt ...Option) (*ptyWindows, error) {\n \t\treturn nil, xerrors.Errorf(\"pty not supported\")\n \t}\n \n+\t// On Windows, pty.New() without Start() is only used by ptytest.New() for\n+\t// in-process CLI testing. ConPTY requires an attached process to function\n+\t// correctly, so ptytest has its own pipe-based implementation. Production\n+\t// code should use pty.Start() which creates a ConPTY with process attached.\n+\treturn nil, xerrors.Errorf(\"pty without process not supported on Windows; use ptytest.New() for tests\")\n+}",
+    "html_url": "https://github.com/coder/coder/pull/21874#discussion_r2758134186",
+    "id": 2758134186,
+    "line": 45,
+    "node_id": "PRRC_kwDOGkVX1s6kZcmq",
+    "original_commit_id": "354d3ef4400b21c47f819bfa75089a551282e484",
+    "original_line": 45,
+    "original_position": 18,
+    "original_start_line": 40,
+    "path": "pty/pty_windows.go",
+    "position": 18,
+    "pull_request_review_id": 3744138295,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21874",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2758134186/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 40,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2026-02-03T09:36:43Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2758134186",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21874#discussion_r2758170167"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21874"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2758170167"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I don't think so; the API is a bit odd to me TBH.\r\n`pty.New` is only used by tests it seems, so therefore we should discourage a parallel use-case alongside `Start()`.",
+    "commit_id": "354d3ef4400b21c47f819bfa75089a551282e484",
+    "created_at": "2026-02-03T09:42:24Z",
+    "diff_hunk": "@@ -37,6 +37,21 @@ func newPty(opt ...Option) (*ptyWindows, error) {\n \t\treturn nil, xerrors.Errorf(\"pty not supported\")\n \t}\n \n+\t// On Windows, pty.New() without Start() is only used by ptytest.New() for\n+\t// in-process CLI testing. ConPTY requires an attached process to function\n+\t// correctly, so ptytest has its own pipe-based implementation. Production\n+\t// code should use pty.Start() which creates a ConPTY with process attached.\n+\treturn nil, xerrors.Errorf(\"pty without process not supported on Windows; use ptytest.New() for tests\")\n+}",
+    "html_url": "https://github.com/coder/coder/pull/21874#discussion_r2758170167",
+    "id": 2758170167,
+    "in_reply_to_id": 2758134186,
+    "line": 45,
+    "node_id": "PRRC_kwDOGkVX1s6kZlY3",
+    "original_commit_id": "354d3ef4400b21c47f819bfa75089a551282e484",
+    "original_line": 45,
+    "original_position": 18,
+    "original_start_line": 40,
+    "path": "pty/pty_windows.go",
+    "position": 18,
+    "pull_request_review_id": 3744183510,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21874",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2758170167/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 40,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2026-02-03T09:42:38Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2758170167",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21874#discussion_r2758202699"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21874"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2758202699"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Ah, that's definitely confusing. I don't think you need to address that in this PR, but we should probably make this abundantly obvious somehow.",
+    "commit_id": "354d3ef4400b21c47f819bfa75089a551282e484",
+    "created_at": "2026-02-03T09:49:56Z",
+    "diff_hunk": "@@ -37,6 +37,21 @@ func newPty(opt ...Option) (*ptyWindows, error) {\n \t\treturn nil, xerrors.Errorf(\"pty not supported\")\n \t}\n \n+\t// On Windows, pty.New() without Start() is only used by ptytest.New() for\n+\t// in-process CLI testing. ConPTY requires an attached process to function\n+\t// correctly, so ptytest has its own pipe-based implementation. Production\n+\t// code should use pty.Start() which creates a ConPTY with process attached.\n+\treturn nil, xerrors.Errorf(\"pty without process not supported on Windows; use ptytest.New() for tests\")\n+}",
+    "html_url": "https://github.com/coder/coder/pull/21874#discussion_r2758202699",
+    "id": 2758202699,
+    "in_reply_to_id": 2758134186,
+    "line": 45,
+    "node_id": "PRRC_kwDOGkVX1s6kZtVL",
+    "original_commit_id": "354d3ef4400b21c47f819bfa75089a551282e484",
+    "original_line": 45,
+    "original_position": 18,
+    "original_start_line": 40,
+    "path": "pty/pty_windows.go",
+    "position": 18,
+    "pull_request_review_id": 3744225382,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21874",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2758202699/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 40,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2026-02-03T09:49:56Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2758202699",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  }
+]

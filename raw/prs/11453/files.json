@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/efdfc9435a12323f3f46a3f6554826257b71d4f8/coderd%2Fprovisionerdserver%2Fprovisionerdserver.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fprovisionerdserver%2Fprovisionerdserver.go?ref=efdfc9435a12323f3f46a3f6554826257b71d4f8",
+    "deletions": 0,
+    "filename": "coderd/provisionerdserver/provisionerdserver.go",
+    "patch": "@@ -272,6 +272,9 @@ func (s *server) heartbeat(ctx context.Context) error {\n }\n \n func (s *server) defaultHeartbeat(ctx context.Context) error {\n+\tif ctx.Err() != nil {\n+\t\treturn nil // we are probably shutting down\n+\t}\n \t//nolint:gocritic // This is specifically for updating the last seen at timestamp.\n \treturn s.Database.UpdateProvisionerDaemonLastSeenAt(dbauthz.AsSystemRestricted(ctx), database.UpdateProvisionerDaemonLastSeenAtParams{\n \t\tID:         s.ID,",
+    "raw_url": "https://github.com/coder/coder/raw/efdfc9435a12323f3f46a3f6554826257b71d4f8/coderd%2Fprovisionerdserver%2Fprovisionerdserver.go",
+    "sha": "038f5e2d9b27fd252a783a69fae5b1f25e4f70a8",
+    "status": "modified"
+  },
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/efdfc9435a12323f3f46a3f6554826257b71d4f8/coderd%2Fprovisionerdserver%2Fprovisionerdserver_test.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fprovisionerdserver%2Fprovisionerdserver_test.go?ref=efdfc9435a12323f3f46a3f6554826257b71d4f8",
+    "deletions": 0,
+    "filename": "coderd/provisionerdserver/provisionerdserver_test.go",
+    "patch": "@@ -110,6 +110,9 @@ func TestHeartbeat(t *testing.T) {\n \t\tcase <-hbCtx.Done():\n \t\t\treturn hbCtx.Err()\n \t\tdefault:\n+\t\t\tif hbCtx.Err() != nil {\n+\t\t\t\treturn nil // done\n+\t\t\t}\n \t\t\theartbeatChan <- struct{}{}\n \t\t\treturn nil\n \t\t}",
+    "raw_url": "https://github.com/coder/coder/raw/efdfc9435a12323f3f46a3f6554826257b71d4f8/coderd%2Fprovisionerdserver%2Fprovisionerdserver_test.go",
+    "sha": "57b6c100734bbe5a79519ee7b3520b409e410bc8",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/0505b131ec5e49c064a8a99cbd395fd7937fc11a/coderd%2Futil%2Ftz%2Ftz_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Futil%2Ftz%2Ftz_test.go?ref=0505b131ec5e49c064a8a99cbd395fd7937fc11a",
+    "deletions": 0,
+    "filename": "coderd/util/tz/tz_test.go",
+    "patch": "@@ -31,6 +31,10 @@ func Test_TimezoneIANA(t *testing.T) {\n \t\t\t// Not all Linux operating systems are guaranteed to have localtime!\n \t\t\tt.Skip(\"localtime doesn't exist!\")\n \t\t}\n+\t\tif runtime.GOOS == \"windows\" {\n+\t\t\t// This test can be flaky on some Windows runners :(\n+\t\t\tt.Skip(\"This test is flaky under Windows.\")\n+\t\t}\n \t\toldEnv, found := os.LookupEnv(\"TZ\")\n \t\tif found {\n \t\t\trequire.NoError(t, os.Unsetenv(\"TZ\"))",
+    "raw_url": "https://github.com/coder/coder/raw/0505b131ec5e49c064a8a99cbd395fd7937fc11a/coderd%2Futil%2Ftz%2Ftz_test.go",
+    "sha": "f70046837064fdb3940b6968feb067e13232e442",
+    "status": "modified"
+  }
+]

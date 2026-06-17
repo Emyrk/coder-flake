@@ -1,0 +1,82 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16162#pullrequestreview-2556341204"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16162"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "58fd773afe40962453035181eb0c164411ae7e03",
+    "html_url": "https://github.com/coder/coder/pull/16162#pullrequestreview-2556341204",
+    "id": 2556341204,
+    "node_id": "PRR_kwDOGkVX1s6YXqvU",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16162",
+    "state": "COMMENTED",
+    "submitted_at": "2025-01-16T14:31:07Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/2198487?u=02d52697c2ad0cafc17af3e508326e44a6b11d4e&v=4",
+      "events_url": "https://api.github.com/users/ThomasK33/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ThomasK33/followers",
+      "following_url": "https://api.github.com/users/ThomasK33/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ThomasK33/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ThomasK33",
+      "id": 2198487,
+      "login": "ThomasK33",
+      "node_id": "MDQ6VXNlcjIxOTg0ODc=",
+      "organizations_url": "https://api.github.com/users/ThomasK33/orgs",
+      "received_events_url": "https://api.github.com/users/ThomasK33/received_events",
+      "repos_url": "https://api.github.com/users/ThomasK33/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ThomasK33/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ThomasK33/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ThomasK33",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16162#pullrequestreview-2566169512"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16162"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "c66bb6690270fa191b7941e6a1d2e5d8cb83cf43",
+    "html_url": "https://github.com/coder/coder/pull/16162#pullrequestreview-2566169512",
+    "id": 2566169512,
+    "node_id": "PRR_kwDOGkVX1s6Y9KOo",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16162",
+    "state": "APPROVED",
+    "submitted_at": "2025-01-22T04:34:30Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/6332295?u=f2e03b88a93decdb4a0e9e86a662603c72c840f3&v=4",
+      "events_url": "https://api.github.com/users/coadler/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coadler/followers",
+      "following_url": "https://api.github.com/users/coadler/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coadler/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/coadler",
+      "id": 6332295,
+      "login": "coadler",
+      "node_id": "MDQ6VXNlcjYzMzIyOTU=",
+      "organizations_url": "https://api.github.com/users/coadler/orgs",
+      "received_events_url": "https://api.github.com/users/coadler/received_events",
+      "repos_url": "https://api.github.com/users/coadler/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coadler/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coadler/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/coadler",
+      "user_view_type": "public"
+    }
+  }
+]

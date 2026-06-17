@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/5a745e36c0ed3764f2844b82be0d0716ec64cfbb/enterprise%2Fwsproxy%2Fwsproxy_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fwsproxy%2Fwsproxy_test.go?ref=5a745e36c0ed3764f2844b82be0d0716ec64cfbb",
+    "deletions": 0,
+    "filename": "enterprise/wsproxy/wsproxy_test.go",
+    "patch": "@@ -598,6 +598,7 @@ func TestWorkspaceProxyDERPMeshProbe(t *testing.T) {\n \t}\n \n \tt.Run(\"ProbeOK\", func(t *testing.T) {\n+\t\tt.Skip(\"flaky test: https://github.com/coder/internal/issues/957\")\n \t\tt.Parallel()\n \n \t\tdeploymentValues := coderdtest.DeploymentValues(t)",
+    "raw_url": "https://github.com/coder/coder/raw/5a745e36c0ed3764f2844b82be0d0716ec64cfbb/enterprise%2Fwsproxy%2Fwsproxy_test.go",
+    "sha": "5d7eaada7f9900d00c52f356e3aeee3571f02c88",
+    "status": "modified"
+  }
+]

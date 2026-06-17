@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/3cde7116b13817311cb628e7edbd4e35219ffc38/agent%2Fagentssh%2Fagentssh_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagentssh%2Fagentssh_test.go?ref=3cde7116b13817311cb628e7edbd4e35219ffc38",
+    "deletions": 2,
+    "filename": "agent/agentssh/agentssh_test.go",
+    "patch": "@@ -216,7 +216,7 @@ func TestNewServer_Signal(t *testing.T) {\n \t\t}\n \t\trequire.NoError(t, sc.Err())\n \n-\t\terr = sess.Signal(ssh.SIGINT)\n+\t\terr = sess.Signal(ssh.SIGKILL)\n \t\trequire.NoError(t, err)\n \n \t\t// Assumption, signal propagates and the command exists, closing stdout.\n@@ -289,7 +289,7 @@ func TestNewServer_Signal(t *testing.T) {\n \t\t}\n \t\trequire.NoError(t, sc.Err())\n \n-\t\terr = sess.Signal(ssh.SIGINT)\n+\t\terr = sess.Signal(ssh.SIGKILL)\n \t\trequire.NoError(t, err)\n \n \t\t// Assumption, signal propagates and the command exists, closing stdout.",
+    "raw_url": "https://github.com/coder/coder/raw/3cde7116b13817311cb628e7edbd4e35219ffc38/agent%2Fagentssh%2Fagentssh_test.go",
+    "sha": "48be4f561963022aa12a1b3324861a59c6557f5d",
+    "status": "modified"
+  }
+]

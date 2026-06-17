@@ -1,0 +1,62 @@
+[
+  {
+    "additions": 16,
+    "blob_url": "https://github.com/coder/coder/blob/354d3ef4400b21c47f819bfa75089a551282e484/pty%2Fpty_windows.go",
+    "changes": 17,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/pty%2Fpty_windows.go?ref=354d3ef4400b21c47f819bfa75089a551282e484",
+    "deletions": 1,
+    "filename": "pty/pty_windows.go",
+    "patch": "@@ -22,7 +22,7 @@ var (\n )\n \n // See: https://docs.microsoft.com/en-us/windows/console/creating-a-pseudoconsole-session\n-func newPty(opt ...Option) (*ptyWindows, error) {\n+func newPty(opt ...Option) (PTY, error) {\n \tvar opts ptyOptions\n \tfor _, o := range opt {\n \t\to(&opts)\n@@ -37,6 +37,21 @@ func newPty(opt ...Option) (*ptyWindows, error) {\n \t\treturn nil, xerrors.Errorf(\"pty not supported\")\n \t}\n \n+\t// On Windows, pty.New() without Start() is only used by ptytest.New() for\n+\t// in-process CLI testing. ConPTY requires an attached process to function\n+\t// correctly, so ptytest has its own pipe-based implementation. Production\n+\t// code should use pty.Start() which creates a ConPTY with process attached.\n+\treturn nil, xerrors.Errorf(\"pty without process not supported on Windows; use ptytest.New() for tests\")\n+}\n+\n+// newConPty creates a PTY backed by a Windows PseudoConsole (ConPTY). This\n+// should only be used when a process will be attached via Start().\n+func newConPty(opt ...Option) (*ptyWindows, error) {\n+\tvar opts ptyOptions\n+\tfor _, o := range opt {\n+\t\to(&opts)\n+\t}\n+\n \tpty := &ptyWindows{\n \t\topts: opts,\n \t}",
+    "raw_url": "https://github.com/coder/coder/raw/354d3ef4400b21c47f819bfa75089a551282e484/pty%2Fpty_windows.go",
+    "sha": "e7fa719756b483921f6dfea64a7c6777fb6d3e74",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/354d3ef4400b21c47f819bfa75089a551282e484/pty%2Fptytest%2Fptytest.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/pty%2Fptytest%2Fptytest.go?ref=354d3ef4400b21c47f819bfa75089a551282e484",
+    "deletions": 1,
+    "filename": "pty/ptytest/ptytest.go",
+    "patch": "@@ -27,7 +27,7 @@ import (\n func New(t *testing.T, opts ...pty.Option) *PTY {\n \tt.Helper()\n \n-\tptty, err := pty.New(opts...)\n+\tptty, err := newTestPTY(opts...)\n \trequire.NoError(t, err)\n \n \te := newExpecter(t, ptty.Output(), \"cmd\")",
+    "raw_url": "https://github.com/coder/coder/raw/354d3ef4400b21c47f819bfa75089a551282e484/pty%2Fptytest%2Fptytest.go",
+    "sha": "efb93ed3389f34db6e031868555aa33c368771e3",
+    "status": "modified"
+  },
+  {
+    "additions": 9,
+    "blob_url": "https://github.com/coder/coder/blob/354d3ef4400b21c47f819bfa75089a551282e484/pty%2Fptytest%2Fptytest_other.go",
+    "changes": 9,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/pty%2Fptytest%2Fptytest_other.go?ref=354d3ef4400b21c47f819bfa75089a551282e484",
+    "deletions": 0,
+    "filename": "pty/ptytest/ptytest_other.go",
+    "patch": "@@ -0,0 +1,9 @@\n+//go:build !windows\n+\n+package ptytest\n+\n+import \"github.com/coder/coder/v2/pty\"\n+\n+func newTestPTY(opts ...pty.Option) (pty.PTY, error) {\n+\treturn pty.New(opts...)\n+}",
+    "raw_url": "https://github.com/coder/coder/raw/354d3ef4400b21c47f819bfa75089a551282e484/pty%2Fptytest%2Fptytest_other.go",
+    "sha": "0edc45d00d2732b89c72cca54c293c8c6be00089",
+    "status": "added"
+  },
+  {
+    "additions": 90,
+    "blob_url": "https://github.com/coder/coder/blob/354d3ef4400b21c47f819bfa75089a551282e484/pty%2Fptytest%2Fptytest_windows.go",
+    "changes": 90,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/pty%2Fptytest%2Fptytest_windows.go?ref=354d3ef4400b21c47f819bfa75089a551282e484",
+    "deletions": 0,
+    "filename": "pty/ptytest/ptytest_windows.go",
+    "patch": "@@ -0,0 +1,90 @@\n+//go:build windows\n+\n+package ptytest\n+\n+import (\n+\t\"os\"\n+\t\"sync\"\n+\n+\t\"golang.org/x/xerrors\"\n+\n+\t\"github.com/coder/coder/v2/pty\"\n+)\n+\n+// testPTY is a pipe-based PTY implementation for in-process CLI testing on\n+// Windows. ConPTY requires an attached process to function correctly - without\n+// one, the pipe handles become invalid intermittently. This implementation\n+// avoids ConPTY entirely for the ptytest.New() + Attach() use case.\n+type testPTY struct {\n+\tinputReader  *os.File\n+\tinputWriter  *os.File\n+\toutputReader *os.File\n+\toutputWriter *os.File\n+\n+\tcloseMutex sync.Mutex\n+\tclosed     bool\n+}\n+\n+func newTestPTY(_ ...pty.Option) (pty.PTY, error) {\n+\tp := &testPTY{}\n+\n+\tvar err error\n+\tp.inputReader, p.inputWriter, err = os.Pipe()\n+\tif err != nil {\n+\t\treturn nil, xerrors.Errorf(\"create input pipe: %w\", err)\n+\t}\n+\tp.outputReader, p.outputWriter, err = os.Pipe()\n+\tif err != nil {\n+\t\t_ = p.inputReader.Close()\n+\t\t_ = p.inputWriter.Close()\n+\t\treturn nil, xerrors.Errorf(\"create output pipe: %w\", err)\n+\t}\n+\n+\treturn p, nil\n+}\n+\n+func (*testPTY) Name() string {\n+\treturn \"\"\n+}\n+\n+func (p *testPTY) Input() pty.ReadWriter {\n+\treturn pty.ReadWriter{\n+\t\tReader: p.inputReader,\n+\t\tWriter: p.inputWriter,\n+\t}\n+}\n+\n+func (p *testPTY) Output() pty.ReadWriter {\n+\treturn pty.ReadWriter{\n+\t\tReader: p.outputReader,\n+\t\tWriter: p.outputWriter,\n+\t}\n+}\n+\n+func (*testPTY) Resize(uint16, uint16) error {\n+\treturn nil\n+}\n+\n+func (p *testPTY) Close() error {\n+\tp.closeMutex.Lock()\n+\tdefer p.closeMutex.Unlock()\n+\tif p.closed {\n+\t\treturn nil\n+\t}\n+\tp.closed = true\n+\n+\tvar firstErr error\n+\tif err := p.outputWriter.Close(); err != nil && firstErr == nil {\n+\t\tfirstErr = err\n+\t}\n+\tif err := p.outputReader.Close(); err != nil && firstErr == nil {\n+\t\tfirstErr = err\n+\t}\n+\tif err := p.inputWriter.Close(); err != nil && firstErr == nil {\n+\t\tfirstErr = err\n+\t}\n+\tif err := p.inputReader.Close(); err != nil && firstErr == nil {\n+\t\tfirstErr = err\n+\t}\n+\treturn firstErr\n+}",
+    "raw_url": "https://github.com/coder/coder/raw/354d3ef4400b21c47f819bfa75089a551282e484/pty%2Fptytest%2Fptytest_windows.go",
+    "sha": "637f4ec68f0851288653a4480601bce55e093546",
+    "status": "added"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/354d3ef4400b21c47f819bfa75089a551282e484/pty%2Fstart_windows.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/pty%2Fstart_windows.go?ref=354d3ef4400b21c47f819bfa75089a551282e484",
+    "deletions": 1,
+    "filename": "pty/start_windows.go",
+    "patch": "@@ -46,7 +46,7 @@ func startPty(cmd *Cmd, opt ...StartOption) (_ PTYCmd, _ Process, retErr error)\n \t\treturn nil, nil, err\n \t}\n \n-\twinPty, err := newPty(opts.ptyOpts...)\n+\twinPty, err := newConPty(opts.ptyOpts...)\n \tif err != nil {\n \t\treturn nil, nil, err\n \t}",
+    "raw_url": "https://github.com/coder/coder/raw/354d3ef4400b21c47f819bfa75089a551282e484/pty%2Fstart_windows.go",
+    "sha": "7665fcc41a802210b2706dc4f19b96c3621493d3",
+    "status": "modified"
+  }
+]

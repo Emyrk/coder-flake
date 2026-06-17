@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/49997e9da6c9adf57ce4fb287cffb9efb3a654ce/cli%2Fschedule_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fschedule_test.go?ref=49997e9da6c9adf57ce4fb287cffb9efb3a654ce",
+    "deletions": 1,
+    "filename": "cli/schedule_test.go",
+    "patch": "@@ -353,7 +353,7 @@ func TestScheduleOverride(t *testing.T) {\n \t\t\townerClient, _, _, ws := setupTestSchedule(t, sched)\n \t\t\tnow := time.Now()\n \t\t\t// To avoid the likelihood of time-related flakes, only matching up to the hour.\n-\t\t\texpectedDeadline := time.Now().In(loc).Add(10 * time.Hour).Format(\"2006-01-02T15:\")\n+\t\t\texpectedDeadline := now.In(loc).Add(10 * time.Hour).Format(\"2006-01-02T15:\")\n \n \t\t\t// When: we override the stop schedule\n \t\t\tinv, root := clitest.New(t,",
+    "raw_url": "https://github.com/coder/coder/raw/49997e9da6c9adf57ce4fb287cffb9efb3a654ce/cli%2Fschedule_test.go",
+    "sha": "b161f41cbcebc9123f61b5b8d42612f6f6f0911f",
+    "status": "modified"
+  }
+]

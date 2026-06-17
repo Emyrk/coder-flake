@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/12f18512526de89d4b77441a8ec96d6b3a20cda3/coderd%2Fworkspaces_test.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaces_test.go?ref=12f18512526de89d4b77441a8ec96d6b3a20cda3",
+    "deletions": 1,
+    "filename": "coderd/workspaces_test.go",
+    "patch": "@@ -2922,10 +2922,11 @@ func TestWorkspaceUpdateTTL(t *testing.T) {\n \t\tdbJob, err := db.GetProvisionerJobByID(dbauthz.AsSystemRestricted(ctx), dbBuild.JobID) //nolint:gocritic // test\n \t\trequire.NoError(t, err)\n \t\trequire.True(t, dbJob.CompletedAt.Valid)\n+\t\tinitialDeadline := dbJob.CompletedAt.Time.Add(deadline)\n \t\texpectedMaxDeadline := dbJob.CompletedAt.Time.Add(maxDeadline)\n \t\terr = db.UpdateWorkspaceBuildDeadlineByID(dbauthz.AsSystemRestricted(ctx), database.UpdateWorkspaceBuildDeadlineByIDParams{ //nolint:gocritic // test\n \t\t\tID:          build.ID,\n-\t\t\tDeadline:    dbBuild.Deadline,\n+\t\t\tDeadline:    initialDeadline,\n \t\t\tMaxDeadline: expectedMaxDeadline,\n \t\t\tUpdatedAt:   dbtime.Now(),\n \t\t})",
+    "raw_url": "https://github.com/coder/coder/raw/12f18512526de89d4b77441a8ec96d6b3a20cda3/coderd%2Fworkspaces_test.go",
+    "sha": "96381043db0ab498bc7191b8568261e2210d225c",
+    "status": "modified"
+  }
+]

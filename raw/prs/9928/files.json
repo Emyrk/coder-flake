@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/262809ed8109aaae8fcb4eada3d5f55c4435eb09/cli%2Fcreate_test.go",
+    "changes": 9,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fcreate_test.go?ref=262809ed8109aaae8fcb4eada3d5f55c4435eb09",
+    "deletions": 3,
+    "filename": "cli/create_test.go",
+    "patch": "@@ -446,7 +446,9 @@ func TestCreateValidateRichParameters(t *testing.T) {\n \t\t\tmatch := matches[i]\n \t\t\tvalue := matches[i+1]\n \t\t\tpty.ExpectMatch(match)\n-\t\t\tpty.WriteLine(value)\n+\t\t\tif value != \"\" {\n+\t\t\t\tpty.WriteLine(value)\n+\t\t\t}\n \t\t}\n \t\t<-doneChan\n \t})\n@@ -481,7 +483,6 @@ func TestCreateValidateRichParameters(t *testing.T) {\n \t\t\tmatch := matches[i]\n \t\t\tvalue := matches[i+1]\n \t\t\tpty.ExpectMatch(match)\n-\n \t\t\tif value != \"\" {\n \t\t\t\tpty.WriteLine(value)\n \t\t\t}\n@@ -519,7 +520,9 @@ func TestCreateValidateRichParameters(t *testing.T) {\n \t\t\tmatch := matches[i]\n \t\t\tvalue := matches[i+1]\n \t\t\tpty.ExpectMatch(match)\n-\t\t\tpty.WriteLine(value)\n+\t\t\tif value != \"\" {\n+\t\t\t\tpty.WriteLine(value)\n+\t\t\t}\n \t\t}\n \t\t<-doneChan\n \t})",
+    "raw_url": "https://github.com/coder/coder/raw/262809ed8109aaae8fcb4eada3d5f55c4435eb09/cli%2Fcreate_test.go",
+    "sha": "7ad774edcc7cb624c2c7ff52e5925f7be429ae81",
+    "status": "modified"
+  }
+]

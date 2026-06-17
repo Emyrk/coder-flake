@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/6785b9f5ff74d6a3750daceb94ee260539b0ded5/coderd%2Fworkspaceagents_test.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaceagents_test.go?ref=6785b9f5ff74d6a3750daceb94ee260539b0ded5",
+    "deletions": 2,
+    "filename": "coderd/workspaceagents_test.go",
+    "patch": "@@ -1353,9 +1353,13 @@ func TestWorkspaceAgent_Metadata(t *testing.T) {\n \tvar update []codersdk.WorkspaceAgentMetadata\n \n \tcheck := func(want codersdk.WorkspaceAgentMetadataResult, got codersdk.WorkspaceAgentMetadata) {\n-\t\trequire.WithinDuration(t, want.CollectedAt, got.Result.CollectedAt, time.Second)\n+\t\trequire.Greater(t, got.Result.CollectedAt, want.CollectedAt)\n+\n+\t\tageImpliedNow := got.Result.CollectedAt.Add(time.Duration(got.Result.Age) * time.Second)\n+\t\t// We use a long WithinDuration to tolerate slow CI, but we're still making sure\n+\t\t// that Age is within the ballpark.\n \t\trequire.WithinDuration(\n-\t\t\tt, time.Now(), got.Result.CollectedAt.Add(time.Duration(got.Result.Age)*time.Second), time.Second,\n+\t\t\tt, time.Now(), ageImpliedNow, time.Second*10,\n \t\t)\n \t\trequire.Equal(t, want.Value, got.Result.Value)\n \t\trequire.Equal(t, want.Error, got.Result.Error)",
+    "raw_url": "https://github.com/coder/coder/raw/6785b9f5ff74d6a3750daceb94ee260539b0ded5/coderd%2Fworkspaceagents_test.go",
+    "sha": "72508a98e0e9628a8b1624701fd1a7867e98a59e",
+    "status": "modified"
+  }
+]

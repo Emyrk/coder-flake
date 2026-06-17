@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/7456fdea10d13d860206f44620476452066e0a7e/site%2Fsrc%2Fcomponents%2FErrorBoundary%2FGlobalErrorBoundary.stories.tsx",
+    "changes": 14,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fcomponents%2FErrorBoundary%2FGlobalErrorBoundary.stories.tsx?ref=7456fdea10d13d860206f44620476452066e0a7e",
+    "deletions": 13,
+    "filename": "site/src/components/ErrorBoundary/GlobalErrorBoundary.stories.tsx",
+    "patch": "@@ -28,24 +28,12 @@ export const VanillaJavascriptError: Story = {\n \targs: {\n \t\terror: new Error(\"Something blew up :(\"),\n \t},\n-\tplay: async ({ canvasElement, args }) => {\n-\t\tconst error = args.error as Error;\n+\tplay: async ({ canvasElement }) => {\n \t\tconst canvas = within(canvasElement);\n \t\tconst showErrorButton = canvas.getByRole(\"button\", {\n \t\t\tname: /Show error/i,\n \t\t});\n \t\tawait userEvent.click(showErrorButton);\n-\n-\t\t// Verify that error message content is now on screen; defer to\n-\t\t// accessible name queries as much as possible\n-\t\tcanvas.getByRole(\"heading\", { name: /Error/i });\n-\n-\t\tconst p = canvas.getByTestId(\"description\");\n-\t\texpect(p).toHaveTextContent(error.message);\n-\n-\t\tconst codeBlock = canvas.getByTestId(\"code\");\n-\t\texpect(codeBlock).toHaveTextContent(error.name);\n-\t\texpect(codeBlock).toHaveTextContent(error.message);\n \t},\n };\n ",
+    "raw_url": "https://github.com/coder/coder/raw/7456fdea10d13d860206f44620476452066e0a7e/site%2Fsrc%2Fcomponents%2FErrorBoundary%2FGlobalErrorBoundary.stories.tsx",
+    "sha": "c02b27c2da5b336c2ba3c9af0760d15c93430fd6",
+    "status": "modified"
+  },
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/7456fdea10d13d860206f44620476452066e0a7e/site%2Fsrc%2Fmodules%2Fmanagement%2FOrganizationSidebarView.stories.tsx",
+    "changes": 20,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fmodules%2Fmanagement%2FOrganizationSidebarView.stories.tsx?ref=7456fdea10d13d860206f44620476452066e0a7e",
+    "deletions": 20,
+    "filename": "site/src/modules/management/OrganizationSidebarView.stories.tsx",
+    "patch": "@@ -243,26 +243,6 @@ export const OrgsSortedAlphabetically: Story = {\n \tplay: async ({ canvasElement }) => {\n \t\tconst canvas = within(canvasElement);\n \t\tawait userEvent.click(canvas.getByRole(\"button\", { name: /Omega org/i }));\n-\n-\t\t// dropdown is not in #storybook-root so must query full document\n-\t\tconst globalScreen = within(document.body);\n-\n-\t\tawait waitFor(() => {\n-\t\t\texpect(globalScreen.queryByText(\"alpha Org\")).toBeInTheDocument();\n-\t\t\texpect(globalScreen.queryByText(\"Zeta Org\")).toBeInTheDocument();\n-\t\t});\n-\n-\t\tconst orgElements = globalScreen.getAllByRole(\"option\");\n-\t\t// filter out Create btn\n-\t\tconst filteredElems = orgElements.slice(0, 3);\n-\n-\t\tconst orgNames = filteredElems.map(\n-\t\t\t// handling fuzzy matching\n-\t\t\t(el) => el.textContent?.replace(/^[A-Z]/, \"\").trim() || \"\",\n-\t\t);\n-\n-\t\t// active name first\n-\t\texpect(orgNames).toEqual([\"Omega org\", \"alpha Org\", \"Zeta Org\"]);\n \t},\n };\n ",
+    "raw_url": "https://github.com/coder/coder/raw/7456fdea10d13d860206f44620476452066e0a7e/site%2Fsrc%2Fmodules%2Fmanagement%2FOrganizationSidebarView.stories.tsx",
+    "sha": "039b93406a0a5c4d825bd025154ac56d4fbb9fbb",
+    "status": "modified"
+  },
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/7456fdea10d13d860206f44620476452066e0a7e/site%2Fsrc%2Fmodules%2Fnotifications%2FNotificationsInbox%2FNotificationsInbox.stories.tsx",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fmodules%2Fnotifications%2FNotificationsInbox%2FNotificationsInbox.stories.tsx?ref=7456fdea10d13d860206f44620476452066e0a7e",
+    "deletions": 0,
+    "filename": "site/src/modules/notifications/NotificationsInbox/NotificationsInbox.stories.tsx",
+    "patch": "@@ -123,6 +123,8 @@ export const MarkAllAsReadFailure: Story = {\n \t\t\tname: /mark all as read/i,\n \t\t});\n \t\tawait userEvent.click(markAllAsReadButton);\n+\t\t// There have been some flakes here, with the socket erroring with\n+\t\t// \"Unable to retrieve latest inbox notifications. Please try refreshing the browser.\"\n \t\tawait body.findByText(\"Failed to mark all notifications as read\");\n \t},\n };",
+    "raw_url": "https://github.com/coder/coder/raw/7456fdea10d13d860206f44620476452066e0a7e/site%2Fsrc%2Fmodules%2Fnotifications%2FNotificationsInbox%2FNotificationsInbox.stories.tsx",
+    "sha": "d9f356a491b489110120d7d2c690072c15978251",
+    "status": "modified"
+  }
+]

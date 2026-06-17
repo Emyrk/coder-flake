@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 14,
+    "blob_url": "https://github.com/coder/coder/blob/01323c8a1061a5b8b89b28c304ea24e187fc451c/coderd%2Fcoderdtest%2Fcoderdtest.go",
+    "changes": 14,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fcoderdtest%2Fcoderdtest.go?ref=01323c8a1061a5b8b89b28c304ea24e187fc451c",
+    "deletions": 0,
+    "filename": "coderd/coderdtest/coderdtest.go",
+    "patch": "@@ -33,6 +33,7 @@ import (\n \t\"github.com/spf13/afero\"\n \t\"github.com/stretchr/testify/assert\"\n \t\"github.com/stretchr/testify/require\"\n+\t\"golang.org/x/xerrors\"\n \t\"google.golang.org/api/idtoken\"\n \t\"google.golang.org/api/option\"\n \n@@ -265,13 +266,26 @@ func CreateFirstUser(t *testing.T, client *codersdk.Client) codersdk.CreateFirst\n \n // CreateAnotherUser creates and authenticates a new user.\n func CreateAnotherUser(t *testing.T, client *codersdk.Client, organizationID uuid.UUID, roles ...string) *codersdk.Client {\n+\treturn createAnotherUserRetry(t, client, organizationID, 5, roles...)\n+}\n+\n+func createAnotherUserRetry(t *testing.T, client *codersdk.Client, organizationID uuid.UUID, retries int, roles ...string) *codersdk.Client {\n \treq := codersdk.CreateUserRequest{\n \t\tEmail:          namesgenerator.GetRandomName(1) + \"@coder.com\",\n \t\tUsername:       randomUsername(),\n \t\tPassword:       \"testpass\",\n \t\tOrganizationID: organizationID,\n \t}\n+\n \tuser, err := client.CreateUser(context.Background(), req)\n+\tvar apiError *codersdk.Error\n+\t// If the user already exists by username or email conflict, try again up to \"retries\" times.\n+\tif err != nil && retries >= 0 && xerrors.As(err, &apiError) {\n+\t\tif apiError.StatusCode() == http.StatusConflict {\n+\t\t\tretries--\n+\t\t\treturn createAnotherUserRetry(t, client, organizationID, retries, roles...)\n+\t\t}\n+\t}\n \trequire.NoError(t, err)\n \n \tlogin, err := client.LoginWithPassword(context.Background(), codersdk.LoginWithPasswordRequest{",
+    "raw_url": "https://github.com/coder/coder/raw/01323c8a1061a5b8b89b28c304ea24e187fc451c/coderd%2Fcoderdtest%2Fcoderdtest.go",
+    "sha": "e39c60878aaba9efba97467d0fc641be587e0f90",
+    "status": "modified"
+  }
+]

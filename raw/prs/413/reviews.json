@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/413#pullrequestreview-903442660"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/413"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "\ud83c\udf89 ",
+    "commit_id": "a8da101e52e490acd9f3e7d38fecad62c469afc5",
+    "html_url": "https://github.com/coder/coder/pull/413#pullrequestreview-903442660",
+    "id": 903442660,
+    "node_id": "PRR_kwDOGkVX1s412XDk",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/413",
+    "state": "APPROVED",
+    "submitted_at": "2022-03-08T18:51:03Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/88213859?u=7bf027f1e01182311a5911ad6d93e6418f3f2123&v=4",
+      "events_url": "https://api.github.com/users/bryphe-coder/events{/privacy}",
+      "followers_url": "https://api.github.com/users/bryphe-coder/followers",
+      "following_url": "https://api.github.com/users/bryphe-coder/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bryphe-coder/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/bryphe-coder",
+      "id": 88213859,
+      "login": "bryphe-coder",
+      "node_id": "MDQ6VXNlcjg4MjEzODU5",
+      "organizations_url": "https://api.github.com/users/bryphe-coder/orgs",
+      "received_events_url": "https://api.github.com/users/bryphe-coder/received_events",
+      "repos_url": "https://api.github.com/users/bryphe-coder/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/bryphe-coder/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bryphe-coder/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/bryphe-coder",
+      "user_view_type": "public"
+    }
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/4c98ad58e2aec63cfea7071ae081f5e26be2a922/.github%2Fworkflows%2Fcoder.yaml",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Fcoder.yaml?ref=4c98ad58e2aec63cfea7071ae081f5e26be2a922",
+    "deletions": 0,
+    "filename": ".github/workflows/coder.yaml",
+    "patch": "@@ -61,6 +61,8 @@ jobs:\n             **/node_modules\n             .eslintcache\n           key: js-${{ runner.os }}-test-${{ hashFiles('**/yarn.lock') }}\n+          restore-keys: |\n+            js-${{ runner.os }}-\n \n       - name: Install node_modules\n         run: ./scripts/yarn_install.sh\n@@ -108,6 +110,8 @@ jobs:\n             **/node_modules\n             .eslintcache\n           key: js-${{ runner.os }}-test-${{ hashFiles('**/yarn.lock') }}\n+          restore-keys: |\n+            js-${{ runner.os }}-\n \n       - name: Install node_modules\n         run: ./scripts/yarn_install.sh\n@@ -250,6 +254,8 @@ jobs:\n             **/node_modules\n             .eslintcache\n           key: js-${{ runner.os }}-test-${{ hashFiles('**/yarn.lock') }}\n+          restore-keys: |\n+            js-${{ runner.os }}-\n \n       # Go is required for uploading the test results to datadog\n       - uses: actions/setup-go@v2\n@@ -312,6 +318,8 @@ jobs:\n             **/node_modules\n             .eslintcache\n           key: js-${{ runner.os }}-test-${{ hashFiles('**/yarn.lock') }}\n+          restore-keys: |\n+            js-${{ runner.os }}-\n \n       # Go is required for uploading the test results to datadog\n       - uses: actions/setup-go@v2",
+    "raw_url": "https://github.com/coder/coder/raw/4c98ad58e2aec63cfea7071ae081f5e26be2a922/.github%2Fworkflows%2Fcoder.yaml",
+    "sha": "de216cbae2a1a65182c78ac43bd5aae8dec62ace",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/4c98ad58e2aec63cfea7071ae081f5e26be2a922/site%2F.yarnrc",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2F.yarnrc?ref=4c98ad58e2aec63cfea7071ae081f5e26be2a922",
+    "deletions": 0,
+    "filename": "site/.yarnrc",
+    "patch": "@@ -0,0 +1 @@\n+network-timeout 300000",
+    "raw_url": "https://github.com/coder/coder/raw/4c98ad58e2aec63cfea7071ae081f5e26be2a922/site%2F.yarnrc",
+    "sha": "d7d9c737a6f6bd73aa9cfdeefecc8c230380b676",
+    "status": "added"
+  }
+]

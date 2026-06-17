@@ -1,0 +1,489 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19478#discussion_r2292401437"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19478"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2292401437"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Be mindful of the fact you can't call `require` methods in a goroutine other than the main test goroutine. They all call `FailNow`, and from the documentation:\r\n> FailNow must be called from the goroutine running the test or benchmark function, not from other goroutines created during the test. Calling FailNow does not stop those other goroutines.\r\n\r\nhttps://pkg.go.dev/testing#F.FailNow\r\n\r\nYou can call `assert` functions, however!",
+    "commit_id": "83e8699946771e01595c15764b2eed9ed427259b",
+    "created_at": "2025-08-22T00:18:14Z",
+    "diff_hunk": "@@ -1720,19 +1721,32 @@ func TestExecutorAutostartSkipsWhenNoProvisionersAvailable(t *testing.T) {\n \t// Stop the workspace while provisioner is available\n \tworkspace = coderdtest.MustTransitionWorkspace(t, client, workspace.ID, codersdk.WorkspaceTransitionStart, codersdk.WorkspaceTransitionStop)\n \n-\t// Wait for provisioner to be available for this specific workspace\n-\tcoderdtest.MustWaitForProvisionersAvailable(t, db, workspace)\n \tp, err := coderdtest.GetProvisionerForTags(db, time.Now(), workspace.OrganizationID, provisionerDaemonTags)\n \trequire.NoError(t, err, \"Error getting provisioner for workspace\")\n \n-\tdaemon1Closer.Close()\n+\tvar wg sync.WaitGroup\n+\twg.Add(2)\n \n-\t// Ensure the provisioner is stale\n-\tstaleTime := sched.Next(workspace.LatestBuild.CreatedAt).Add((-1 * provisionerdserver.StaleInterval) + -10*time.Second)\n-\tcoderdtest.UpdateProvisionerLastSeenAt(t, db, p.ID, staleTime)\n+\tnext := sched.Next(workspace.LatestBuild.CreatedAt)\n+\tgo func() {\n+\t\tdefer wg.Done()\n+\t\t// Ensure the provisioner is stale\n+\t\tstaleTime := next.Add(-(provisionerdserver.StaleInterval * 2))\n+\t\tcoderdtest.UpdateProvisionerLastSeenAt(t, db, p.ID, staleTime)\n+\t\tp, err = coderdtest.GetProvisionerForTags(db, time.Now(), workspace.OrganizationID, provisionerDaemonTags)\n+\t\trequire.NoError(t, err, \"Error getting provisioner for workspace\")\n+\t\trequire.Equal(t, p.LastSeenAt.Time.UnixNano(), staleTime.UnixNano())",
+    "html_url": "https://github.com/coder/coder/pull/19478#discussion_r2292401437",
+    "id": 2292401437,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6Io0Ud",
+    "original_commit_id": "6fa1e31638589a64145103a3aa9aadaacbfad695",
+    "original_line": 1738,
+    "original_position": 32,
+    "original_start_line": 1737,
+    "path": "coderd/autobuild/lifecycle_executor_test.go",
+    "position": 1,
+    "pull_request_review_id": 3142638799,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19478",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2292401437/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-08-22T00:18:36Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2292401437",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/39577870?v=4",
+      "events_url": "https://api.github.com/users/ethanndickson/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ethanndickson/followers",
+      "following_url": "https://api.github.com/users/ethanndickson/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ethanndickson/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ethanndickson",
+      "id": 39577870,
+      "login": "ethanndickson",
+      "node_id": "MDQ6VXNlcjM5NTc3ODcw",
+      "organizations_url": "https://api.github.com/users/ethanndickson/orgs",
+      "received_events_url": "https://api.github.com/users/ethanndickson/received_events",
+      "repos_url": "https://api.github.com/users/ethanndickson/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ethanndickson/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ethanndickson/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ethanndickson",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19478#discussion_r2298467716"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19478"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2298467716"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "suggest using methods in `testutil/chan.go` and passing in a parent context in the method signature",
+    "commit_id": "83e8699946771e01595c15764b2eed9ed427259b",
+    "created_at": "2025-08-25T15:46:56Z",
+    "diff_hunk": "@@ -1652,8 +1652,36 @@ func MustWaitForAnyProvisioner(t *testing.T, db database.Store) {\n \t}, testutil.WaitShort, testutil.IntervalFast)\n }\n \n+// MustWaitForProvisionersUnavailable waits for provisioners to become unavailable for a specific workspace\n+func MustWaitForProvisionersUnavailable(t *testing.T, db database.Store, workspace codersdk.Workspace, tags map[string]string, checkTime time.Time) {\n+\tt.Helper()\n+\tctx := ctxWithProvisionerPermissions(testutil.Context(t, testutil.WaitShort))\n+\n+\trequire.Eventually(t, func() bool {\n+\t\t// Use the same logic as hasValidProvisioner but expect false\n+\t\tprovisionerDaemons, err := db.GetProvisionerDaemonsByOrganization(ctx, database.GetProvisionerDaemonsByOrganizationParams{\n+\t\t\tOrganizationID: workspace.OrganizationID,\n+\t\t\tWantTags:       tags,\n+\t\t})\n+\t\tif err != nil {\n+\t\t\treturn false\n+\t\t}\n+\n+\t\t// Check if NO provisioners are active (all are stale or gone)\n+\t\tfor _, pd := range provisionerDaemons {\n+\t\t\tif pd.LastSeenAt.Valid {\n+\t\t\t\tage := checkTime.Sub(pd.LastSeenAt.Time)\n+\t\t\t\tif age <= provisionerdserver.StaleInterval {\n+\t\t\t\t\treturn false // Found an active provisioner, keep waiting\n+\t\t\t\t}\n+\t\t\t}\n+\t\t}\n+\t\treturn true // No active provisioners found\n+\t}, testutil.WaitMedium, testutil.IntervalFast)",
+    "html_url": "https://github.com/coder/coder/pull/19478#discussion_r2298467716",
+    "id": 2298467716,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6I_9WE",
+    "original_commit_id": "e86b46996a0136588c4788cb22ee064aedd3122e",
+    "original_line": 1680,
+    "original_position": 29,
+    "original_start_line": 1660,
+    "path": "coderd/coderdtest/coderdtest.go",
+    "position": 1,
+    "pull_request_review_id": 3152051275,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19478",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2298467716/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-08-25T15:47:14Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2298467716",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19478#discussion_r2301793102"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19478"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2301793102"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I'm not sure what you're suggesting we actually change here since this set of `MustWaitForX` functions don't make use of a channel.\r\n\r\nDid you mean to leave this comment on one of the `stats := <-statsCh` lines that are in some of the actual test functions?",
+    "commit_id": "83e8699946771e01595c15764b2eed9ed427259b",
+    "created_at": "2025-08-26T18:26:55Z",
+    "diff_hunk": "@@ -1652,8 +1652,36 @@ func MustWaitForAnyProvisioner(t *testing.T, db database.Store) {\n \t}, testutil.WaitShort, testutil.IntervalFast)\n }\n \n+// MustWaitForProvisionersUnavailable waits for provisioners to become unavailable for a specific workspace\n+func MustWaitForProvisionersUnavailable(t *testing.T, db database.Store, workspace codersdk.Workspace, tags map[string]string, checkTime time.Time) {\n+\tt.Helper()\n+\tctx := ctxWithProvisionerPermissions(testutil.Context(t, testutil.WaitShort))\n+\n+\trequire.Eventually(t, func() bool {\n+\t\t// Use the same logic as hasValidProvisioner but expect false\n+\t\tprovisionerDaemons, err := db.GetProvisionerDaemonsByOrganization(ctx, database.GetProvisionerDaemonsByOrganizationParams{\n+\t\t\tOrganizationID: workspace.OrganizationID,\n+\t\t\tWantTags:       tags,\n+\t\t})\n+\t\tif err != nil {\n+\t\t\treturn false\n+\t\t}\n+\n+\t\t// Check if NO provisioners are active (all are stale or gone)\n+\t\tfor _, pd := range provisionerDaemons {\n+\t\t\tif pd.LastSeenAt.Valid {\n+\t\t\t\tage := checkTime.Sub(pd.LastSeenAt.Time)\n+\t\t\t\tif age <= provisionerdserver.StaleInterval {\n+\t\t\t\t\treturn false // Found an active provisioner, keep waiting\n+\t\t\t\t}\n+\t\t\t}\n+\t\t}\n+\t\treturn true // No active provisioners found\n+\t}, testutil.WaitMedium, testutil.IntervalFast)",
+    "html_url": "https://github.com/coder/coder/pull/19478#discussion_r2301793102",
+    "id": 2301793102,
+    "in_reply_to_id": 2298467716,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6JMpNO",
+    "original_commit_id": "e86b46996a0136588c4788cb22ee064aedd3122e",
+    "original_line": 1680,
+    "original_position": 29,
+    "original_start_line": 1660,
+    "path": "coderd/coderdtest/coderdtest.go",
+    "position": 1,
+    "pull_request_review_id": 3156823343,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19478",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2301793102/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-08-26T18:26:55Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2301793102",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/3246492?v=4",
+      "events_url": "https://api.github.com/users/cstyan/events{/privacy}",
+      "followers_url": "https://api.github.com/users/cstyan/followers",
+      "following_url": "https://api.github.com/users/cstyan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/cstyan/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/cstyan",
+      "id": 3246492,
+      "login": "cstyan",
+      "node_id": "MDQ6VXNlcjMyNDY0OTI=",
+      "organizations_url": "https://api.github.com/users/cstyan/orgs",
+      "received_events_url": "https://api.github.com/users/cstyan/received_events",
+      "repos_url": "https://api.github.com/users/cstyan/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/cstyan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/cstyan/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/cstyan",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19478#discussion_r2301805365"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19478"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2301805365"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Sorry, I got mixed up here. The method I wanted to highlight (`testutil.Eventually`) is actually defined in `testutil/eventually.go`.\r\n\r\nThe problem with the below\r\n\r\n```\r\nctx := testutil.Context(t, testutil.WaitMedium)\r\n<setup code>\r\nrequire.Eventually(t, func bool() {\r\n<assertions that should eventually be true>\r\n}, testutil.WaitMedium, testutil.IntervalFast)\r\n```\r\n\r\nis that `ctx` can reach its deadline before the condition in `require.Eventually` is met, and is therefore prone to flakiness.\r\n\r\nMy suggestion is instead to use\r\n\r\n```\r\nctx := testutil.Context(t, testutil.WaitMedium)\r\n<setup code>\r\ntestutil.Eventually(t, func bool() {\r\n<assertions that should eventually be true>\r\n}, testutil.IntervalFast)\r\n```\r\n\r\nThis will adhere to the deadline imposed by `ctx` and be less flake-prone. Apologies for the confusion.",
+    "commit_id": "83e8699946771e01595c15764b2eed9ed427259b",
+    "created_at": "2025-08-26T18:32:04Z",
+    "diff_hunk": "@@ -1652,8 +1652,36 @@ func MustWaitForAnyProvisioner(t *testing.T, db database.Store) {\n \t}, testutil.WaitShort, testutil.IntervalFast)\n }\n \n+// MustWaitForProvisionersUnavailable waits for provisioners to become unavailable for a specific workspace\n+func MustWaitForProvisionersUnavailable(t *testing.T, db database.Store, workspace codersdk.Workspace, tags map[string]string, checkTime time.Time) {\n+\tt.Helper()\n+\tctx := ctxWithProvisionerPermissions(testutil.Context(t, testutil.WaitShort))\n+\n+\trequire.Eventually(t, func() bool {\n+\t\t// Use the same logic as hasValidProvisioner but expect false\n+\t\tprovisionerDaemons, err := db.GetProvisionerDaemonsByOrganization(ctx, database.GetProvisionerDaemonsByOrganizationParams{\n+\t\t\tOrganizationID: workspace.OrganizationID,\n+\t\t\tWantTags:       tags,\n+\t\t})\n+\t\tif err != nil {\n+\t\t\treturn false\n+\t\t}\n+\n+\t\t// Check if NO provisioners are active (all are stale or gone)\n+\t\tfor _, pd := range provisionerDaemons {\n+\t\t\tif pd.LastSeenAt.Valid {\n+\t\t\t\tage := checkTime.Sub(pd.LastSeenAt.Time)\n+\t\t\t\tif age <= provisionerdserver.StaleInterval {\n+\t\t\t\t\treturn false // Found an active provisioner, keep waiting\n+\t\t\t\t}\n+\t\t\t}\n+\t\t}\n+\t\treturn true // No active provisioners found\n+\t}, testutil.WaitMedium, testutil.IntervalFast)",
+    "html_url": "https://github.com/coder/coder/pull/19478#discussion_r2301805365",
+    "id": 2301805365,
+    "in_reply_to_id": 2298467716,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6JMsM1",
+    "original_commit_id": "e86b46996a0136588c4788cb22ee064aedd3122e",
+    "original_line": 1680,
+    "original_position": 29,
+    "original_start_line": 1660,
+    "path": "coderd/coderdtest/coderdtest.go",
+    "position": 1,
+    "pull_request_review_id": 3156840536,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19478",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2301805365/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-08-26T18:32:04Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2301805365",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19478#discussion_r2301930934"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19478"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2301930934"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "No worries at all \ud83d\udc4d I refactored all of the test helpers I'd written in this file (MustWaitForX) to make use of `testutil.Eventually`.",
+    "commit_id": "83e8699946771e01595c15764b2eed9ed427259b",
+    "created_at": "2025-08-26T19:25:24Z",
+    "diff_hunk": "@@ -1652,8 +1652,36 @@ func MustWaitForAnyProvisioner(t *testing.T, db database.Store) {\n \t}, testutil.WaitShort, testutil.IntervalFast)\n }\n \n+// MustWaitForProvisionersUnavailable waits for provisioners to become unavailable for a specific workspace\n+func MustWaitForProvisionersUnavailable(t *testing.T, db database.Store, workspace codersdk.Workspace, tags map[string]string, checkTime time.Time) {\n+\tt.Helper()\n+\tctx := ctxWithProvisionerPermissions(testutil.Context(t, testutil.WaitShort))\n+\n+\trequire.Eventually(t, func() bool {\n+\t\t// Use the same logic as hasValidProvisioner but expect false\n+\t\tprovisionerDaemons, err := db.GetProvisionerDaemonsByOrganization(ctx, database.GetProvisionerDaemonsByOrganizationParams{\n+\t\t\tOrganizationID: workspace.OrganizationID,\n+\t\t\tWantTags:       tags,\n+\t\t})\n+\t\tif err != nil {\n+\t\t\treturn false\n+\t\t}\n+\n+\t\t// Check if NO provisioners are active (all are stale or gone)\n+\t\tfor _, pd := range provisionerDaemons {\n+\t\t\tif pd.LastSeenAt.Valid {\n+\t\t\t\tage := checkTime.Sub(pd.LastSeenAt.Time)\n+\t\t\t\tif age <= provisionerdserver.StaleInterval {\n+\t\t\t\t\treturn false // Found an active provisioner, keep waiting\n+\t\t\t\t}\n+\t\t\t}\n+\t\t}\n+\t\treturn true // No active provisioners found\n+\t}, testutil.WaitMedium, testutil.IntervalFast)",
+    "html_url": "https://github.com/coder/coder/pull/19478#discussion_r2301930934",
+    "id": 2301930934,
+    "in_reply_to_id": 2298467716,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6JNK22",
+    "original_commit_id": "e86b46996a0136588c4788cb22ee064aedd3122e",
+    "original_line": 1680,
+    "original_position": 29,
+    "original_start_line": 1660,
+    "path": "coderd/coderdtest/coderdtest.go",
+    "position": 1,
+    "pull_request_review_id": 3157017171,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19478",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2301930934/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-08-26T19:25:24Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2301930934",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/3246492?v=4",
+      "events_url": "https://api.github.com/users/cstyan/events{/privacy}",
+      "followers_url": "https://api.github.com/users/cstyan/followers",
+      "following_url": "https://api.github.com/users/cstyan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/cstyan/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/cstyan",
+      "id": 3246492,
+      "login": "cstyan",
+      "node_id": "MDQ6VXNlcjMyNDY0OTI=",
+      "organizations_url": "https://api.github.com/users/cstyan/orgs",
+      "received_events_url": "https://api.github.com/users/cstyan/received_events",
+      "repos_url": "https://api.github.com/users/cstyan/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/cstyan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/cstyan/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/cstyan",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19478#discussion_r2303189462"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19478"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2303189462"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "nit: Suggest instead checking less than or equal to staleTime instead instead?",
+    "commit_id": "83e8699946771e01595c15764b2eed9ed427259b",
+    "created_at": "2025-08-27T08:00:06Z",
+    "diff_hunk": "@@ -1720,19 +1721,32 @@ func TestExecutorAutostartSkipsWhenNoProvisionersAvailable(t *testing.T) {\n \t// Stop the workspace while provisioner is available\n \tworkspace = coderdtest.MustTransitionWorkspace(t, client, workspace.ID, codersdk.WorkspaceTransitionStart, codersdk.WorkspaceTransitionStop)\n \n-\t// Wait for provisioner to be available for this specific workspace\n-\tcoderdtest.MustWaitForProvisionersAvailable(t, db, workspace)\n \tp, err := coderdtest.GetProvisionerForTags(db, time.Now(), workspace.OrganizationID, provisionerDaemonTags)\n \trequire.NoError(t, err, \"Error getting provisioner for workspace\")\n \n-\tdaemon1Closer.Close()\n+\tvar wg sync.WaitGroup\n+\twg.Add(2)\n \n-\t// Ensure the provisioner is stale\n-\tstaleTime := sched.Next(workspace.LatestBuild.CreatedAt).Add((-1 * provisionerdserver.StaleInterval) + -10*time.Second)\n-\tcoderdtest.UpdateProvisionerLastSeenAt(t, db, p.ID, staleTime)\n+\tnext := sched.Next(workspace.LatestBuild.CreatedAt)\n+\tgo func() {\n+\t\tdefer wg.Done()\n+\t\t// Ensure the provisioner is stale\n+\t\tstaleTime := next.Add(-(provisionerdserver.StaleInterval * 2))\n+\t\tcoderdtest.UpdateProvisionerLastSeenAt(t, db, p.ID, staleTime)\n+\t\tp, err = coderdtest.GetProvisionerForTags(db, time.Now(), workspace.OrganizationID, provisionerDaemonTags)\n+\t\tassert.NoError(t, err, \"Error getting provisioner for workspace\")\n+\t\tassert.Eventually(t, func() bool { return p.LastSeenAt.Time.UnixNano() == staleTime.UnixNano() }, testutil.WaitMedium, testutil.IntervalFast)",
+    "html_url": "https://github.com/coder/coder/pull/19478#discussion_r2303189462",
+    "id": 2303189462,
+    "line": 1738,
+    "node_id": "PRRC_kwDOGkVX1s6JR-HW",
+    "original_commit_id": "83e8699946771e01595c15764b2eed9ed427259b",
+    "original_line": 1738,
+    "original_position": 32,
+    "original_start_line": null,
+    "path": "coderd/autobuild/lifecycle_executor_test.go",
+    "position": 32,
+    "pull_request_review_id": 3158784522,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19478",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2303189462/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-08-27T08:00:40Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2303189462",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19478#discussion_r2304613818"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19478"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2304613818"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "This should be fine, `lastSeenAt` should never be updated within the execution of this test *other than* via this direct call to `coderdtest.UpdateProvisionerLastSeenAt`, since that ensures the provisioner is stale and the autobuild will then not execute. We want to ensure it's at least `staleTime` or very close to it, as when we create a provisioner via the various test helpers it gets a default `LastSeenAt` time of like January 2024.\r\n\r\nWe could make this more explicitly enforced by also double checking that in addition to the `stats.Transitions` length being 0, assert that the `LastSeenAt` time for this provisioner is still equal to `staleTime`.",
+    "commit_id": "83e8699946771e01595c15764b2eed9ed427259b",
+    "created_at": "2025-08-27T16:36:48Z",
+    "diff_hunk": "@@ -1720,19 +1721,32 @@ func TestExecutorAutostartSkipsWhenNoProvisionersAvailable(t *testing.T) {\n \t// Stop the workspace while provisioner is available\n \tworkspace = coderdtest.MustTransitionWorkspace(t, client, workspace.ID, codersdk.WorkspaceTransitionStart, codersdk.WorkspaceTransitionStop)\n \n-\t// Wait for provisioner to be available for this specific workspace\n-\tcoderdtest.MustWaitForProvisionersAvailable(t, db, workspace)\n \tp, err := coderdtest.GetProvisionerForTags(db, time.Now(), workspace.OrganizationID, provisionerDaemonTags)\n \trequire.NoError(t, err, \"Error getting provisioner for workspace\")\n \n-\tdaemon1Closer.Close()\n+\tvar wg sync.WaitGroup\n+\twg.Add(2)\n \n-\t// Ensure the provisioner is stale\n-\tstaleTime := sched.Next(workspace.LatestBuild.CreatedAt).Add((-1 * provisionerdserver.StaleInterval) + -10*time.Second)\n-\tcoderdtest.UpdateProvisionerLastSeenAt(t, db, p.ID, staleTime)\n+\tnext := sched.Next(workspace.LatestBuild.CreatedAt)\n+\tgo func() {\n+\t\tdefer wg.Done()\n+\t\t// Ensure the provisioner is stale\n+\t\tstaleTime := next.Add(-(provisionerdserver.StaleInterval * 2))\n+\t\tcoderdtest.UpdateProvisionerLastSeenAt(t, db, p.ID, staleTime)\n+\t\tp, err = coderdtest.GetProvisionerForTags(db, time.Now(), workspace.OrganizationID, provisionerDaemonTags)\n+\t\tassert.NoError(t, err, \"Error getting provisioner for workspace\")\n+\t\tassert.Eventually(t, func() bool { return p.LastSeenAt.Time.UnixNano() == staleTime.UnixNano() }, testutil.WaitMedium, testutil.IntervalFast)",
+    "html_url": "https://github.com/coder/coder/pull/19478#discussion_r2304613818",
+    "id": 2304613818,
+    "in_reply_to_id": 2303189462,
+    "line": 1738,
+    "node_id": "PRRC_kwDOGkVX1s6JXZ26",
+    "original_commit_id": "83e8699946771e01595c15764b2eed9ed427259b",
+    "original_line": 1738,
+    "original_position": 32,
+    "original_start_line": null,
+    "path": "coderd/autobuild/lifecycle_executor_test.go",
+    "position": 32,
+    "pull_request_review_id": 3160730686,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19478",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2304613818/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-08-27T16:36:49Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2304613818",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/3246492?v=4",
+      "events_url": "https://api.github.com/users/cstyan/events{/privacy}",
+      "followers_url": "https://api.github.com/users/cstyan/followers",
+      "following_url": "https://api.github.com/users/cstyan/following{/other_user}",
+      "gists_url": "https://api.github.com/users/cstyan/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/cstyan",
+      "id": 3246492,
+      "login": "cstyan",
+      "node_id": "MDQ6VXNlcjMyNDY0OTI=",
+      "organizations_url": "https://api.github.com/users/cstyan/orgs",
+      "received_events_url": "https://api.github.com/users/cstyan/received_events",
+      "repos_url": "https://api.github.com/users/cstyan/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/cstyan/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/cstyan/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/cstyan",
+      "user_view_type": "public"
+    }
+  }
+]

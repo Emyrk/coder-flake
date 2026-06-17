@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/952d933873c42f970cddbbfdf63050cc7251225a/coderd%2Fnotifications%2Fmetrics_test.go",
+    "changes": 7,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fnotifications%2Fmetrics_test.go?ref=952d933873c42f970cddbbfdf63050cc7251225a",
+    "deletions": 3,
+    "filename": "coderd/notifications/metrics_test.go",
+    "patch": "@@ -254,9 +254,10 @@ func TestPendingUpdatesMetric(t *testing.T) {\n \tsuccess := testutil.RequireRecvCtx(testutil.Context(t, testutil.WaitShort), t, interceptor.updateSuccess)\n \tfailure := testutil.RequireRecvCtx(testutil.Context(t, testutil.WaitShort), t, interceptor.updateFailure)\n \n-\t// Ensure that the value set in the metric is equivalent to the number of actual pending updates.\n-\tpending := promtest.ToFloat64(metrics.PendingUpdates)\n-\trequire.EqualValues(t, pending, success+failure)\n+\t// Wait for the metric to be updated with the expected count of metrics.\n+\trequire.Eventually(t, func() bool {\n+\t\treturn promtest.ToFloat64(metrics.PendingUpdates) == float64(success+failure)\n+\t}, testutil.WaitShort, testutil.IntervalFast)\n \n \t// Unpause the interceptor so the updates can proceed.\n \tinterceptor.unpause()",
+    "raw_url": "https://github.com/coder/coder/raw/952d933873c42f970cddbbfdf63050cc7251225a/coderd%2Fnotifications%2Fmetrics_test.go",
+    "sha": "6c360dd2919d0cdfbd7806d4540054fb64fb5af8",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/3ce8bf1482dde9a6411ed17be356314c0d53c92b/pty%2Fstart_other.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/pty%2Fstart_other.go?ref=3ce8bf1482dde9a6411ed17be356314c0d53c92b",
+    "deletions": 3,
+    "filename": "pty/start_other.go",
+    "patch": "@@ -17,9 +17,6 @@ func startPty(cmd *exec.Cmd) (PTY, *os.Process, error) {\n \tif err != nil {\n \t\treturn nil, nil, xerrors.Errorf(\"open: %w\", err)\n \t}\n-\tdefer func() {\n-\t\t_ = tty.Close()\n-\t}()\n \tcmd.SysProcAttr = &syscall.SysProcAttr{\n \t\tSetsid:  true,\n \t\tSetctty: true,",
+    "raw_url": "https://github.com/coder/coder/raw/3ce8bf1482dde9a6411ed17be356314c0d53c92b/pty%2Fstart_other.go",
+    "sha": "a527869e9917889516f0c6a5dc357405abd023ed",
+    "status": "modified"
+  }
+]

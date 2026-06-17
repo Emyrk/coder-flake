@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/df3dbd08d089f1748daade7ab5fb54aa45ebfc7f/cli%2Fgitssh_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fgitssh_test.go?ref=df3dbd08d089f1748daade7ab5fb54aa45ebfc7f",
+    "deletions": 2,
+    "filename": "cli/gitssh_test.go",
+    "patch": "@@ -58,7 +58,7 @@ func prepareTestGitSSH(ctx context.Context, t *testing.T) (*agentsdk.Client, str\n \t_ = agenttest.New(t, client.URL, r.AgentToken, func(o *agent.Options) {\n \t\to.Client = agentClient\n \t})\n-\t_ = coderdtest.AwaitWorkspaceAgents(t, client, r.Workspace.ID)\n+\t_ = coderdtest.NewWorkspaceAgentWaiter(t, client, r.Workspace.ID).WithContext(ctx).Wait()\n \treturn agentClient, r.AgentToken, pubkey\n }\n \n@@ -167,7 +167,7 @@ func TestGitSSH(t *testing.T) {\n \t\trequire.NoError(t, err)\n \t\twritePrivateKeyToFile(t, idFile, privkey)\n \n-\t\tsetupCtx := testutil.Context(t, testutil.WaitLong)\n+\t\tsetupCtx := testutil.Context(t, testutil.WaitSuperLong)\n \t\tclient, token, coderPubkey := prepareTestGitSSH(setupCtx, t)\n \n \t\tauthkey := make(chan gossh.PublicKey, 1)",
+    "raw_url": "https://github.com/coder/coder/raw/df3dbd08d089f1748daade7ab5fb54aa45ebfc7f/cli%2Fgitssh_test.go",
+    "sha": "37ad33c1e818392fec26ded061b47cb919a72f9a",
+    "status": "modified"
+  }
+]

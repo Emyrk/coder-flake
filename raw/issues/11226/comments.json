@@ -1,0 +1,48 @@
+[
+  {
+    "author_association": "MEMBER",
+    "body": "this unit test exercises the bug: https://github.com/coder/coder/pull/11243/commits/278252100a0379b3d9f9fbe2a0137436d1daec47",
+    "created_at": "2023-12-15T20:21:06Z",
+    "html_url": "https://github.com/coder/coder/issues/11226#issuecomment-1858442175",
+    "id": 1858442175,
+    "issue_url": "https://api.github.com/repos/coder/coder/issues/11226",
+    "node_id": "IC_kwDOGkVX1s5uxZO_",
+    "performed_via_github_app": null,
+    "pin": null,
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/issues/comments/1858442175/reactions"
+    },
+    "updated_at": "2023-12-15T20:21:06Z",
+    "url": "https://api.github.com/repos/coder/coder/issues/comments/1858442175",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  }
+]

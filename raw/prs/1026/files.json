@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 12,
+    "blob_url": "https://github.com/coder/coder/blob/855923a5beaac3079cc1882001b794e2009ed09b/cli%2Fstart.go",
+    "changes": 14,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fstart.go?ref=855923a5beaac3079cc1882001b794e2009ed09b",
+    "deletions": 2,
+    "filename": "cli/start.go",
+    "patch": "@@ -64,8 +64,11 @@ func start() *cobra.Command {\n \troot := &cobra.Command{\n \t\tUse: \"start\",\n \t\tRunE: func(cmd *cobra.Command, args []string) error {\n+\t\t\tlogger := slog.Make(sloghuman.Sink(os.Stderr))\n \t\t\tif traceDatadog {\n-\t\t\t\ttracer.Start()\n+\t\t\t\ttracer.Start(tracer.WithLogStartup(false), tracer.WithLogger(&datadogLogger{\n+\t\t\t\t\tlogger: logger.Named(\"datadog\"),\n+\t\t\t\t}))\n \t\t\t\tdefer tracer.Stop()\n \t\t\t}\n \n@@ -153,7 +156,6 @@ func start() *cobra.Command {\n \t\t\t\treturn xerrors.Errorf(\"parse ssh keygen algorithm %s: %w\", sshKeygenAlgorithmRaw, err)\n \t\t\t}\n \n-\t\t\tlogger := slog.Make(sloghuman.Sink(os.Stderr))\n \t\t\toptions := &coderd.Options{\n \t\t\t\tAccessURL:            accessURLParsed,\n \t\t\t\tLogger:               logger.Named(\"coderd\"),\n@@ -534,3 +536,11 @@ func configureTLS(listener net.Listener, tlsMinVersion, tlsClientAuth, tlsCertFi\n \n \treturn tls.NewListener(listener, tlsConfig), nil\n }\n+\n+type datadogLogger struct {\n+\tlogger slog.Logger\n+}\n+\n+func (d *datadogLogger) Log(msg string) {\n+\td.logger.Debug(context.Background(), msg)\n+}",
+    "raw_url": "https://github.com/coder/coder/raw/855923a5beaac3079cc1882001b794e2009ed09b/cli%2Fstart.go",
+    "sha": "3c9e0c9b98c2907d5b4678352309a0cd1f493486",
+    "status": "modified"
+  }
+]

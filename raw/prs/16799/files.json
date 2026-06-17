@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/8a1ab104b8b52ddac6e097f5a9d3df6584a0f989/coderd%2Fdatabase%2Fquerier_test.go",
+    "changes": 5,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdatabase%2Fquerier_test.go?ref=8a1ab104b8b52ddac6e097f5a9d3df6584a0f989",
+    "deletions": 3,
+    "filename": "coderd/database/querier_test.go",
+    "patch": "@@ -2169,9 +2169,6 @@ func TestExpectOne(t *testing.T) {\n func TestGetProvisionerJobsByIDsWithQueuePosition(t *testing.T) {\n \tt.Parallel()\n \n-\tnow := dbtime.Now()\n-\tctx := testutil.Context(t, testutil.WaitShort)\n-\n \ttestCases := []struct {\n \t\tname           string\n \t\tjobTags        []database.StringMap\n@@ -2393,6 +2390,8 @@ func TestGetProvisionerJobsByIDsWithQueuePosition(t *testing.T) {\n \t\tt.Run(tc.name, func(t *testing.T) {\n \t\t\tt.Parallel()\n \t\t\tdb, _ := dbtestutil.NewDB(t)\n+\t\t\tnow := dbtime.Now()\n+\t\t\tctx := testutil.Context(t, testutil.WaitShort)\n \n \t\t\t// Create provisioner jobs based on provided tags:\n \t\t\tallJobs := make([]database.ProvisionerJob, len(tc.jobTags))",
+    "raw_url": "https://github.com/coder/coder/raw/8a1ab104b8b52ddac6e097f5a9d3df6584a0f989/coderd%2Fdatabase%2Fquerier_test.go",
+    "sha": "2eb3125fc25af1a8fa63eda546530211900ab19c",
+    "status": "modified"
+  }
+]

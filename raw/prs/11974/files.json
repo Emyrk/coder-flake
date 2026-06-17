@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/510d93638ba412d9ed32b8fa134f38c86e53ee9b/flake.nix",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=510d93638ba412d9ed32b8fa134f38c86e53ee9b",
+    "deletions": 0,
+    "filename": "flake.nix",
+    "patch": "@@ -37,6 +37,7 @@\n           go_1_21\n           go-migrate\n           golangci-lint\n+          google-chrome\n           gopls\n           gotestsum\n           jq",
+    "raw_url": "https://github.com/coder/coder/raw/510d93638ba412d9ed32b8fa134f38c86e53ee9b/flake.nix",
+    "sha": "344ed21312081c3f1822f2f552e3c7ac4b44edfc",
+    "status": "modified"
+  }
+]

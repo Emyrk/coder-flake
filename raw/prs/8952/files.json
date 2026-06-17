@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 11,
+    "blob_url": "https://github.com/coder/coder/blob/1d2f47e666056d18eaea3404d55767ebc36a165f/coderd%2Fbatchstats%2Fbatcher.go",
+    "changes": 21,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fbatchstats%2Fbatcher.go?ref=1d2f47e666056d18eaea3404d55767ebc36a165f",
+    "deletions": 10,
+    "filename": "coderd/batchstats/batcher.go",
+    "patch": "@@ -126,6 +126,7 @@ func New(ctx context.Context, opts ...Option) (*Batcher, func(), error) {\n \n // Add adds a stat to the batcher for the given workspace and agent.\n func (b *Batcher) Add(\n+\tnow time.Time,\n \tagentID uuid.UUID,\n \ttemplateID uuid.UUID,\n \tuserID uuid.UUID,\n@@ -135,7 +136,7 @@ func (b *Batcher) Add(\n \tb.mu.Lock()\n \tdefer b.mu.Unlock()\n \n-\tnow := database.Now()\n+\tnow = database.Time(now)\n \n \tb.buf.ID = append(b.buf.ID, uuid.New())\n \tb.buf.CreatedAt = append(b.buf.CreatedAt, now)\n@@ -199,15 +200,6 @@ func (b *Batcher) flush(ctx context.Context, forced bool, reason string) {\n \tdefer func() {\n \t\tb.flushForced.Store(false)\n \t\tb.mu.Unlock()\n-\t\t// Notify that a flush has completed. This only happens in tests.\n-\t\tif b.flushed != nil {\n-\t\t\tselect {\n-\t\t\tcase <-ctx.Done():\n-\t\t\t\tclose(b.flushed)\n-\t\t\tdefault:\n-\t\t\t\tb.flushed <- count\n-\t\t\t}\n-\t\t}\n \t\tif count > 0 {\n \t\t\telapsed := time.Since(start)\n \t\t\tb.log.Debug(ctx, \"flush complete\",\n@@ -217,6 +209,15 @@ func (b *Batcher) flush(ctx context.Context, forced bool, reason string) {\n \t\t\t\tslog.F(\"reason\", reason),\n \t\t\t)\n \t\t}\n+\t\t// Notify that a flush has completed. This only happens in tests.\n+\t\tif b.flushed != nil {\n+\t\t\tselect {\n+\t\t\tcase <-ctx.Done():\n+\t\t\t\tclose(b.flushed)\n+\t\t\tdefault:\n+\t\t\t\tb.flushed <- count\n+\t\t\t}\n+\t\t}\n \t}()\n \n \tif len(b.buf.ID) == 0 {",
+    "raw_url": "https://github.com/coder/coder/raw/1d2f47e666056d18eaea3404d55767ebc36a165f/coderd%2Fbatchstats%2Fbatcher.go",
+    "sha": "a5239102f2182acc1d0b042a774a142787b28d46",
+    "status": "modified"
+  },
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/1d2f47e666056d18eaea3404d55767ebc36a165f/coderd%2Fbatchstats%2Fbatcher_internal_test.go",
+    "changes": 16,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fbatchstats%2Fbatcher_internal_test.go?ref=1d2f47e666056d18eaea3404d55767ebc36a165f",
+    "deletions": 8,
+    "filename": "coderd/batchstats/batcher_internal_test.go",
+    "patch": "@@ -46,7 +46,7 @@ func TestBatchStats(t *testing.T) {\n \n \t// Given: no data points are added for workspace\n \t// When: it becomes time to report stats\n-\tt1 := time.Now()\n+\tt1 := database.Now()\n \t// Signal a tick and wait for a flush to complete.\n \ttick <- t1\n \tf := <-flushed\n@@ -59,9 +59,9 @@ func TestBatchStats(t *testing.T) {\n \trequire.Empty(t, stats, \"should have no stats for workspace\")\n \n \t// Given: a single data point is added for workspace\n-\tt2 := time.Now()\n+\tt2 := t1.Add(time.Second)\n \tt.Logf(\"inserting 1 stat\")\n-\trequire.NoError(t, b.Add(deps1.Agent.ID, deps1.User.ID, deps1.Template.ID, deps1.Workspace.ID, randAgentSDKStats(t)))\n+\trequire.NoError(t, b.Add(t2.Add(time.Millisecond), deps1.Agent.ID, deps1.User.ID, deps1.Template.ID, deps1.Workspace.ID, randAgentSDKStats(t)))\n \n \t// When: it becomes time to report stats\n \t// Signal a tick and wait for a flush to complete.\n@@ -77,17 +77,17 @@ func TestBatchStats(t *testing.T) {\n \n \t// Given: a lot of data points are added for both workspaces\n \t// (equal to batch size)\n-\tt3 := time.Now()\n+\tt3 := t2.Add(time.Second)\n \tdone := make(chan struct{})\n \n \tgo func() {\n \t\tdefer close(done)\n \t\tt.Logf(\"inserting %d stats\", defaultBufferSize)\n \t\tfor i := 0; i < defaultBufferSize; i++ {\n \t\t\tif i%2 == 0 {\n-\t\t\t\trequire.NoError(t, b.Add(deps1.Agent.ID, deps1.User.ID, deps1.Template.ID, deps1.Workspace.ID, randAgentSDKStats(t)))\n+\t\t\t\trequire.NoError(t, b.Add(t3.Add(time.Millisecond), deps1.Agent.ID, deps1.User.ID, deps1.Template.ID, deps1.Workspace.ID, randAgentSDKStats(t)))\n \t\t\t} else {\n-\t\t\t\trequire.NoError(t, b.Add(deps2.Agent.ID, deps2.User.ID, deps2.Template.ID, deps2.Workspace.ID, randAgentSDKStats(t)))\n+\t\t\t\trequire.NoError(t, b.Add(t3.Add(time.Millisecond), deps2.Agent.ID, deps2.User.ID, deps2.Template.ID, deps2.Workspace.ID, randAgentSDKStats(t)))\n \t\t\t}\n \t\t}\n \t}()\n@@ -105,15 +105,15 @@ func TestBatchStats(t *testing.T) {\n \trequire.Len(t, stats, 2, \"should have stats for both workspaces\")\n \n \t// Ensures that a subsequent flush pushes all the remaining data\n-\tt4 := time.Now()\n+\tt4 := t3.Add(time.Second)\n \ttick <- t4\n \tf2 := <-flushed\n \tt.Logf(\"flush 4 completed\")\n \texpectedCount := defaultBufferSize - f\n \trequire.Equal(t, expectedCount, f2, \"did not flush expected remaining rows\")\n \n \t// Ensure that a subsequent flush does not push stale data.\n-\tt5 := time.Now()\n+\tt5 := t4.Add(time.Second)\n \ttick <- t5\n \tf = <-flushed\n \trequire.Zero(t, f, \"expected zero stats to have been flushed\")",
+    "raw_url": "https://github.com/coder/coder/raw/1d2f47e666056d18eaea3404d55767ebc36a165f/coderd%2Fbatchstats%2Fbatcher_internal_test.go",
+    "sha": "8288442400a3e7b3661868ec63c31d4fe5314cf5",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/1d2f47e666056d18eaea3404d55767ebc36a165f/coderd%2Fworkspaceagents.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaceagents.go?ref=1d2f47e666056d18eaea3404d55767ebc36a165f",
+    "deletions": 1,
+    "filename": "coderd/workspaceagents.go",
+    "patch": "@@ -1414,7 +1414,7 @@ func (api *API) workspaceAgentReportStats(rw http.ResponseWriter, r *http.Reques\n \n \tvar errGroup errgroup.Group\n \terrGroup.Go(func() error {\n-\t\tif err := api.statsBatcher.Add(workspaceAgent.ID, workspace.TemplateID, workspace.OwnerID, workspace.ID, req); err != nil {\n+\t\tif err := api.statsBatcher.Add(time.Now(), workspaceAgent.ID, workspace.TemplateID, workspace.OwnerID, workspace.ID, req); err != nil {\n \t\t\tapi.Logger.Error(ctx, \"failed to add stats to batcher\", slog.Error(err))\n \t\t\treturn xerrors.Errorf(\"can't insert workspace agent stat: %w\", err)\n \t\t}",
+    "raw_url": "https://github.com/coder/coder/raw/1d2f47e666056d18eaea3404d55767ebc36a165f/coderd%2Fworkspaceagents.go",
+    "sha": "545f3e7c6ed840ac3ec41edb0102852bb0dfe465",
+    "status": "modified"
+  }
+]

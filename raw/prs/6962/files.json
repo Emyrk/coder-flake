@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/c10b91e86984420c360e2e3e6f4f51db508bcb31/coderd%2Fworkspaceagents_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaceagents_test.go?ref=c10b91e86984420c360e2e3e6f4f51db508bcb31",
+    "deletions": 1,
+    "filename": "coderd/workspaceagents_test.go",
+    "patch": "@@ -1355,7 +1355,7 @@ func TestWorkspaceAgent_Metadata(t *testing.T) {\n \tcheck := func(want codersdk.WorkspaceAgentMetadataResult, got codersdk.WorkspaceAgentMetadata) {\n \t\trequire.WithinDuration(t, want.CollectedAt, got.Result.CollectedAt, time.Second)\n \t\trequire.WithinDuration(\n-\t\t\tt, time.Now(), got.Result.CollectedAt.Add(time.Duration(got.Result.Age)*time.Second), time.Millisecond*500,\n+\t\t\tt, time.Now(), got.Result.CollectedAt.Add(time.Duration(got.Result.Age)*time.Second), time.Second,\n \t\t)\n \t\trequire.Equal(t, want.Value, got.Result.Value)\n \t\trequire.Equal(t, want.Error, got.Result.Error)",
+    "raw_url": "https://github.com/coder/coder/raw/c10b91e86984420c360e2e3e6f4f51db508bcb31/coderd%2Fworkspaceagents_test.go",
+    "sha": "dc38b992425740480445f204fa86d049f0f9cb16",
+    "status": "modified"
+  }
+]

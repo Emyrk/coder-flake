@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/5b29aa4a9db6669d034412b4a35250cc21c32201/provisionerd%2Fprovisionerd_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/provisionerd%2Fprovisionerd_test.go?ref=5b29aa4a9db6669d034412b4a35250cc21c32201",
+    "deletions": 0,
+    "filename": "provisionerd/provisionerd_test.go",
+    "patch": "@@ -868,6 +868,7 @@ func TestProvisionerd(t *testing.T) {\n \t})\n \n \tt.Run(\"ReconnectAndComplete\", func(t *testing.T) {\n+\tt.Skip(\"Test is flakey. See: https://github.com/coder/coder/issues/5159\")\n \t\tt.Parallel()\n \t\tvar (\n \t\t\tsecond       atomic.Bool",
+    "raw_url": "https://github.com/coder/coder/raw/5b29aa4a9db6669d034412b4a35250cc21c32201/provisionerd%2Fprovisionerd_test.go",
+    "sha": "7127acc85c87699ac664621e23483969cadbb223",
+    "status": "modified"
+  }
+]

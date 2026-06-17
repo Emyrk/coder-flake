@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 11,
+    "blob_url": "https://github.com/coder/coder/blob/8c96860231c8588e1ebeb47fbeff9f9ef54c887f/coderd%2Fworkspaceagents_test.go",
+    "changes": 26,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaceagents_test.go?ref=8c96860231c8588e1ebeb47fbeff9f9ef54c887f",
+    "deletions": 15,
+    "filename": "coderd/workspaceagents_test.go",
+    "patch": "@@ -1350,7 +1350,7 @@ func TestWorkspaceAgent_Metadata_CatchMemoryLeak(t *testing.T) {\n \tagentClient := agentsdk.New(client.URL)\n \tagentClient.SetSessionToken(r.AgentToken)\n \n-\tctx, cancel := context.WithCancel(testutil.Context(t, testutil.WaitSuperLong))\n+\tctx := testutil.Context(t, testutil.WaitSuperLong)\n \tconn, err := agentClient.ConnectRPC(ctx)\n \trequire.NoError(t, err)\n \tdefer func() {\n@@ -1404,20 +1404,21 @@ func TestWorkspaceAgent_Metadata_CatchMemoryLeak(t *testing.T) {\n \n \tpostDone := testutil.Go(t, func() {\n \t\tfor {\n+\t\t\tselect {\n+\t\t\tcase <-metadataDone:\n+\t\t\t\treturn\n+\t\t\tdefault:\n+\t\t\t}\n \t\t\t// We need to send two separate metadata updates to trigger the\n \t\t\t// memory leak. foo2 will cause the number of foo1 to be doubled, etc.\n-\t\t\terr = post(ctx, \"foo1\", \"hi\")\n+\t\t\terr := post(ctx, \"foo1\", \"hi\")\n \t\t\tif err != nil {\n-\t\t\t\tif !xerrors.Is(err, context.Canceled) {\n-\t\t\t\t\tassert.NoError(t, err, \"post metadata foo1\")\n-\t\t\t\t}\n+\t\t\t\tassert.NoError(t, err, \"post metadata foo1\")\n \t\t\t\treturn\n \t\t\t}\n \t\t\terr = post(ctx, \"foo2\", \"bye\")\n \t\t\tif err != nil {\n-\t\t\t\tif !xerrors.Is(err, context.Canceled) {\n-\t\t\t\t\tassert.NoError(t, err, \"post metadata foo1\")\n-\t\t\t\t}\n+\t\t\t\tassert.NoError(t, err, \"post metadata foo1\")\n \t\t\t\treturn\n \t\t\t}\n \t\t}\n@@ -1436,13 +1437,8 @@ func TestWorkspaceAgent_Metadata_CatchMemoryLeak(t *testing.T) {\n \t// testing it is not straightforward.\n \tdb.err.Store(&wantErr)\n \n-\tselect {\n-\tcase <-ctx.Done():\n-\t\tt.Fatal(\"timeout waiting for SSE to close\")\n-\tcase <-metadataDone:\n-\t}\n-\tcancel()\n-\t<-postDone\n+\ttestutil.RequireRecvCtx(ctx, t, metadataDone)\n+\ttestutil.RequireRecvCtx(ctx, t, postDone)\n }\n \n func TestWorkspaceAgent_Startup(t *testing.T) {",
+    "raw_url": "https://github.com/coder/coder/raw/8c96860231c8588e1ebeb47fbeff9f9ef54c887f/coderd%2Fworkspaceagents_test.go",
+    "sha": "a2915d2633f1325444c9ae4094c04625210ea70e",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/6ec8d6f0631c56d4465631b70fbe3eafa45103f9/aibridge%2Finternal%2Fintegrationtest%2Fresponses_internal_test.go",
+    "changes": 7,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/aibridge%2Finternal%2Fintegrationtest%2Fresponses_internal_test.go?ref=6ec8d6f0631c56d4465631b70fbe3eafa45103f9",
+    "deletions": 1,
+    "filename": "aibridge/internal/integrationtest/responses_internal_test.go",
+    "patch": "@@ -920,7 +920,12 @@ func TestResponsesInjectedTool(t *testing.T) {\n \t\t\tfor i := range tokenUsages {\n \t\t\t\ttokenUsages[i].InterceptionID = \"\" // ignore interception ID and time creation when comparing\n \t\t\t\ttokenUsages[i].CreatedAt = time.Time{}\n-\t\t\t\trequire.Equal(t, tc.expectTokenUsages[i], *tokenUsages[i])\n+\t\t\t}\n+\n+\t\t\t// Match by content, not position, AsyncRecorder may flake.\n+\t\t\t// See https://github.com/coder/internal/issues/1544.\n+\t\t\tfor _, expected := range tc.expectTokenUsages {\n+\t\t\t\trequire.Contains(t, tokenUsages, &expected)\n \t\t\t}\n \n \t\t\t// Verify the response is the final tool response (after agentic loop).",
+    "raw_url": "https://github.com/coder/coder/raw/6ec8d6f0631c56d4465631b70fbe3eafa45103f9/aibridge%2Finternal%2Fintegrationtest%2Fresponses_internal_test.go",
+    "sha": "906f817500c7c3c85fc2b60795c32319f105492b",
+    "status": "modified"
+  }
+]

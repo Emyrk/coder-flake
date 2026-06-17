@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/af5a992e0cab038ae81d05f40357277137e022c3/enterprise%2Ftailnet%2Fcoordinator.go",
+    "changes": 12,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Ftailnet%2Fcoordinator.go?ref=af5a992e0cab038ae81d05f40357277137e022c3",
+    "deletions": 6,
+    "filename": "enterprise/tailnet/coordinator.go",
+    "patch": "@@ -197,12 +197,6 @@ func (c *haCoordinator) handleNextClientMessage(id, agent uuid.UUID, decoder *js\n func (c *haCoordinator) ServeAgent(conn net.Conn, id uuid.UUID, name string) error {\n \tc.agentNameCache.Add(id, name)\n \n-\t// Tell clients on other instances to send a callmemaybe to us.\n-\terr := c.publishAgentHello(id)\n-\tif err != nil {\n-\t\treturn xerrors.Errorf(\"publish agent hello: %w\", err)\n-\t}\n-\n \t// Publish all nodes on this instance that want to connect to this agent.\n \tnodes := c.nodesSubscribedToAgent(id)\n \tif len(nodes) > 0 {\n@@ -241,6 +235,12 @@ func (c *haCoordinator) ServeAgent(conn net.Conn, id uuid.UUID, name string) err\n \t}\n \tc.mutex.Unlock()\n \n+\t// Tell clients on other instances to send a callmemaybe to us.\n+\terr := c.publishAgentHello(id)\n+\tif err != nil {\n+\t\treturn xerrors.Errorf(\"publish agent hello: %w\", err)\n+\t}\n+\n \tdefer func() {\n \t\tc.mutex.Lock()\n \t\tdefer c.mutex.Unlock()",
+    "raw_url": "https://github.com/coder/coder/raw/af5a992e0cab038ae81d05f40357277137e022c3/enterprise%2Ftailnet%2Fcoordinator.go",
+    "sha": "e4ff98272398335a3d24c2bcbd3033468a747279",
+    "status": "modified"
+  }
+]

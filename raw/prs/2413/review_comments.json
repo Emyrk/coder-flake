@@ -1,0 +1,210 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2413#discussion_r899217666"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2413"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/899217666"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Tip (non-blocking): It would be OK to call this `err`, at the time `defer func` runs, the value of `err` would be that of the `return` statement.",
+    "commit_id": "0d5f35f7e9f295ef016d25929386f350f8efb512",
+    "created_at": "2022-06-16T15:33:23Z",
+    "diff_hunk": "@@ -36,8 +46,19 @@ func migrateSetup(db *sql.DB) (source.Driver, *migrate.Migrate, error) {\n }\n \n // MigrateUp runs SQL migrations to ensure the database schema is up-to-date.\n-func MigrateUp(db *sql.DB) error {\n+func MigrateUp(db *sql.DB) (retErr error) {",
+    "html_url": "https://github.com/coder/coder/pull/2413#discussion_r899217666",
+    "id": 899217666,
+    "line": 49,
+    "node_id": "PRRC_kwDOGkVX1s41mPkC",
+    "original_commit_id": "474186acc2618f9cdf4abb8ac0a28247f9d89d89",
+    "original_line": 49,
+    "original_position": 36,
+    "original_start_line": null,
+    "path": "coderd/database/migrate.go",
+    "position": 36,
+    "pull_request_review_id": 1009238646,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2413",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/899217666/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-06-16T15:34:13Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/899217666",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2413#discussion_r899221703"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2413"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/899221703"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Just realized `m` can be nil here which would panic. Should we move this to after `err` is handled?",
+    "commit_id": "0d5f35f7e9f295ef016d25929386f350f8efb512",
+    "created_at": "2022-06-16T15:35:54Z",
+    "diff_hunk": "@@ -36,8 +46,19 @@ func migrateSetup(db *sql.DB) (source.Driver, *migrate.Migrate, error) {\n }\n \n // MigrateUp runs SQL migrations to ensure the database schema is up-to-date.\n-func MigrateUp(db *sql.DB) error {\n+func MigrateUp(db *sql.DB) (retErr error) {\n \t_, m, err := migrateSetup(db)\n+\tdefer func() {\n+\t\tsrcErr, dbErr := m.Close()",
+    "html_url": "https://github.com/coder/coder/pull/2413#discussion_r899221703",
+    "id": 899221703,
+    "line": 55,
+    "node_id": "PRRC_kwDOGkVX1s41mQjH",
+    "original_commit_id": "474186acc2618f9cdf4abb8ac0a28247f9d89d89",
+    "original_line": 52,
+    "original_position": 39,
+    "original_start_line": null,
+    "path": "coderd/database/migrate.go",
+    "position": 42,
+    "pull_request_review_id": 1009245415,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2413",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/899221703/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-06-16T15:35:55Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/899221703",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2413#discussion_r899228011"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2413"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/899228011"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Yeah, good call.",
+    "commit_id": "0d5f35f7e9f295ef016d25929386f350f8efb512",
+    "created_at": "2022-06-16T15:41:52Z",
+    "diff_hunk": "@@ -36,8 +46,19 @@ func migrateSetup(db *sql.DB) (source.Driver, *migrate.Migrate, error) {\n }\n \n // MigrateUp runs SQL migrations to ensure the database schema is up-to-date.\n-func MigrateUp(db *sql.DB) error {\n+func MigrateUp(db *sql.DB) (retErr error) {\n \t_, m, err := migrateSetup(db)\n+\tdefer func() {\n+\t\tsrcErr, dbErr := m.Close()",
+    "html_url": "https://github.com/coder/coder/pull/2413#discussion_r899228011",
+    "id": 899228011,
+    "in_reply_to_id": 899221703,
+    "line": 55,
+    "node_id": "PRRC_kwDOGkVX1s41mSFr",
+    "original_commit_id": "474186acc2618f9cdf4abb8ac0a28247f9d89d89",
+    "original_line": 52,
+    "original_position": 39,
+    "original_start_line": null,
+    "path": "coderd/database/migrate.go",
+    "position": 42,
+    "pull_request_review_id": 1009255298,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2413",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/899228011/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-06-16T15:41:53Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/899228011",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  }
+]

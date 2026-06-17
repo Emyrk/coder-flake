@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/92afd2e18b079eea0363b993af4cf4eeba7ba133/.github%2Fworkflows%2Fci.yaml",
+    "changes": 9,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Fci.yaml?ref=92afd2e18b079eea0363b993af4cf4eeba7ba133",
+    "deletions": 2,
+    "filename": ".github/workflows/ci.yaml",
+    "patch": "@@ -121,6 +121,9 @@ jobs:\n     needs: changes\n     if: needs.changes.outputs.gomod == 'true'\n     runs-on: ${{ github.repository_owner == 'coder' && 'depot-ubuntu-22.04-8' || 'ubuntu-latest' }}\n+    permissions:\n+      # Give the default GITHUB_TOKEN write permission to commit and push the changed files back to the repository.\n+      contents: write\n     steps:\n       - name: Checkout\n         uses: actions/checkout@v4\n@@ -133,8 +136,10 @@ jobs:\n       - name: Update Nix Flake SRI Hash\n         run: ./scripts/update-flake.sh\n \n-      - name: Ensure No Changes\n-        run: git diff --exit-code\n+      - uses: stefanzweifel/git-auto-commit-action@v5\n+        with:\n+          # Allows dependabot to still rebase!\n+          commit_message: \"[dependabot skip] Update Nix Flake SRI Hash\"\n \n   lint:\n     needs: changes",
+    "raw_url": "https://github.com/coder/coder/raw/92afd2e18b079eea0363b993af4cf4eeba7ba133/.github%2Fworkflows%2Fci.yaml",
+    "sha": "899a09293d197342d6f213fe639a13c00fa0c91b",
+    "status": "modified"
+  }
+]

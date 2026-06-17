@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19308#pullrequestreview-3109842598"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19308"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "5190cb047fa2b2f6047e242ede859638c62904a1",
+    "html_url": "https://github.com/coder/coder/pull/19308#pullrequestreview-3109842598",
+    "id": 3109842598,
+    "node_id": "PRR_kwDOGkVX1s65XG6m",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19308",
+    "state": "APPROVED",
+    "submitted_at": "2025-08-12T10:38:07Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  }
+]

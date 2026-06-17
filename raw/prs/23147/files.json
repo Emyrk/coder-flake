@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 13,
+    "blob_url": "https://github.com/coder/coder/blob/a0edc04acdeea30201f365c4d1eede78f2262c82/coderd%2Fchatd%2Fchatd_test.go",
+    "changes": 21,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fchatd%2Fchatd_test.go?ref=a0edc04acdeea30201f365c4d1eede78f2262c82",
+    "deletions": 8,
+    "filename": "coderd/chatd/chatd_test.go",
+    "patch": "@@ -867,6 +867,19 @@ func TestInterruptAutoPromotionIgnoresLaterUsageLimitIncrease(t *testing.T) {\n \trequire.True(t, queuedResult.Queued)\n \trequire.NotNil(t, queuedResult.QueuedMessage)\n \n+\t// Send \"later queued\" immediately after \"queued\" while the first\n+\t// message is still in chat_queued_messages. The existing backlog\n+\t// (len(existingQueued) > 0) guarantees this is queued regardless\n+\t// of chat status, avoiding a race where the auto-promoted \"queued\"\n+\t// message finishes processing before we can send this.\n+\tlaterQueuedResult, err := server.SendMessage(ctx, chatd.SendMessageOptions{\n+\t\tChatID:  chat.ID,\n+\t\tContent: []codersdk.ChatMessagePart{codersdk.ChatMessageText(\"later queued\")},\n+\t})\n+\trequire.NoError(t, err)\n+\trequire.True(t, laterQueuedResult.Queued)\n+\trequire.NotNil(t, laterQueuedResult.QueuedMessage)\n+\n \trequire.Eventually(t, func() bool {\n \t\tselect {\n \t\tcase <-interrupted:\n@@ -876,14 +889,6 @@ func TestInterruptAutoPromotionIgnoresLaterUsageLimitIncrease(t *testing.T) {\n \t\t}\n \t}, testutil.WaitMedium, testutil.IntervalFast)\n \n-\tlaterQueuedResult, err := server.SendMessage(ctx, chatd.SendMessageOptions{\n-\t\tChatID:  chat.ID,\n-\t\tContent: []codersdk.ChatMessagePart{codersdk.ChatMessageText(\"later queued\")},\n-\t})\n-\trequire.NoError(t, err)\n-\trequire.True(t, laterQueuedResult.Queued)\n-\trequire.NotNil(t, laterQueuedResult.QueuedMessage)\n-\n \tspendChat, err := db.InsertChat(ctx, database.InsertChatParams{\n \t\tOwnerID:           user.ID,\n \t\tWorkspaceID:       uuid.NullUUID{},",
+    "raw_url": "https://github.com/coder/coder/raw/a0edc04acdeea30201f365c4d1eede78f2262c82/coderd%2Fchatd%2Fchatd_test.go",
+    "sha": "4ffd8b0efafd4180c7feedca2a3c7594836f4539",
+    "status": "modified"
+  }
+]

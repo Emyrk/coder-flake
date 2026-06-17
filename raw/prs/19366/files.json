@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 33,
+    "blob_url": "https://github.com/coder/coder/blob/13401e190c90acfee2e45d59c35ec2a0611f9462/site%2Fsrc%2Fcomponents%2FActiveUserChart%2FActiveUserChart.stories.tsx",
+    "changes": 47,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fcomponents%2FActiveUserChart%2FActiveUserChart.stories.tsx?ref=13401e190c90acfee2e45d59c35ec2a0611f9462",
+    "deletions": 14,
+    "filename": "site/src/components/ActiveUserChart/ActiveUserChart.stories.tsx",
+    "patch": "@@ -6,13 +6,13 @@ const meta: Meta<typeof ActiveUserChart> = {\n \tcomponent: ActiveUserChart,\n \targs: {\n \t\tdata: [\n-\t\t\t{ date: \"2024-01-01\", amount: 5 },\n-\t\t\t{ date: \"2024-01-02\", amount: 6 },\n-\t\t\t{ date: \"2024-01-03\", amount: 7 },\n-\t\t\t{ date: \"2024-01-04\", amount: 8 },\n-\t\t\t{ date: \"2024-01-05\", amount: 9 },\n-\t\t\t{ date: \"2024-01-06\", amount: 10 },\n-\t\t\t{ date: \"2024-01-07\", amount: 11 },\n+\t\t\t{ date: \"2024-01-01\", amount: 12 },\n+\t\t\t{ date: \"2024-01-02\", amount: 8 },\n+\t\t\t{ date: \"2024-01-03\", amount: 15 },\n+\t\t\t{ date: \"2024-01-04\", amount: 3 },\n+\t\t\t{ date: \"2024-01-05\", amount: 22 },\n+\t\t\t{ date: \"2024-01-06\", amount: 7 },\n+\t\t\t{ date: \"2024-01-07\", amount: 18 },\n \t\t],\n \t},\n \tdecorators: [\n@@ -31,12 +31,31 @@ export const Example: Story = {};\n \n export const ManyDataPoints: Story = {\n \targs: {\n-\t\tdata: Array.from({ length: 30 }).map((_, i) => {\n-\t\t\tconst date = new Date(2024, 0, i + 1);\n-\t\t\treturn {\n-\t\t\t\tdate: date.toISOString().split(\"T\")[0],\n-\t\t\t\tamount: 5 + Math.floor(Math.random() * 15),\n-\t\t\t};\n-\t\t}),\n+\t\tdata: [\n+\t\t\t{ date: \"2024-01-01\", amount: 12 },\n+\t\t\t{ date: \"2024-01-02\", amount: 8 },\n+\t\t\t{ date: \"2024-01-03\", amount: 15 },\n+\t\t\t{ date: \"2024-01-04\", amount: 3 },\n+\t\t\t{ date: \"2024-01-05\", amount: 22 },\n+\t\t\t{ date: \"2024-01-06\", amount: 7 },\n+\t\t\t{ date: \"2024-01-07\", amount: 18 },\n+\t\t\t{ date: \"2024-01-08\", amount: 31 },\n+\t\t\t{ date: \"2024-01-09\", amount: 5 },\n+\t\t\t{ date: \"2024-01-10\", amount: 27 },\n+\t\t\t{ date: \"2024-01-11\", amount: 14 },\n+\t\t\t{ date: \"2024-01-12\", amount: 9 },\n+\t\t\t{ date: \"2024-01-13\", amount: 35 },\n+\t\t\t{ date: \"2024-01-14\", amount: 21 },\n+\t\t\t{ date: \"2024-01-15\", amount: 6 },\n+\t\t\t{ date: \"2024-01-16\", amount: 29 },\n+\t\t\t{ date: \"2024-01-17\", amount: 11 },\n+\t\t\t{ date: \"2024-01-18\", amount: 17 },\n+\t\t\t{ date: \"2024-01-19\", amount: 4 },\n+\t\t\t{ date: \"2024-01-20\", amount: 25 },\n+\t\t\t{ date: \"2024-01-21\", amount: 13 },\n+\t\t\t{ date: \"2024-01-22\", amount: 33 },\n+\t\t\t{ date: \"2024-01-23\", amount: 19 },\n+\t\t\t{ date: \"2024-01-24\", amount: 26 },\n+\t\t],\n \t},\n };",
+    "raw_url": "https://github.com/coder/coder/raw/13401e190c90acfee2e45d59c35ec2a0611f9462/site%2Fsrc%2Fcomponents%2FActiveUserChart%2FActiveUserChart.stories.tsx",
+    "sha": "c63f867eb0de8ec888e77da5495006679bc28d39",
+    "status": "modified"
+  },
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/13401e190c90acfee2e45d59c35ec2a0611f9462/site%2Fsrc%2Fmodules%2Fworkspaces%2FgenerateWorkspaceName.ts",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fmodules%2Fworkspaces%2FgenerateWorkspaceName.ts?ref=13401e190c90acfee2e45d59c35ec2a0611f9462",
+    "deletions": 0,
+    "filename": "site/src/modules/workspaces/generateWorkspaceName.ts",
+    "patch": "@@ -1,3 +1,4 @@\n+import isChromatic from \"chromatic/isChromatic\";\n import {\n \tanimals,\n \tcolors,\n@@ -6,6 +7,9 @@ import {\n } from \"unique-names-generator\";\n \n export const generateWorkspaceName = () => {\n+\tif (isChromatic()) {\n+\t\treturn \"yellow-bird-23\";\n+\t}\n \tconst numberDictionary = NumberDictionary.generate({ min: 0, max: 99 });\n \treturn uniqueNamesGenerator({\n \t\tdictionaries: [colors, animals, numberDictionary],",
+    "raw_url": "https://github.com/coder/coder/raw/13401e190c90acfee2e45d59c35ec2a0611f9462/site%2Fsrc%2Fmodules%2Fworkspaces%2FgenerateWorkspaceName.ts",
+    "sha": "9dff54a59b4f59828c1a27e89a787d4ecde82aa8",
+    "status": "modified"
+  },
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/13401e190c90acfee2e45d59c35ec2a0611f9462/site%2Fsrc%2Fpages%2FWorkspaceSettingsPage%2FWorkspaceSchedulePage%2FWorkspaceSchedulePage.stories.tsx",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FWorkspaceSettingsPage%2FWorkspaceSchedulePage%2FWorkspaceSchedulePage.stories.tsx?ref=13401e190c90acfee2e45d59c35ec2a0611f9462",
+    "deletions": 4,
+    "filename": "site/src/pages/WorkspaceSettingsPage/WorkspaceSchedulePage/WorkspaceSchedulePage.stories.tsx",
+    "patch": "@@ -11,15 +11,15 @@ import { templateByNameKey } from \"api/queries/templates\";\n import { workspaceByOwnerAndNameKey } from \"api/queries/workspaces\";\n import type { Workspace } from \"api/typesGenerated\";\n import {\n-\treactRouterNestedAncestors,\n+\treactRouterOutlet,\n \treactRouterParameters,\n } from \"storybook-addon-remix-react-router\";\n import { WorkspaceSettingsLayout } from \"../WorkspaceSettingsLayout\";\n import WorkspaceSchedulePage from \"./WorkspaceSchedulePage\";\n \n const meta = {\n \ttitle: \"pages/WorkspaceSchedulePage\",\n-\tcomponent: WorkspaceSchedulePage,\n+\tcomponent: WorkspaceSettingsLayout,\n \tdecorators: [withAuthProvider, withDashboardProvider],\n \tparameters: {\n \t\tlayout: \"fullscreen\",\n@@ -52,11 +52,11 @@ function workspaceRouterParameters(workspace: Workspace) {\n \t\t\t\tworkspace: workspace.name,\n \t\t\t},\n \t\t},\n-\t\trouting: reactRouterNestedAncestors(\n+\t\trouting: reactRouterOutlet(\n \t\t\t{\n \t\t\t\tpath: \"/:username/:workspace/settings/schedule\",\n \t\t\t},\n-\t\t\t<WorkspaceSettingsLayout />,\n+\t\t\t<WorkspaceSchedulePage />,\n \t\t),\n \t});\n }",
+    "raw_url": "https://github.com/coder/coder/raw/13401e190c90acfee2e45d59c35ec2a0611f9462/site%2Fsrc%2Fpages%2FWorkspaceSettingsPage%2FWorkspaceSchedulePage%2FWorkspaceSchedulePage.stories.tsx",
+    "sha": "7503c439a3e9c7891b1c682018c1cd29f84f8277",
+    "status": "modified"
+  }
+]

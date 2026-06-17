@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 9,
+    "blob_url": "https://github.com/coder/coder/blob/6242917a16cc47c1e862d24131aa6ba1fb747c0f/coderd%2Fworkspaceagentsrpc_internal_test.go",
+    "changes": 11,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaceagentsrpc_internal_test.go?ref=6242917a16cc47c1e862d24131aa6ba1fb747c0f",
+    "deletions": 2,
+    "filename": "coderd/workspaceagentsrpc_internal_test.go",
+    "patch": "@@ -219,14 +219,21 @@ func TestAgentWebsocketMonitor_BuildOutdated(t *testing.T) {\n \n func TestAgentWebsocketMonitor_SendPings(t *testing.T) {\n \tt.Parallel()\n-\tctx := testutil.Context(t, testutil.WaitShort)\n+\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitShort)\n+\tt.Cleanup(cancel)\n \tfConn := &fakePingerCloser{}\n \tuut := &agentWebsocketMonitor{\n \t\tpingPeriod: testutil.IntervalFast,\n \t\tconn:       fConn,\n \t}\n-\tgo uut.sendPings(ctx)\n+\tdone := make(chan struct{})\n+\tgo func() {\n+\t\tuut.sendPings(ctx)\n+\t\tclose(done)\n+\t}()\n \tfConn.requireEventuallyHasPing(t)\n+\tcancel()\n+\t<-done\n \tlastPing := uut.lastPing.Load()\n \trequire.NotNil(t, lastPing)\n }",
+    "raw_url": "https://github.com/coder/coder/raw/6242917a16cc47c1e862d24131aa6ba1fb747c0f/coderd%2Fworkspaceagentsrpc_internal_test.go",
+    "sha": "834de4807d9be28e2f519a9a744b4a6186b72357",
+    "status": "modified"
+  }
+]

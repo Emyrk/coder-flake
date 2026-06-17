@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/2c8e8b7d12f698db4e87182244ceb979e14447d7/coderd%2Fworkspaceresourceauth_test.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaceresourceauth_test.go?ref=2c8e8b7d12f698db4e87182244ceb979e14447d7",
+    "deletions": 1,
+    "filename": "coderd/workspaceresourceauth_test.go",
+    "patch": "@@ -69,7 +69,8 @@ func TestPostWorkspaceAuthGoogleInstanceIdentity(t *testing.T) {\n \t\tuser := coderdtest.CreateFirstUser(t, client)\n \t\tcoderdtest.NewProvisionerDaemon(t, client)\n \t\tversion := coderdtest.CreateProjectVersion(t, client, user.OrganizationID, &echo.Responses{\n-\t\t\tParse: echo.ParseComplete,\n+\t\t\tParse:           echo.ParseComplete,\n+\t\t\tProvisionDryRun: echo.ProvisionComplete,\n \t\t\tProvision: []*proto.Provision_Response{{\n \t\t\t\tType: &proto.Provision_Response_Complete{\n \t\t\t\t\tComplete: &proto.Provision_Complete{",
+    "raw_url": "https://github.com/coder/coder/raw/2c8e8b7d12f698db4e87182244ceb979e14447d7/coderd%2Fworkspaceresourceauth_test.go",
+    "sha": "5e1b643c93f7c0e7fb2fa1213916e904dc1f5005",
+    "status": "modified"
+  }
+]

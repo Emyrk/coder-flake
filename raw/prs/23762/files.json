@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/2088fe681fb3519654b54dabcd98a0a35d60c467/coderd%2Fx%2Fchatd%2Fconfigcache_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fx%2Fchatd%2Fconfigcache_test.go?ref=2088fe681fb3519654b54dabcd98a0a35d60c467",
+    "deletions": 1,
+    "filename": "coderd/x/chatd/configcache_test.go",
+    "patch": "@@ -278,7 +278,7 @@ func TestConfigCache_UserPrompt_ExpiredEntryRefetches(t *testing.T) {\n \t\treturn fmt.Sprintf(\"prompt-%d\", call), nil\n \t}\n \tcache := newChatConfigCache(ctx, store, clock)\n-\tcache.userPrompts.Set(userID, \"stale\", 0)\n+\tcache.userPrompts.Set(userID, \"stale\", -time.Second)\n \n \tfirst, err := cache.UserPrompt(ctx, userID)\n \trequire.NoError(t, err)",
+    "raw_url": "https://github.com/coder/coder/raw/2088fe681fb3519654b54dabcd98a0a35d60c467/coderd%2Fx%2Fchatd%2Fconfigcache_test.go",
+    "sha": "a874eb95123b4f88acea58b4d613109692475478",
+    "status": "modified"
+  }
+]

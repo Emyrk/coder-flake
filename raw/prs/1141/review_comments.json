@@ -1,0 +1,280 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/1141#discussion_r857748570"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/1141"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/857748570"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I'll assuming closing `p` will terminate the for loop below by causing a read error and triggering the `require`. ",
+    "commit_id": "13bedba0c74776849de1ad8a5781a5e31dae15ad",
+    "created_at": "2022-04-25T15:19:32Z",
+    "diff_hunk": "@@ -76,6 +78,19 @@ func (p *PTY) ExpectMatch(str string) string {\n \tvar buffer bytes.Buffer\n \tmultiWriter := io.MultiWriter(&buffer, p.outputWriter)\n \truneWriter := bufio.NewWriterSize(multiWriter, utf8.UTFMax)\n+\tcomplete, cancelFunc := context.WithCancel(context.Background())\n+\tdefer cancelFunc()\n+\tgo func() {\n+\t\ttimer := time.NewTimer(10 * time.Second)\n+\t\tdefer timer.Stop()\n+\t\tselect {\n+\t\tcase <-complete.Done():\n+\t\t\treturn\n+\t\tcase <-timer.C:\n+\t\t}\n+\t\t_ = p.Close()\n+\t\tp.t.Errorf(\"match exceeded deadline: %q\", str)",
+    "html_url": "https://github.com/coder/coder/pull/1141#discussion_r857748570",
+    "id": 857748570,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s4zIDRa",
+    "original_commit_id": "e9b63985a3b98cb8df1a9604c32ff386e52548d5",
+    "original_line": 92,
+    "original_position": 40,
+    "original_start_line": 91,
+    "path": "pty/ptytest/ptytest.go",
+    "position": 1,
+    "pull_request_review_id": 952050163,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/1141",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/857748570/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-04-25T15:21:10Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/857748570",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/1141#discussion_r857750169"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/1141"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/857750169"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Wow that is a big rune. I'll assume this is only used for tests, so the excessive allocation is ok.",
+    "commit_id": "13bedba0c74776849de1ad8a5781a5e31dae15ad",
+    "created_at": "2022-04-25T15:21:06Z",
+    "diff_hunk": "@@ -60,7 +62,7 @@ func create(t *testing.T, ptty pty.PTY) *PTY {\n \t\tPTY: ptty,\n \n \t\toutputWriter: writer,\n-\t\truneReader:   bufio.NewReaderSize(ptty.Output(), utf8.UTFMax),\n+\t\truneReader:   bufio.NewReaderSize(ptty.Output(), 4096),",
+    "html_url": "https://github.com/coder/coder/pull/1141#discussion_r857750169",
+    "id": 857750169,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s4zIDqZ",
+    "original_commit_id": "e9b63985a3b98cb8df1a9604c32ff386e52548d5",
+    "original_line": 65,
+    "original_position": 21,
+    "original_start_line": null,
+    "path": "pty/ptytest/ptytest.go",
+    "position": 1,
+    "pull_request_review_id": 952050163,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/1141",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/857750169/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-04-25T15:21:10Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/857750169",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/1141#discussion_r857760051"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/1141"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/857760051"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Yup!",
+    "commit_id": "13bedba0c74776849de1ad8a5781a5e31dae15ad",
+    "created_at": "2022-04-25T15:30:53Z",
+    "diff_hunk": "@@ -76,6 +78,19 @@ func (p *PTY) ExpectMatch(str string) string {\n \tvar buffer bytes.Buffer\n \tmultiWriter := io.MultiWriter(&buffer, p.outputWriter)\n \truneWriter := bufio.NewWriterSize(multiWriter, utf8.UTFMax)\n+\tcomplete, cancelFunc := context.WithCancel(context.Background())\n+\tdefer cancelFunc()\n+\tgo func() {\n+\t\ttimer := time.NewTimer(10 * time.Second)\n+\t\tdefer timer.Stop()\n+\t\tselect {\n+\t\tcase <-complete.Done():\n+\t\t\treturn\n+\t\tcase <-timer.C:\n+\t\t}\n+\t\t_ = p.Close()\n+\t\tp.t.Errorf(\"match exceeded deadline: %q\", str)",
+    "html_url": "https://github.com/coder/coder/pull/1141#discussion_r857760051",
+    "id": 857760051,
+    "in_reply_to_id": 857748570,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s4zIGEz",
+    "original_commit_id": "e9b63985a3b98cb8df1a9604c32ff386e52548d5",
+    "original_line": 92,
+    "original_position": 40,
+    "original_start_line": 91,
+    "path": "pty/ptytest/ptytest.go",
+    "position": 1,
+    "pull_request_review_id": 952066328,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/1141",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/857760051/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-04-25T15:30:53Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/857760051",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/1141#discussion_r857760273"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/1141"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/857760273"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Yeah, I'm still playing with this because it doesn't seem to be the proper fix, unfortunately.",
+    "commit_id": "13bedba0c74776849de1ad8a5781a5e31dae15ad",
+    "created_at": "2022-04-25T15:31:07Z",
+    "diff_hunk": "@@ -60,7 +62,7 @@ func create(t *testing.T, ptty pty.PTY) *PTY {\n \t\tPTY: ptty,\n \n \t\toutputWriter: writer,\n-\t\truneReader:   bufio.NewReaderSize(ptty.Output(), utf8.UTFMax),\n+\t\truneReader:   bufio.NewReaderSize(ptty.Output(), 4096),",
+    "html_url": "https://github.com/coder/coder/pull/1141#discussion_r857760273",
+    "id": 857760273,
+    "in_reply_to_id": 857750169,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s4zIGIR",
+    "original_commit_id": "e9b63985a3b98cb8df1a9604c32ff386e52548d5",
+    "original_line": 65,
+    "original_position": 21,
+    "original_start_line": null,
+    "path": "pty/ptytest/ptytest.go",
+    "position": 1,
+    "pull_request_review_id": 952066651,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/1141",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/857760273/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-04-25T15:31:07Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/857760273",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  }
+]

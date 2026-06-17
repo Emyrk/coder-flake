@@ -1,0 +1,122 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/22654#pullrequestreview-3895301531"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/22654"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "## Pull request overview\n\nThis PR stabilizes the `TestTokens` CLI integration test by adjusting the expiration-time assertion to avoid flakiness around boundary timestamps.\n\n**Changes:**\n- Capture `now := time.Now()` once and assert the token expiry is not in the future (allowing equality).\n- Improve the failure message to include both `ExpiresAt` and `now` for easier debugging.\n\n\n\n\n\n---\n\n\ud83d\udca1 <a href=\"/coder/coder/new/main?filename=.github/instructions/*.instructions.md\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Add Copilot custom instructions</a> for smarter, more guided reviews. <a href=\"https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Learn how to get started</a>.",
+    "commit_id": "5f4adf538cd47d9672bf3fb5c6ba58e90c96eaa7",
+    "html_url": "https://github.com/coder/coder/pull/22654#pullrequestreview-3895301531",
+    "id": 3895301531,
+    "node_id": "PRR_kwDOGkVX1s7oLZWb",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/22654",
+    "state": "COMMENTED",
+    "submitted_at": "2026-03-05T09:54:56Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "id": 175728472,
+      "login": "copilot-pull-request-reviewer[bot]",
+      "node_id": "BOT_kgDOCnlnWA",
+      "organizations_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/22654#pullrequestreview-3895312957"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/22654"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "5f4adf538cd47d9672bf3fb5c6ba58e90c96eaa7",
+    "html_url": "https://github.com/coder/coder/pull/22654#pullrequestreview-3895312957",
+    "id": 3895312957,
+    "node_id": "PRR_kwDOGkVX1s7oLcI9",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/22654",
+    "state": "APPROVED",
+    "submitted_at": "2026-03-05T09:57:07Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/40153966?u=f9361ea910fccdf9e76c3ee799b9f0791ef74f9e&v=4",
+      "events_url": "https://api.github.com/users/DanielleMaywood/events{/privacy}",
+      "followers_url": "https://api.github.com/users/DanielleMaywood/followers",
+      "following_url": "https://api.github.com/users/DanielleMaywood/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DanielleMaywood/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/DanielleMaywood",
+      "id": 40153966,
+      "login": "DanielleMaywood",
+      "node_id": "MDQ6VXNlcjQwMTUzOTY2",
+      "organizations_url": "https://api.github.com/users/DanielleMaywood/orgs",
+      "received_events_url": "https://api.github.com/users/DanielleMaywood/received_events",
+      "repos_url": "https://api.github.com/users/DanielleMaywood/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/DanielleMaywood/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DanielleMaywood/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/DanielleMaywood",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/22654#pullrequestreview-3895436480"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/22654"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "5f4adf538cd47d9672bf3fb5c6ba58e90c96eaa7",
+    "html_url": "https://github.com/coder/coder/pull/22654#pullrequestreview-3895436480",
+    "id": 3895436480,
+    "node_id": "PRR_kwDOGkVX1s7oL6TA",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/22654",
+    "state": "APPROVED",
+    "submitted_at": "2026-03-05T10:18:45Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  }
+]

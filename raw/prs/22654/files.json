@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/5f4adf538cd47d9672bf3fb5c6ba58e90c96eaa7/cli%2Ftokens_test.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Ftokens_test.go?ref=5f4adf538cd47d9672bf3fb5c6ba58e90c96eaa7",
+    "deletions": 1,
+    "filename": "cli/tokens_test.go",
+    "patch": "@@ -188,7 +188,8 @@ func TestTokens(t *testing.T) {\n \trequire.NoError(t, err)\n \t// Validate that token was expired\n \tif token, err := client.APIKeyByName(ctx, secondUser.ID.String(), \"token-two\"); assert.NoError(t, err) {\n-\t\trequire.True(t, token.ExpiresAt.Before(time.Now()))\n+\t\tnow := time.Now()\n+\t\trequire.False(t, token.ExpiresAt.After(now), \"token expiresAt should not be in the future, but was %s (now=%s)\", token.ExpiresAt, now)\n \t}\n \n \t// Delete by ID (explicit delete flag)",
+    "raw_url": "https://github.com/coder/coder/raw/5f4adf538cd47d9672bf3fb5c6ba58e90c96eaa7/cli%2Ftokens_test.go",
+    "sha": "fe68a61a5a0e49d7c080fe1a2c89ab1abf79d75d",
+    "status": "modified"
+  }
+]

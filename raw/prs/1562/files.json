@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 20,
+    "blob_url": "https://github.com/coder/coder/blob/0696b4029416f28c553bda4a3e63f20f485a4890/agent%2Fagent_test.go",
+    "changes": 27,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagent_test.go?ref=0696b4029416f28c553bda4a3e63f20f485a4890",
+    "deletions": 7,
+    "filename": "agent/agent_test.go",
+    "patch": "@@ -1,6 +1,7 @@\n package agent_test\n \n import (\n+\t\"bufio\"\n \t\"context\"\n \t\"encoding/json\"\n \t\"fmt\"\n@@ -204,6 +205,11 @@ func TestAgent(t *testing.T) {\n \t\tid := uuid.NewString()\n \t\tnetConn, err := conn.ReconnectingPTY(id, 100, 100)\n \t\trequire.NoError(t, err)\n+\t\tbufRead := bufio.NewReader(netConn)\n+\n+\t\t// Brief pause to reduce the likelihood that we send keystrokes while\n+\t\t// the shell is simultaneously sending a prompt.\n+\t\ttime.Sleep(100 * time.Millisecond)\n \n \t\tdata, err := json.Marshal(agent.ReconnectingPTYRequest{\n \t\t\tData: \"echo test\\r\\n\",\n@@ -212,28 +218,35 @@ func TestAgent(t *testing.T) {\n \t\t_, err = netConn.Write(data)\n \t\trequire.NoError(t, err)\n \n-\t\tfindEcho := func() {\n+\t\texpectLine := func(matcher func(string) bool) {\n \t\t\tfor {\n-\t\t\t\tread, err := netConn.Read(data)\n+\t\t\t\tline, err := bufRead.ReadString('\\n')\n \t\t\t\trequire.NoError(t, err)\n-\t\t\t\tif strings.Contains(string(data[:read]), \"test\") {\n+\t\t\t\tif matcher(line) {\n \t\t\t\t\tbreak\n \t\t\t\t}\n \t\t\t}\n \t\t}\n+\t\tmatchEchoCommand := func(line string) bool {\n+\t\t\treturn strings.Contains(line, \"echo test\")\n+\t\t}\n+\t\tmatchEchoOutput := func(line string) bool {\n+\t\t\treturn strings.Contains(line, \"test\") && !strings.Contains(line, \"echo\")\n+\t\t}\n \n \t\t// Once for typing the command...\n-\t\tfindEcho()\n+\t\texpectLine(matchEchoCommand)\n \t\t// And another time for the actual output.\n-\t\tfindEcho()\n+\t\texpectLine(matchEchoOutput)\n \n \t\t_ = netConn.Close()\n \t\tnetConn, err = conn.ReconnectingPTY(id, 100, 100)\n \t\trequire.NoError(t, err)\n+\t\tbufRead = bufio.NewReader(netConn)\n \n \t\t// Same output again!\n-\t\tfindEcho()\n-\t\tfindEcho()\n+\t\texpectLine(matchEchoCommand)\n+\t\texpectLine(matchEchoOutput)\n \t})\n \n \tt.Run(\"Dial\", func(t *testing.T) {",
+    "raw_url": "https://github.com/coder/coder/raw/0696b4029416f28c553bda4a3e63f20f485a4890/agent%2Fagent_test.go",
+    "sha": "db3235417960edfef5bcf87ac58aad1ea86d9da9",
+    "status": "modified"
+  },
+  {
+    "additions": 19,
+    "blob_url": "https://github.com/coder/coder/blob/0696b4029416f28c553bda4a3e63f20f485a4890/coderd%2Fworkspaceagents_test.go",
+    "changes": 25,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaceagents_test.go?ref=0696b4029416f28c553bda4a3e63f20f485a4890",
+    "deletions": 6,
+    "filename": "coderd/workspaceagents_test.go",
+    "patch": "@@ -1,11 +1,13 @@\n package coderd_test\n \n import (\n+\t\"bufio\"\n \t\"context\"\n \t\"encoding/json\"\n \t\"runtime\"\n \t\"strings\"\n \t\"testing\"\n+\t\"time\"\n \n \t\"github.com/google/uuid\"\n \t\"github.com/pion/webrtc/v3\"\n@@ -230,6 +232,11 @@ func TestWorkspaceAgentPTY(t *testing.T) {\n \trequire.NoError(t, err)\n \t_, err = conn.Write(data)\n \trequire.NoError(t, err)\n+\tbufRead := bufio.NewReader(conn)\n+\n+\t// Brief pause to reduce the likelihood that we send keystrokes while\n+\t// the shell is simultaneously sending a prompt.\n+\ttime.Sleep(100 * time.Millisecond)\n \n \tdata, err = json.Marshal(agent.ReconnectingPTYRequest{\n \t\tData: \"echo test\\r\\n\",\n@@ -238,16 +245,22 @@ func TestWorkspaceAgentPTY(t *testing.T) {\n \t_, err = conn.Write(data)\n \trequire.NoError(t, err)\n \n-\tfindEcho := func() {\n+\texpectLine := func(matcher func(string) bool) {\n \t\tfor {\n-\t\t\tread, err := conn.Read(data)\n+\t\t\tline, err := bufRead.ReadString('\\n')\n \t\t\trequire.NoError(t, err)\n-\t\t\tif strings.Contains(string(data[:read]), \"test\") {\n-\t\t\t\treturn\n+\t\t\tif matcher(line) {\n+\t\t\t\tbreak\n \t\t\t}\n \t\t}\n \t}\n+\tmatchEchoCommand := func(line string) bool {\n+\t\treturn strings.Contains(line, \"echo test\")\n+\t}\n+\tmatchEchoOutput := func(line string) bool {\n+\t\treturn strings.Contains(line, \"test\") && !strings.Contains(line, \"echo\")\n+\t}\n \n-\tfindEcho()\n-\tfindEcho()\n+\texpectLine(matchEchoCommand)\n+\texpectLine(matchEchoOutput)\n }",
+    "raw_url": "https://github.com/coder/coder/raw/0696b4029416f28c553bda4a3e63f20f485a4890/coderd%2Fworkspaceagents_test.go",
+    "sha": "15bf01d065badb17eaf828f5ed5457b27bb87737",
+    "status": "modified"
+  }
+]

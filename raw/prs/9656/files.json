@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/2b17ab3a03692e65f0482e2d8872548825cfefcf/coderd%2Ftemplates_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Ftemplates_test.go?ref=2b17ab3a03692e65f0482e2d8872548825cfefcf",
+    "deletions": 0,
+    "filename": "coderd/templates_test.go",
+    "patch": "@@ -475,6 +475,8 @@ func TestPatchTemplateMeta(t *testing.T) {\n \t\tuser := coderdtest.CreateFirstUser(t, client)\n \t\tversion := coderdtest.CreateTemplateVersion(t, client, user.OrganizationID, nil)\n \t\ttemplate := coderdtest.CreateTemplate(t, client, user.OrganizationID, version.ID)\n+\t\tcoderdtest.AwaitTemplateVersionJob(t, client, version.ID)\n+\n \t\treq := codersdk.UpdateTemplateMeta{\n \t\t\tName:                         \"new-template-name\",\n \t\t\tDisplayName:                  \"Displayed Name 456\",",
+    "raw_url": "https://github.com/coder/coder/raw/2b17ab3a03692e65f0482e2d8872548825cfefcf/coderd%2Ftemplates_test.go",
+    "sha": "e4b7713dc4a4dcd25e9e015b1bb169acdbcf180c",
+    "status": "modified"
+  }
+]

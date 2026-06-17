@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 27,
+    "blob_url": "https://github.com/coder/coder/blob/3b139bbf72abb0402b958bbdd32742889d0427ec/coderd%2Fexp_chats_test.go",
+    "changes": 27,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fexp_chats_test.go?ref=3b139bbf72abb0402b958bbdd32742889d0427ec",
+    "deletions": 0,
+    "filename": "coderd/exp_chats_test.go",
+    "patch": "@@ -7435,6 +7435,20 @@ func TestPatchChatMessage(t *testing.T) {\n \t\trequire.Equal(t, defaultModel.ID, chat.LastModelConfigID,\n \t\t\t\"chat starts on the default model\")\n \n+\t\t// Wait for the initial chat processing to complete before\n+\t\t// editing. CreateChat sets the chat to pending and the daemon\n+\t\t// processes it asynchronously; editing while that first round\n+\t\t// is still running can race with message insertions that\n+\t\t// overwrite last_model_config_id.\n+\t\ttestutil.Eventually(ctx, t, func(ctx context.Context) bool {\n+\t\t\tc, getErr := client.GetChat(ctx, chat.ID)\n+\t\t\tif getErr != nil {\n+\t\t\t\treturn false\n+\t\t\t}\n+\t\t\treturn c.Status != codersdk.ChatStatusPending &&\n+\t\t\t\tc.Status != codersdk.ChatStatusRunning\n+\t\t}, testutil.IntervalFast, \"initial chat processing did not finish\")\n+\n \t\tmessagesResult, err := client.GetChatMessages(ctx, chat.ID, nil)\n \t\trequire.NoError(t, err)\n \t\tvar userMessageID int64\n@@ -7459,6 +7473,19 @@ func TestPatchChatMessage(t *testing.T) {\n \t\trequire.Equal(t, overrideModel.ID, *edited.Message.ModelConfigID,\n \t\t\t\"replacement message must use the requested model\")\n \n+\t\t// Wait for the second round of processing (triggered by the\n+\t\t// edit) to complete, then verify last_model_config_id.\n+\t\t// Reading immediately after EditChatMessage can race with the\n+\t\t// daemon re-processing the now-pending chat.\n+\t\ttestutil.Eventually(ctx, t, func(ctx context.Context) bool {\n+\t\t\tc, getErr := client.GetChat(ctx, chat.ID)\n+\t\t\tif getErr != nil {\n+\t\t\t\treturn false\n+\t\t\t}\n+\t\t\treturn c.Status != codersdk.ChatStatusPending &&\n+\t\t\t\tc.Status != codersdk.ChatStatusRunning\n+\t\t}, testutil.IntervalFast, \"post-edit chat processing did not finish\")\n+\n \t\tupdatedChat, err := client.GetChat(ctx, chat.ID)\n \t\trequire.NoError(t, err)\n \t\trequire.Equal(t, overrideModel.ID, updatedChat.LastModelConfigID,",
+    "raw_url": "https://github.com/coder/coder/raw/3b139bbf72abb0402b958bbdd32742889d0427ec/coderd%2Fexp_chats_test.go",
+    "sha": "b274be1c7ac16665fd80474e363781407cafe68e",
+    "status": "modified"
+  }
+]

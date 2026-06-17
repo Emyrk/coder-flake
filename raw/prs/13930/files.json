@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/29b51c0069750e6a1967afb38cd389b63f7b9748/flake.lock",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.lock?ref=29b51c0069750e6a1967afb38cd389b63f7b9748",
+    "deletions": 3,
+    "filename": "flake.lock",
+    "patch": "@@ -44,11 +44,11 @@\n     },\n     \"nixpkgs\": {\n       \"locked\": {\n-        \"lastModified\": 1720418205,\n-        \"narHash\": \"sha256-cPJoFPXU44GlhWg4pUk9oUPqurPlCFZ11ZQPk21GTPU=\",\n+        \"lastModified\": 1720957393,\n+        \"narHash\": \"sha256-oedh2RwpjEa+TNxhg5Je9Ch6d3W1NKi7DbRO1ziHemA=\",\n         \"owner\": \"nixos\",\n         \"repo\": \"nixpkgs\",\n-        \"rev\": \"655a58a72a6601292512670343087c2d75d859c1\",\n+        \"rev\": \"693bc46d169f5af9c992095736e82c3488bf7dbb\",\n         \"type\": \"github\"\n       },\n       \"original\": {",
+    "raw_url": "https://github.com/coder/coder/raw/29b51c0069750e6a1967afb38cd389b63f7b9748/flake.lock",
+    "sha": "4c7c29d41aa797e128b392edebe99e4e91a08bf1",
+    "status": "modified"
+  },
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/29b51c0069750e6a1967afb38cd389b63f7b9748/flake.nix",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=29b51c0069750e6a1967afb38cd389b63f7b9748",
+    "deletions": 2,
+    "filename": "flake.nix",
+    "patch": "@@ -42,8 +42,8 @@\n \n         # The minimal set of packages to build Coder.\n         devShellPackages = with pkgs; [\n-          # google-chrome is not available on OSX\n-          (if pkgs.stdenv.hostPlatform.isDarwin then null else google-chrome)\n+          # google-chrome is not available on OSX and aarch64 linux\n+          (if pkgs.stdenv.hostPlatform.isDarwin || pkgs.stdenv.hostPlatform.isAarch64 then null else google-chrome)\n           # strace is not available on OSX\n           (if pkgs.stdenv.hostPlatform.isDarwin then null else strace)\n           bat",
+    "raw_url": "https://github.com/coder/coder/raw/29b51c0069750e6a1967afb38cd389b63f7b9748/flake.nix",
+    "sha": "f34b1b76f8867fa53adc3a04b88db8b14956fbda",
+    "status": "modified"
+  }
+]

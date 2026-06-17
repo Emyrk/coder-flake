@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25376#pullrequestreview-4296280284"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25376"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "f4de07e010e69bca7e8e4d82f867b179cc4f893b",
+    "html_url": "https://github.com/coder/coder/pull/25376#pullrequestreview-4296280284",
+    "id": 4296280284,
+    "node_id": "PRR_kwDOGkVX1s8AAAABABQI3A",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25376",
+    "state": "APPROVED",
+    "submitted_at": "2026-05-15T07:36:12Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/2198487?u=02d52697c2ad0cafc17af3e508326e44a6b11d4e&v=4",
+      "events_url": "https://api.github.com/users/ThomasK33/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ThomasK33/followers",
+      "following_url": "https://api.github.com/users/ThomasK33/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ThomasK33/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ThomasK33",
+      "id": 2198487,
+      "login": "ThomasK33",
+      "node_id": "MDQ6VXNlcjIxOTg0ODc=",
+      "organizations_url": "https://api.github.com/users/ThomasK33/orgs",
+      "received_events_url": "https://api.github.com/users/ThomasK33/received_events",
+      "repos_url": "https://api.github.com/users/ThomasK33/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ThomasK33/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ThomasK33/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ThomasK33",
+      "user_view_type": "public"
+    }
+  }
+]

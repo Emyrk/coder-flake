@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/98ced341171c275a85d16ae31e0d6a79c079c6cb/cli%2Fping_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fping_test.go?ref=98ced341171c275a85d16ae31e0d6a79c079c6cb",
+    "deletions": 1,
+    "filename": "cli/ping_test.go",
+    "patch": "@@ -67,7 +67,7 @@ func TestPing(t *testing.T) {\n \n \t\tpty.ExpectMatch(\"pong from \" + workspace.Name)\n \t\tpty.ExpectMatch(\"\u2714 received remote agent data from Coder networking coordinator\")\n-\t\tpty.ExpectMatch(\"\u2714 You are connected directly (p2p)\")\n+\t\tpty.ExpectMatch(\"You are connected\")\n \t\tcancel()\n \t\t<-cmdDone\n \t})",
+    "raw_url": "https://github.com/coder/coder/raw/98ced341171c275a85d16ae31e0d6a79c079c6cb/cli%2Fping_test.go",
+    "sha": "9e3225df28e298315c7e8469df3b4ba421f4ba63",
+    "status": "modified"
+  }
+]

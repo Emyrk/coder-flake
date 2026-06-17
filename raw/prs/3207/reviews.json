@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/3207#pullrequestreview-1051077212"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/3207"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "Reasonable choice! Can you post the output (like why it fails) in the PR for posterity?",
+    "commit_id": "a34c029e4b657dda9a10dc836a03c892628cd251",
+    "html_url": "https://github.com/coder/coder/pull/3207#pullrequestreview-1051077212",
+    "id": 1051077212,
+    "node_id": "PRR_kwDOGkVX1s4-pipc",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/3207",
+    "state": "APPROVED",
+    "submitted_at": "2022-07-26T14:22:31Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/1290996?u=59db90928ff6c03ccb436012e5e97f89ae43268f&v=4",
+      "events_url": "https://api.github.com/users/presleyp/events{/privacy}",
+      "followers_url": "https://api.github.com/users/presleyp/followers",
+      "following_url": "https://api.github.com/users/presleyp/following{/other_user}",
+      "gists_url": "https://api.github.com/users/presleyp/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/presleyp",
+      "id": 1290996,
+      "login": "presleyp",
+      "node_id": "MDQ6VXNlcjEyOTA5OTY=",
+      "organizations_url": "https://api.github.com/users/presleyp/orgs",
+      "received_events_url": "https://api.github.com/users/presleyp/received_events",
+      "repos_url": "https://api.github.com/users/presleyp/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/presleyp/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/presleyp/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/presleyp",
+      "user_view_type": "public"
+    }
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/cea630b095fd7c9f27f4d9465f2715c97ee59558/.github%2Fworkflows%2Fcoder.yaml",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Fcoder.yaml?ref=cea630b095fd7c9f27f4d9465f2715c97ee59558",
+    "deletions": 2,
+    "filename": ".github/workflows/coder.yaml",
+    "patch": "@@ -209,7 +209,7 @@ jobs:\n         run: gotestsum --junitfile=\"gotests.xml\" --packages=\"./...\" --\n           -covermode=atomic -coverprofile=\"gotests.coverage\"\n           -coverpkg=./...,github.com/coder/coder/codersdk\n-          -timeout=3m -count=$GOCOUNT -short -failfast\n+          -timeout=5m -count=$GOCOUNT -short -failfast\n \n       - name: Upload DataDog Trace\n         if: always() && github.actor != 'dependabot[bot]' && !github.event.pull_request.head.repo.fork\n@@ -316,7 +316,7 @@ jobs:\n   deploy:\n     name: \"deploy\"\n     runs-on: ubuntu-latest\n-    timeout-minutes: 20\n+    timeout-minutes: 30\n     if: github.ref == 'refs/heads/main' && !github.event.pull_request.head.repo.fork\n     permissions:\n       contents: read",
+    "raw_url": "https://github.com/coder/coder/raw/cea630b095fd7c9f27f4d9465f2715c97ee59558/.github%2Fworkflows%2Fcoder.yaml",
+    "sha": "bd6d6f57539394cc0a2ec96da617cec3f8647b99",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/cea630b095fd7c9f27f4d9465f2715c97ee59558/Makefile",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/Makefile?ref=cea630b095fd7c9f27f4d9465f2715c97ee59558",
+    "deletions": 1,
+    "filename": "Makefile",
+    "patch": "@@ -115,7 +115,7 @@ test: test-clean\n .PHONY: test-postgres\n test-postgres: test-clean\n \tDB=ci gotestsum --junitfile=\"gotests.xml\" --packages=\"./...\" -- \\\n-          -covermode=atomic -coverprofile=\"gotests.coverage\" -timeout=5m \\\n+          -covermode=atomic -coverprofile=\"gotests.coverage\" -timeout=10m \\\n           -coverpkg=./...,github.com/coder/coder/codersdk \\\n           -count=1 -parallel=1 -race -failfast\n ",
+    "raw_url": "https://github.com/coder/coder/raw/cea630b095fd7c9f27f4d9465f2715c97ee59558/Makefile",
+    "sha": "ed8584bad7eb9de23af0b5d559e8b6ea04014b9d",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/cea630b095fd7c9f27f4d9465f2715c97ee59558/cli%2Fserver_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fserver_test.go?ref=cea630b095fd7c9f27f4d9465f2715c97ee59558",
+    "deletions": 1,
+    "filename": "cli/server_test.go",
+    "patch": "@@ -56,7 +56,7 @@ func TestServer(t *testing.T) {\n \t\t\tassert.NoError(t, err)\n \t\t\tclient = codersdk.New(accessURL)\n \t\t\treturn true\n-\t\t}, 15*time.Second, 25*time.Millisecond)\n+\t\t}, time.Minute, 50*time.Millisecond)\n \t\t_, err = client.CreateFirstUser(ctx, codersdk.CreateFirstUserRequest{\n \t\t\tEmail:            \"some@one.com\",\n \t\t\tUsername:         \"example\",",
+    "raw_url": "https://github.com/coder/coder/raw/cea630b095fd7c9f27f4d9465f2715c97ee59558/cli%2Fserver_test.go",
+    "sha": "cb343547f93c1a91cda8d8d175c99c740e841ba8",
+    "status": "modified"
+  }
+]

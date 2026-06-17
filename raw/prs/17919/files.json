@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 10,
+    "blob_url": "https://github.com/coder/coder/blob/b39796898f9d71ec625d19d19ad65b5f31c8fbfc/site%2Fsrc%2Fmodules%2Fresources%2FuseAgentLogs.test.ts",
+    "changes": 14,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fmodules%2Fresources%2FuseAgentLogs.test.ts?ref=b39796898f9d71ec625d19d19ad65b5f31c8fbfc",
+    "deletions": 4,
+    "filename": "site/src/modules/resources/useAgentLogs.test.ts",
+    "patch": "@@ -1,4 +1,4 @@\n-import { renderHook } from \"@testing-library/react\";\n+import { renderHook, waitFor } from \"@testing-library/react\";\n import type { WorkspaceAgentLog } from \"api/typesGenerated\";\n import WS from \"jest-websocket-mock\";\n import { MockWorkspaceAgent } from \"testHelpers/entities\";\n@@ -29,17 +29,23 @@ describe(\"useAgentLogs\", () => {\n \n \t\t// Send 3 logs\n \t\tserver.send(JSON.stringify(generateLogs(3)));\n-\t\texpect(result.current).toHaveLength(3);\n+\t\tawait waitFor(() => {\n+\t\t\texpect(result.current).toHaveLength(3);\n+\t\t});\n \n \t\t// Disable the hook\n \t\trerender({ enabled: false });\n-\t\texpect(result.current).toHaveLength(0);\n+\t\tawait waitFor(() => {\n+\t\t\texpect(result.current).toHaveLength(0);\n+\t\t});\n \n \t\t// Enable the hook again\n \t\trerender({ enabled: true });\n \t\tawait server.connected;\n \t\tserver.send(JSON.stringify(generateLogs(3)));\n-\t\texpect(result.current).toHaveLength(3);\n+\t\tawait waitFor(() => {\n+\t\t\texpect(result.current).toHaveLength(3);\n+\t\t});\n \t});\n });\n ",
+    "raw_url": "https://github.com/coder/coder/raw/b39796898f9d71ec625d19d19ad65b5f31c8fbfc/site%2Fsrc%2Fmodules%2Fresources%2FuseAgentLogs.test.ts",
+    "sha": "a5339e00c87eb4b341301f85d76e18f31cf2254b",
+    "status": "modified"
+  }
+]

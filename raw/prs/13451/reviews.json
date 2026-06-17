@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/13451#pullrequestreview-2094701001"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/13451"
+      }
+    },
+    "author_association": "NONE",
+    "body": "This PR is a hotfix and has been automatically approved.\n\n* \u2705 Base is main\n* \u2705 Has hotfix label\n* \u2705 Head is from coder/coder\n* \u2705 Less than 100 lines\n",
+    "commit_id": "96f2a63cdfef724c681fec6fe342807449f4cf67",
+    "html_url": "https://github.com/coder/coder/pull/13451#pullrequestreview-2094701001",
+    "id": 2094701001,
+    "node_id": "PRR_kwDOGkVX1s582pnJ",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/13451",
+    "state": "APPROVED",
+    "submitted_at": "2024-06-03T19:39:37Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/338482?v=4",
+      "events_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/cdr-bot",
+      "id": 134560238,
+      "login": "cdr-bot[bot]",
+      "node_id": "BOT_kgDOCAU57g",
+      "organizations_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/cdr-bot%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/cdr-bot%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  }
+]

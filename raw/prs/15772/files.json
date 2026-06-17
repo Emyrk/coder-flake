@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/c3ad13883dd53327fb711bbe85ad40a4b383ba5a/enterprise%2Fcoderd%2Fworkspaces_test.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcoderd%2Fworkspaces_test.go?ref=c3ad13883dd53327fb711bbe85ad40a4b383ba5a",
+    "deletions": 5,
+    "filename": "enterprise/coderd/workspaces_test.go",
+    "patch": "@@ -1117,9 +1117,7 @@ func TestWorkspaceAutobuild(t *testing.T) {\n \t\t\tclock   = quartz.NewMock(t)\n \t\t)\n \n-\t\t// Set the clock to 8AM Monday, 1st January, 2024 to keep\n-\t\t// this test deterministic.\n-\t\tclock.Set(time.Date(2024, 1, 1, 8, 0, 0, 0, time.UTC))\n+\t\tclock.Set(dbtime.Now())\n \n \t\tlogger := slogtest.Make(t, &slogtest.Options{IgnoreErrors: true}).Leveled(slog.LevelDebug)\n \t\tclient, user := coderdenttest.New(t, &coderdenttest.Options{\n@@ -1129,7 +1127,7 @@ func TestWorkspaceAutobuild(t *testing.T) {\n \t\t\t\tAutobuildStats:           statsCh,\n \t\t\t\tLogger:                   &logger,\n \t\t\t\tClock:                    clock,\n-\t\t\t\tTemplateScheduleStore:    schedule.NewEnterpriseTemplateScheduleStore(agplUserQuietHoursScheduleStore(), notifications.NewNoopEnqueuer(), logger, nil),\n+\t\t\t\tTemplateScheduleStore:    schedule.NewEnterpriseTemplateScheduleStore(agplUserQuietHoursScheduleStore(), notifications.NewNoopEnqueuer(), logger, clock),\n \t\t\t},\n \t\t\tLicenseOptions: &coderdenttest.LicenseOptions{\n \t\t\t\tFeatures: license.Features{codersdk.FeatureAdvancedTemplateScheduling: 1},\n@@ -1185,7 +1183,7 @@ func TestWorkspaceAutobuild(t *testing.T) {\n \t\t\t}\n \n \t\t\t// Ensure that there is a valid next start at and that is is after\n-\t\t\t// the preivous start.\n+\t\t\t// the previous start.\n \t\t\trequire.NotNil(t, ws.NextStartAt)\n \t\t\trequire.Greater(t, *ws.NextStartAt, next)\n ",
+    "raw_url": "https://github.com/coder/coder/raw/c3ad13883dd53327fb711bbe85ad40a4b383ba5a/enterprise%2Fcoderd%2Fworkspaces_test.go",
+    "sha": "2dd7eeec9719ef62b8c143bc69f349e7ea597d31",
+    "status": "modified"
+  }
+]

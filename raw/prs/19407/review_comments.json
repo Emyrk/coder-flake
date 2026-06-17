@@ -1,0 +1,140 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19407#discussion_r2284708760"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19407"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2284708760"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "It looks like this might sometimes be a symlink which we aren't resolving which causes a problem in the tests on nightly gauntlet. Instead of resolving this symlink, I've just removed this and replaced the mock expectation with `gomock.Any()` as we don't really care about this for this test.",
+    "commit_id": "08547261fa9d360249f6f852a17b85690c7e5eb1",
+    "created_at": "2025-08-19T09:39:50Z",
+    "diff_hunk": "@@ -2096,9 +2096,6 @@ func TestAPI(t *testing.T) {\n \t\t\t\t}\n \t\t\t)\n \n-\t\t\tcoderBin, err := os.Executable()\n-\t\t\trequire.NoError(t, err)",
+    "html_url": "https://github.com/coder/coder/pull/19407#discussion_r2284708760",
+    "id": 2284708760,
+    "line": 2100,
+    "node_id": "PRRC_kwDOGkVX1s6ILeOY",
+    "original_commit_id": "08547261fa9d360249f6f852a17b85690c7e5eb1",
+    "original_line": 2100,
+    "original_position": 5,
+    "original_start_line": 2099,
+    "path": "agent/agentcontainers/api_test.go",
+    "position": 5,
+    "pull_request_review_id": 3131532452,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19407",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2284708760/reactions"
+    },
+    "side": "LEFT",
+    "start_line": 2099,
+    "start_side": "LEFT",
+    "subject_type": "line",
+    "updated_at": "2025-08-19T09:39:50Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2284708760",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/40153966?v=4",
+      "events_url": "https://api.github.com/users/DanielleMaywood/events{/privacy}",
+      "followers_url": "https://api.github.com/users/DanielleMaywood/followers",
+      "following_url": "https://api.github.com/users/DanielleMaywood/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DanielleMaywood/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/DanielleMaywood",
+      "id": 40153966,
+      "login": "DanielleMaywood",
+      "node_id": "MDQ6VXNlcjQwMTUzOTY2",
+      "organizations_url": "https://api.github.com/users/DanielleMaywood/orgs",
+      "received_events_url": "https://api.github.com/users/DanielleMaywood/received_events",
+      "repos_url": "https://api.github.com/users/DanielleMaywood/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/DanielleMaywood/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DanielleMaywood/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/DanielleMaywood",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19407#discussion_r2284711955"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19407"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2284711955"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "drive by fix: whilst trying to recreate this flake, i got this to fail because the clock would skip a turn for some reason, so instead we just invoke `RefreshContainers` directly.",
+    "commit_id": "08547261fa9d360249f6f852a17b85690c7e5eb1",
+    "created_at": "2025-08-19T09:41:07Z",
+    "diff_hunk": "@@ -2149,16 +2146,16 @@ func TestAPI(t *testing.T) {\n \t\t\tgomock.InOrder(\n \t\t\t\tmCCLI.EXPECT().DetectArchitecture(gomock.Any(), testContainer.ID).Return(runtime.GOARCH, nil),\n \t\t\t\tmCCLI.EXPECT().ExecAs(gomock.Any(), testContainer.ID, \"root\", \"mkdir\", \"-p\", \"/.coder-agent\").Return(nil, nil),\n-\t\t\t\tmCCLI.EXPECT().Copy(gomock.Any(), testContainer.ID, coderBin, \"/.coder-agent/coder\").Return(nil),\n+\t\t\t\tmCCLI.EXPECT().Copy(gomock.Any(), testContainer.ID, gomock.Any(), \"/.coder-agent/coder\").Return(nil),\n \t\t\t\tmCCLI.EXPECT().ExecAs(gomock.Any(), testContainer.ID, \"root\", \"chmod\", \"0755\", \"/.coder-agent\", \"/.coder-agent/coder\").Return(nil, nil),\n \t\t\t\tmCCLI.EXPECT().ExecAs(gomock.Any(), testContainer.ID, \"root\", \"/bin/sh\", \"-c\", \"chown $(id -u):$(id -g) /.coder-agent/coder\").Return(nil, nil),\n \t\t\t)\n \n \t\t\t// Given: We allow creation to succeed.\n \t\t\ttestutil.RequireSend(ctx, t, fSAC.createErrC, nil)\n \n-\t\t\t_, aw := mClock.AdvanceNext()\n-\t\t\taw.MustWait(ctx)\n+\t\t\terr = api.RefreshContainers(ctx)\n+\t\t\trequire.NoError(t, err)",
+    "html_url": "https://github.com/coder/coder/pull/19407#discussion_r2284711955",
+    "id": 2284711955,
+    "line": 2158,
+    "node_id": "PRRC_kwDOGkVX1s6ILfAT",
+    "original_commit_id": "08547261fa9d360249f6f852a17b85690c7e5eb1",
+    "original_line": 2158,
+    "original_position": 35,
+    "original_start_line": 2157,
+    "path": "agent/agentcontainers/api_test.go",
+    "position": 35,
+    "pull_request_review_id": 3131536485,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19407",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2284711955/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 2157,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-08-19T09:41:08Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2284711955",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/40153966?v=4",
+      "events_url": "https://api.github.com/users/DanielleMaywood/events{/privacy}",
+      "followers_url": "https://api.github.com/users/DanielleMaywood/followers",
+      "following_url": "https://api.github.com/users/DanielleMaywood/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DanielleMaywood/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/DanielleMaywood",
+      "id": 40153966,
+      "login": "DanielleMaywood",
+      "node_id": "MDQ6VXNlcjQwMTUzOTY2",
+      "organizations_url": "https://api.github.com/users/DanielleMaywood/orgs",
+      "received_events_url": "https://api.github.com/users/DanielleMaywood/received_events",
+      "repos_url": "https://api.github.com/users/DanielleMaywood/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/DanielleMaywood/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DanielleMaywood/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/DanielleMaywood",
+      "user_view_type": "public"
+    }
+  }
+]

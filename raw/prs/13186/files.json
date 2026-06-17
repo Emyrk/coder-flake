@@ -1,0 +1,74 @@
+[
+  {
+    "additions": 23,
+    "blob_url": "https://github.com/coder/coder/blob/eff4eaf24838cb35fdf73b7f38f202151c086549/.github%2Fworkflows%2Fci.yaml",
+    "changes": 23,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Fci.yaml?ref=eff4eaf24838cb35fdf73b7f38f202151c086549",
+    "deletions": 0,
+    "filename": ".github/workflows/ci.yaml",
+    "patch": "@@ -37,6 +37,7 @@ jobs:\n       k8s: ${{ steps.filter.outputs.k8s }}\n       ci: ${{ steps.filter.outputs.ci }}\n       db: ${{ steps.filter.outputs.db }}\n+      gomod: ${{ steps.filter.outputs.gomod }}\n       offlinedocs-only: ${{ steps.filter.outputs.offlinedocs_count == steps.filter.outputs.all_count }}\n       offlinedocs: ${{ steps.filter.outputs.offlinedocs }}\n     steps:\n@@ -90,6 +91,9 @@ jobs:\n               - \"scaletest/**\"\n               - \"tailnet/**\"\n               - \"testutil/**\"\n+            gomod:\n+              - \"go.mod\"\n+              - \"go.sum\"\n             ts:\n               - \"site/**\"\n               - \"Makefile\"\n@@ -108,6 +112,25 @@ jobs:\n         run: |\n           echo \"${{ toJSON(steps.filter )}}\"\n \n+  update-flake:\n+    needs: changes\n+    if: needs.changes.outputs.gomod == 'true'\n+    runs-on: ${{ github.repository_owner == 'coder' && 'buildjet-8vcpu-ubuntu-2204' || 'ubuntu-latest' }}\n+    steps:\n+      - name: Checkout\n+        uses: actions/checkout@v4\n+        with:\n+          fetch-depth: 1\n+\n+      - name: Setup Go\n+        uses: ./.github/actions/setup-go\n+\n+      - name: Update Nix Flake SRI Hash\n+        run: ./scripts/update-flake.sh\n+\n+      - name: Ensure No Changes\n+        run: git diff --exit-code\n+\n   lint:\n     needs: changes\n     if: needs.changes.outputs.offlinedocs-only == 'false' || needs.changes.outputs.ci == 'true' || github.ref == 'refs/heads/main'",
+    "raw_url": "https://github.com/coder/coder/raw/eff4eaf24838cb35fdf73b7f38f202151c086549/.github%2Fworkflows%2Fci.yaml",
+    "sha": "c9c14f2d2be8bb1cdc4fb42b94e48dd0191438b2",
+    "status": "modified"
+  },
+  {
+    "additions": 70,
+    "blob_url": "https://github.com/coder/coder/blob/eff4eaf24838cb35fdf73b7f38f202151c086549/flake.lock",
+    "changes": 71,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.lock?ref=eff4eaf24838cb35fdf73b7f38f202151c086549",
+    "deletions": 1,
+    "filename": "flake.lock",
+    "patch": "@@ -56,6 +56,24 @@\n         \"type\": \"github\"\n       }\n     },\n+    \"flake-utils_3\": {\n+      \"inputs\": {\n+        \"systems\": \"systems_3\"\n+      },\n+      \"locked\": {\n+        \"lastModified\": 1710146030,\n+        \"narHash\": \"sha256-SZ5L6eA7HJ/nmkzGG7/ISclqe6oZdOZTNoesiInkXPQ=\",\n+        \"owner\": \"numtide\",\n+        \"repo\": \"flake-utils\",\n+        \"rev\": \"b1d9ab70662946ef0850d488da1c9019f3a9752a\",\n+        \"type\": \"github\"\n+      },\n+      \"original\": {\n+        \"owner\": \"numtide\",\n+        \"repo\": \"flake-utils\",\n+        \"type\": \"github\"\n+      }\n+    },\n     \"nixpkgs\": {\n       \"locked\": {\n         \"lastModified\": 1681823821,\n@@ -87,11 +105,47 @@\n         \"type\": \"github\"\n       }\n     },\n+    \"nixpkgs_3\": {\n+      \"locked\": {\n+        \"lastModified\": 1714906307,\n+        \"narHash\": \"sha256-UlRZtrCnhPFSJlDQE7M0eyhgvuuHBTe1eJ9N9AQlJQ0=\",\n+        \"owner\": \"nixos\",\n+        \"repo\": \"nixpkgs\",\n+        \"rev\": \"25865a40d14b3f9cf19f19b924e2ab4069b09588\",\n+        \"type\": \"github\"\n+      },\n+      \"original\": {\n+        \"owner\": \"nixos\",\n+        \"ref\": \"nixos-unstable\",\n+        \"repo\": \"nixpkgs\",\n+        \"type\": \"github\"\n+      }\n+    },\n+    \"pnpm2nix\": {\n+      \"inputs\": {\n+        \"flake-utils\": \"flake-utils_3\",\n+        \"nixpkgs\": \"nixpkgs_3\"\n+      },\n+      \"locked\": {\n+        \"lastModified\": 1706694632,\n+        \"narHash\": \"sha256-ytyTwNPiUR8aq74QlxFI+Wv3MyvXz5POO1xZxQIoi0c=\",\n+        \"owner\": \"nzbr\",\n+        \"repo\": \"pnpm2nix-nzbr\",\n+        \"rev\": \"0366b7344171accc2522525710e52a8abbf03579\",\n+        \"type\": \"github\"\n+      },\n+      \"original\": {\n+        \"owner\": \"nzbr\",\n+        \"repo\": \"pnpm2nix-nzbr\",\n+        \"type\": \"github\"\n+      }\n+    },\n     \"root\": {\n       \"inputs\": {\n         \"drpc\": \"drpc\",\n         \"flake-utils\": \"flake-utils_2\",\n-        \"nixpkgs\": \"nixpkgs_2\"\n+        \"nixpkgs\": \"nixpkgs_2\",\n+        \"pnpm2nix\": \"pnpm2nix\"\n       }\n     },\n     \"systems\": {\n@@ -123,6 +177,21 @@\n         \"repo\": \"default\",\n         \"type\": \"github\"\n       }\n+    },\n+    \"systems_3\": {\n+      \"locked\": {\n+        \"lastModified\": 1681028828,\n+        \"narHash\": \"sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=\",\n+        \"owner\": \"nix-systems\",\n+        \"repo\": \"default\",\n+        \"rev\": \"da67096a3b9bf56a91d16901293e51ba5b49a27e\",\n+        \"type\": \"github\"\n+      },\n+      \"original\": {\n+        \"owner\": \"nix-systems\",\n+        \"repo\": \"default\",\n+        \"type\": \"github\"\n+      }\n     }\n   },\n   \"root\": \"root\",",
+    "raw_url": "https://github.com/coder/coder/raw/eff4eaf24838cb35fdf73b7f38f202151c086549/flake.lock",
+    "sha": "8a460beeb97822282d2f24f504bb8c7a947fe206",
+    "status": "modified"
+  },
+  {
+    "additions": 72,
+    "blob_url": "https://github.com/coder/coder/blob/eff4eaf24838cb35fdf73b7f38f202151c086549/flake.nix",
+    "changes": 94,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=eff4eaf24838cb35fdf73b7f38f202151c086549",
+    "deletions": 22,
+    "filename": "flake.nix",
+    "patch": "@@ -4,25 +4,29 @@\n   inputs = {\n     nixpkgs.url = \"github:nixos/nixpkgs/nixos-unstable\";\n     flake-utils.url = \"github:numtide/flake-utils\";\n+    pnpm2nix.url = \"github:nzbr/pnpm2nix-nzbr\";\n     drpc.url = \"github:storj/drpc/v0.0.33\";\n   };\n \n-  outputs = { self, nixpkgs, flake-utils, drpc }:\n+  outputs = { self, nixpkgs, flake-utils, drpc, pnpm2nix }:\n     flake-utils.lib.eachDefaultSystem (system:\n       let\n         # Workaround for: terraform has an unfree license (\u2018bsl11\u2019), refusing to evaluate.\n         pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };\n-        formatter = pkgs.nixpkgs-fmt;\n         nodejs = pkgs.nodejs-18_x;\n-        yarn = pkgs.yarn.override { inherit nodejs; };\n         # Check in https://search.nixos.org/packages to find new packages.\n         # Use `nix --extra-experimental-features nix-command --extra-experimental-features flakes flake update`\n         # to update the lock file if packages are out-of-date.\n \n         # From https://nixos.wiki/wiki/Google_Cloud_SDK\n-        gdk = pkgs.google-cloud-sdk.withExtraComponents ([pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin]);\n+        gdk = pkgs.google-cloud-sdk.withExtraComponents ([ pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin ]);\n \n+        # The minimal set of packages to build Coder.\n         devShellPackages = with pkgs; [\n+          # google-chrome is not available on OSX\n+          (if pkgs.stdenv.hostPlatform.isDarwin then null else google-chrome)\n+          # strace is not available on OSX\n+          (if pkgs.stdenv.hostPlatform.isDarwin then null else strace)\n           bat\n           cairo\n           curl\n@@ -31,24 +35,20 @@\n           gcc\n           gdk\n           getopt\n-          git\n           gh\n+          git\n           gnumake\n           gnused\n           go_1_21\n           go-migrate\n           golangci-lint\n-          # google-chrome is not available on OSX\n-          (if pkgs.stdenv.hostPlatform.isDarwin then null else google-chrome)\n           gopls\n           gotestsum\n           jq\n           kubectl\n           kubectx\n           kubernetes-helm\n           less\n-          # Needed for many LD system libs!\n-          util-linux\n           mockgen\n           nfpm\n           nodejs\n@@ -67,34 +67,84 @@\n           shellcheck\n           shfmt\n           sqlc\n-          # strace is not available on OSX\n-          (if pkgs.stdenv.hostPlatform.isDarwin then null else strace)\n           terraform\n           typos\n+          # Needed for many LD system libs!\n+          util-linux\n           vim\n           wget\n-          yarn\n           yq-go\n           zip\n           zsh\n           zstd\n         ];\n \n-        allPackages = pkgs.buildEnv {\n-          name = \"all-packages\";\n-          paths = devShellPackages;\n+        # buildSite packages the site directory.\n+        buildSite = pnpm2nix.packages.${system}.mkPnpmPackage {\n+          src = ./site/.;\n+          # Required for the `canvas` package!\n+          extraBuildInputs = with pkgs; [ pkgs.cairo pkgs.pango pkgs.pixman ];\n+          installInPlace = true;\n+          distDir = \"out\";\n         };\n+\n+        version = \"v0.0.0-nix-${self.shortRev or self.dirtyShortRev}\";\n+\n+        # To make faster subsequent builds, you could extract the `.zst`\n+        # slim bundle into it's own derivation.\n+        buildFat = osArch:\n+          pkgs.buildGo121Module {\n+            name = \"coder-${osArch}\";\n+            # Updated with ./scripts/update-flake.nix`.\n+            # This should be updated whenever go.mod changes!\n+            vendorHash = \"sha256-pTRr85MtdlsI0iYGAwLAQ3QvtrDR8rDOynYx8FDaRy0=\";\n+            proxyVendor = true;\n+            src = ./.;\n+            nativeBuildInputs = with pkgs; [ getopt openssl zstd ];\n+            preBuild = ''\n+              # Replaces /usr/bin/env with an absolute path to the interpreter.\n+              patchShebangs ./scripts\n+            '';\n+            buildPhase = ''\n+              runHook preBuild\n+\n+              # Unpack the site contents.\n+              mkdir -p ./site/out\n+              cp -r ${buildSite.out}/* ./site/out\n+\n+              # Build and copy the binary!\n+              export CODER_FORCE_VERSION=${version}\n+              make -j build/coder_${osArch}\n+            '';\n+            installPhase = ''\n+              mkdir -p $out/bin\n+              cp -r ./build/coder_${osArch} $out/bin/coder\n+            '';\n+          };\n       in\n       {\n-        defaultPackage = formatter; # or replace it with your desired default package.\n         devShell = pkgs.mkShell {\n-        buildInputs = devShellPackages;\n-        shellHook = ''\n-          export PLAYWRIGHT_BROWSERS_PATH=${pkgs.playwright-driver.browsers}\n-          export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true\n-        '';\n+          buildInputs = devShellPackages;\n+          shellHook = ''\n+            export PLAYWRIGHT_BROWSERS_PATH=${pkgs.playwright-driver.browsers}\n+            export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true\n+          '';\n+        };\n+        packages = {\n+          all = pkgs.buildEnv {\n+            name = \"all-packages\";\n+            paths = devShellPackages;\n+          };\n+          site = buildSite;\n+\n+          # Copying `OS_ARCHES` from the Makefile.\n+          linux_amd64 = buildFat \"linux_amd64\";\n+          linux_arm64 = buildFat \"linux_arm64\";\n+          darwin_amd64 = buildFat \"darwin_amd64\";\n+          darwin_arm64 = buildFat \"darwin_arm64\";\n+          windows_amd64 = buildFat \"windows_amd64.exe\";\n+          windows_arm64 = buildFat \"windows_arm64.exe\";\n         };\n-        packages.all = allPackages;\n       }\n     );\n }",
+    "raw_url": "https://github.com/coder/coder/raw/eff4eaf24838cb35fdf73b7f38f202151c086549/flake.nix",
+    "sha": "510a2ea8dad53f960e24260da3dc7077b1daa0c7",
+    "status": "modified"
+  },
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/eff4eaf24838cb35fdf73b7f38f202151c086549/scripts%2Flib.sh",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scripts%2Flib.sh?ref=eff4eaf24838cb35fdf73b7f38f202151c086549",
+    "deletions": 0,
+    "filename": "scripts/lib.sh",
+    "patch": "@@ -43,6 +43,9 @@ SCRIPT=\"${BASH_SOURCE[1]:-${BASH_SOURCE[0]}}\"\n SCRIPT_DIR=\"$(realpath \"$(dirname \"$SCRIPT\")\")\"\n \n function project_root {\n+\t# Nix sets $src in derivations!\n+\t[[ -n \"${src:-}\" ]] && echo \"$src\" && return\n+\n \t# Try to use `git rev-parse --show-toplevel` to find the project root.\n \t# If this directory is not a git repository, this command will fail.\n \tgit rev-parse --show-toplevel 2>/dev/null && return",
+    "raw_url": "https://github.com/coder/coder/raw/eff4eaf24838cb35fdf73b7f38f202151c086549/scripts%2Flib.sh",
+    "sha": "78ec22d503fbf3bb02f079423048bed84e6a212e",
+    "status": "modified"
+  },
+  {
+    "additions": 16,
+    "blob_url": "https://github.com/coder/coder/blob/eff4eaf24838cb35fdf73b7f38f202151c086549/scripts%2Fupdate-flake.sh",
+    "changes": 16,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scripts%2Fupdate-flake.sh?ref=eff4eaf24838cb35fdf73b7f38f202151c086549",
+    "deletions": 0,
+    "filename": "scripts/update-flake.sh",
+    "patch": "@@ -0,0 +1,16 @@\n+#!/usr/bin/env bash\n+# Updates SRI hashes for flake.nix.\n+\n+set -eu\n+\n+cd \"$(dirname \"${BASH_SOURCE[0]}\")/..\"\n+\n+OUT=$(mktemp -d -t nar-hash-XXXXXX)\n+\n+echo \"Downloading Go modules...\"\n+GOPATH=\"$OUT\" go mod download\n+echo \"Calculating SRI hash...\"\n+HASH=$(go run tailscale.com/cmd/nardump --sri \"$OUT/pkg/mod/cache/download\")\n+sudo rm -rf \"$OUT\"\n+\n+sed -i \"s/\\(vendorHash = \\\"\\)[^\\\"]*/\\1${HASH}/\" ./flake.nix",
+    "raw_url": "https://github.com/coder/coder/raw/eff4eaf24838cb35fdf73b7f38f202151c086549/scripts%2Fupdate-flake.sh",
+    "sha": "4094f20032611b134af4e32b7b3c78da0b4b788d",
+    "status": "added"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/eff4eaf24838cb35fdf73b7f38f202151c086549/site%2Fpackage.json",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fpackage.json?ref=eff4eaf24838cb35fdf73b7f38f202151c086549",
+    "deletions": 1,
+    "filename": "site/package.json",
+    "patch": "@@ -184,6 +184,6 @@\n   },\n   \"engines\": {\n     \"npm\": \">=9.0.0 <10.0.0\",\n-    \"node\": \">=18.0.0 <19.0.0\"\n+    \"node\": \">=18.0.0 <21.0.0\"\n   }\n }",
+    "raw_url": "https://github.com/coder/coder/raw/eff4eaf24838cb35fdf73b7f38f202151c086549/site%2Fpackage.json",
+    "sha": "a5c5fee146578935d0c6518c640deab4df6e5cb4",
+    "status": "modified"
+  }
+]

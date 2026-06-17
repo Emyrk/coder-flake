@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 26,
+    "blob_url": "https://github.com/coder/coder/blob/4c4fcad4245e23ce6b9a8274cf7660eef5742496/cli%2Fssh_test.go",
+    "changes": 28,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fssh_test.go?ref=4c4fcad4245e23ce6b9a8274cf7660eef5742496",
+    "deletions": 2,
+    "filename": "cli/ssh_test.go",
+    "patch": "@@ -117,14 +117,26 @@ func TestSSH(t *testing.T) {\n \t\tclitest.SetupConfig(t, client, root)\n \t\tpty := ptytest.New(t).Attach(inv)\n \n-\t\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitLong)\n+\t\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitSuperLong)\n \t\tdefer cancel()\n \n \t\tcmdDone := tGo(t, func() {\n \t\t\terr := inv.WithContext(ctx).Run()\n \t\t\tassert.NoError(t, err)\n \t\t})\n \n+\t\t// Delay until workspace is starting, otherwise the agent may be\n+\t\t// booted due to outdated build.\n+\t\tvar err error\n+\t\tfor {\n+\t\t\tworkspace, err = client.Workspace(ctx, workspace.ID)\n+\t\t\trequire.NoError(t, err)\n+\t\t\tif workspace.LatestBuild.Transition == codersdk.WorkspaceTransitionStart {\n+\t\t\t\tbreak\n+\t\t\t}\n+\t\t\ttime.Sleep(testutil.IntervalFast)\n+\t\t}\n+\n \t\t// When the agent connects, the workspace was started, and we should\n \t\t// have access to the shell.\n \t\t_ = agenttest.New(t, client.URL, authToken)\n@@ -365,7 +377,7 @@ func TestSSH(t *testing.T) {\n \t\tworkspaceBuild := coderdtest.CreateWorkspaceBuild(t, client, workspace, database.WorkspaceTransitionStop)\n \t\tcoderdtest.AwaitWorkspaceBuildJobCompleted(t, client, workspaceBuild.ID)\n \n-\t\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitLong)\n+\t\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitSuperLong)\n \t\tdefer cancel()\n \n \t\tclientStdinR, clientStdinW := io.Pipe()\n@@ -461,6 +473,18 @@ func TestSSH(t *testing.T) {\n \t\t\tassert.NoError(t, err)\n \t\t})\n \n+\t\t// Delay until workspace is starting, otherwise the agent may be\n+\t\t// booted due to outdated build.\n+\t\tvar err error\n+\t\tfor {\n+\t\t\tworkspace, err = client.Workspace(ctx, workspace.ID)\n+\t\t\trequire.NoError(t, err)\n+\t\t\tif workspace.LatestBuild.Transition == codersdk.WorkspaceTransitionStart {\n+\t\t\t\tbreak\n+\t\t\t}\n+\t\t\ttime.Sleep(testutil.IntervalFast)\n+\t\t}\n+\n \t\t// When the agent connects, the workspace was started, and we should\n \t\t// have access to the shell.\n \t\t_ = agenttest.New(t, client.URL, authToken)",
+    "raw_url": "https://github.com/coder/coder/raw/4c4fcad4245e23ce6b9a8274cf7660eef5742496/cli%2Fssh_test.go",
+    "sha": "f1e52b1a0c0ef15c07579f7891c782f178c166df",
+    "status": "modified"
+  }
+]

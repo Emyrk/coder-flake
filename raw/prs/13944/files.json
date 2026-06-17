@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 9,
+    "blob_url": "https://github.com/coder/coder/blob/c9566171ce870ee2661afbcca2efd2ba97d6fd82/coderd%2Fnotifications%2Fmetrics_test.go",
+    "changes": 21,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fnotifications%2Fmetrics_test.go?ref=c9566171ce870ee2661afbcca2efd2ba97d6fd82",
+    "deletions": 12,
+    "filename": "coderd/notifications/metrics_test.go",
+    "patch": "@@ -2,7 +2,6 @@ package notifications_test\n \n import (\n \t\"context\"\n-\t\"sync\"\n \t\"testing\"\n \t\"time\"\n \n@@ -260,7 +259,7 @@ func TestPendingUpdatesMetric(t *testing.T) {\n \trequire.EqualValues(t, pending, success+failure)\n \n \t// Unpause the interceptor so the updates can proceed.\n-\tinterceptor.proceed.Broadcast()\n+\tinterceptor.unpause()\n \n \t// Validate that the store synced the expected number of updates.\n \trequire.Eventually(t, func() bool {\n@@ -376,7 +375,7 @@ func fingerprintLabels(lbs ...string) model.Fingerprint {\n type updateSignallingInterceptor struct {\n \tnotifications.Store\n \n-\tproceed *sync.Cond\n+\tpause chan any\n \n \tupdateSuccess chan int\n \tupdateFailure chan int\n@@ -386,33 +385,31 @@ func newUpdateSignallingInterceptor(interceptor notifications.Store) *updateSign\n \treturn &updateSignallingInterceptor{\n \t\tStore: interceptor,\n \n-\t\tproceed: sync.NewCond(&sync.Mutex{}),\n+\t\tpause: make(chan any, 1),\n \n \t\tupdateSuccess: make(chan int, 1),\n \t\tupdateFailure: make(chan int, 1),\n \t}\n }\n \n+func (u *updateSignallingInterceptor) unpause() {\n+\tclose(u.pause)\n+}\n+\n func (u *updateSignallingInterceptor) BulkMarkNotificationMessagesSent(ctx context.Context, arg database.BulkMarkNotificationMessagesSentParams) (int64, error) {\n \tu.updateSuccess <- len(arg.IDs)\n \n-\tu.proceed.L.Lock()\n-\tdefer u.proceed.L.Unlock()\n-\n \t// Wait until signaled so we have a chance to read the number of pending updates.\n-\tu.proceed.Wait()\n+\t<-u.pause\n \n \treturn u.Store.BulkMarkNotificationMessagesSent(ctx, arg)\n }\n \n func (u *updateSignallingInterceptor) BulkMarkNotificationMessagesFailed(ctx context.Context, arg database.BulkMarkNotificationMessagesFailedParams) (int64, error) {\n \tu.updateFailure <- len(arg.IDs)\n \n-\tu.proceed.L.Lock()\n-\tdefer u.proceed.L.Unlock()\n-\n \t// Wait until signaled so we have a chance to read the number of pending updates.\n-\tu.proceed.Wait()\n+\t<-u.pause\n \n \treturn u.Store.BulkMarkNotificationMessagesFailed(ctx, arg)\n }",
+    "raw_url": "https://github.com/coder/coder/raw/c9566171ce870ee2661afbcca2efd2ba97d6fd82/coderd%2Fnotifications%2Fmetrics_test.go",
+    "sha": "89078425ef2fcd0c3d885051ce2f6396abbc4d59",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/5be304a9bbef26bf06f8fd5fdf06d4e8529a5344/flake.nix",
+    "changes": 12,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=5be304a9bbef26bf06f8fd5fdf06d4e8529a5344",
+    "deletions": 5,
+    "filename": "flake.nix",
+    "patch": "@@ -13,6 +13,8 @@\n         # Workaround for: terraform has an unfree license (\u2018bsl11\u2019), refusing to evaluate.\n         pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };\n         formatter = pkgs.nixpkgs-fmt;\n+        nodejs = pkgs.nodejs-18_x;\n+        yarn = pkgs.yarn.override { inherit nodejs; };\n         # Check in https://search.nixos.org/packages to find new packages.\n         # Use `nix --extra-experimental-features nix-command --extra-experimental-features flakes flake update`\n         # to update the lock file if packages are out-of-date.\n@@ -46,11 +48,11 @@\n           libuuid\n           mockgen\n           nfpm\n-          nodejs-18_x\n-          nodejs-18_x.pkgs.pnpm\n-          nodejs-18_x.pkgs.prettier\n-          nodejs-18_x.pkgs.typescript\n-          nodejs-18_x.pkgs.typescript-language-server\n+          nodejs\n+          nodejs.pkgs.pnpm\n+          nodejs.pkgs.prettier\n+          nodejs.pkgs.typescript\n+          nodejs.pkgs.typescript-language-server\n           openssh\n           openssl\n           pango",
+    "raw_url": "https://github.com/coder/coder/raw/5be304a9bbef26bf06f8fd5fdf06d4e8529a5344/flake.nix",
+    "sha": "f3322d9c7761c14cf246bd05b25af3acf4472f0f",
+    "status": "modified"
+  }
+]

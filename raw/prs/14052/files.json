@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/c4cf7649423a7baa7762346f35ebe625ce6820f4/.github%2Fworkflows%2Fci.yaml",
+    "changes": 12,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Fci.yaml?ref=c4cf7649423a7baa7762346f35ebe625ce6820f4",
+    "deletions": 4,
+    "filename": ".github/workflows/ci.yaml",
+    "patch": "@@ -121,28 +121,32 @@ jobs:\n     needs: changes\n     if: needs.changes.outputs.gomod == 'true'\n     runs-on: ${{ github.repository_owner == 'coder' && 'depot-ubuntu-22.04-8' || 'ubuntu-latest' }}\n-    permissions:\n-      # Give the default GITHUB_TOKEN write permission to commit and push the changed files back to the repository.\n-      contents: write\n     steps:\n       - name: Checkout\n         uses: actions/checkout@v4\n         with:\n           fetch-depth: 1\n           # See: https://github.com/stefanzweifel/git-auto-commit-action?tab=readme-ov-file#commits-made-by-this-action-do-not-trigger-new-workflow-runs\n-          token: ${{ secrets.GITHUB_TOKEN }}\n+          token: ${{ secrets.CDRCI_GITHUB_TOKEN }}\n \n       - name: Setup Go\n         uses: ./.github/actions/setup-go\n \n       - name: Update Nix Flake SRI Hash\n         run: ./scripts/update-flake.sh\n \n+      # auto update flake for dependabot\n       - uses: stefanzweifel/git-auto-commit-action@v5\n+        if: github.actor == 'dependabot[bot]'\n         with:\n           # Allows dependabot to still rebase!\n           commit_message: \"[dependabot skip] Update Nix Flake SRI Hash\"\n \n+      # require everyone else to update it themselves\n+      - name: Ensure No Changes\n+        if: github.actor != 'dependabot[bot]'\n+        run: git diff --exit-code\n+\n   lint:\n     needs: changes\n     if: needs.changes.outputs.offlinedocs-only == 'false' || needs.changes.outputs.ci == 'true' || github.ref == 'refs/heads/main'",
+    "raw_url": "https://github.com/coder/coder/raw/c4cf7649423a7baa7762346f35ebe625ce6820f4/.github%2Fworkflows%2Fci.yaml",
+    "sha": "4b665be19afd1f1ac3c76398b7400eddc549699a",
+    "status": "modified"
+  }
+]

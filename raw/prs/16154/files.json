@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/0db718b620e1baff48f4e88beccca8ed61e86451/flake.nix",
+    "changes": 10,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=0db718b620e1baff48f4e88beccca8ed61e86451",
+    "deletions": 3,
+    "filename": "flake.nix",
+    "patch": "@@ -85,6 +85,7 @@\n           kubectl\n           kubectx\n           kubernetes-helm\n+          lazygit\n           less\n           mockgen\n           moreutils\n@@ -144,7 +145,7 @@\n             name = \"coder-${osArch}\";\n             # Updated with ./scripts/update-flake.sh`.\n             # This should be updated whenever go.mod changes!\n-            vendorHash = \"sha256-Tsajkkp+NMjYRCpRX5HlSy/sCSpuABIGDM1jeavVe+w=\";\n+            vendorHash = \"sha256-ykLZqtALSvDpBc2yEjRGdOyCFNsnLZiGid0d4s27e8Q=\";\n             proxyVendor = true;\n             src = ./.;\n             nativeBuildInputs = with pkgs; [ getopt openssl zstd ];\n@@ -156,12 +157,15 @@\n               runHook preBuild\n \n               # Unpack the site contents.\n-              mkdir -p ./site/out\n+              mkdir -p ./site/out ./site/node_modules/\n               cp -r ${buildSite.out}/* ./site/out\n+              touch ./site/node_modules/.installed\n \n               # Build and copy the binary!\n               export CODER_FORCE_VERSION=${version}\n-              make -j build/coder_${osArch}\n+              # Flagging 'site/node_modules/.installed' as an old file,\n+              # as we do not want to trigger codegen during a build.\n+              make -j -o 'site/node_modules/.installed' build/coder_${osArch}\n             '';\n             installPhase = ''\n               mkdir -p $out/bin",
+    "raw_url": "https://github.com/coder/coder/raw/0db718b620e1baff48f4e88beccca8ed61e86451/flake.nix",
+    "sha": "ed2029ab57e1751a9ce47fdd0d5f67e5e768c99b",
+    "status": "modified"
+  }
+]

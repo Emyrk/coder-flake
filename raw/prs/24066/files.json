@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 10,
+    "blob_url": "https://github.com/coder/coder/blob/d00ba440e1aad363e48bc0d2d2af8a2b6dec3ffd/coderd%2Fx%2Fchatd%2Fsubagent_internal_test.go",
+    "changes": 15,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fx%2Fchatd%2Fsubagent_internal_test.go?ref=d00ba440e1aad363e48bc0d2d2af8a2b6dec3ffd",
+    "deletions": 5,
+    "filename": "coderd/x/chatd/subagent_internal_test.go",
+    "patch": "@@ -1055,12 +1055,17 @@ func TestAwaitSubagentCompletion(t *testing.T) {\n \t\trequire.NoError(t, err)\n \t\tdefer cancelProbe()\n \n-\t\t// Transition the child first, then publish once the\n-\t\t// durable completion state is observable. Pubsub only\n-\t\t// wakes the waiter; it does not guarantee the report is\n-\t\t// visible in the same instant as the notification.\n-\t\tsetChatStatus(ctx, t, db, child.ID, database.ChatStatusWaiting, \"\")\n+\t\t// Insert the message BEFORE transitioning to Waiting.\n+\t\t// Stale PG LISTEN/NOTIFY notifications from the\n+\t\t// processor's earlier run can still be buffered in the\n+\t\t// pgListener after drainInflight returns. If such a\n+\t\t// notification is dispatched between setChatStatus and\n+\t\t// insertAssistantMessage, checkSubagentCompletion would\n+\t\t// see done=true (Waiting) with an empty report. By\n+\t\t// inserting the message first, the report is guaranteed\n+\t\t// to be committed before the status makes it visible.\n \t\tinsertAssistantMessage(ctx, t, db, child.ID, model.ID, \"pubsub result\")\n+\t\tsetChatStatus(ctx, t, db, child.ID, database.ChatStatusWaiting, \"\")\n \t\trequire.EventuallyWithT(t, func(c *assert.CollectT) {\n \t\t\tchat, report, done, err := server.checkSubagentCompletion(ctx, child.ID)\n \t\t\trequire.NoError(c, err)",
+    "raw_url": "https://github.com/coder/coder/raw/d00ba440e1aad363e48bc0d2d2af8a2b6dec3ffd/coderd%2Fx%2Fchatd%2Fsubagent_internal_test.go",
+    "sha": "144addbd08cda460bdeda697daf188b82b8abcd0",
+    "status": "modified"
+  }
+]

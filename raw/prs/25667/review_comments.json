@@ -1,0 +1,210 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25667#discussion_r3304097639"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25667"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3304097639"
+      }
+    },
+    "author_association": "NONE",
+    "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Wire base_sha input into changed-test selection**\n\nThe workflow advertises a `workflow_dispatch` `base_sha` input, but the value is never consumed when building the test matrix, so manual runs cannot actually diff against the requested base commit. In `flake-go`, the selector only runs `whichtests --repo-root . --github-actions --coalesce` and never passes `base_sha`, which means dispatches intended to reproduce flakes against a specific base can silently select the wrong tests (or no tests) based on the tool's default base.\n\nUseful? React with \ud83d\udc4d\u00a0/ \ud83d\udc4e.",
+    "commit_id": "744582b69d28836994c84e14bf56e233c4a57a88",
+    "created_at": "2026-05-26T13:42:48Z",
+    "diff_hunk": "@@ -0,0 +1,133 @@\n+name: flake-go\n+\n+on:\n+  pull_request:\n+  workflow_dispatch:\n+    inputs:\n+      base_sha:\n+        description: \"Base commit to diff against. Defaults to merge-base against origin/main.\"\n+        required: false\n+        type: string",
+    "html_url": "https://github.com/coder/coder/pull/25667#discussion_r3304097639",
+    "id": 3304097639,
+    "line": 10,
+    "node_id": "PRRC_kwDOGkVX1s7E8Idn",
+    "original_commit_id": "a437732a3a69a32821eaea497c3bbce777a8ceaa",
+    "original_line": 10,
+    "original_position": 10,
+    "original_start_line": 7,
+    "path": ".github/workflows/flake-go.yaml",
+    "position": 10,
+    "pull_request_review_id": 4364116229,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25667",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3304097639/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 7,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2026-05-26T13:42:48Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3304097639",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/1144995?v=4",
+      "events_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/chatgpt-codex-connector",
+      "id": 199175422,
+      "login": "chatgpt-codex-connector[bot]",
+      "node_id": "BOT_kgDOC98s_g",
+      "organizations_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25667#discussion_r3304107548"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25667"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3304107548"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "The --github-actions mode in whichtests reads workflow_dispatch.inputs.base_sha and inputs.head_sha directly out of $GITHUB_EVENT_PATH, which GitHub Actions populates from the declared workflow_dispatch.inputs block. There is no separate CLI flag to thread; passing one would conflict with the event-driven contract.\r\n\r\nSee [githubactions.go in coder/whichtests](https://github.com/coder/whichtests/blob/ec33bab1ec04cd86beb7a61a069db4463dba63f5/githubactions.go) \u2014 the workflow_dispatch branch validates event.Inputs.BaseSHA, sets req.Range.BaseSHA, and adds an origin fetch for that SHA before planning. A dispatch with base_sha: deadbeef does diff against that commit.",
+    "commit_id": "744582b69d28836994c84e14bf56e233c4a57a88",
+    "created_at": "2026-05-26T13:44:07Z",
+    "diff_hunk": "@@ -0,0 +1,133 @@\n+name: flake-go\n+\n+on:\n+  pull_request:\n+  workflow_dispatch:\n+    inputs:\n+      base_sha:\n+        description: \"Base commit to diff against. Defaults to merge-base against origin/main.\"\n+        required: false\n+        type: string",
+    "html_url": "https://github.com/coder/coder/pull/25667#discussion_r3304107548",
+    "id": 3304107548,
+    "in_reply_to_id": 3304097639,
+    "line": 10,
+    "node_id": "PRRC_kwDOGkVX1s7E8K4c",
+    "original_commit_id": "a437732a3a69a32821eaea497c3bbce777a8ceaa",
+    "original_line": 10,
+    "original_position": 10,
+    "original_start_line": 7,
+    "path": ".github/workflows/flake-go.yaml",
+    "position": 10,
+    "pull_request_review_id": 4364127365,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25667",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3304107548/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 7,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2026-05-26T13:44:07Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3304107548",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/39577870?v=4",
+      "events_url": "https://api.github.com/users/ethanndickson/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ethanndickson/followers",
+      "following_url": "https://api.github.com/users/ethanndickson/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ethanndickson/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ethanndickson",
+      "id": 39577870,
+      "login": "ethanndickson",
+      "node_id": "MDQ6VXNlcjM5NTc3ODcw",
+      "organizations_url": "https://api.github.com/users/ethanndickson/orgs",
+      "received_events_url": "https://api.github.com/users/ethanndickson/received_events",
+      "repos_url": "https://api.github.com/users/ethanndickson/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ethanndickson/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ethanndickson/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ethanndickson",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25667#discussion_r3309259262"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25667"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3309259262"
+      }
+    },
+    "author_association": "NONE",
+    "body": "**<sub><sub>![P2 Badge](https://img.shields.io/badge/P2-yellow?style=flat)</sub></sub>  Include failure() in report condition**\n\nWhen the flake check step actually fails, this report step will be skipped because GitHub Actions implicitly applies `success()` to any step `if` that does not contain a status check function. The CI workflow report steps use `failure() && ...`, but this new flake workflow only checks `steps.flake_check.outcome`, so the failure artifact and summary will not be produced for the exact test failures this workflow is meant to diagnose. Add `failure()` or `always()` to this condition before checking the step outcome.\n\nUseful? React with \ud83d\udc4d\u00a0/ \ud83d\udc4e.",
+    "commit_id": "94532bba119344a703c7a19e1000f6e27cd7a290",
+    "created_at": "2026-05-27T07:42:55Z",
+    "diff_hunk": "@@ -0,0 +1,82 @@\n+name: flake-go\n+\n+on:\n+  pull_request:\n+  workflow_dispatch:\n+    inputs:\n+      base_sha:\n+        description: \"Base commit to diff against. Defaults to merge-base against origin/main.\"\n+        required: false\n+        type: string\n+      head_sha:\n+        description: \"Head commit to analyze. Defaults to the checked out HEAD.\"\n+        required: false\n+        type: string\n+\n+permissions:\n+  contents: read\n+\n+concurrency:\n+  group: ${{ github.workflow }}-${{ github.ref }}\n+  cancel-in-progress: true\n+\n+jobs:\n+  flake_go:\n+    name: Flake Check\n+    runs-on: ${{ github.repository_owner == 'coder' && 'depot-ubuntu-22.04-4' || 'ubuntu-latest' }}\n+    timeout-minutes: 20\n+    steps:\n+      - name: Harden Runner\n+        uses: step-security/harden-runner@f808768d1510423e83855289c910610ca9b43176 # v2.17.0\n+        with:\n+          egress-policy: audit\n+\n+      - name: Checkout\n+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2\n+        with:\n+          repository: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}\n+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.event.inputs.head_sha || github.sha }}\n+          fetch-depth: 0\n+          persist-credentials: false\n+\n+      - name: Setup Go\n+        uses: ./.github/actions/setup-go\n+\n+      - name: Install whichtests\n+        shell: bash\n+        run: ./.github/scripts/retry.sh -- go install github.com/coder/whichtests@ec33bab1ec04cd86beb7a61a069db4463dba63f5\n+\n+      - name: Select changed tests\n+        id: selector\n+        shell: bash\n+        run: |\n+          set -euo pipefail\n+          whichtests \\\n+            --repo-root . \\\n+            --github-actions \\\n+            --coalesce \\\n+            --out-matrix \"$RUNNER_TEMP/flake-matrix.json\"\n+\n+      - name: Setup Terraform\n+        if: ${{ fromJSON(steps.selector.outputs.matrix).include[0] != null }}\n+        uses: ./.github/actions/setup-tf\n+\n+      - name: Run targeted Go flake checks\n+        id: flake_check\n+        if: ${{ fromJSON(steps.selector.outputs.matrix).include[0] != null }}\n+        uses: ./.github/actions/test-go-pg\n+        with:\n+          postgres-version: \"13\"\n+          test-parallelism-packages: \"4\"\n+          test-parallelism-tests: \"16\"\n+          test-count: \"25\"\n+          test-packages: ${{ fromJSON(steps.selector.outputs.matrix).include[0].package }}\n+          run-regex: ${{ fromJSON(steps.selector.outputs.matrix).include[0].run_regex }}\n+          test-shuffle: \"on\"\n+          gotestsum-json-file: default\n+\n+      - name: Publish Go test failure report\n+        if: ${{ steps.flake_check.outcome == 'failure' && github.actor != 'dependabot[bot]' && (github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork) }}",
+    "html_url": "https://github.com/coder/coder/pull/25667#discussion_r3309259262",
+    "id": 3309259262,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7FP0n-",
+    "original_commit_id": "94532bba119344a703c7a19e1000f6e27cd7a290",
+    "original_line": 79,
+    "original_position": 79,
+    "original_start_line": null,
+    "path": ".github/workflows/flake-go.yaml",
+    "position": 1,
+    "pull_request_review_id": 4370409891,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25667",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3309259262/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-05-27T07:42:55Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3309259262",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/1144995?v=4",
+      "events_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/chatgpt-codex-connector",
+      "id": 199175422,
+      "login": "chatgpt-codex-connector[bot]",
+      "node_id": "BOT_kgDOC98s_g",
+      "organizations_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  }
+]

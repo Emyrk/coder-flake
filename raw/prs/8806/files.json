@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/ce50b4c9194a8331e542e29572ad1557fd1cd8e0/cli%2Fstat_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fstat_test.go?ref=ce50b4c9194a8331e542e29572ad1557fd1cd8e0",
+    "deletions": 2,
+    "filename": "cli/stat_test.go",
+    "patch": "@@ -74,7 +74,7 @@ func TestStatCPUCmd(t *testing.T) {\n \t\tt.Parallel()\n \t\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitShort)\n \t\tt.Cleanup(cancel)\n-\t\tinv, _ := clitest.New(t, \"stat\", \"cpu\", \"--output=text\")\n+\t\tinv, _ := clitest.New(t, \"stat\", \"cpu\", \"--output=text\", \"--host\")\n \t\tbuf := new(bytes.Buffer)\n \t\tinv.Stdout = buf\n \t\terr := inv.WithContext(ctx).Run()\n@@ -87,7 +87,7 @@ func TestStatCPUCmd(t *testing.T) {\n \t\tt.Parallel()\n \t\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitShort)\n \t\tt.Cleanup(cancel)\n-\t\tinv, _ := clitest.New(t, \"stat\", \"cpu\", \"--output=json\")\n+\t\tinv, _ := clitest.New(t, \"stat\", \"cpu\", \"--output=json\", \"--host\")\n \t\tbuf := new(bytes.Buffer)\n \t\tinv.Stdout = buf\n \t\terr := inv.WithContext(ctx).Run()",
+    "raw_url": "https://github.com/coder/coder/raw/ce50b4c9194a8331e542e29572ad1557fd1cd8e0/cli%2Fstat_test.go",
+    "sha": "7b37a98ce9113f79ca9d6db3d267cfdd3f6fff5b",
+    "status": "modified"
+  }
+]

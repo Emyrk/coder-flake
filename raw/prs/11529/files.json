@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 19,
+    "blob_url": "https://github.com/coder/coder/blob/0a7408c3d5a53ae341ba7980fbf440d0bbfff3a1/flake.nix",
+    "changes": 19,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=0a7408c3d5a53ae341ba7980fbf440d0bbfff3a1",
+    "deletions": 0,
+    "filename": "flake.nix",
+    "patch": "@@ -20,6 +20,25 @@\n         # From https://nixos.wiki/wiki/Google_Cloud_SDK\n         gdk = pkgs.google-cloud-sdk.withExtraComponents ([pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin]);\n \n+        # Nixpkgs contains the old golang/mock library which is archived, but we\n+        # use Uber's fork. An updated version exists in unstable, but hasn't\n+        # made it to stable yet.\n+        mockgen = pkgs.buildGoModule rec {\n+          pname = \"mockgen\";\n+          version = \"0.4.0\";\n+\n+          src = pkgs.fetchFromGitHub {\n+            owner = \"uber-go\";\n+            repo = \"mock\";\n+            rev = \"v${version}\";\n+            hash = \"sha256-3nt70xrZisK5vgQa+STZPiY4F9ITKw8PbBWcKoBn4Vc=\";\n+          };\n+\n+          vendorHash = \"sha256-mcNVud2jzvlPPQEaar/eYZkP71V2Civz+R5v10+tewA=\";\n+\n+          subPackages = [ \"mockgen\" ];\n+        };\n+\n         devShellPackages = with pkgs; [\n           bat\n           cairo",
+    "raw_url": "https://github.com/coder/coder/raw/0a7408c3d5a53ae341ba7980fbf440d0bbfff3a1/flake.nix",
+    "sha": "45f2f6c3b136b3be4c6254d028294b16115b7d19",
+    "status": "modified"
+  }
+]

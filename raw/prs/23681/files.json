@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 10,
+    "blob_url": "https://github.com/coder/coder/blob/ea390a6f932422df70b4dcc1efa2e13686f57ca9/site%2Fsrc%2Fcomponents%2Fai-elements%2Fresponse.stories.tsx",
+    "changes": 14,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fcomponents%2Fai-elements%2Fresponse.stories.tsx?ref=ea390a6f932422df70b4dcc1efa2e13686f57ca9",
+    "deletions": 4,
+    "filename": "site/src/components/ai-elements/response.stories.tsx",
+    "patch": "@@ -1,5 +1,5 @@\n import type { Meta, StoryObj } from \"@storybook/react-vite\";\n-import { expect, within } from \"storybook/test\";\n+import { expect, waitFor, within } from \"storybook/test\";\n import { Response } from \"./response\";\n \n const sampleMarkdown = `\n@@ -125,15 +125,21 @@ export const StreamingInlineMarkdown: Story = {\n \n // Verifies that an incomplete fenced code block in streaming mode\n // renders inside a code element rather than showing raw backticks.\n+// The FileViewer renders a <diffs-container> web component whose\n+// content lives in Shadow DOM, so we assert on DOM structure rather\n+// than text content inside the web component.\n export const StreamingCodeFence: Story = {\n \targs: {\n \t\tchildren: \"```ts\\nconst x = 1\",\n \t\tstreaming: true,\n \t},\n \tplay: async ({ canvasElement }) => {\n-\t\tconst canvas = within(canvasElement);\n-\t\tconst codeContent = await canvas.findByText(/const x = 1/);\n-\t\texpect(codeContent).toBeInTheDocument();\n+\t\t// The code fence should be parsed into a FileViewer (web component),\n+\t\t// not rendered as raw backtick text.\n+\t\tawait waitFor(() => {\n+\t\t\tconst viewer = canvasElement.querySelector(\"diffs-container\");\n+\t\t\texpect(viewer).toBeInTheDocument();\n+\t\t});\n \t\t// The raw triple-backtick should not appear as visible text.\n \t\tconst bodyText = canvasElement.textContent ?? \"\";\n \t\texpect(bodyText).not.toContain(\"```\");",
+    "raw_url": "https://github.com/coder/coder/raw/ea390a6f932422df70b4dcc1efa2e13686f57ca9/site%2Fsrc%2Fcomponents%2Fai-elements%2Fresponse.stories.tsx",
+    "sha": "f5be2b4bcca8e3ba71b7b3ee521c6eeacfb0ccb8",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 9,
+    "blob_url": "https://github.com/coder/coder/blob/0feb68679e7df5218da9154048c2a6c94176cd84/enterprise%2Fcli%2Fboundary_test.go",
+    "changes": 20,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcli%2Fboundary_test.go?ref=0feb68679e7df5218da9154048c2a6c94176cd84",
+    "deletions": 11,
+    "filename": "enterprise/cli/boundary_test.go",
+    "patch": "@@ -1,6 +1,7 @@\n package cli_test\n \n import (\n+\t\"bytes\"\n \t\"net/http\"\n \t\"net/http/httptest\"\n \t\"net/http/httputil\"\n@@ -17,31 +18,28 @@ import (\n \t\"github.com/coder/coder/v2/codersdk\"\n \t\"github.com/coder/coder/v2/enterprise/coderd/coderdenttest\"\n \t\"github.com/coder/coder/v2/enterprise/coderd/license\"\n-\t\"github.com/coder/coder/v2/pty/ptytest\"\n \t\"github.com/coder/coder/v2/testutil\"\n )\n \n // Actually testing the functionality of coder/boundary takes place in the\n // coder/boundary repo, since it's a dependency of coder.\n // Here we want to test basically that integrating it as a subcommand doesn't break anything.\n func TestBoundarySubcommand(t *testing.T) {\n-\tt.Skip()\n-\n \tt.Parallel()\n-\tctx := testutil.Context(t, testutil.WaitShort)\n \n \tinv, _ := newCLI(t, \"boundary\", \"--help\")\n-\tpty := ptytest.New(t).Attach(inv)\n+\tvar buf bytes.Buffer\n+\tinv.Stdout = &buf\n+\tinv.Stderr = &buf\n \n-\tgo func() {\n-\t\terr := inv.WithContext(ctx).Run()\n-\t\tassert.NoError(t, err)\n-\t}()\n+\terr := inv.Run()\n+\trequire.NoError(t, err)\n \n-\t// Expect the --help output to include the short description.\n+\t// Verify help output contains expected information.\n \t// We're simply confirming that `coder boundary --help` ran without a runtime error as\n \t// a good chunk of serpents self validation logic happens at runtime.\n-\tpty.ExpectMatch(boundarycli.BaseCommand(\"dev\").Short)\n+\toutput := buf.String()\n+\tassert.Contains(t, output, boundarycli.BaseCommand(\"dev\").Short)\n }\n \n func TestBoundaryLicenseVerification(t *testing.T) {",
+    "raw_url": "https://github.com/coder/coder/raw/0feb68679e7df5218da9154048c2a6c94176cd84/enterprise%2Fcli%2Fboundary_test.go",
+    "sha": "25cb9074c7341f00b3d6c32d1fb7e4d10d889554",
+    "status": "modified"
+  }
+]

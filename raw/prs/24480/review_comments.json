@@ -1,0 +1,1118 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24480#discussion_r3100852991"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24480"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3100852991"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "**P3** [DEREM-3] The PR description says: \"Fix: use `act()` to batch the message publications (side effects), then `waitFor()` to assert the resulting DOM state.\" The `act()` was introduced in commit 1 (1c82658) and correctly removed in commit 2 (a8917cd) with the explanation that `waitFor` already flushes pending state updates. The code is right, but the description still describes the commit-1 approach.\n\n> The agent's reasoning was correct and the action was correct (removing `act()`). But the externally visible artifact, the PR description, describes an approach the code no longer takes. *(Mafu-san)*\n\n> \ud83e\udd16",
+    "commit_id": "f2526f60bfcec04c10da198406edd0c6b2ecae4b",
+    "created_at": "2026-04-17T14:00:59Z",
+    "diff_hunk": "@@ -261,18 +255,18 @@ describe(\"CreateWorkspacePage\", () => {\n \t\t\t\tdiagnostics: [],\n \t\t\t};\n \n-\t\t\tawait waitFor(() => {\n-\t\t\t\tmockPublisher.publishMessage(\n-\t\t\t\t\tnew MessageEvent(\"message\", { data: JSON.stringify(response1) }),\n-\t\t\t\t);\n+\t\t\tmockPublisher.publishMessage(",
+    "html_url": "https://github.com/coder/coder/pull/24480#discussion_r3100852991",
+    "id": 3100852991,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6400L_",
+    "original_commit_id": "a8917cdffddc13a29867a61c2c853c79501ccf0b",
+    "original_line": 258,
+    "original_position": 32,
+    "original_start_line": null,
+    "path": "site/src/pages/CreateWorkspacePage/CreateWorkspacePage.test.tsx",
+    "position": 1,
+    "pull_request_review_id": 4129430814,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24480",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3100852991/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-04-17T14:00:59Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3100852991",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24480#discussion_r3100853001"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24480"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3100853001"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "**P3** [DEREM-4] This test sends response1 (id: 1) then response2 (id: 4). Both pass the staleness guard at `CreateWorkspacePage.tsx:147` because both read the same pre-batch `latestResponse`. The guard (`latestResponse.id >= response.id`) has zero test coverage.\n\nDelete lines 147-149 from the component and this test still passes. The missing case: send a high-id response first, then a low-id response, and assert the stale response is ignored. Without that, a regression in the guard goes undetected and out-of-order WebSocket delivery causes parameter flickering.\n\n> Delete the URL params entirely and the test still passes. It proves the component renders parameters. It proves nothing about [the guard]. *(Bisky P3, Hisoka P4)*\n\n> \ud83e\udd16",
+    "commit_id": "f2526f60bfcec04c10da198406edd0c6b2ecae4b",
+    "created_at": "2026-04-17T14:00:59Z",
+    "diff_hunk": "@@ -261,18 +255,18 @@ describe(\"CreateWorkspacePage\", () => {\n \t\t\t\tdiagnostics: [],\n \t\t\t};\n \n-\t\t\tawait waitFor(() => {\n-\t\t\t\tmockPublisher.publishMessage(\n-\t\t\t\t\tnew MessageEvent(\"message\", { data: JSON.stringify(response1) }),\n-\t\t\t\t);\n+\t\t\tmockPublisher.publishMessage(",
+    "html_url": "https://github.com/coder/coder/pull/24480#discussion_r3100853001",
+    "id": 3100853001,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6400MJ",
+    "original_commit_id": "a8917cdffddc13a29867a61c2c853c79501ccf0b",
+    "original_line": 258,
+    "original_position": 32,
+    "original_start_line": null,
+    "path": "site/src/pages/CreateWorkspacePage/CreateWorkspacePage.test.tsx",
+    "position": 1,
+    "pull_request_review_id": 4129430814,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24480",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3100853001/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-04-17T14:00:59Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3100853001",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24480#discussion_r3100853010"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24480"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3100853010"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "**Note** [DEREM-5] 8 of the 9 removed `waitFor` blocks contained only `userEvent` or `publishMessage` calls with no `expect()`. `waitFor` resolves immediately when its callback doesn't throw, so no retries, no corruption. The fix is correct per testing-library best practices, but the stated mechanism (\"re-fires side effects on every retry, corrupting form state\") was not active in those blocks. Only the `expect(mediumOption).toBeTruthy()` polling block (original line 155) and the \"latest response\" assertions had a real timing issue.\n\n> If these tests remain flaky after this PR, the stated diagnosis won't point to the actual cause. *(Pariston)*\n\n> \ud83e\udd16",
+    "commit_id": "bff56817ee5efb25168f4dd771f138b066905436",
+    "created_at": "2026-04-17T14:00:59Z",
+    "diff_hunk": "@@ -147,19 +147,13 @@ describe(\"CreateWorkspacePage\", () => {\n \n \t\t\tvi.useFakeTimers({ shouldAdvanceTime: true });\n \n-\t\t\tawait waitFor(async () => {\n-\t\t\t\tawait userEvent.click(instanceTypeSelect);\n-\t\t\t});\n+\t\t\tawait userEvent.click(instanceTypeSelect);",
+    "html_url": "https://github.com/coder/coder/pull/24480#discussion_r3100853010",
+    "id": 3100853010,
+    "line": 150,
+    "node_id": "PRRC_kwDOGkVX1s6400MS",
+    "original_commit_id": "a8917cdffddc13a29867a61c2c853c79501ccf0b",
+    "original_line": 150,
+    "original_position": 7,
+    "original_start_line": null,
+    "path": "site/src/pages/CreateWorkspacePage/CreateWorkspacePage.test.tsx",
+    "position": 7,
+    "pull_request_review_id": 4129430814,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24480",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3100853010/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-04-17T14:00:59Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3100853010",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24480#discussion_r3101871832"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24480"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3101871832"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "> \ud83e\udd16 This comment was written by Coder Agent on behalf of Danielle Maywood \ud83e\udd16\n\nFair \u2014 the description was describing the commit-1 approach after commit 2 removed the `act()`. Updated the PR body.\n",
+    "commit_id": "f2526f60bfcec04c10da198406edd0c6b2ecae4b",
+    "created_at": "2026-04-17T16:46:20Z",
+    "diff_hunk": "@@ -261,18 +255,18 @@ describe(\"CreateWorkspacePage\", () => {\n \t\t\t\tdiagnostics: [],\n \t\t\t};\n \n-\t\t\tawait waitFor(() => {\n-\t\t\t\tmockPublisher.publishMessage(\n-\t\t\t\t\tnew MessageEvent(\"message\", { data: JSON.stringify(response1) }),\n-\t\t\t\t);\n+\t\t\tmockPublisher.publishMessage(",
+    "html_url": "https://github.com/coder/coder/pull/24480#discussion_r3101871832",
+    "id": 3101871832,
+    "in_reply_to_id": 3100852991,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s644s7Y",
+    "original_commit_id": "a8917cdffddc13a29867a61c2c853c79501ccf0b",
+    "original_line": 258,
+    "original_position": 32,
+    "original_start_line": null,
+    "path": "site/src/pages/CreateWorkspacePage/CreateWorkspacePage.test.tsx",
+    "position": 1,
+    "pull_request_review_id": 4130546566,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24480",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3101871832/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-04-17T16:46:20Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3101871832",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/40153966?v=4",
+      "events_url": "https://api.github.com/users/DanielleMaywood/events{/privacy}",
+      "followers_url": "https://api.github.com/users/DanielleMaywood/followers",
+      "following_url": "https://api.github.com/users/DanielleMaywood/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DanielleMaywood/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/DanielleMaywood",
+      "id": 40153966,
+      "login": "DanielleMaywood",
+      "node_id": "MDQ6VXNlcjQwMTUzOTY2",
+      "organizations_url": "https://api.github.com/users/DanielleMaywood/orgs",
+      "received_events_url": "https://api.github.com/users/DanielleMaywood/received_events",
+      "repos_url": "https://api.github.com/users/DanielleMaywood/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/DanielleMaywood/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DanielleMaywood/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/DanielleMaywood",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24480#discussion_r3101872555"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24480"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3101872555"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "> \ud83e\udd16 This comment was written by Coder Agent on behalf of Danielle Maywood \ud83e\udd16\n\nValid finding, but out of scope for this PR (scoped to flake fixes). You discovered it \u2014 feel free to track it as a follow-up.\n",
+    "commit_id": "f2526f60bfcec04c10da198406edd0c6b2ecae4b",
+    "created_at": "2026-04-17T16:46:25Z",
+    "diff_hunk": "@@ -261,18 +255,18 @@ describe(\"CreateWorkspacePage\", () => {\n \t\t\t\tdiagnostics: [],\n \t\t\t};\n \n-\t\t\tawait waitFor(() => {\n-\t\t\t\tmockPublisher.publishMessage(\n-\t\t\t\t\tnew MessageEvent(\"message\", { data: JSON.stringify(response1) }),\n-\t\t\t\t);\n+\t\t\tmockPublisher.publishMessage(",
+    "html_url": "https://github.com/coder/coder/pull/24480#discussion_r3101872555",
+    "id": 3101872555,
+    "in_reply_to_id": 3100853001,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s644tGr",
+    "original_commit_id": "a8917cdffddc13a29867a61c2c853c79501ccf0b",
+    "original_line": 258,
+    "original_position": 32,
+    "original_start_line": null,
+    "path": "site/src/pages/CreateWorkspacePage/CreateWorkspacePage.test.tsx",
+    "position": 1,
+    "pull_request_review_id": 4130547431,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24480",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3101872555/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-04-17T16:46:25Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3101872555",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/40153966?v=4",
+      "events_url": "https://api.github.com/users/DanielleMaywood/events{/privacy}",
+      "followers_url": "https://api.github.com/users/DanielleMaywood/followers",
+      "following_url": "https://api.github.com/users/DanielleMaywood/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DanielleMaywood/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/DanielleMaywood",
+      "id": 40153966,
+      "login": "DanielleMaywood",
+      "node_id": "MDQ6VXNlcjQwMTUzOTY2",
+      "organizations_url": "https://api.github.com/users/DanielleMaywood/orgs",
+      "received_events_url": "https://api.github.com/users/DanielleMaywood/received_events",
+      "repos_url": "https://api.github.com/users/DanielleMaywood/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/DanielleMaywood/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DanielleMaywood/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/DanielleMaywood",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24480#discussion_r3101873376"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24480"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3101873376"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "> \ud83e\udd16 This comment was written by Coder Agent on behalf of Danielle Maywood \ud83e\udd16\n\nFair. The diagnosis was overgeneralized \u2014 most of the removed `waitFor` blocks had no `expect()`, so `waitFor` resolved on the first pass and no retries happened. The pattern was smelly but not actively firing retries in those blocks. The two real timing bugs were the `toBeTruthy()` polling block (fixed via `findByRole`) and the \"latest response\" assertion (fixed via a trailing `waitFor`). Rewrote the description to reflect that.\n",
+    "commit_id": "bff56817ee5efb25168f4dd771f138b066905436",
+    "created_at": "2026-04-17T16:46:31Z",
+    "diff_hunk": "@@ -147,19 +147,13 @@ describe(\"CreateWorkspacePage\", () => {\n \n \t\t\tvi.useFakeTimers({ shouldAdvanceTime: true });\n \n-\t\t\tawait waitFor(async () => {\n-\t\t\t\tawait userEvent.click(instanceTypeSelect);\n-\t\t\t});\n+\t\t\tawait userEvent.click(instanceTypeSelect);",
+    "html_url": "https://github.com/coder/coder/pull/24480#discussion_r3101873376",
+    "id": 3101873376,
+    "in_reply_to_id": 3100853010,
+    "line": 150,
+    "node_id": "PRRC_kwDOGkVX1s644tTg",
+    "original_commit_id": "a8917cdffddc13a29867a61c2c853c79501ccf0b",
+    "original_line": 150,
+    "original_position": 7,
+    "original_start_line": null,
+    "path": "site/src/pages/CreateWorkspacePage/CreateWorkspacePage.test.tsx",
+    "position": 7,
+    "pull_request_review_id": 4130548310,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24480",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3101873376/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-04-17T16:46:31Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3101873376",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/40153966?v=4",
+      "events_url": "https://api.github.com/users/DanielleMaywood/events{/privacy}",
+      "followers_url": "https://api.github.com/users/DanielleMaywood/followers",
+      "following_url": "https://api.github.com/users/DanielleMaywood/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DanielleMaywood/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/DanielleMaywood",
+      "id": 40153966,
+      "login": "DanielleMaywood",
+      "node_id": "MDQ6VXNlcjQwMTUzOTY2",
+      "organizations_url": "https://api.github.com/users/DanielleMaywood/orgs",
+      "received_events_url": "https://api.github.com/users/DanielleMaywood/received_events",
+      "repos_url": "https://api.github.com/users/DanielleMaywood/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/DanielleMaywood/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DanielleMaywood/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/DanielleMaywood",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24480#discussion_r3101885775"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24480"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3101885775"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Human here, get a grip. How did this escape scope creep detection?",
+    "commit_id": "f2526f60bfcec04c10da198406edd0c6b2ecae4b",
+    "created_at": "2026-04-17T16:48:09Z",
+    "diff_hunk": "@@ -261,18 +255,18 @@ describe(\"CreateWorkspacePage\", () => {\n \t\t\t\tdiagnostics: [],\n \t\t\t};\n \n-\t\t\tawait waitFor(() => {\n-\t\t\t\tmockPublisher.publishMessage(\n-\t\t\t\t\tnew MessageEvent(\"message\", { data: JSON.stringify(response1) }),\n-\t\t\t\t);\n+\t\t\tmockPublisher.publishMessage(",
+    "html_url": "https://github.com/coder/coder/pull/24480#discussion_r3101885775",
+    "id": 3101885775,
+    "in_reply_to_id": 3100853001,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s644wVP",
+    "original_commit_id": "a8917cdffddc13a29867a61c2c853c79501ccf0b",
+    "original_line": 258,
+    "original_position": 32,
+    "original_start_line": null,
+    "path": "site/src/pages/CreateWorkspacePage/CreateWorkspacePage.test.tsx",
+    "position": 1,
+    "pull_request_review_id": 4130561625,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24480",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3101885775/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-04-17T16:48:09Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3101885775",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24480#discussion_r3101980100"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24480"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3101980100"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "**P3** [DEREM-8] Inconsistent `act()` usage within the same file. The error/close tests (lines 188, 219) wrap publish calls in `act()`. This test publishes bare (lines 270-276). Both are synchronous mock dispatches that trigger React state updates, followed by `waitFor` assertions.\n\nCommit `a8917cdffd` removed `act()` here, calling it \"belt-and-suspenders\" since `waitFor` flushes state updates. Commit `f2526f60bf` added `act()` to the sibling tests, calling it \"canonical.\" Both can't be true.\n\n> Both operations are synchronous WebSocket mock publish calls that trigger React state updates via callbacks, followed by waitFor assertions. The mechanisms are identical. *(Mafu-san)*\n\nEither drop `act()` from the error/close tests (consistent with the reasoning in commit 2) or add it back here (consistent with commit 3). Both work; the inconsistency is what's wrong.\n\n> \ud83e\udd16",
+    "commit_id": "f2526f60bfcec04c10da198406edd0c6b2ecae4b",
+    "created_at": "2026-04-17T17:07:22Z",
+    "diff_hunk": "@@ -261,18 +267,18 @@ describe(\"CreateWorkspacePage\", () => {\n \t\t\t\tdiagnostics: [],\n \t\t\t};\n \n-\t\t\tawait waitFor(() => {\n-\t\t\t\tmockPublisher.publishMessage(\n-\t\t\t\t\tnew MessageEvent(\"message\", { data: JSON.stringify(response1) }),\n-\t\t\t\t);\n+\t\t\tmockPublisher.publishMessage(",
+    "html_url": "https://github.com/coder/coder/pull/24480#discussion_r3101980100",
+    "id": 3101980100,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s645HXE",
+    "original_commit_id": "f2526f60bfcec04c10da198406edd0c6b2ecae4b",
+    "original_line": 270,
+    "original_position": 64,
+    "original_start_line": null,
+    "path": "site/src/pages/CreateWorkspacePage/CreateWorkspacePage.test.tsx",
+    "position": 1,
+    "pull_request_review_id": 4130661745,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24480",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3101980100/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-04-17T17:07:22Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3101980100",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24480#discussion_r3101980194"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24480"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3101980194"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "[DEREM-3] Verified fixed. PR description updated to match shipped code.\n\n> \ud83e\udd16",
+    "commit_id": "f2526f60bfcec04c10da198406edd0c6b2ecae4b",
+    "created_at": "2026-04-17T17:07:23Z",
+    "diff_hunk": "@@ -261,18 +255,18 @@ describe(\"CreateWorkspacePage\", () => {\n \t\t\t\tdiagnostics: [],\n \t\t\t};\n \n-\t\t\tawait waitFor(() => {\n-\t\t\t\tmockPublisher.publishMessage(\n-\t\t\t\t\tnew MessageEvent(\"message\", { data: JSON.stringify(response1) }),\n-\t\t\t\t);\n+\t\t\tmockPublisher.publishMessage(",
+    "html_url": "https://github.com/coder/coder/pull/24480#discussion_r3101980194",
+    "id": 3101980194,
+    "in_reply_to_id": 3100852991,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s645HYi",
+    "original_commit_id": "a8917cdffddc13a29867a61c2c853c79501ccf0b",
+    "original_line": 258,
+    "original_position": 32,
+    "original_start_line": null,
+    "path": "site/src/pages/CreateWorkspacePage/CreateWorkspacePage.test.tsx",
+    "position": 1,
+    "pull_request_review_id": 4130661837,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24480",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3101980194/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-04-17T17:07:23Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3101980194",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24480#discussion_r3101980305"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24480"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3101980305"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "[DEREM-4] Closed by human reviewer as scope creep. Acknowledged.\n\n> \ud83e\udd16",
+    "commit_id": "f2526f60bfcec04c10da198406edd0c6b2ecae4b",
+    "created_at": "2026-04-17T17:07:24Z",
+    "diff_hunk": "@@ -261,18 +255,18 @@ describe(\"CreateWorkspacePage\", () => {\n \t\t\t\tdiagnostics: [],\n \t\t\t};\n \n-\t\t\tawait waitFor(() => {\n-\t\t\t\tmockPublisher.publishMessage(\n-\t\t\t\t\tnew MessageEvent(\"message\", { data: JSON.stringify(response1) }),\n-\t\t\t\t);\n+\t\t\tmockPublisher.publishMessage(",
+    "html_url": "https://github.com/coder/coder/pull/24480#discussion_r3101980305",
+    "id": 3101980305,
+    "in_reply_to_id": 3100853001,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s645HaR",
+    "original_commit_id": "a8917cdffddc13a29867a61c2c853c79501ccf0b",
+    "original_line": 258,
+    "original_position": 32,
+    "original_start_line": null,
+    "path": "site/src/pages/CreateWorkspacePage/CreateWorkspacePage.test.tsx",
+    "position": 1,
+    "pull_request_review_id": 4130661935,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24480",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3101980305/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-04-17T17:07:24Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3101980305",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24480#discussion_r3101980390"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24480"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3101980390"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "[DEREM-5] Author accepted. PR description rewritten to accurately distinguish three patterns.\n\n> \ud83e\udd16",
+    "commit_id": "bff56817ee5efb25168f4dd771f138b066905436",
+    "created_at": "2026-04-17T17:07:25Z",
+    "diff_hunk": "@@ -147,19 +147,13 @@ describe(\"CreateWorkspacePage\", () => {\n \n \t\t\tvi.useFakeTimers({ shouldAdvanceTime: true });\n \n-\t\t\tawait waitFor(async () => {\n-\t\t\t\tawait userEvent.click(instanceTypeSelect);\n-\t\t\t});\n+\t\t\tawait userEvent.click(instanceTypeSelect);",
+    "html_url": "https://github.com/coder/coder/pull/24480#discussion_r3101980390",
+    "id": 3101980390,
+    "in_reply_to_id": 3100853010,
+    "line": 150,
+    "node_id": "PRRC_kwDOGkVX1s645Hbm",
+    "original_commit_id": "a8917cdffddc13a29867a61c2c853c79501ccf0b",
+    "original_line": 150,
+    "original_position": 7,
+    "original_start_line": null,
+    "path": "site/src/pages/CreateWorkspacePage/CreateWorkspacePage.test.tsx",
+    "position": 7,
+    "pull_request_review_id": 4130662028,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24480",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3101980390/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-04-17T17:07:25Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3101980390",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24480#discussion_r3102112576"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24480"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3102112576"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "> \ud83e\udd16 This comment was written by Coder Agent on behalf of Danielle Maywood \ud83e\udd16\n\nFair \u2014 my reasoning flipped between commits. `waitFor` makes the assertion eventually succeed, but it doesn't retroactively wrap the already-fired `setState` in `act()` \u2014 that's what the warning exists to catch. Unified on `act()` here in bff56817e.\n",
+    "commit_id": "f2526f60bfcec04c10da198406edd0c6b2ecae4b",
+    "created_at": "2026-04-17T17:27:30Z",
+    "diff_hunk": "@@ -261,18 +267,18 @@ describe(\"CreateWorkspacePage\", () => {\n \t\t\t\tdiagnostics: [],\n \t\t\t};\n \n-\t\t\tawait waitFor(() => {\n-\t\t\t\tmockPublisher.publishMessage(\n-\t\t\t\t\tnew MessageEvent(\"message\", { data: JSON.stringify(response1) }),\n-\t\t\t\t);\n+\t\t\tmockPublisher.publishMessage(",
+    "html_url": "https://github.com/coder/coder/pull/24480#discussion_r3102112576",
+    "id": 3102112576,
+    "in_reply_to_id": 3101980100,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s645ntA",
+    "original_commit_id": "f2526f60bfcec04c10da198406edd0c6b2ecae4b",
+    "original_line": 270,
+    "original_position": 64,
+    "original_start_line": null,
+    "path": "site/src/pages/CreateWorkspacePage/CreateWorkspacePage.test.tsx",
+    "position": 1,
+    "pull_request_review_id": 4130808889,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24480",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3102112576/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-04-17T17:27:30Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3102112576",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/40153966?v=4",
+      "events_url": "https://api.github.com/users/DanielleMaywood/events{/privacy}",
+      "followers_url": "https://api.github.com/users/DanielleMaywood/followers",
+      "following_url": "https://api.github.com/users/DanielleMaywood/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DanielleMaywood/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/DanielleMaywood",
+      "id": 40153966,
+      "login": "DanielleMaywood",
+      "node_id": "MDQ6VXNlcjQwMTUzOTY2",
+      "organizations_url": "https://api.github.com/users/DanielleMaywood/orgs",
+      "received_events_url": "https://api.github.com/users/DanielleMaywood/received_events",
+      "repos_url": "https://api.github.com/users/DanielleMaywood/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/DanielleMaywood/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DanielleMaywood/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/DanielleMaywood",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24480#discussion_r3102188067"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24480"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3102188067"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "[DEREM-3] Verified fixed. All rounds complete.\n\n> \ud83e\udd16",
+    "commit_id": "f2526f60bfcec04c10da198406edd0c6b2ecae4b",
+    "created_at": "2026-04-17T17:42:16Z",
+    "diff_hunk": "@@ -261,18 +255,18 @@ describe(\"CreateWorkspacePage\", () => {\n \t\t\t\tdiagnostics: [],\n \t\t\t};\n \n-\t\t\tawait waitFor(() => {\n-\t\t\t\tmockPublisher.publishMessage(\n-\t\t\t\t\tnew MessageEvent(\"message\", { data: JSON.stringify(response1) }),\n-\t\t\t\t);\n+\t\t\tmockPublisher.publishMessage(",
+    "html_url": "https://github.com/coder/coder/pull/24480#discussion_r3102188067",
+    "id": 3102188067,
+    "in_reply_to_id": 3100852991,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6456Ij",
+    "original_commit_id": "a8917cdffddc13a29867a61c2c853c79501ccf0b",
+    "original_line": 258,
+    "original_position": 32,
+    "original_start_line": null,
+    "path": "site/src/pages/CreateWorkspacePage/CreateWorkspacePage.test.tsx",
+    "position": 1,
+    "pull_request_review_id": 4130890293,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24480",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3102188067/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-04-17T17:42:16Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3102188067",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24480#discussion_r3102188188"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24480"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3102188188"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "[DEREM-4] Human closed. All rounds complete.\n\n> \ud83e\udd16",
+    "commit_id": "f2526f60bfcec04c10da198406edd0c6b2ecae4b",
+    "created_at": "2026-04-17T17:42:17Z",
+    "diff_hunk": "@@ -261,18 +255,18 @@ describe(\"CreateWorkspacePage\", () => {\n \t\t\t\tdiagnostics: [],\n \t\t\t};\n \n-\t\t\tawait waitFor(() => {\n-\t\t\t\tmockPublisher.publishMessage(\n-\t\t\t\t\tnew MessageEvent(\"message\", { data: JSON.stringify(response1) }),\n-\t\t\t\t);\n+\t\t\tmockPublisher.publishMessage(",
+    "html_url": "https://github.com/coder/coder/pull/24480#discussion_r3102188188",
+    "id": 3102188188,
+    "in_reply_to_id": 3100853001,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6456Kc",
+    "original_commit_id": "a8917cdffddc13a29867a61c2c853c79501ccf0b",
+    "original_line": 258,
+    "original_position": 32,
+    "original_start_line": null,
+    "path": "site/src/pages/CreateWorkspacePage/CreateWorkspacePage.test.tsx",
+    "position": 1,
+    "pull_request_review_id": 4130890437,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24480",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3102188188/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-04-17T17:42:17Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3102188188",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24480#discussion_r3102188332"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24480"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3102188332"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "[DEREM-5] Author accepted. All rounds complete.\n\n> \ud83e\udd16",
+    "commit_id": "bff56817ee5efb25168f4dd771f138b066905436",
+    "created_at": "2026-04-17T17:42:18Z",
+    "diff_hunk": "@@ -147,19 +147,13 @@ describe(\"CreateWorkspacePage\", () => {\n \n \t\t\tvi.useFakeTimers({ shouldAdvanceTime: true });\n \n-\t\t\tawait waitFor(async () => {\n-\t\t\t\tawait userEvent.click(instanceTypeSelect);\n-\t\t\t});\n+\t\t\tawait userEvent.click(instanceTypeSelect);",
+    "html_url": "https://github.com/coder/coder/pull/24480#discussion_r3102188332",
+    "id": 3102188332,
+    "in_reply_to_id": 3100853010,
+    "line": 150,
+    "node_id": "PRRC_kwDOGkVX1s6456Ms",
+    "original_commit_id": "a8917cdffddc13a29867a61c2c853c79501ccf0b",
+    "original_line": 150,
+    "original_position": 7,
+    "original_start_line": null,
+    "path": "site/src/pages/CreateWorkspacePage/CreateWorkspacePage.test.tsx",
+    "position": 7,
+    "pull_request_review_id": 4130890604,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24480",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3102188332/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-04-17T17:42:18Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3102188332",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24480#discussion_r3102188468"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24480"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3102188468"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "[DEREM-8] Verified fixed. `act()` now consistent across all WebSocket publish calls.\n\n> \ud83e\udd16",
+    "commit_id": "f2526f60bfcec04c10da198406edd0c6b2ecae4b",
+    "created_at": "2026-04-17T17:42:19Z",
+    "diff_hunk": "@@ -261,18 +267,18 @@ describe(\"CreateWorkspacePage\", () => {\n \t\t\t\tdiagnostics: [],\n \t\t\t};\n \n-\t\t\tawait waitFor(() => {\n-\t\t\t\tmockPublisher.publishMessage(\n-\t\t\t\t\tnew MessageEvent(\"message\", { data: JSON.stringify(response1) }),\n-\t\t\t\t);\n+\t\t\tmockPublisher.publishMessage(",
+    "html_url": "https://github.com/coder/coder/pull/24480#discussion_r3102188468",
+    "id": 3102188468,
+    "in_reply_to_id": 3101980100,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6456O0",
+    "original_commit_id": "f2526f60bfcec04c10da198406edd0c6b2ecae4b",
+    "original_line": 270,
+    "original_position": 64,
+    "original_start_line": null,
+    "path": "site/src/pages/CreateWorkspacePage/CreateWorkspacePage.test.tsx",
+    "position": 1,
+    "pull_request_review_id": 4130890778,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24480",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3102188468/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-04-17T17:42:19Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3102188468",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  }
+]

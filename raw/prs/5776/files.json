@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/d2cd3296aa8e743be013bf32cdfc7addebb65adf/scaletest%2Fagentconn%2Frun_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scaletest%2Fagentconn%2Frun_test.go?ref=d2cd3296aa8e743be013bf32cdfc7addebb65adf",
+    "deletions": 1,
+    "filename": "scaletest/agentconn/run_test.go",
+    "patch": "@@ -186,7 +186,7 @@ func Test_Runner(t *testing.T) {\n \t\trequire.WithinRange(t,\n \t\t\ttime.Now(),\n \t\t\tstart.Add(testutil.WaitShort-time.Second),\n-\t\t\tstart.Add(testutil.WaitShort+5*time.Second),\n+\t\t\tstart.Add(testutil.WaitShort+10*time.Second),\n \t\t)\n \n \t\trequire.Contains(t, logStr, \"Opening connection to workspace agent\")",
+    "raw_url": "https://github.com/coder/coder/raw/d2cd3296aa8e743be013bf32cdfc7addebb65adf/scaletest%2Fagentconn%2Frun_test.go",
+    "sha": "433a614e6f5d62c0559cc759b4de37b0d2b2cb36",
+    "status": "modified"
+  }
+]

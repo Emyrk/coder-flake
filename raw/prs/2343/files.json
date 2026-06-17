@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/1a7ea88b2adb23e012b734761c537dc21f554e76/coderd%2Fworkspaces_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaces_test.go?ref=1a7ea88b2adb23e012b734761c537dc21f554e76",
+    "deletions": 2,
+    "filename": "coderd/workspaces_test.go",
+    "patch": "@@ -1010,8 +1010,8 @@ func TestWorkspaceExtend(t *testing.T) {\n \t})\n \trequire.ErrorContains(t, err, \"deadline: Validation failed for tag \\\"required\\\" with value: \\\"0001-01-01 00:00:00 +0000 UTC\\\"\", \"setting an empty deadline on a workspace should fail\")\n \n-\t// Updating with a deadline 29 minutes in the future should fail\n-\tdeadlineTooSoon := time.Now().Add(29 * time.Minute)\n+\t// Updating with a deadline less than 30 minutes in the future should fail\n+\tdeadlineTooSoon := time.Now().Add(15 * time.Minute) // XXX: time.Now\n \terr = client.PutExtendWorkspace(ctx, workspace.ID, codersdk.PutExtendWorkspaceRequest{\n \t\tDeadline: deadlineTooSoon,\n \t})",
+    "raw_url": "https://github.com/coder/coder/raw/1a7ea88b2adb23e012b734761c537dc21f554e76/coderd%2Fworkspaces_test.go",
+    "sha": "c7021685b0a3cfd5400355a4c1da3ebcb281a4d5",
+    "status": "modified"
+  }
+]

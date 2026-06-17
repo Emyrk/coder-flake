@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/96acdd29e2ba3ecb91a72b8f3c571fb486c3fe81/.github%2Fworkflows%2Fci.yaml",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Fci.yaml?ref=96acdd29e2ba3ecb91a72b8f3c571fb486c3fe81",
+    "deletions": 0,
+    "filename": ".github/workflows/ci.yaml",
+    "patch": "@@ -489,6 +489,14 @@ jobs:\n           # macOS will output \"The default interactive shell is now zsh\" intermittently in CI.\n           touch ~/.bash_profile && echo \"export BASH_SILENCE_DEPRECATION_WARNING=1\" >> ~/.bash_profile\n \n+      - name: Increase PTY limit (macOS)\n+        if: runner.os == 'macOS'\n+        shell: bash\n+        run: |\n+          # Increase PTY limit to avoid exhaustion during tests.\n+          # Default is 511; 999 is the maximum value on CI runner.\n+          sudo sysctl -w kern.tty.ptmx_max=999\n+\n       - name: Test with PostgreSQL Database (Linux)\n         if: runner.os == 'Linux'\n         uses: ./.github/actions/test-go-pg",
+    "raw_url": "https://github.com/coder/coder/raw/96acdd29e2ba3ecb91a72b8f3c571fb486c3fe81/.github%2Fworkflows%2Fci.yaml",
+    "sha": "4fc0c8dcbf49742f6016e14a88df14346a91e817",
+    "status": "modified"
+  }
+]

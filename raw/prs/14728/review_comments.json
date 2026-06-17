@@ -1,0 +1,628 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14728#discussion_r1766808129"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14728"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1766808129"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Where does the new hash come from?",
+    "commit_id": "c86ca8607b4a0be6030419a744ee0c5df3f87a63",
+    "created_at": "2024-09-19T13:10:52Z",
+    "diff_hunk": "@@ -40,6 +40,28 @@\n         # From https://nixos.wiki/wiki/Google_Cloud_SDK\n         gdk = pkgs.google-cloud-sdk.withExtraComponents ([ pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin ]);\n \n+        customProtocGenGo = pkgs.buildGoModule rec {\n+          name = \"protoc-gen-go\";\n+          owner = \"protocolbuffers\";\n+          repo = \"protobuf-go\";\n+          rev = \"v1.30.0\"; \n+          src = pkgs.fetchFromGitHub {\n+            owner = \"protocolbuffers\";\n+            repo = \"protobuf-go\";\n+            rev = rev;\n+            # This should be updated whenever rev changes!\n+            # To update, set to \"\", run nix-shell, insert new hash",
+    "html_url": "https://github.com/coder/coder/pull/14728#discussion_r1766808129",
+    "id": 1766808129,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5pT1pB",
+    "original_commit_id": "5b66a505677629e9a72ec89278aca142ce299d4e",
+    "original_line": 53,
+    "original_position": 14,
+    "original_start_line": null,
+    "path": "flake.nix",
+    "position": 1,
+    "pull_request_review_id": 2315497467,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14728",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1766808129/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-09-19T13:12:12Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1766808129",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14728#discussion_r1766809838"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14728"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1766809838"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Let's follow the convention above and call it:\r\n\r\n```suggestion\r\n          proto_gen_go_1_30\r\n```",
+    "commit_id": "c86ca8607b4a0be6030419a744ee0c5df3f87a63",
+    "created_at": "2024-09-19T13:11:54Z",
+    "diff_hunk": "@@ -80,7 +102,7 @@\n           playwright-driver.browsers\n           postgresql_16\n           protobuf\n-          protoc-gen-go\n+          customProtocGenGo",
+    "html_url": "https://github.com/coder/coder/pull/14728#discussion_r1766809838",
+    "id": 1766809838,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5pT2Du",
+    "original_commit_id": "5b66a505677629e9a72ec89278aca142ce299d4e",
+    "original_line": 105,
+    "original_position": 34,
+    "original_start_line": null,
+    "path": "flake.nix",
+    "position": 1,
+    "pull_request_review_id": 2315497467,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14728",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1766809838/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-09-19T13:12:12Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1766809838",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14728#discussion_r1767130306"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14728"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1767130306"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "There are a couple of ways to generate the hash, can use either of them\r\n\r\n1. `nix-prefetch-git https://github.com/protocolbuffers/protobuf-go --rev v1.30.0`\r\n2.  Run `nix-shell` with `sha256 = \"\";` this will fail to load the shell and output the required hash in the log as seen in the image, use that\r\n\r\n<img width=\"917\" alt=\"image\" src=\"https://github.com/user-attachments/assets/a07c7032-3a02-4103-87e8-39ccf5afb40d\">\r\n",
+    "commit_id": "c86ca8607b4a0be6030419a744ee0c5df3f87a63",
+    "created_at": "2024-09-19T16:24:57Z",
+    "diff_hunk": "@@ -40,6 +40,28 @@\n         # From https://nixos.wiki/wiki/Google_Cloud_SDK\n         gdk = pkgs.google-cloud-sdk.withExtraComponents ([ pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin ]);\n \n+        customProtocGenGo = pkgs.buildGoModule rec {\n+          name = \"protoc-gen-go\";\n+          owner = \"protocolbuffers\";\n+          repo = \"protobuf-go\";\n+          rev = \"v1.30.0\"; \n+          src = pkgs.fetchFromGitHub {\n+            owner = \"protocolbuffers\";\n+            repo = \"protobuf-go\";\n+            rev = rev;\n+            # This should be updated whenever rev changes!\n+            # To update, set to \"\", run nix-shell, insert new hash",
+    "html_url": "https://github.com/coder/coder/pull/14728#discussion_r1767130306",
+    "id": 1767130306,
+    "in_reply_to_id": 1766808129,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5pVETC",
+    "original_commit_id": "5b66a505677629e9a72ec89278aca142ce299d4e",
+    "original_line": 53,
+    "original_position": 14,
+    "original_start_line": null,
+    "path": "flake.nix",
+    "position": 1,
+    "pull_request_review_id": 2316043850,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14728",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1767130306/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-09-19T16:24:57Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1767130306",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/13068144?v=4",
+      "events_url": "https://api.github.com/users/joobisb/events{/privacy}",
+      "followers_url": "https://api.github.com/users/joobisb/followers",
+      "following_url": "https://api.github.com/users/joobisb/following{/other_user}",
+      "gists_url": "https://api.github.com/users/joobisb/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/joobisb",
+      "id": 13068144,
+      "login": "joobisb",
+      "node_id": "MDQ6VXNlcjEzMDY4MTQ0",
+      "organizations_url": "https://api.github.com/users/joobisb/orgs",
+      "received_events_url": "https://api.github.com/users/joobisb/received_events",
+      "repos_url": "https://api.github.com/users/joobisb/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/joobisb/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/joobisb/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/joobisb",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14728#discussion_r1767134029"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14728"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1767134029"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Can you rather integrate this into `scripts/update-flake.sh` pls?\r\nThe less we make folks think, the more likely they are to do the right thing.",
+    "commit_id": "c86ca8607b4a0be6030419a744ee0c5df3f87a63",
+    "created_at": "2024-09-19T16:27:33Z",
+    "diff_hunk": "@@ -40,6 +40,28 @@\n         # From https://nixos.wiki/wiki/Google_Cloud_SDK\n         gdk = pkgs.google-cloud-sdk.withExtraComponents ([ pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin ]);\n \n+        customProtocGenGo = pkgs.buildGoModule rec {\n+          name = \"protoc-gen-go\";\n+          owner = \"protocolbuffers\";\n+          repo = \"protobuf-go\";\n+          rev = \"v1.30.0\"; \n+          src = pkgs.fetchFromGitHub {\n+            owner = \"protocolbuffers\";\n+            repo = \"protobuf-go\";\n+            rev = rev;\n+            # This should be updated whenever rev changes!\n+            # To update, set to \"\", run nix-shell, insert new hash",
+    "html_url": "https://github.com/coder/coder/pull/14728#discussion_r1767134029",
+    "id": 1767134029,
+    "in_reply_to_id": 1766808129,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5pVFNN",
+    "original_commit_id": "5b66a505677629e9a72ec89278aca142ce299d4e",
+    "original_line": 53,
+    "original_position": 14,
+    "original_start_line": null,
+    "path": "flake.nix",
+    "position": 1,
+    "pull_request_review_id": 2316049362,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14728",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1767134029/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-09-19T16:27:34Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1767134029",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14728#discussion_r1767147077"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14728"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1767147077"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "yeah that would be better, I will do that",
+    "commit_id": "c86ca8607b4a0be6030419a744ee0c5df3f87a63",
+    "created_at": "2024-09-19T16:31:51Z",
+    "diff_hunk": "@@ -40,6 +40,28 @@\n         # From https://nixos.wiki/wiki/Google_Cloud_SDK\n         gdk = pkgs.google-cloud-sdk.withExtraComponents ([ pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin ]);\n \n+        customProtocGenGo = pkgs.buildGoModule rec {\n+          name = \"protoc-gen-go\";\n+          owner = \"protocolbuffers\";\n+          repo = \"protobuf-go\";\n+          rev = \"v1.30.0\"; \n+          src = pkgs.fetchFromGitHub {\n+            owner = \"protocolbuffers\";\n+            repo = \"protobuf-go\";\n+            rev = rev;\n+            # This should be updated whenever rev changes!\n+            # To update, set to \"\", run nix-shell, insert new hash",
+    "html_url": "https://github.com/coder/coder/pull/14728#discussion_r1767147077",
+    "id": 1767147077,
+    "in_reply_to_id": 1766808129,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5pVIZF",
+    "original_commit_id": "5b66a505677629e9a72ec89278aca142ce299d4e",
+    "original_line": 53,
+    "original_position": 14,
+    "original_start_line": null,
+    "path": "flake.nix",
+    "position": 1,
+    "pull_request_review_id": 2316067591,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14728",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1767147077/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-09-19T16:31:52Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1767147077",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/13068144?v=4",
+      "events_url": "https://api.github.com/users/joobisb/events{/privacy}",
+      "followers_url": "https://api.github.com/users/joobisb/followers",
+      "following_url": "https://api.github.com/users/joobisb/following{/other_user}",
+      "gists_url": "https://api.github.com/users/joobisb/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/joobisb",
+      "id": 13068144,
+      "login": "joobisb",
+      "node_id": "MDQ6VXNlcjEzMDY4MTQ0",
+      "organizations_url": "https://api.github.com/users/joobisb/orgs",
+      "received_events_url": "https://api.github.com/users/joobisb/received_events",
+      "repos_url": "https://api.github.com/users/joobisb/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/joobisb/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/joobisb/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/joobisb",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14728#discussion_r1768496970"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14728"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1768496970"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "This is flimsy (and possibly not portable across Linux/Mac/Windows); is there a more robust way we can get this?",
+    "commit_id": "c86ca8607b4a0be6030419a744ee0c5df3f87a63",
+    "created_at": "2024-09-20T12:21:49Z",
+    "diff_hunk": "@@ -13,4 +27,14 @@ echo \"Calculating SRI hash...\"\n HASH=$(go run tailscale.com/cmd/nardump --sri \"$OUT/pkg/mod/cache/download\")\n sudo rm -rf \"$OUT\"\n \n+echo \"Updating go.mod vendorHash\"\n sed -i \"s#\\(vendorHash = \\\"\\)[^\\\"]*#\\1${HASH}#\" ./flake.nix\n+\n+# Update protoc-gen-go sha256\n+echo \"Updating protoc-gen-go sha256...\"\n+PROTOC_GEN_GO_REV=$(grep -A 20 'pkgs.buildGoModule rec' flake.nix | grep -A 10 'repo = \"protobuf-go\"' | grep 'rev = \"v' | sed 's/.*rev = \"\\(.*\\)\".*/\\1/')",
+    "html_url": "https://github.com/coder/coder/pull/14728#discussion_r1768496970",
+    "id": 1768496970,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5paR9K",
+    "original_commit_id": "29e30cbcbfcda7fd28f1736740f232d24c49d01f",
+    "original_line": 35,
+    "original_position": 30,
+    "original_start_line": null,
+    "path": "scripts/update-flake.sh",
+    "position": 1,
+    "pull_request_review_id": 2318092956,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14728",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1768496970/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-09-20T12:23:18Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1768496970",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14728#discussion_r1769075963"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14728"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1769075963"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "@dannykopping \r\nfound a way to do this using `nix eval` , please have a look\r\n\r\nRefer: https://discourse.nixos.org/t/how-to-evaluate-a-nix-value-from-a-shell-script/24296/3",
+    "commit_id": "c86ca8607b4a0be6030419a744ee0c5df3f87a63",
+    "created_at": "2024-09-20T19:07:23Z",
+    "diff_hunk": "@@ -13,4 +27,14 @@ echo \"Calculating SRI hash...\"\n HASH=$(go run tailscale.com/cmd/nardump --sri \"$OUT/pkg/mod/cache/download\")\n sudo rm -rf \"$OUT\"\n \n+echo \"Updating go.mod vendorHash\"\n sed -i \"s#\\(vendorHash = \\\"\\)[^\\\"]*#\\1${HASH}#\" ./flake.nix\n+\n+# Update protoc-gen-go sha256\n+echo \"Updating protoc-gen-go sha256...\"\n+PROTOC_GEN_GO_REV=$(grep -A 20 'pkgs.buildGoModule rec' flake.nix | grep -A 10 'repo = \"protobuf-go\"' | grep 'rev = \"v' | sed 's/.*rev = \"\\(.*\\)\".*/\\1/')",
+    "html_url": "https://github.com/coder/coder/pull/14728#discussion_r1769075963",
+    "id": 1769075963,
+    "in_reply_to_id": 1768496970,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5pcfT7",
+    "original_commit_id": "29e30cbcbfcda7fd28f1736740f232d24c49d01f",
+    "original_line": 35,
+    "original_position": 30,
+    "original_start_line": null,
+    "path": "scripts/update-flake.sh",
+    "position": 1,
+    "pull_request_review_id": 2319078281,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14728",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1769075963/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-09-20T19:07:23Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1769075963",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/13068144?v=4",
+      "events_url": "https://api.github.com/users/joobisb/events{/privacy}",
+      "followers_url": "https://api.github.com/users/joobisb/followers",
+      "following_url": "https://api.github.com/users/joobisb/following{/other_user}",
+      "gists_url": "https://api.github.com/users/joobisb/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/joobisb",
+      "id": 13068144,
+      "login": "joobisb",
+      "node_id": "MDQ6VXNlcjEzMDY4MTQ0",
+      "organizations_url": "https://api.github.com/users/joobisb/orgs",
+      "received_events_url": "https://api.github.com/users/joobisb/received_events",
+      "repos_url": "https://api.github.com/users/joobisb/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/joobisb/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/joobisb/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/joobisb",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14728#discussion_r1773254720"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14728"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1773254720"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "@joobisb can we not use the `nix-command flakes` approach for this? My previous comment will apply to this, too (about compatibility).",
+    "commit_id": "c86ca8607b4a0be6030419a744ee0c5df3f87a63",
+    "created_at": "2024-09-24T12:33:03Z",
+    "diff_hunk": "@@ -13,4 +27,14 @@ echo \"Calculating SRI hash...\"\n HASH=$(go run tailscale.com/cmd/nardump --sri \"$OUT/pkg/mod/cache/download\")\n sudo rm -rf \"$OUT\"\n \n+echo \"Updating go.mod vendorHash\"\n sed -i \"s#\\(vendorHash = \\\"\\)[^\\\"]*#\\1${HASH}#\" ./flake.nix\n+\n+# Update protoc-gen-go sha256\n+echo \"Updating protoc-gen-go sha256...\"\n+PROTOC_GEN_GO_REV=$(nix eval --extra-experimental-features nix-command --extra-experimental-features flakes --raw .#proto_gen_go.rev)\n+echo \"protoc-gen-go version: $PROTOC_GEN_GO_REV\"\n+PROTOC_GEN_GO_SHA256=$(nix-prefetch-git https://github.com/protocolbuffers/protobuf-go --rev \"$PROTOC_GEN_GO_REV\" | jq -r .hash)",
+    "html_url": "https://github.com/coder/coder/pull/14728#discussion_r1773254720",
+    "id": 1773254720,
+    "line": 37,
+    "node_id": "PRRC_kwDOGkVX1s5psbhA",
+    "original_commit_id": "a57d5522bb02545e5daf929280df871e5735e9fc",
+    "original_line": 37,
+    "original_position": 32,
+    "original_start_line": null,
+    "path": "scripts/update-flake.sh",
+    "position": 32,
+    "pull_request_review_id": 2325105412,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14728",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1773254720/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-09-24T12:33:03Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1773254720",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14728#discussion_r1773269093"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14728"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1773269093"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Actually this is fine, I think.",
+    "commit_id": "c86ca8607b4a0be6030419a744ee0c5df3f87a63",
+    "created_at": "2024-09-24T12:42:18Z",
+    "diff_hunk": "@@ -13,4 +27,14 @@ echo \"Calculating SRI hash...\"\n HASH=$(go run tailscale.com/cmd/nardump --sri \"$OUT/pkg/mod/cache/download\")\n sudo rm -rf \"$OUT\"\n \n+echo \"Updating go.mod vendorHash\"\n sed -i \"s#\\(vendorHash = \\\"\\)[^\\\"]*#\\1${HASH}#\" ./flake.nix\n+\n+# Update protoc-gen-go sha256\n+echo \"Updating protoc-gen-go sha256...\"\n+PROTOC_GEN_GO_REV=$(nix eval --extra-experimental-features nix-command --extra-experimental-features flakes --raw .#proto_gen_go.rev)\n+echo \"protoc-gen-go version: $PROTOC_GEN_GO_REV\"\n+PROTOC_GEN_GO_SHA256=$(nix-prefetch-git https://github.com/protocolbuffers/protobuf-go --rev \"$PROTOC_GEN_GO_REV\" | jq -r .hash)",
+    "html_url": "https://github.com/coder/coder/pull/14728#discussion_r1773269093",
+    "id": 1773269093,
+    "in_reply_to_id": 1773254720,
+    "line": 37,
+    "node_id": "PRRC_kwDOGkVX1s5psfBl",
+    "original_commit_id": "a57d5522bb02545e5daf929280df871e5735e9fc",
+    "original_line": 37,
+    "original_position": 32,
+    "original_start_line": null,
+    "path": "scripts/update-flake.sh",
+    "position": 32,
+    "pull_request_review_id": 2325131319,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14728",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1773269093/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-09-24T12:45:05Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1773269093",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  }
+]

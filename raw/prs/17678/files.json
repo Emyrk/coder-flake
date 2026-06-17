@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/80dd321f20c2b62ad363f1e95edb46a05bdb339d/coderd%2Fworkspaceagentsrpc_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaceagentsrpc_test.go?ref=80dd321f20c2b62ad363f1e95edb46a05bdb339d",
+    "deletions": 0,
+    "filename": "coderd/workspaceagentsrpc_test.go",
+    "patch": "@@ -32,6 +32,7 @@ func TestWorkspaceAgentReportStats(t *testing.T) {\n \tr := dbfake.WorkspaceBuild(t, db, database.WorkspaceTable{\n \t\tOrganizationID: user.OrganizationID,\n \t\tOwnerID:        user.UserID,\n+\t\tLastUsedAt:     dbtime.Now().Add(-time.Minute),\n \t}).WithAgent().Do()\n \n \tac := agentsdk.New(client.URL)",
+    "raw_url": "https://github.com/coder/coder/raw/80dd321f20c2b62ad363f1e95edb46a05bdb339d/coderd%2Fworkspaceagentsrpc_test.go",
+    "sha": "caea9b39c2f54a0b8551f3e2d51e584678a38875",
+    "status": "modified"
+  }
+]

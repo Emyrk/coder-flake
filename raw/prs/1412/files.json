@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/dba4fb91ebdc4e9256353c133245a9cff7e7ded4/.github%2Fworkflows%2Frelease.yaml",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Frelease.yaml?ref=dba4fb91ebdc4e9256353c133245a9cff7e7ded4",
+    "deletions": 1,
+    "filename": ".github/workflows/release.yaml",
+    "patch": "@@ -13,7 +13,7 @@ jobs:\n       DOCKER_CLI_EXPERIMENTAL: \"enabled\"\n     steps:\n       # Docker is not included on macos-latest\n-      - uses: docker-practice/actions-setup-docker@v1\n+      - uses: docker-practice/actions-setup-docker@v1.0.8\n \n       - uses: actions/checkout@v3\n         with:",
+    "raw_url": "https://github.com/coder/coder/raw/dba4fb91ebdc4e9256353c133245a9cff7e7ded4/.github%2Fworkflows%2Frelease.yaml",
+    "sha": "0be53c100001e46fec6afd0410cb82f93d579fc2",
+    "status": "modified"
+  }
+]

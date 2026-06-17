@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24796#pullrequestreview-4191758278"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24796"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "71b68c999d35b208b247e55789818a4385c59d2e",
+    "html_url": "https://github.com/coder/coder/pull/24796#pullrequestreview-4191758278",
+    "id": 4191758278,
+    "node_id": "PRR_kwDOGkVX1s752SfG",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24796",
+    "state": "APPROVED",
+    "submitted_at": "2026-04-28T19:23:24Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/3724288?v=4",
+      "events_url": "https://api.github.com/users/zedkipp/events{/privacy}",
+      "followers_url": "https://api.github.com/users/zedkipp/followers",
+      "following_url": "https://api.github.com/users/zedkipp/following{/other_user}",
+      "gists_url": "https://api.github.com/users/zedkipp/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/zedkipp",
+      "id": 3724288,
+      "login": "zedkipp",
+      "node_id": "MDQ6VXNlcjM3MjQyODg=",
+      "organizations_url": "https://api.github.com/users/zedkipp/orgs",
+      "received_events_url": "https://api.github.com/users/zedkipp/received_events",
+      "repos_url": "https://api.github.com/users/zedkipp/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/zedkipp/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/zedkipp/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/zedkipp",
+      "user_view_type": "public"
+    }
+  }
+]

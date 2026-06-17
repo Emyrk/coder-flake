@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/0274f6860e7cbe6e754ccbd3d82f5f9c77c93056/.github%2Fworkflows%2Fflake-go.yaml",
+    "changes": 7,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Fflake-go.yaml?ref=0274f6860e7cbe6e754ccbd3d82f5f9c77c93056",
+    "deletions": 2,
+    "filename": ".github/workflows/flake-go.yaml",
+    "patch": "@@ -24,7 +24,10 @@ jobs:\n   flake_go:\n     name: Flake Check\n     runs-on: ${{ github.repository_owner == 'coder' && 'depot-ubuntu-22.04-4' || 'ubuntu-latest' }}\n-    timeout-minutes: 20\n+    # This timeout must be greater than the Go test timeout set in `make test`\n+    # (-timeout 20m) so we receive a goroutine trace before the runner kills\n+    # the job. Mirrors the test-go-pg job in ci.yaml.\n+    timeout-minutes: 25\n     steps:\n       - name: Harden Runner\n         uses: step-security/harden-runner@f808768d1510423e83855289c910610ca9b43176 # v2.17.0\n@@ -75,7 +78,7 @@ jobs:\n           postgres-version: \"13\"\n           test-parallelism-packages: \"4\"\n           test-parallelism-tests: \"16\"\n-          test-count: \"25\"\n+          test-count: \"35\"\n           test-packages: ${{ fromJSON(steps.selector.outputs.matrix).include[0].package }}\n           run-regex: ${{ fromJSON(steps.selector.outputs.matrix).include[0].run_regex }}\n           test-shuffle: \"on\"",
+    "raw_url": "https://github.com/coder/coder/raw/0274f6860e7cbe6e754ccbd3d82f5f9c77c93056/.github%2Fworkflows%2Fflake-go.yaml",
+    "sha": "bb18587744a9bb06a9b2850cabc762dc5359b67f",
+    "status": "modified"
+  }
+]

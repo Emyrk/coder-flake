@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 22,
+    "blob_url": "https://github.com/coder/coder/blob/da5ad69aff8ccd303e3fc7265e0836ef0d093bb2/enterprise%2Fwsproxy%2Fwsproxy_test.go",
+    "changes": 32,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fwsproxy%2Fwsproxy_test.go?ref=da5ad69aff8ccd303e3fc7265e0836ef0d093bb2",
+    "deletions": 10,
+    "filename": "enterprise/wsproxy/wsproxy_test.go",
+    "patch": "@@ -367,17 +367,29 @@ func TestDERPEndToEnd(t *testing.T) {\n \t\treturn true\n \t}, testutil.WaitLong, testutil.IntervalMedium)\n \n-\t// Swap out the DERPMapper for a fake one that only returns the proxy. This\n-\t// allows us to force the agent to pick the proxy as its preferred region.\n-\toldDERPMapper := *api.AGPL.DERPMapper.Load()\n-\tnewDERPMapper := func(derpMap *tailcfg.DERPMap) *tailcfg.DERPMap {\n-\t\tderpMap = oldDERPMapper(derpMap)\n-\t\t// Strip everything but the proxy, which is region ID 10001.\n-\t\tderpMap.Regions = map[int]*tailcfg.DERPRegion{\n-\t\t\t10001: derpMap.Regions[10001],\n+\t// Wait until the proxy appears in the DERP map, and then swap out the DERP\n+\t// map for one that only contains the proxy region. This allows us to force\n+\t// the agent to pick the proxy as its preferred region.\n+\tvar proxyOnlyDERPMap *tailcfg.DERPMap\n+\trequire.Eventually(t, func() bool {\n+\t\tderpMap := api.AGPL.DERPMap()\n+\t\tif derpMap == nil {\n+\t\t\treturn false\n+\t\t}\n+\t\tif _, ok := derpMap.Regions[10001]; !ok {\n+\t\t\treturn false\n \t\t}\n-\t\tderpMap.OmitDefaultRegions = true\n-\t\treturn derpMap\n+\n+\t\t// Make a DERP map that only contains the proxy region.\n+\t\tproxyOnlyDERPMap = derpMap.Clone()\n+\t\tproxyOnlyDERPMap.Regions = map[int]*tailcfg.DERPRegion{\n+\t\t\t10001: proxyOnlyDERPMap.Regions[10001],\n+\t\t}\n+\t\tproxyOnlyDERPMap.OmitDefaultRegions = true\n+\t\treturn true\n+\t}, testutil.WaitLong, testutil.IntervalMedium)\n+\tnewDERPMapper := func(derpMap *tailcfg.DERPMap) *tailcfg.DERPMap {\n+\t\treturn proxyOnlyDERPMap\n \t}\n \tapi.AGPL.DERPMapper.Store(&newDERPMapper)\n ",
+    "raw_url": "https://github.com/coder/coder/raw/da5ad69aff8ccd303e3fc7265e0836ef0d093bb2/enterprise%2Fwsproxy%2Fwsproxy_test.go",
+    "sha": "83f9321bdeaa8242381f178a6f99504e236f4f27",
+    "status": "modified"
+  }
+]

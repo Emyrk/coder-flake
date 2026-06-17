@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2343#pullrequestreview-1007581498"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2343"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "1a7ea88b2adb23e012b734761c537dc21f554e76",
+    "html_url": "https://github.com/coder/coder/pull/2343#pullrequestreview-1007581498",
+    "id": 1007581498,
+    "node_id": "PRR_kwDOGkVX1s48Dnk6",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2343",
+    "state": "APPROVED",
+    "submitted_at": "2022-06-15T14:11:58Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  }
+]

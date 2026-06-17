@@ -1,0 +1,209 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/1643#discussion_r878543684"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/1643"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/878543684"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "Is there an issue filed for this? Maybe link it in a comment?",
+    "commit_id": "399cb3fb596dd268eb70b26b3661c1ab21892db7",
+    "created_at": "2022-05-20T21:02:17Z",
+    "diff_hunk": "@@ -23,6 +23,7 @@ import (\n )\n \n func TestSSH(t *testing.T) {\n+\tt.Skip(\"This is causing test flakes. TODO @cian fix this\")",
+    "html_url": "https://github.com/coder/coder/pull/1643#discussion_r878543684",
+    "id": 878543684,
+    "line": 26,
+    "node_id": "PRRC_kwDOGkVX1s40XYNE",
+    "original_commit_id": "1d7de76e49ce7db549a265acd1eb39bed2876351",
+    "original_line": 26,
+    "original_position": 4,
+    "original_start_line": null,
+    "path": "cli/ssh_test.go",
+    "position": 4,
+    "pull_request_review_id": 980667274,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/1643",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/878543684/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-05-20T21:03:38Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/878543684",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7511231?v=4",
+      "events_url": "https://api.github.com/users/AbhineetJain/events{/privacy}",
+      "followers_url": "https://api.github.com/users/AbhineetJain/followers",
+      "following_url": "https://api.github.com/users/AbhineetJain/following{/other_user}",
+      "gists_url": "https://api.github.com/users/AbhineetJain/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/AbhineetJain",
+      "id": 7511231,
+      "login": "AbhineetJain",
+      "node_id": "MDQ6VXNlcjc1MTEyMzE=",
+      "organizations_url": "https://api.github.com/users/AbhineetJain/orgs",
+      "received_events_url": "https://api.github.com/users/AbhineetJain/received_events",
+      "repos_url": "https://api.github.com/users/AbhineetJain/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/AbhineetJain/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/AbhineetJain/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/AbhineetJain",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/1643#discussion_r878544239"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/1643"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/878544239"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "Maybe we can file an issue and link it in a comment here as well. ",
+    "commit_id": "399cb3fb596dd268eb70b26b3661c1ab21892db7",
+    "created_at": "2022-05-20T21:03:29Z",
+    "diff_hunk": "@@ -59,6 +59,7 @@ func TestMain(m *testing.M) {\n }\n \n func TestConn(t *testing.T) {\n+\tt.Skip(\"peer tests are known to be flaky\")",
+    "html_url": "https://github.com/coder/coder/pull/1643#discussion_r878544239",
+    "id": 878544239,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s40XYVv",
+    "original_commit_id": "1d7de76e49ce7db549a265acd1eb39bed2876351",
+    "original_line": 62,
+    "original_position": 4,
+    "original_start_line": null,
+    "path": "peer/conn_test.go",
+    "position": 1,
+    "pull_request_review_id": 980667274,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/1643",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/878544239/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-05-20T21:03:38Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/878544239",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7511231?v=4",
+      "events_url": "https://api.github.com/users/AbhineetJain/events{/privacy}",
+      "followers_url": "https://api.github.com/users/AbhineetJain/followers",
+      "following_url": "https://api.github.com/users/AbhineetJain/following{/other_user}",
+      "gists_url": "https://api.github.com/users/AbhineetJain/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/AbhineetJain",
+      "id": 7511231,
+      "login": "AbhineetJain",
+      "node_id": "MDQ6VXNlcjc1MTEyMzE=",
+      "organizations_url": "https://api.github.com/users/AbhineetJain/orgs",
+      "received_events_url": "https://api.github.com/users/AbhineetJain/received_events",
+      "repos_url": "https://api.github.com/users/AbhineetJain/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/AbhineetJain/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/AbhineetJain/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/AbhineetJain",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/1643#discussion_r878549033"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/1643"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/878549033"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "```suggestion\r\n\tt.Skip(\"known flake -- https://github.com/coder/coder/issues/1644\")\r\n```",
+    "commit_id": "399cb3fb596dd268eb70b26b3661c1ab21892db7",
+    "created_at": "2022-05-20T21:13:44Z",
+    "diff_hunk": "@@ -59,6 +59,7 @@ func TestMain(m *testing.M) {\n }\n \n func TestConn(t *testing.T) {\n+\tt.Skip(\"peer tests are known to be flaky\")",
+    "html_url": "https://github.com/coder/coder/pull/1643#discussion_r878549033",
+    "id": 878549033,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s40XZgp",
+    "original_commit_id": "1d7de76e49ce7db549a265acd1eb39bed2876351",
+    "original_line": 62,
+    "original_position": 4,
+    "original_start_line": null,
+    "path": "peer/conn_test.go",
+    "position": 1,
+    "pull_request_review_id": 980674703,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/1643",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/878549033/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-05-20T21:13:45Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/878549033",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 11,
+    "blob_url": "https://github.com/coder/coder/blob/7b07c76815e8ce943effa030d394b4ad8e24dc22/coderd%2Fworkspaces_test.go",
+    "changes": 17,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaces_test.go?ref=7b07c76815e8ce943effa030d394b4ad8e24dc22",
+    "deletions": 6,
+    "filename": "coderd/workspaces_test.go",
+    "patch": "@@ -2147,12 +2147,17 @@ func TestWorkspaceUpdateAutomaticUpdates_OK(t *testing.T) {\n \trequire.Equal(t, codersdk.AutomaticUpdatesAlways, updated.AutomaticUpdates)\n \n \trequire.Eventually(t, func() bool {\n-\t\treturn len(auditor.AuditLogs()) >= 9\n-\t}, testutil.WaitShort, testutil.IntervalFast)\n-\tl := auditor.AuditLogs()[8]\n-\trequire.Equal(t, database.AuditActionWrite, l.Action)\n-\trequire.Equal(t, user.ID, l.UserID)\n-\trequire.Equal(t, workspace.ID, l.ResourceID)\n+\t\tvar found bool\n+\t\tfor _, l := range auditor.AuditLogs() {\n+\t\t\tif l.Action == database.AuditActionWrite &&\n+\t\t\t\tl.UserID == user.ID &&\n+\t\t\t\tl.ResourceID == workspace.ID {\n+\t\t\t\tfound = true\n+\t\t\t\tbreak\n+\t\t\t}\n+\t\t}\n+\t\treturn found\n+\t}, testutil.WaitShort, testutil.IntervalFast, \"did not find expected audit log\")\n }\n \n func TestUpdateWorkspaceAutomaticUpdates_NotFound(t *testing.T) {",
+    "raw_url": "https://github.com/coder/coder/raw/7b07c76815e8ce943effa030d394b4ad8e24dc22/coderd%2Fworkspaces_test.go",
+    "sha": "18566f6b3cdf12ab64ccba39f3c9ab5f8686c6f5",
+    "status": "modified"
+  }
+]

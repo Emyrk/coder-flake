@@ -1,0 +1,122 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/1562#pullrequestreview-977281415"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/1562"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Absolutely top-tier fix! \ud83e\udd73",
+    "commit_id": "bf9c363cd02dddaacdbd8787b393f38351183736",
+    "html_url": "https://github.com/coder/coder/pull/1562#pullrequestreview-977281415",
+    "id": 977281415,
+    "node_id": "PRR_kwDOGkVX1s46QCGH",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/1562",
+    "state": "APPROVED",
+    "submitted_at": "2022-05-18T16:42:28Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/1562#pullrequestreview-977297358"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/1562"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "",
+    "commit_id": "bf9c363cd02dddaacdbd8787b393f38351183736",
+    "html_url": "https://github.com/coder/coder/pull/1562#pullrequestreview-977297358",
+    "id": 977297358,
+    "node_id": "PRR_kwDOGkVX1s46QF_O",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/1562",
+    "state": "COMMENTED",
+    "submitted_at": "2022-05-18T16:55:06Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/548160?v=4",
+      "events_url": "https://api.github.com/users/dwahler/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dwahler/followers",
+      "following_url": "https://api.github.com/users/dwahler/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dwahler/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dwahler",
+      "id": 548160,
+      "login": "dwahler",
+      "node_id": "MDQ6VXNlcjU0ODE2MA==",
+      "organizations_url": "https://api.github.com/users/dwahler/orgs",
+      "received_events_url": "https://api.github.com/users/dwahler/received_events",
+      "repos_url": "https://api.github.com/users/dwahler/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dwahler/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dwahler/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dwahler",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/1562#pullrequestreview-977299343"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/1562"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bf9c363cd02dddaacdbd8787b393f38351183736",
+    "html_url": "https://github.com/coder/coder/pull/1562#pullrequestreview-977299343",
+    "id": 977299343,
+    "node_id": "PRR_kwDOGkVX1s46QGeP",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/1562",
+    "state": "COMMENTED",
+    "submitted_at": "2022-05-18T16:56:48Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  }
+]

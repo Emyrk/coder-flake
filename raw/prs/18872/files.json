@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/a4ce5f6309e0398cefae9fe95f7d55cd4c89b5bd/cli%2Fdelete_test.go",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fdelete_test.go?ref=a4ce5f6309e0398cefae9fe95f7d55cd4c89b5bd",
+    "deletions": 3,
+    "filename": "cli/delete_test.go",
+    "patch": "@@ -233,9 +233,6 @@ func TestDelete(t *testing.T) {\n \t\t\tt.Skip(\"this test requires postgres\")\n \t\t}\n \n-\t\tclock := quartz.NewMock(t)\n-\t\tctx := testutil.Context(t, testutil.WaitSuperLong)\n-\n \t\t// Setup\n \t\tdb, pb := dbtestutil.NewDB(t, dbtestutil.WithDumpOnFailure())\n \t\tclient, _ := coderdtest.NewWithProvisionerCloser(t, &coderdtest.Options{\n@@ -301,6 +298,9 @@ func TestDelete(t *testing.T) {\n \t\t\tt.Run(tc.name, func(t *testing.T) {\n \t\t\t\tt.Parallel()\n \n+\t\t\t\tclock := quartz.NewMock(t)\n+\t\t\t\tctx := testutil.Context(t, testutil.WaitSuperLong)\n+\n \t\t\t\t// Create one prebuilt workspace (owned by system user) and one normal workspace (owned by a user)\n \t\t\t\t// Each workspace is persisted in the DB along with associated workspace jobs and builds.\n \t\t\t\tdbPrebuiltWorkspace := setupTestDBWorkspace(t, clock, db, pb, orgID, database.PrebuildsSystemUserID, template.ID, version.ID, preset.ID)",
+    "raw_url": "https://github.com/coder/coder/raw/a4ce5f6309e0398cefae9fe95f7d55cd4c89b5bd/cli%2Fdelete_test.go",
+    "sha": "c01893419f80fc354427c81080e548367210b05c",
+    "status": "modified"
+  }
+]

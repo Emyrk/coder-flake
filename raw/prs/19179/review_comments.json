@@ -1,0 +1,209 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19179#discussion_r2254198522"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19179"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2254198522"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "The readConfigErr is always returned when a config is found in configMap, even when the error should be nil for successful reads. This should return nil for the error when successfully finding a config.\n```suggestion\n\t\t\treturn v, nil\n```",
+    "commit_id": "72514f82edf27425eb1b29d5b768cea264220e91",
+    "created_at": "2025-08-05T12:29:09Z",
+    "diff_hunk": "@@ -109,7 +115,12 @@ func (f *fakeDevcontainerCLI) Exec(ctx context.Context, _, _ string, cmd string,\n \treturn f.execErr\n }\n \n-func (f *fakeDevcontainerCLI) ReadConfig(ctx context.Context, _, _ string, envs []string, _ ...agentcontainers.DevcontainerCLIReadConfigOptions) (agentcontainers.DevcontainerConfig, error) {\n+func (f *fakeDevcontainerCLI) ReadConfig(ctx context.Context, _, configPath string, envs []string, _ ...agentcontainers.DevcontainerCLIReadConfigOptions) (agentcontainers.DevcontainerConfig, error) {\n+\tif f.configMap != nil {\n+\t\tif v, found := f.configMap[configPath]; found {\n+\t\t\treturn v, f.readConfigErr",
+    "html_url": "https://github.com/coder/coder/pull/19179#discussion_r2254198522",
+    "id": 2254198522,
+    "line": 121,
+    "node_id": "PRRC_kwDOGkVX1s6GXFb6",
+    "original_commit_id": "72514f82edf27425eb1b29d5b768cea264220e91",
+    "original_line": 121,
+    "original_position": 32,
+    "original_start_line": null,
+    "path": "agent/agentcontainers/api_test.go",
+    "position": 32,
+    "pull_request_review_id": 3088072217,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19179",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2254198522/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-08-05T12:29:10Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2254198522",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "id": 175728472,
+      "login": "Copilot",
+      "node_id": "BOT_kgDOCnlnWA",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/Copilot",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19179#discussion_r2254563776"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19179"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2254563776"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Suggest `assert` here instead.",
+    "commit_id": "72514f82edf27425eb1b29d5b768cea264220e91",
+    "created_at": "2025-08-05T14:38:24Z",
+    "diff_hunk": "@@ -3775,43 +3705,73 @@ func TestDevcontainerDiscovery(t *testing.T) {\n \t\t\t\t\tctx    = testutil.Context(t, testutil.WaitShort)\n \t\t\t\t\tlogger = testutil.Logger(t)\n \t\t\t\t\tmClock = quartz.NewMock(t)\n-\t\t\t\t\tmDCCLI = acmock.NewMockDevcontainerCLI(gomock.NewController(t))\n+\n+\t\t\t\t\tupCalledMu  sync.Mutex\n+\t\t\t\t\tupCalledFor = map[string]bool{}\n+\n+\t\t\t\t\tfCCLI  = &fakeContainerCLI{}\n+\t\t\t\t\tfDCCLI = &fakeDevcontainerCLI{\n+\t\t\t\t\t\tconfigMap: tt.configMap,\n+\t\t\t\t\t\tup: func(_, configPath string) (string, error) {\n+\t\t\t\t\t\t\tupCalledMu.Lock()\n+\t\t\t\t\t\t\tupCalledFor[configPath] = true\n+\t\t\t\t\t\t\tupCalledMu.Unlock()\n+\t\t\t\t\t\t\treturn \"\", nil\n+\t\t\t\t\t\t},\n+\t\t\t\t\t}\n \n \t\t\t\t\tr = chi.NewRouter()\n \t\t\t\t)\n \n-\t\t\t\t// Given: We setup our mocks. These mocks handle our expectations for these\n-\t\t\t\t// tests. If there are missing/unexpected mock calls, the test will fail.\n-\t\t\t\ttt.setupMocks(mDCCLI)\n-\n \t\t\t\tapi := agentcontainers.NewAPI(logger,\n \t\t\t\t\tagentcontainers.WithClock(mClock),\n \t\t\t\t\tagentcontainers.WithWatcher(watcher.NewNoop()),\n \t\t\t\t\tagentcontainers.WithFileSystem(initFS(t, tt.fs)),\n \t\t\t\t\tagentcontainers.WithManifestInfo(\"owner\", \"workspace\", \"parent-agent\", \"/home/coder\"),\n-\t\t\t\t\tagentcontainers.WithContainerCLI(&fakeContainerCLI{}),\n-\t\t\t\t\tagentcontainers.WithDevcontainerCLI(mDCCLI),\n+\t\t\t\t\tagentcontainers.WithContainerCLI(fCCLI),\n+\t\t\t\t\tagentcontainers.WithDevcontainerCLI(fDCCLI),\n \t\t\t\t\tagentcontainers.WithProjectDiscovery(true),\n \t\t\t\t\tagentcontainers.WithDiscoveryAutostart(true),\n \t\t\t\t)\n \t\t\t\tapi.Start()\n-\t\t\t\tdefer api.Close()\n \t\t\t\tr.Mount(\"/\", api.Routes())\n \n-\t\t\t\t// When: All expected dev containers have been found.\n+\t\t\t\t// Given: We allow the discover routing to progress\n+\t\t\t\tvar got codersdk.WorkspaceAgentListContainersResponse\n \t\t\t\trequire.Eventuallyf(t, func() bool {\n \t\t\t\t\treq := httptest.NewRequest(http.MethodGet, \"/\", nil).WithContext(ctx)\n \t\t\t\t\trec := httptest.NewRecorder()\n \t\t\t\t\tr.ServeHTTP(rec, req)\n \n-\t\t\t\t\tgot := codersdk.WorkspaceAgentListContainersResponse{}\n+\t\t\t\t\tgot = codersdk.WorkspaceAgentListContainersResponse{}\n \t\t\t\t\terr := json.NewDecoder(rec.Body).Decode(&got)\n \t\t\t\t\trequire.NoError(t, err)\n \n-\t\t\t\t\treturn len(got.Devcontainers) >= tt.expectDevcontainerCount\n+\t\t\t\t\tupCalledMu.Lock()\n+\t\t\t\t\tupCalledCount := len(upCalledFor)\n+\t\t\t\t\tupCalledMu.Unlock()\n+\n+\t\t\t\t\treturn len(got.Devcontainers) >= tt.expectDevcontainerCount && upCalledCount >= tt.expectUpCalledCount\n \t\t\t\t}, testutil.WaitShort, testutil.IntervalFast, \"dev containers never found\")\n \n-\t\t\t\t// Then: We expect the mock infra to not fail.\n+\t\t\t\t// Close the API. We expect this not to fail because we should have finished\n+\t\t\t\t// at this point.\n+\t\t\t\terr := api.Close()\n+\t\t\t\trequire.NoError(t, err)\n+\n+\t\t\t\t// Then: We expect to find the expected devcontainers\n+\t\t\t\tassert.Len(t, got.Devcontainers, tt.expectDevcontainerCount)\n+\n+\t\t\t\t// And: We expect `up` to have been called the expected amount of times.\n+\t\t\t\tassert.Len(t, upCalledFor, tt.expectUpCalledCount)\n+\n+\t\t\t\t// And: `up` was called on the correct containers\n+\t\t\t\tfor configPath, config := range tt.configMap {\n+\t\t\t\t\tautoStart := config.Configuration.Customizations.Coder.AutoStart\n+\t\t\t\t\twasUpCalled := upCalledFor[configPath]\n+\n+\t\t\t\t\trequire.Equal(t, autoStart, wasUpCalled)",
+    "html_url": "https://github.com/coder/coder/pull/19179#discussion_r2254563776",
+    "id": 2254563776,
+    "line": 3773,
+    "node_id": "PRRC_kwDOGkVX1s6GYenA",
+    "original_commit_id": "72514f82edf27425eb1b29d5b768cea264220e91",
+    "original_line": 3773,
+    "original_position": 365,
+    "original_start_line": null,
+    "path": "agent/agentcontainers/api_test.go",
+    "position": 365,
+    "pull_request_review_id": 3088596439,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19179",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2254563776/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-08-05T14:39:20Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2254563776",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19179#discussion_r2254565266"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19179"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2254565266"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Will this handle the case where we call `up` for something not in `config.Configuration.Customizations.Coder.AutoStart`?",
+    "commit_id": "72514f82edf27425eb1b29d5b768cea264220e91",
+    "created_at": "2025-08-05T14:38:56Z",
+    "diff_hunk": "@@ -3775,43 +3705,73 @@ func TestDevcontainerDiscovery(t *testing.T) {\n \t\t\t\t\tctx    = testutil.Context(t, testutil.WaitShort)\n \t\t\t\t\tlogger = testutil.Logger(t)\n \t\t\t\t\tmClock = quartz.NewMock(t)\n-\t\t\t\t\tmDCCLI = acmock.NewMockDevcontainerCLI(gomock.NewController(t))\n+\n+\t\t\t\t\tupCalledMu  sync.Mutex\n+\t\t\t\t\tupCalledFor = map[string]bool{}\n+\n+\t\t\t\t\tfCCLI  = &fakeContainerCLI{}\n+\t\t\t\t\tfDCCLI = &fakeDevcontainerCLI{\n+\t\t\t\t\t\tconfigMap: tt.configMap,\n+\t\t\t\t\t\tup: func(_, configPath string) (string, error) {\n+\t\t\t\t\t\t\tupCalledMu.Lock()\n+\t\t\t\t\t\t\tupCalledFor[configPath] = true\n+\t\t\t\t\t\t\tupCalledMu.Unlock()\n+\t\t\t\t\t\t\treturn \"\", nil\n+\t\t\t\t\t\t},\n+\t\t\t\t\t}\n \n \t\t\t\t\tr = chi.NewRouter()\n \t\t\t\t)\n \n-\t\t\t\t// Given: We setup our mocks. These mocks handle our expectations for these\n-\t\t\t\t// tests. If there are missing/unexpected mock calls, the test will fail.\n-\t\t\t\ttt.setupMocks(mDCCLI)\n-\n \t\t\t\tapi := agentcontainers.NewAPI(logger,\n \t\t\t\t\tagentcontainers.WithClock(mClock),\n \t\t\t\t\tagentcontainers.WithWatcher(watcher.NewNoop()),\n \t\t\t\t\tagentcontainers.WithFileSystem(initFS(t, tt.fs)),\n \t\t\t\t\tagentcontainers.WithManifestInfo(\"owner\", \"workspace\", \"parent-agent\", \"/home/coder\"),\n-\t\t\t\t\tagentcontainers.WithContainerCLI(&fakeContainerCLI{}),\n-\t\t\t\t\tagentcontainers.WithDevcontainerCLI(mDCCLI),\n+\t\t\t\t\tagentcontainers.WithContainerCLI(fCCLI),\n+\t\t\t\t\tagentcontainers.WithDevcontainerCLI(fDCCLI),\n \t\t\t\t\tagentcontainers.WithProjectDiscovery(true),\n \t\t\t\t\tagentcontainers.WithDiscoveryAutostart(true),\n \t\t\t\t)\n \t\t\t\tapi.Start()\n-\t\t\t\tdefer api.Close()\n \t\t\t\tr.Mount(\"/\", api.Routes())\n \n-\t\t\t\t// When: All expected dev containers have been found.\n+\t\t\t\t// Given: We allow the discover routing to progress\n+\t\t\t\tvar got codersdk.WorkspaceAgentListContainersResponse\n \t\t\t\trequire.Eventuallyf(t, func() bool {\n \t\t\t\t\treq := httptest.NewRequest(http.MethodGet, \"/\", nil).WithContext(ctx)\n \t\t\t\t\trec := httptest.NewRecorder()\n \t\t\t\t\tr.ServeHTTP(rec, req)\n \n-\t\t\t\t\tgot := codersdk.WorkspaceAgentListContainersResponse{}\n+\t\t\t\t\tgot = codersdk.WorkspaceAgentListContainersResponse{}\n \t\t\t\t\terr := json.NewDecoder(rec.Body).Decode(&got)\n \t\t\t\t\trequire.NoError(t, err)\n \n-\t\t\t\t\treturn len(got.Devcontainers) >= tt.expectDevcontainerCount\n+\t\t\t\t\tupCalledMu.Lock()\n+\t\t\t\t\tupCalledCount := len(upCalledFor)\n+\t\t\t\t\tupCalledMu.Unlock()\n+\n+\t\t\t\t\treturn len(got.Devcontainers) >= tt.expectDevcontainerCount && upCalledCount >= tt.expectUpCalledCount\n \t\t\t\t}, testutil.WaitShort, testutil.IntervalFast, \"dev containers never found\")\n \n-\t\t\t\t// Then: We expect the mock infra to not fail.\n+\t\t\t\t// Close the API. We expect this not to fail because we should have finished\n+\t\t\t\t// at this point.\n+\t\t\t\terr := api.Close()\n+\t\t\t\trequire.NoError(t, err)\n+\n+\t\t\t\t// Then: We expect to find the expected devcontainers\n+\t\t\t\tassert.Len(t, got.Devcontainers, tt.expectDevcontainerCount)\n+\n+\t\t\t\t// And: We expect `up` to have been called the expected amount of times.\n+\t\t\t\tassert.Len(t, upCalledFor, tt.expectUpCalledCount)\n+\n+\t\t\t\t// And: `up` was called on the correct containers\n+\t\t\t\tfor configPath, config := range tt.configMap {\n+\t\t\t\t\tautoStart := config.Configuration.Customizations.Coder.AutoStart\n+\t\t\t\t\twasUpCalled := upCalledFor[configPath]",
+    "html_url": "https://github.com/coder/coder/pull/19179#discussion_r2254565266",
+    "id": 2254565266,
+    "line": 3771,
+    "node_id": "PRRC_kwDOGkVX1s6GYe-S",
+    "original_commit_id": "72514f82edf27425eb1b29d5b768cea264220e91",
+    "original_line": 3771,
+    "original_position": 363,
+    "original_start_line": null,
+    "path": "agent/agentcontainers/api_test.go",
+    "position": 363,
+    "pull_request_review_id": 3088596439,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19179",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2254565266/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-08-05T14:39:11Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2254565266",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  }
+]

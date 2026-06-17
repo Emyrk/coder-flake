@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/a3f64f74f794c733126ad21cd1feb0801caf67c4/coderd%2Fworkspaces_test.go",
+    "changes": 11,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaces_test.go?ref=a3f64f74f794c733126ad21cd1feb0801caf67c4",
+    "deletions": 3,
+    "filename": "coderd/workspaces_test.go",
+    "patch": "@@ -2875,13 +2875,18 @@ func TestWorkspaceUpdateTTL(t *testing.T) {\n \t\t\t\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitLong)\n \t\t\t\tdefer cancel()\n \n-\t\t\t\terr := client.UpdateWorkspaceTTL(ctx, workspace.ID, codersdk.UpdateWorkspaceTTLRequest{\n-\t\t\t\t\tTTLMillis: testCase.toTTL,\n-\t\t\t\t})\n+\t\t\t\t// Re-fetch the workspace build. This is required because\n+\t\t\t\t// `AwaitWorkspaceBuildJobCompleted` can return stale data.\n+\t\t\t\tbuild, err := client.WorkspaceBuild(ctx, build.ID)\n \t\t\t\trequire.NoError(t, err)\n \n \t\t\t\tdeadlineBefore := build.Deadline\n \n+\t\t\t\terr = client.UpdateWorkspaceTTL(ctx, workspace.ID, codersdk.UpdateWorkspaceTTLRequest{\n+\t\t\t\t\tTTLMillis: testCase.toTTL,\n+\t\t\t\t})\n+\t\t\t\trequire.NoError(t, err)\n+\n \t\t\t\tbuild, err = client.WorkspaceBuild(ctx, build.ID)\n \t\t\t\trequire.NoError(t, err)\n ",
+    "raw_url": "https://github.com/coder/coder/raw/a3f64f74f794c733126ad21cd1feb0801caf67c4/coderd%2Fworkspaces_test.go",
+    "sha": "141c62ff3a4b364729d1dd615ae77f873183402e",
+    "status": "modified"
+  }
+]

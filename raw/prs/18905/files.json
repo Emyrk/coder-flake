@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/5bb2756f6f4fa8575bb0225562bfc5a8b757e3d8/agent%2Fagentcontainers%2Fapi_test.go",
+    "changes": 7,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagentcontainers%2Fapi_test.go?ref=5bb2756f6f4fa8575bb0225562bfc5a8b757e3d8",
+    "deletions": 0,
+    "filename": "agent/agentcontainers/api_test.go",
+    "patch": "@@ -358,15 +358,22 @@ func TestAPI(t *testing.T) {\n \t\t\tfakeCLI    = &fakeContainerCLI{\n \t\t\t\tlistErr: firstErr,\n \t\t\t}\n+\t\t\tfWatcher = newFakeWatcher(t)\n \t\t)\n \n \t\tapi := agentcontainers.NewAPI(logger,\n+\t\t\tagentcontainers.WithWatcher(fWatcher),\n \t\t\tagentcontainers.WithClock(mClock),\n \t\t\tagentcontainers.WithContainerCLI(fakeCLI),\n \t\t)\n \t\tapi.Start()\n \t\tdefer api.Close()\n \n+\t\t// The watcherLoop writes a log when it is initialized.\n+\t\t// We want to ensure this has happened before we start\n+\t\t// the test so that it does not intefere.\n+\t\tfWatcher.waitNext(ctx)\n+\n \t\t// Make sure the ticker function has been registered\n \t\t// before advancing the clock.\n \t\ttickerTrap.MustWait(ctx).MustRelease(ctx)",
+    "raw_url": "https://github.com/coder/coder/raw/5bb2756f6f4fa8575bb0225562bfc5a8b757e3d8/agent%2Fagentcontainers%2Fapi_test.go",
+    "sha": "eb75d5a62b6615fa32d18150d52d820249120423",
+    "status": "modified"
+  }
+]

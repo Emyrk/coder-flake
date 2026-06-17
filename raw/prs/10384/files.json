@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/d5229e40770b3dcc25eca9a7a1ad5ce3327f9881/agent%2Fagent_test.go",
+    "changes": 9,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagent_test.go?ref=d5229e40770b3dcc25eca9a7a1ad5ce3327f9881",
+    "deletions": 2,
+    "filename": "agent/agent_test.go",
+    "patch": "@@ -350,8 +350,13 @@ func TestAgent_Session_TTY_MOTD(t *testing.T) {\n \t\t\tunexpected: []string{},\n \t\t},\n \t\t{\n-\t\t\tname:     \"Trim\",\n-\t\t\tmanifest: agentsdk.Manifest{},\n+\t\t\tname: \"Trim\",\n+\t\t\t// Enable motd since it will be printed after the banner,\n+\t\t\t// this ensures that we can test for an exact mount of\n+\t\t\t// newlines.\n+\t\t\tmanifest: agentsdk.Manifest{\n+\t\t\t\tMOTDFile: name,\n+\t\t\t},\n \t\t\tbanner: codersdk.ServiceBannerConfig{\n \t\t\t\tEnabled: true,\n \t\t\t\tMessage: \"\\n\\n\\n\\n\\n\\nbanner\\n\\n\\n\\n\\n\\n\",",
+    "raw_url": "https://github.com/coder/coder/raw/d5229e40770b3dcc25eca9a7a1ad5ce3327f9881/agent%2Fagent_test.go",
+    "sha": "1d18c115000d31db8bebe5f6b1a3f0861611f533",
+    "status": "modified"
+  }
+]

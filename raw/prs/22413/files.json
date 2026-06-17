@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 10,
+    "blob_url": "https://github.com/coder/coder/blob/08e1adcf79445bbd348f43276a7e2f0253312f60/site%2Fe2e%2Fhelpers.ts",
+    "changes": 12,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fe2e%2Fhelpers.ts?ref=08e1adcf79445bbd348f43276a7e2f0253312f60",
+    "deletions": 2,
+    "filename": "site/e2e/helpers.ts",
+    "patch": "@@ -171,8 +171,11 @@ export const verifyParameters = async (\n \texpectedBuildParameters: WorkspaceBuildParameter[],\n ) => {\n \tconst user = currentUser(page);\n+\t// Use networkidle to ensure all API responses (workspace data, build\n+\t// parameters) are settled before verifying values. Using domcontentloaded\n+\t// can cause the form to render with stale React Query cache data.\n \tawait page.goto(`/@${user.username}/${workspaceName}/settings/parameters`, {\n-\t\twaitUntil: \"domcontentloaded\",\n+\t\twaitUntil: \"networkidle\",\n \t});\n \n \tfor (const buildParameter of expectedBuildParameters) {\n@@ -209,7 +212,12 @@ export const verifyParameters = async (\n \t\t\tcase \"number\":\n \t\t\t\t{\n \t\t\t\t\tconst parameterField = parameterLabel.locator(\"input\");\n-\t\t\t\t\tawait expect(parameterField).toHaveValue(buildParameter.value);\n+\t\t\t\t\t// Dynamic parameters can hydrate after initial render with\n+\t\t\t\t\t// stale or empty values. Retry with a longer timeout to\n+\t\t\t\t\t// allow the page to settle.\n+\t\t\t\t\tawait expect(parameterField).toHaveValue(buildParameter.value, {\n+\t\t\t\t\t\ttimeout: 15_000,\n+\t\t\t\t\t});\n \t\t\t\t}\n \t\t\t\tbreak;\n \t\t\tdefault:",
+    "raw_url": "https://github.com/coder/coder/raw/08e1adcf79445bbd348f43276a7e2f0253312f60/site%2Fe2e%2Fhelpers.ts",
+    "sha": "60b06b380342f31d88a2fa6f5f298d486279bfc5",
+    "status": "modified"
+  }
+]

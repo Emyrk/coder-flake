@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/7f5a85e80501342baba4eb556bad33233dd58689/coderd%2Fx%2Fchatd%2Fchatd_test.go",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fx%2Fchatd%2Fchatd_test.go?ref=7f5a85e80501342baba4eb556bad33233dd58689",
+    "deletions": 0,
+    "filename": "coderd/x/chatd/chatd_test.go",
+    "patch": "@@ -2623,6 +2623,12 @@ func TestPromoteQueuedMessageReloadsChatWhenModelConfigChangesDuringPending(t *t\n \n func TestAutoPromoteQueuedMessagesPreservesPerTurnModelOrder(t *testing.T) {\n \tt.Parallel()\n+\t// TODO(CODAGT-353): Re-enable this test after the chatd notification flow\n+\t// refactor gives workers enough causal information to distinguish stale\n+\t// control NOTIFY messages from real interrupts. The current design reuses\n+\t// the same status notification shape for wake-only and interrupt intents,\n+\t// so a stale NOTIFY can cancel a new processChat run.\n+\tt.Skip(\"skipped until chatd notification flow refactor handles stale control notifications\")\n \n \tdb, ps := dbtestutil.NewDB(t)\n \tctx := testutil.Context(t, testutil.WaitSuperLong)",
+    "raw_url": "https://github.com/coder/coder/raw/7f5a85e80501342baba4eb556bad33233dd58689/coderd%2Fx%2Fchatd%2Fchatd_test.go",
+    "sha": "6074bebd3bc0aa7be1f0ec6659b96bf632d31a50",
+    "status": "modified"
+  },
+  {
+    "additions": 24,
+    "blob_url": "https://github.com/coder/coder/blob/7f5a85e80501342baba4eb556bad33233dd58689/coderd%2Fx%2Fchatd%2Fintegration_responses_test.go",
+    "changes": 24,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fx%2Fchatd%2Fintegration_responses_test.go?ref=7f5a85e80501342baba4eb556bad33233dd58689",
+    "deletions": 0,
+    "filename": "coderd/x/chatd/integration_responses_test.go",
+    "patch": "@@ -25,6 +25,12 @@ import (\n \n func TestOpenAIResponsesNoStaleWebSearchReplay(t *testing.T) {\n \tt.Parallel()\n+\t// TODO(CODAGT-353): Re-enable this test after the chatd notification flow\n+\t// refactor gives workers enough causal information to distinguish stale\n+\t// control NOTIFY messages from real interrupts. The current design reuses\n+\t// the same status notification shape for wake-only and interrupt intents,\n+\t// so a stale NOTIFY can cancel a new processChat run.\n+\tt.Skip(\"skipped until chatd notification flow refactor handles stale control notifications\")\n \n \tdb, ps := dbtestutil.NewDB(t)\n \tctx := testutil.Context(t, testutil.WaitLong)\n@@ -108,6 +114,12 @@ func TestOpenAIResponsesNoStaleWebSearchReplay(t *testing.T) {\n \n func TestOpenAIResponsesFullReplayPairsReasoningAndWebSearch(t *testing.T) {\n \tt.Parallel()\n+\t// TODO(CODAGT-353): Re-enable this test after the chatd notification flow\n+\t// refactor gives workers enough causal information to distinguish stale\n+\t// control NOTIFY messages from real interrupts. The current design reuses\n+\t// the same status notification shape for wake-only and interrupt intents,\n+\t// so a stale NOTIFY can cancel a new processChat run.\n+\tt.Skip(\"skipped until chatd notification flow refactor handles stale control notifications\")\n \n \tdb, ps := dbtestutil.NewDB(t)\n \tctx := testutil.Context(t, testutil.WaitLong)\n@@ -190,6 +202,12 @@ func TestOpenAIResponsesFullReplayPairsReasoningAndWebSearch(t *testing.T) {\n \n func TestOpenAIResponsesChainModeSkipsWhenLocalCallPending(t *testing.T) {\n \tt.Parallel()\n+\t// TODO(CODAGT-353): Re-enable this test after the chatd notification flow\n+\t// refactor gives workers enough causal information to distinguish stale\n+\t// control NOTIFY messages from real interrupts. The current design reuses\n+\t// the same status notification shape for wake-only and interrupt intents,\n+\t// so a stale NOTIFY can cancel a new processChat run.\n+\tt.Skip(\"skipped until chatd notification flow refactor handles stale control notifications\")\n \n \tdb, ps := dbtestutil.NewDB(t)\n \tctx := testutil.Context(t, testutil.WaitLong)\n@@ -257,6 +275,12 @@ func TestOpenAIResponsesChainModeSkipsWhenLocalCallPending(t *testing.T) {\n \n func TestOpenAIResponsesChainModeStillFiresForProviderExecutedOnly(t *testing.T) {\n \tt.Parallel()\n+\t// TODO(CODAGT-353): Re-enable this test after the chatd notification flow\n+\t// refactor gives workers enough causal information to distinguish stale\n+\t// control NOTIFY messages from real interrupts. The current design reuses\n+\t// the same status notification shape for wake-only and interrupt intents,\n+\t// so a stale NOTIFY can cancel a new processChat run.\n+\tt.Skip(\"skipped until chatd notification flow refactor handles stale control notifications\")\n \n \tdb, ps := dbtestutil.NewDB(t)\n \tctx := testutil.Context(t, testutil.WaitLong)",
+    "raw_url": "https://github.com/coder/coder/raw/7f5a85e80501342baba4eb556bad33233dd58689/coderd%2Fx%2Fchatd%2Fintegration_responses_test.go",
+    "sha": "97e1f0a0767d96d494b2b404c305ddaa99c322b2",
+    "status": "modified"
+  }
+]

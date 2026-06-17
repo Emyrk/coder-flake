@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/4d2ab03996d2888c8a94cd330df707d89276af3d/agent%2Fx%2Fagentdesktop%2Fportabledesktop_internal_test.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fx%2Fagentdesktop%2Fportabledesktop_internal_test.go?ref=4d2ab03996d2888c8a94cd330df707d89276af3d",
+    "deletions": 2,
+    "filename": "agent/x/agentdesktop/portabledesktop_internal_test.go",
+    "patch": "@@ -636,7 +636,9 @@ func TestPortableDesktop_StopRecording_ReturnsArtifact(t *testing.T) {\n \tlogger := slogtest.Make(t, nil)\n \trec := &recordedExecer{\n \t\tscripts: map[string]string{\n-\t\t\t\"record\": `trap 'exit 0' INT; sleep 120 & wait`,\n+\t\t\t// Use exec so SIGINT is delivered directly to sleep\n+\t\t\t// and the process exits immediately. (See coder/internal#1462.)\n+\t\t\t\"record\": `exec sleep 120`,\n \t\t\t\"up\":     `printf '{\"vncPort\":5901,\"geometry\":\"1920x1080\"}\\n' && sleep 120`,\n \t\t},\n \t}\n@@ -680,7 +682,9 @@ func TestPortableDesktop_StopRecording_WithThumbnail(t *testing.T) {\n \tlogger := slogtest.Make(t, nil)\n \trec := &recordedExecer{\n \t\tscripts: map[string]string{\n-\t\t\t\"record\": `trap 'exit 0' INT; sleep 120 & wait`,\n+\t\t\t// See TestPortableDesktop_StopRecording_ReturnsArtifact\n+\t\t\t// for why we use exec instead of trap+wait.\n+\t\t\t\"record\": `exec sleep 120`,\n \t\t\t\"up\":     `printf '{\"vncPort\":5901,\"geometry\":\"1920x1080\"}\\n' && sleep 120`,\n \t\t},\n \t}",
+    "raw_url": "https://github.com/coder/coder/raw/4d2ab03996d2888c8a94cd330df707d89276af3d/agent%2Fx%2Fagentdesktop%2Fportabledesktop_internal_test.go",
+    "sha": "c8720e10983abcb1cd118d73c3d9c7ebfa61c742",
+    "status": "modified"
+  }
+]

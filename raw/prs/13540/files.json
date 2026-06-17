@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 18,
+    "blob_url": "https://github.com/coder/coder/blob/f93ab807f2c0cf22ffd54b1e91ca8928b842beed/flake.nix",
+    "changes": 18,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=f93ab807f2c0cf22ffd54b1e91ca8928b842beed",
+    "deletions": 0,
+    "filename": "flake.nix",
+    "patch": "@@ -20,6 +20,24 @@\n \n         # From https://nixos.wiki/wiki/Google_Cloud_SDK\n         gdk = pkgs.google-cloud-sdk.withExtraComponents ([ pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin ]);\n+        # Locked to 1.25.0 instead of updating! See the derivation in nixpkgs:\n+        # https://github.com/NixOS/nixpkgs/blob/4f3886e6c789e9f563195a9c407be2c8e16e4010/pkgs/development/tools/database/sqlc/default.nix\n+        sqlc = pkgs.buildGoModule {\n+          pname = \"sqlc\";\n+          version = \"1.25.0\";\n+\n+          src = pkgs.fetchFromGitHub {\n+            owner = \"sqlc-dev\";\n+            repo = \"sqlc\";\n+            rev = \"v${version}\";\n+            hash = \"sha256-VrR/oSGyKtbKHfQaiLQ9oKyWC1Y7lTZO1aUSS5bCkKY=\";\n+          };\n+\n+          proxyVendor = true;\n+          vendorHash = \"sha256-C5OOTAYoSt4anz1B/NGDHY5NhxfyTZ6EHis04LFnMPM=\";\n+\n+          subPackages = [ \"cmd/sqlc\" ];\n+        };\n \n         # The minimal set of packages to build Coder.\n         devShellPackages = with pkgs; [",
+    "raw_url": "https://github.com/coder/coder/raw/f93ab807f2c0cf22ffd54b1e91ca8928b842beed/flake.nix",
+    "sha": "b2b82117b24f08b0fad0fe7f478ba345dc10c72b",
+    "status": "modified"
+  }
+]

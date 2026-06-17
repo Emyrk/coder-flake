@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/66cdb3d88dcf14c092e89cfab996db18510d758d/site%2Fsrc%2Fpages%2FTerminalPage%2FTerminalPage.test.tsx",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FTerminalPage%2FTerminalPage.test.tsx?ref=66cdb3d88dcf14c092e89cfab996db18510d758d",
+    "deletions": 1,
+    "filename": "site/src/pages/TerminalPage/TerminalPage.test.tsx",
+    "patch": "@@ -58,7 +58,7 @@ const expectTerminalText = (container: HTMLElement, text: string) => {\n       }\n       expect(row.textContent).toContain(text);\n     },\n-    { timeout: 3_000 },\n+    { timeout: 5_000 },\n   );\n };\n \n@@ -67,6 +67,9 @@ describe(\"TerminalPage\", () => {\n     const spy = jest\n       .spyOn(API, \"getWorkspaceByOwnerAndName\")\n       .mockResolvedValue(MockWorkspace);\n+    const ws = new WS(\n+      `ws://localhost/api/v2/workspaceagents/${MockWorkspaceAgent.id}/pty`,\n+    );\n     await renderTerminal(\n       `/${MockUser.username}/${MockWorkspace.name}/terminal`,\n     );\n@@ -77,6 +80,7 @@ describe(\"TerminalPage\", () => {\n       );\n     });\n     spy.mockRestore();\n+    ws.close();\n   });\n \n   it(\"shows an error if fetching workspace fails\", async () => {",
+    "raw_url": "https://github.com/coder/coder/raw/66cdb3d88dcf14c092e89cfab996db18510d758d/site%2Fsrc%2Fpages%2FTerminalPage%2FTerminalPage.test.tsx",
+    "sha": "dae0cf5e85efa52365c86c65779e2a9faad15b0d",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21792#pullrequestreview-3728946686"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21792"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "404e06b7ac9953a422c5cf5d73592420a4bca5f0",
+    "html_url": "https://github.com/coder/coder/pull/21792#pullrequestreview-3728946686",
+    "id": 3728946686,
+    "node_id": "PRR_kwDOGkVX1s7eQzX-",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21792",
+    "state": "APPROVED",
+    "submitted_at": "2026-01-30T15:26:32Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?u=4c3e3776b7cc9cb346e9f43196fb387c845a4adc&v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21792#pullrequestreview-3729022322"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21792"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "404e06b7ac9953a422c5cf5d73592420a4bca5f0",
+    "html_url": "https://github.com/coder/coder/pull/21792#pullrequestreview-3729022322",
+    "id": 3729022322,
+    "node_id": "PRR_kwDOGkVX1s7eRF1y",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21792",
+    "state": "APPROVED",
+    "submitted_at": "2026-01-30T15:42:49Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  }
+]

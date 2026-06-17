@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/e7c3b85f763e457ed1e12a7401779cfe34c56ae2/scaletest%2Fworkspacebuild%2Frun.go",
+    "changes": 10,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scaletest%2Fworkspacebuild%2Frun.go?ref=e7c3b85f763e457ed1e12a7401779cfe34c56ae2",
+    "deletions": 5,
+    "filename": "scaletest/workspacebuild/run.go",
+    "patch": "@@ -147,12 +147,12 @@ func (r *CleanupRunner) Run(ctx context.Context, _ string, logs io.Writer) error\n \tif err == nil && build.Job.Status.Active() {\n \t\t// mark the build as canceled\n \t\tlogger.Info(ctx, \"canceling workspace build\", slog.F(\"build_id\", build.ID), slog.F(\"workspace_id\", r.workspaceID))\n-\t\tif err = r.client.CancelWorkspaceBuild(ctx, build.ID, codersdk.CancelWorkspaceBuildParams{}); err == nil {\n-\t\t\t// Wait for the job to cancel before we delete it\n-\t\t\t_ = waitForBuild(ctx, logs, r.client, build.ID) // it will return a \"build canceled\" error\n-\t\t} else {\n-\t\t\tlogger.Warn(ctx, \"failed to cancel workspace build, attempting to delete anyway\", slog.Error(err))\n+\t\tif err = r.client.CancelWorkspaceBuild(ctx, build.ID, codersdk.CancelWorkspaceBuildParams{}); err != nil {\n+\t\t\tlogger.Warn(ctx, \"failed to cancel workspace build\", slog.Error(err))\n \t\t}\n+\t\t// Wait for either the build or the cancellation to finish\n+\t\t// either is necessary or we'll fail at the delete step.\n+\t\t_ = waitForBuild(ctx, logs, r.client, build.ID) // it will return a \"build canceled\" error\n \t} else {\n \t\tlogger.Warn(ctx, \"unable to lookup latest workspace build, attempting to delete anyway\", slog.Error(err))\n \t}",
+    "raw_url": "https://github.com/coder/coder/raw/e7c3b85f763e457ed1e12a7401779cfe34c56ae2/scaletest%2Fworkspacebuild%2Frun.go",
+    "sha": "fd3f1be54b9b66edc64e830d822ca9abe28375b1",
+    "status": "modified"
+  }
+]

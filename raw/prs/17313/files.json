@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/e11ac70665c9fd5e7f7d3008f3f214792f737077/agent%2Fagentssh%2Fagentssh_test.go",
+    "changes": 5,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagentssh%2Fagentssh_test.go?ref=e11ac70665c9fd5e7f7d3008f3f214792f737077",
+    "deletions": 0,
+    "filename": "agent/agentssh/agentssh_test.go",
+    "patch": "@@ -13,6 +13,7 @@ import (\n \t\"strings\"\n \t\"sync\"\n \t\"testing\"\n+\t\"time\"\n \n \t\"github.com/prometheus/client_golang/prometheus\"\n \t\"github.com/spf13/afero\"\n@@ -200,7 +201,11 @@ func TestNewServer_CloseActiveConnections(t *testing.T) {\n \t\t\t\t}\n \t\t\t\tassert.NoError(t, err)\n \n+\t\t\t\t// Allow the session to settle (i.e. reach echo).\n \t\t\t\tpty.ExpectMatchContext(ctx, \"started\")\n+\t\t\t\t// Sleep a bit to ensure the sleep has started.\n+\t\t\t\ttime.Sleep(testutil.IntervalMedium)\n+\n \t\t\t\tclose(ch)\n \n \t\t\t\terr = sess.Wait()",
+    "raw_url": "https://github.com/coder/coder/raw/e11ac70665c9fd5e7f7d3008f3f214792f737077/agent%2Fagentssh%2Fagentssh_test.go",
+    "sha": "ae1aaa92f2ffdb43b85a43ca22f83832e6ffc303",
+    "status": "modified"
+  }
+]

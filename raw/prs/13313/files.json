@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/30dda0c1ee266cd93441775cd7a6cf9995e0e51c/tailnet%2Ftest%2Fintegration%2Fintegration.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/tailnet%2Ftest%2Fintegration%2Fintegration.go?ref=30dda0c1ee266cd93441775cd7a6cf9995e0e51c",
+    "deletions": 0,
+    "filename": "tailnet/test/integration/integration.go",
+    "patch": "@@ -449,6 +449,9 @@ func ExecBackground(t *testing.T, processName string, netNS *os.File, name strin\n \twaitErr := make(chan error, 1)\n \tgo func() {\n \t\terr := cmd.Wait()\n+\t\tif err != nil && strings.Contains(err.Error(), \"signal: terminated\") {\n+\t\t\terr = nil\n+\t\t}\n \t\twaitErr <- err\n \t\tclose(waitErr)\n \t}()",
+    "raw_url": "https://github.com/coder/coder/raw/30dda0c1ee266cd93441775cd7a6cf9995e0e51c/tailnet%2Ftest%2Fintegration%2Fintegration.go",
+    "sha": "b26365ea3ee8b7d90f64238df7e3f950c1520b2a",
+    "status": "modified"
+  }
+]

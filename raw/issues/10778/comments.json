@@ -1,0 +1,48 @@
+[
+  {
+    "author_association": "MEMBER",
+    "body": "Duplicate of https://github.com/coder/coder/issues/10599",
+    "created_at": "2023-11-20T09:43:49Z",
+    "html_url": "https://github.com/coder/coder/issues/10778#issuecomment-1818686923",
+    "id": 1818686923,
+    "issue_url": "https://api.github.com/repos/coder/coder/issues/10778",
+    "node_id": "IC_kwDOGkVX1s5sZvXL",
+    "performed_via_github_app": null,
+    "pin": null,
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/issues/comments/1818686923/reactions"
+    },
+    "updated_at": "2023-11-20T09:43:49Z",
+    "url": "https://api.github.com/repos/coder/coder/issues/comments/1818686923",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/14044910?v=4",
+      "events_url": "https://api.github.com/users/mtojek/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mtojek/followers",
+      "following_url": "https://api.github.com/users/mtojek/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mtojek/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mtojek",
+      "id": 14044910,
+      "login": "mtojek",
+      "node_id": "MDQ6VXNlcjE0MDQ0OTEw",
+      "organizations_url": "https://api.github.com/users/mtojek/orgs",
+      "received_events_url": "https://api.github.com/users/mtojek/received_events",
+      "repos_url": "https://api.github.com/users/mtojek/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mtojek/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mtojek/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mtojek",
+      "user_view_type": "public"
+    }
+  }
+]

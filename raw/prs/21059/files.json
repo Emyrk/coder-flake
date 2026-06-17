@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 14,
+    "blob_url": "https://github.com/coder/coder/blob/c65ab291f2a9f5faee51e7bd9b7a0b14e83111a4/agent%2Fagentcontainers%2Fapi_test.go",
+    "changes": 15,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagentcontainers%2Fapi_test.go?ref=c65ab291f2a9f5faee51e7bd9b7a0b14e83111a4",
+    "deletions": 1,
+    "filename": "agent/agentcontainers/api_test.go",
+    "patch": "@@ -234,6 +234,8 @@ func (w *fakeWatcher) sendEventWaitNextCalled(ctx context.Context, event fsnotif\n // fakeSubAgentClient implements SubAgentClient for testing purposes.\n type fakeSubAgentClient struct {\n \tlogger slog.Logger\n+\n+\tmu     sync.Mutex // Protects following.\n \tagents map[uuid.UUID]agentcontainers.SubAgent\n \n \tlistErrC   chan error // If set, send to return error, close to return nil.\n@@ -254,6 +256,8 @@ func (m *fakeSubAgentClient) List(ctx context.Context) ([]agentcontainers.SubAge\n \t\t\t}\n \t\t}\n \t}\n+\tm.mu.Lock()\n+\tdefer m.mu.Unlock()\n \tvar agents []agentcontainers.SubAgent\n \tfor _, agent := range m.agents {\n \t\tagents = append(agents, agent)\n@@ -283,6 +287,9 @@ func (m *fakeSubAgentClient) Create(ctx context.Context, agent agentcontainers.S\n \t\treturn agentcontainers.SubAgent{}, xerrors.New(\"operating system must be set\")\n \t}\n \n+\tm.mu.Lock()\n+\tdefer m.mu.Unlock()\n+\n \tfor _, a := range m.agents {\n \t\tif a.Name == agent.Name {\n \t\t\treturn agentcontainers.SubAgent{}, &pq.Error{\n@@ -314,6 +321,8 @@ func (m *fakeSubAgentClient) Delete(ctx context.Context, id uuid.UUID) error {\n \t\t\t}\n \t\t}\n \t}\n+\tm.mu.Lock()\n+\tdefer m.mu.Unlock()\n \tif m.agents == nil {\n \t\tm.agents = make(map[uuid.UUID]agentcontainers.SubAgent)\n \t}\n@@ -2162,6 +2171,10 @@ func TestAPI(t *testing.T) {\n \t\t\tnowRecreateSuccessTrap.MustWait(ctx).MustRelease(ctx)\n \t\t\tnowRecreateSuccessTrap.Close()\n \n+\t\t\t// Advance the clock to run the devcontainer state update routine.\n+\t\t\t_, aw := mClock.AdvanceNext()\n+\t\t\taw.MustWait(ctx)\n+\n \t\t\treq = httptest.NewRequest(http.MethodGet, \"/\", nil)\n \t\t\trec = httptest.NewRecorder()\n \t\t\tr.ServeHTTP(rec, req)\n@@ -2178,7 +2191,7 @@ func TestAPI(t *testing.T) {\n \t\t\t// available for use.\n \t\t\trequire.Len(t, response.Devcontainers, 1)\n \t\t\tassert.Equal(t, codersdk.WorkspaceAgentDevcontainerStatusRunning, response.Devcontainers[0].Status)\n-\t\t\tassert.NotNil(t, response.Devcontainers[0].Container)\n+\t\t\trequire.NotNil(t, response.Devcontainers[0].Container)\n \t\t\tassert.Equal(t, testContainer.ID, response.Devcontainers[0].Container.ID)\n \t\t})\n ",
+    "raw_url": "https://github.com/coder/coder/raw/c65ab291f2a9f5faee51e7bd9b7a0b14e83111a4/agent%2Fagentcontainers%2Fapi_test.go",
+    "sha": "f9fb89c16aa962e8d43fe12f76a0615fa5cd8dcb",
+    "status": "modified"
+  }
+]

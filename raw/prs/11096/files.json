@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/4a91d09b2af98a454f37d6c86d641284960a7b36/coderd%2Fautobuild%2Flifecycle_executor_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fautobuild%2Flifecycle_executor_test.go?ref=4a91d09b2af98a454f37d6c86d641284960a7b36",
+    "deletions": 2,
+    "filename": "coderd/autobuild/lifecycle_executor_test.go",
+    "patch": "@@ -817,7 +817,7 @@ func TestExecutorAutostopTemplateDisabled(t *testing.T) {\n \n \t// When: the autobuild executor ticks after the workspace setting, but before the template setting:\n \tgo func() {\n-\t\ttickCh <- workspace.LatestBuild.CreatedAt.Add(45 * time.Minute)\n+\t\ttickCh <- workspace.LatestBuild.Job.CompletedAt.Add(45 * time.Minute)\n \t}()\n \n \t// Then: nothing should happen\n@@ -827,7 +827,7 @@ func TestExecutorAutostopTemplateDisabled(t *testing.T) {\n \n \t// When: the autobuild executor ticks after the template setting:\n \tgo func() {\n-\t\ttickCh <- workspace.LatestBuild.CreatedAt.Add(61 * time.Minute)\n+\t\ttickCh <- workspace.LatestBuild.Job.CompletedAt.Add(61 * time.Minute)\n \t\tclose(tickCh)\n \t}()\n ",
+    "raw_url": "https://github.com/coder/coder/raw/4a91d09b2af98a454f37d6c86d641284960a7b36/coderd%2Fautobuild%2Flifecycle_executor_test.go",
+    "sha": "5e7aaffc5ba2ed3e8c39b5f56e1c175ad09b1152",
+    "status": "modified"
+  },
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/4a91d09b2af98a454f37d6c86d641284960a7b36/coderd%2Fprovisionerdserver%2Fprovisionerdserver.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fprovisionerdserver%2Fprovisionerdserver.go?ref=4a91d09b2af98a454f37d6c86d641284960a7b36",
+    "deletions": 2,
+    "filename": "coderd/provisionerdserver/provisionerdserver.go",
+    "patch": "@@ -1131,9 +1131,9 @@ func (s *server) CompleteJob(ctx context.Context, completed *proto.CompletedJob)\n \n \t\t\terr = db.UpdateProvisionerJobWithCompleteByID(ctx, database.UpdateProvisionerJobWithCompleteByIDParams{\n \t\t\t\tID:        jobID,\n-\t\t\t\tUpdatedAt: dbtime.Now(),\n+\t\t\t\tUpdatedAt: now,\n \t\t\t\tCompletedAt: sql.NullTime{\n-\t\t\t\t\tTime:  dbtime.Now(),\n+\t\t\t\t\tTime:  now,\n \t\t\t\t\tValid: true,\n \t\t\t\t},\n \t\t\t\tError:     sql.NullString{},",
+    "raw_url": "https://github.com/coder/coder/raw/4a91d09b2af98a454f37d6c86d641284960a7b36/coderd%2Fprovisionerdserver%2Fprovisionerdserver.go",
+    "sha": "250308bf93489b87dc531c4524dda4a8a8b26262",
+    "status": "modified"
+  }
+]

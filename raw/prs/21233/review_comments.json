@@ -1,0 +1,280 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21233#discussion_r2611846402"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21233"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2611846402"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Review: Below is the actual test flake fix, combined with the query ordering.",
+    "commit_id": "8ef85c8aea1769fc07dc7e0970e8ed828a9a1c79",
+    "created_at": "2025-12-11T19:40:00Z",
+    "diff_hunk": "@@ -1107,31 +1098,31 @@ func TestTemplatePush(t *testing.T) {\n \t\t\tclitest.SetupConfig(t, templateAdmin, root)\n \t\t\tpty := ptytest.New(t).Attach(inv)\n \n-\t\t\texecDone := make(chan error)\n-\t\t\tgo func() {\n-\t\t\t\texecDone <- inv.Run()\n-\t\t\t}()\n+\t\t\tctx := testutil.Context(t, testutil.WaitMedium)\n+\t\t\tinv = inv.WithContext(ctx)\n+\t\t\tw := clitest.StartWithWaiter(t, inv)\n \n \t\t\t// Select \"Yes\" for the \"Upload <template_path>\" prompt\n-\t\t\tpty.ExpectMatch(\"Upload\")\n+\t\t\tpty.ExpectMatchContext(ctx, \"Upload\")\n \t\t\tpty.WriteLine(\"yes\")\n \n-\t\t\tpty.ExpectMatch(\"var.string_var\")\n-\t\t\tpty.ExpectMatch(\"Enter value:\")\n-\t\t\tpty.WriteLine(\"test-string\")\n+\t\t\t// Variables are prompted in alphabetical order.",
+    "html_url": "https://github.com/coder/coder/pull/21233#discussion_r2611846402",
+    "id": 2611846402,
+    "line": 1104,
+    "node_id": "PRRC_kwDOGkVX1s6brZ0C",
+    "original_commit_id": "cdc3cf4ef5e2c43539fa1eb476fbe487e00f2437",
+    "original_line": 1109,
+    "original_position": 460,
+    "original_start_line": null,
+    "path": "cli/templatepush_test.go",
+    "position": 458,
+    "pull_request_review_id": 3569028341,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21233",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2611846402/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-12-11T19:40:00Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2611846402",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21233#discussion_r2612532524"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21233"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2612532524"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "nit:\nwould `w.RequireSuccess()` be more correct here?",
+    "commit_id": "cdc3cf4ef5e2c43539fa1eb476fbe487e00f2437",
+    "created_at": "2025-12-12T01:06:12Z",
+    "diff_hunk": "@@ -564,11 +563,11 @@ func TestTemplatePush(t *testing.T) {\n \t\t\t\t\t}, testutil.WaitShort, testutil.IntervalFast)\n \n \t\t\t\t\tif tt.expectOutput != \"\" {\n-\t\t\t\t\t\tpty.ExpectMatch(tt.expectOutput)\n+\t\t\t\t\t\tpty.ExpectMatchContext(ctx, tt.expectOutput)\n \t\t\t\t\t}\n \n \t\t\t\t\tcancel()\n-\t\t\t\t\t<-done\n+\t\t\t\t\t_ = w.Wait()",
+    "html_url": "https://github.com/coder/coder/pull/21233#discussion_r2612532524",
+    "id": 2612532524,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6buBUs",
+    "original_commit_id": "cdc3cf4ef5e2c43539fa1eb476fbe487e00f2437",
+    "original_line": 570,
+    "original_position": 221,
+    "original_start_line": null,
+    "path": "cli/templatepush_test.go",
+    "position": 1,
+    "pull_request_review_id": 3569878864,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21233",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2612532524/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-12-12T01:06:23Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2612532524",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/39577870?v=4",
+      "events_url": "https://api.github.com/users/ethanndickson/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ethanndickson/followers",
+      "following_url": "https://api.github.com/users/ethanndickson/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ethanndickson/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ethanndickson",
+      "id": 39577870,
+      "login": "ethanndickson",
+      "node_id": "MDQ6VXNlcjM5NTc3ODcw",
+      "organizations_url": "https://api.github.com/users/ethanndickson/orgs",
+      "received_events_url": "https://api.github.com/users/ethanndickson/received_events",
+      "repos_url": "https://api.github.com/users/ethanndickson/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ethanndickson/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ethanndickson/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ethanndickson",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21233#discussion_r2613592280"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21233"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2613592280"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I tried to keep the original spirit of the test. Essentially, since we kill the command (cancel), we don't care if it's a success or a failure. I could add a comment if that helps clarify?",
+    "commit_id": "cdc3cf4ef5e2c43539fa1eb476fbe487e00f2437",
+    "created_at": "2025-12-12T09:46:29Z",
+    "diff_hunk": "@@ -564,11 +563,11 @@ func TestTemplatePush(t *testing.T) {\n \t\t\t\t\t}, testutil.WaitShort, testutil.IntervalFast)\n \n \t\t\t\t\tif tt.expectOutput != \"\" {\n-\t\t\t\t\t\tpty.ExpectMatch(tt.expectOutput)\n+\t\t\t\t\t\tpty.ExpectMatchContext(ctx, tt.expectOutput)\n \t\t\t\t\t}\n \n \t\t\t\t\tcancel()\n-\t\t\t\t\t<-done\n+\t\t\t\t\t_ = w.Wait()",
+    "html_url": "https://github.com/coder/coder/pull/21233#discussion_r2613592280",
+    "id": 2613592280,
+    "in_reply_to_id": 2612532524,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6byEDY",
+    "original_commit_id": "cdc3cf4ef5e2c43539fa1eb476fbe487e00f2437",
+    "original_line": 570,
+    "original_position": 221,
+    "original_start_line": null,
+    "path": "cli/templatepush_test.go",
+    "position": 1,
+    "pull_request_review_id": 3571105001,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21233",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2613592280/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-12-12T09:46:30Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2613592280",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21233#discussion_r2613624378"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21233"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2613624378"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I simplified this further, and added a comment.",
+    "commit_id": "cdc3cf4ef5e2c43539fa1eb476fbe487e00f2437",
+    "created_at": "2025-12-12T09:57:14Z",
+    "diff_hunk": "@@ -564,11 +563,11 @@ func TestTemplatePush(t *testing.T) {\n \t\t\t\t\t}, testutil.WaitShort, testutil.IntervalFast)\n \n \t\t\t\t\tif tt.expectOutput != \"\" {\n-\t\t\t\t\t\tpty.ExpectMatch(tt.expectOutput)\n+\t\t\t\t\t\tpty.ExpectMatchContext(ctx, tt.expectOutput)\n \t\t\t\t\t}\n \n \t\t\t\t\tcancel()\n-\t\t\t\t\t<-done\n+\t\t\t\t\t_ = w.Wait()",
+    "html_url": "https://github.com/coder/coder/pull/21233#discussion_r2613624378",
+    "id": 2613624378,
+    "in_reply_to_id": 2612532524,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6byL46",
+    "original_commit_id": "cdc3cf4ef5e2c43539fa1eb476fbe487e00f2437",
+    "original_line": 570,
+    "original_position": 221,
+    "original_start_line": null,
+    "path": "cli/templatepush_test.go",
+    "position": 1,
+    "pull_request_review_id": 3571141307,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21233",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2613624378/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-12-12T09:57:14Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2613624378",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/388fcfc60ee61553142df9b6f85cb13a60c4fe9e/flake.lock",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.lock?ref=388fcfc60ee61553142df9b6f85cb13a60c4fe9e",
+    "deletions": 3,
+    "filename": "flake.lock",
+    "patch": "@@ -70,11 +70,11 @@\n     },\n     \"nixpkgs_2\": {\n       \"locked\": {\n-        \"lastModified\": 1689850295,\n-        \"narHash\": \"sha256-fUYf6WdQlhd2H+3aR8jST5dhFH1d0eE22aes8fNIfyk=\",\n+        \"lastModified\": 1690179384,\n+        \"narHash\": \"sha256-+arbgqFTAtoeKtepW9wCnA0njCOyoiDFyl0Q0SBSOtE=\",\n         \"owner\": \"nixos\",\n         \"repo\": \"nixpkgs\",\n-        \"rev\": \"5df4d78d54f7a34e9ea1f84a22b4fd9baebc68d0\",\n+        \"rev\": \"b12803b6d90e2e583429bb79b859ca53c348b39a\",\n         \"type\": \"github\"\n       },\n       \"original\": {",
+    "raw_url": "https://github.com/coder/coder/raw/388fcfc60ee61553142df9b6f85cb13a60c4fe9e/flake.lock",
+    "sha": "79d823fd527c6fe74661fc052979616048b2835b",
+    "status": "modified"
+  }
+]

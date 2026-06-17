@@ -1,0 +1,209 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/18526#discussion_r2163682977"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/18526"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2163682977"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "```suggestion\r\n\t\t\t\t// If the context was canceled, we want to return that error instead.\r\n```",
+    "commit_id": "6f6a29e5221e9c3c538d7acf8c3f5fdb0ec4e535",
+    "created_at": "2025-06-24T11:14:04Z",
+    "diff_hunk": "@@ -311,21 +311,31 @@ func (dcli *dockerCLI) List(ctx context.Context) (codersdk.WorkspaceAgentListCon\n // container IDs and returns the parsed output.\n // The stderr output is also returned for logging purposes.\n func runDockerInspect(ctx context.Context, execer agentexec.Execer, ids ...string) (stdout, stderr []byte, err error) {\n-\tvar stdoutBuf, stderrBuf bytes.Buffer\n-\tcmd := execer.CommandContext(ctx, \"docker\", append([]string{\"inspect\"}, ids...)...)\n-\tcmd.Stdout = &stdoutBuf\n-\tcmd.Stderr = &stderrBuf\n-\terr = cmd.Run()\n-\tstdout = bytes.TrimSpace(stdoutBuf.Bytes())\n-\tstderr = bytes.TrimSpace(stderrBuf.Bytes())\n-\tif err != nil {\n-\t\tif bytes.Contains(stderr, []byte(\"No such object:\")) {\n-\t\t\t// This can happen if a container is deleted between the time we check for its existence and the time we inspect it.\n-\t\t\treturn stdout, stderr, nil\n+\tselect {\n+\tcase <-ctx.Done():\n+\t\t// If the context is done, we don't want to run the command.\n+\t\treturn []byte{}, []byte{}, ctx.Err()\n+\tdefault:\n+\t\tvar stdoutBuf, stderrBuf bytes.Buffer\n+\t\tcmd := execer.CommandContext(ctx, \"docker\", append([]string{\"inspect\"}, ids...)...)\n+\t\tcmd.Stdout = &stdoutBuf\n+\t\tcmd.Stderr = &stderrBuf\n+\t\terr = cmd.Run()\n+\t\tstdout = bytes.TrimSpace(stdoutBuf.Bytes())\n+\t\tstderr = bytes.TrimSpace(stderrBuf.Bytes())\n+\t\tif err != nil {\n+\t\t\tif ctx.Err() != nil {\n+\t\t\t\t// If the context was canceled, we don't want to return an error.",
+    "html_url": "https://github.com/coder/coder/pull/18526#discussion_r2163682977",
+    "id": 2163682977,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6A9y6h",
+    "original_commit_id": "c9d3b2c2d03a19cd98d767f799b436d39ee76b6c",
+    "original_line": 328,
+    "original_position": 29,
+    "original_start_line": null,
+    "path": "agent/agentcontainers/containers_dockercli.go",
+    "position": 1,
+    "pull_request_review_id": 2953344636,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/18526",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2163682977/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-06-24T11:14:51Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2163682977",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/18526#discussion_r2163684510"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/18526"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2163684510"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "This could be simplified to just `if ctx.Err() != nil`.",
+    "commit_id": "6f6a29e5221e9c3c538d7acf8c3f5fdb0ec4e535",
+    "created_at": "2025-06-24T11:14:54Z",
+    "diff_hunk": "@@ -311,21 +311,31 @@ func (dcli *dockerCLI) List(ctx context.Context) (codersdk.WorkspaceAgentListCon\n // container IDs and returns the parsed output.\n // The stderr output is also returned for logging purposes.\n func runDockerInspect(ctx context.Context, execer agentexec.Execer, ids ...string) (stdout, stderr []byte, err error) {\n-\tvar stdoutBuf, stderrBuf bytes.Buffer\n-\tcmd := execer.CommandContext(ctx, \"docker\", append([]string{\"inspect\"}, ids...)...)\n-\tcmd.Stdout = &stdoutBuf\n-\tcmd.Stderr = &stderrBuf\n-\terr = cmd.Run()\n-\tstdout = bytes.TrimSpace(stdoutBuf.Bytes())\n-\tstderr = bytes.TrimSpace(stderrBuf.Bytes())\n-\tif err != nil {\n-\t\tif bytes.Contains(stderr, []byte(\"No such object:\")) {\n-\t\t\t// This can happen if a container is deleted between the time we check for its existence and the time we inspect it.\n-\t\t\treturn stdout, stderr, nil\n+\tselect {\n+\tcase <-ctx.Done():",
+    "html_url": "https://github.com/coder/coder/pull/18526#discussion_r2163684510",
+    "id": 2163684510,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6A9zSe",
+    "original_commit_id": "c9d3b2c2d03a19cd98d767f799b436d39ee76b6c",
+    "original_line": 315,
+    "original_position": 16,
+    "original_start_line": null,
+    "path": "agent/agentcontainers/containers_dockercli.go",
+    "position": 1,
+    "pull_request_review_id": 2953347296,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/18526",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2163684510/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-06-24T11:16:03Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2163684510",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/18526#discussion_r2163685893"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/18526"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2163685893"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Note that `context.Canceled` doesn't, by default, trigger test failure. Still, nice to not pollute the error stream.",
+    "commit_id": "6f6a29e5221e9c3c538d7acf8c3f5fdb0ec4e535",
+    "created_at": "2025-06-24T11:15:46Z",
+    "diff_hunk": "@@ -378,7 +378,11 @@ func (api *API) updaterLoop() {\n \t// and anyone looking to interact with the API.\n \tapi.logger.Debug(api.ctx, \"performing initial containers update\")\n \tif err := api.updateContainers(api.ctx); err != nil {\n-\t\tapi.logger.Error(api.ctx, \"initial containers update failed\", slog.Error(err))\n+\t\tif errors.Is(err, context.Canceled) {",
+    "html_url": "https://github.com/coder/coder/pull/18526#discussion_r2163685893",
+    "id": 2163685893,
+    "line": 381,
+    "node_id": "PRRC_kwDOGkVX1s6A9zoF",
+    "original_commit_id": "c9d3b2c2d03a19cd98d767f799b436d39ee76b6c",
+    "original_line": 381,
+    "original_position": 5,
+    "original_start_line": null,
+    "path": "agent/agentcontainers/api.go",
+    "position": 5,
+    "pull_request_review_id": 2953349502,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/18526",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2163685893/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-06-24T11:16:09Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2163685893",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  }
+]

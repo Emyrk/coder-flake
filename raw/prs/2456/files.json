@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/2c6c5c8df55e1bcc3070be29891e39cbcd4d80cd/cli%2Fserver.go",
+    "changes": 11,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fserver.go?ref=2c6c5c8df55e1bcc3070be29891e39cbcd4d80cd",
+    "deletions": 5,
+    "filename": "cli/server.go",
+    "patch": "@@ -403,11 +403,6 @@ func server() *cobra.Command {\n \t\t\t\terrCh <- wg.Wait()\n \t\t\t}()\n \n-\t\t\t// This is helpful for tests, but can be silently ignored.\n-\t\t\t// Coder may be ran as users that don't have permission to write in the homedir,\n-\t\t\t// such as via the systemd service.\n-\t\t\t_ = config.URL().Write(client.URL.String())\n-\n \t\t\thasFirstUser, err := client.HasFirstUser(cmd.Context())\n \t\t\tif !hasFirstUser && err == nil {\n \t\t\t\tcmd.Println()\n@@ -437,6 +432,12 @@ func server() *cobra.Command {\n \t\t\tstopChan := make(chan os.Signal, 1)\n \t\t\tdefer signal.Stop(stopChan)\n \t\t\tsignal.Notify(stopChan, os.Interrupt)\n+\n+\t\t\t// This is helpful for tests, but can be silently ignored.\n+\t\t\t// Coder may be ran as users that don't have permission to write in the homedir,\n+\t\t\t// such as via the systemd service.\n+\t\t\t_ = config.URL().Write(client.URL.String())\n+\n \t\t\tselect {\n \t\t\tcase <-cmd.Context().Done():\n \t\t\t\tcoderAPI.Close()",
+    "raw_url": "https://github.com/coder/coder/raw/2c6c5c8df55e1bcc3070be29891e39cbcd4d80cd/cli%2Fserver.go",
+    "sha": "be27a40a8dff8b800ed8d93a740f418a47006569",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/2c6c5c8df55e1bcc3070be29891e39cbcd4d80cd/coderd%2Fprovisionerdaemons.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fprovisionerdaemons.go?ref=2c6c5c8df55e1bcc3070be29891e39cbcd4d80cd",
+    "deletions": 1,
+    "filename": "coderd/provisionerdaemons.go",
+    "patch": "@@ -96,7 +96,7 @@ func (api *API) ListenProvisionerDaemon(ctx context.Context) (client proto.DRPCP\n \t\t},\n \t})\n \tgo func() {\n-\t\terr = server.Serve(ctx, serverSession)\n+\t\terr := server.Serve(ctx, serverSession)\n \t\tif err != nil && !xerrors.Is(err, io.EOF) {\n \t\t\tapi.Logger.Debug(ctx, \"provisioner daemon disconnected\", slog.Error(err))\n \t\t}",
+    "raw_url": "https://github.com/coder/coder/raw/2c6c5c8df55e1bcc3070be29891e39cbcd4d80cd/coderd%2Fprovisionerdaemons.go",
+    "sha": "2a41be0ddc712d91e05d0528c76fa667a799d776",
+    "status": "modified"
+  }
+]

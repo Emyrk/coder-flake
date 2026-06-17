@@ -1,0 +1,48 @@
+[
+  {
+    "author_association": "MEMBER",
+    "body": "3/4 log dumps contain panic:\r\n\r\n```\r\npanic: runtime error: invalid memory address or nil pointer dereference\r\n[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x179b4b4]\r\n\r\ngoroutine 1289 [running]:\r\ngithub.com/coder/coder/tailnet.(*Conn).Close(0x0)\r\n\t/home/runner/work/coder/coder/tailnet/conn.go:488 +0x54\r\ngithub.com/coder/coder/agent.(*agent).createTailnet.func1()\r\n\t/home/runner/work/coder/coder/agent/agent.go:266 +0x85\r\ngithub.com/coder/coder/agent.(*agent).createTailnet(0xc0002eb560, {0x3b17630?, 0xc0007ad440}, 0xc0004c8d20)\r\n\t/home/runner/work/coder/coder/agent/agent.go:274 +0x95f\r\ngithub.com/coder/coder/agent.(*agent).run(0xc0002eb560, {0x3b17630?, 0xc0007ad440})\r\n\t/home/runner/work/coder/coder/agent/agent.go:213 +0xca5\r\ngithub.com/coder/coder/agent.(*agent).runLoop(0xc0002eb560, {0x3b17630, 0xc0007ad440})\r\n\t/home/runner/work/coder/coder/agent/agent.go:139 +0x185\r\ncreated by github.com/coder/coder/agent.(*agent).init\r\n\t/home/runner/work/coder/coder/agent/agent.go:558 +0xf9a\r\n```",
+    "created_at": "2022-12-05T17:11:04Z",
+    "html_url": "https://github.com/coder/coder/issues/5293#issuecomment-1337758925",
+    "id": 1337758925,
+    "issue_url": "https://api.github.com/repos/coder/coder/issues/5293",
+    "node_id": "IC_kwDOGkVX1s5PvJTN",
+    "performed_via_github_app": null,
+    "pin": null,
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/issues/comments/1337758925/reactions"
+    },
+    "updated_at": "2022-12-05T17:11:04Z",
+    "url": "https://api.github.com/repos/coder/coder/issues/comments/1337758925",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/14044910?v=4",
+      "events_url": "https://api.github.com/users/mtojek/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mtojek/followers",
+      "following_url": "https://api.github.com/users/mtojek/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mtojek/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mtojek",
+      "id": 14044910,
+      "login": "mtojek",
+      "node_id": "MDQ6VXNlcjE0MDQ0OTEw",
+      "organizations_url": "https://api.github.com/users/mtojek/orgs",
+      "received_events_url": "https://api.github.com/users/mtojek/received_events",
+      "repos_url": "https://api.github.com/users/mtojek/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mtojek/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mtojek/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mtojek",
+      "user_view_type": "public"
+    }
+  }
+]

@@ -1,0 +1,350 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/17702#discussion_r2077820966"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/17702"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2077820966"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Let's add a comment still why we're initializing this here so it doesn't move by accident \ud83d\udc4d\ud83c\udffb ",
+    "commit_id": "3dd31745962cfb0be8f6881fe255296e954b7bd6",
+    "created_at": "2025-05-07T14:49:44Z",
+    "diff_hunk": "@@ -141,6 +141,7 @@ func (m *Manager) Run(ctx context.Context) {\n \tm.log.Info(ctx, \"started\")\n \n \tm.runOnce.Do(func() {\n+\t\tm.notifier = newNotifier(ctx, m.cfg, uuid.New(), m.log, m.store, m.handlers, m.helpers, m.metrics, m.clock)",
+    "html_url": "https://github.com/coder/coder/pull/17702#discussion_r2077820966",
+    "id": 2077820966,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s572Qgm",
+    "original_commit_id": "ab8560dbde6a44c515cbc0121499f228fba2c0dd",
+    "original_line": 144,
+    "original_position": 4,
+    "original_start_line": null,
+    "path": "coderd/notifications/manager.go",
+    "position": 1,
+    "pull_request_review_id": 2822081853,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/17702",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2077820966/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-05-07T14:49:51Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2077820966",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/17702#discussion_r2079097025"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/17702"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2079097025"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I think @defelmnq is on PTO, @mafredri would you mind adding the comment so we can merge it?\r\n\r\nPS. not sure what happened that 9 CI jobs failed here...",
+    "commit_id": "3dd31745962cfb0be8f6881fe255296e954b7bd6",
+    "created_at": "2025-05-08T07:42:18Z",
+    "diff_hunk": "@@ -141,6 +141,7 @@ func (m *Manager) Run(ctx context.Context) {\n \tm.log.Info(ctx, \"started\")\n \n \tm.runOnce.Do(func() {\n+\t\tm.notifier = newNotifier(ctx, m.cfg, uuid.New(), m.log, m.store, m.handlers, m.helpers, m.metrics, m.clock)",
+    "html_url": "https://github.com/coder/coder/pull/17702#discussion_r2079097025",
+    "id": 2079097025,
+    "in_reply_to_id": 2077820966,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s577IDB",
+    "original_commit_id": "ab8560dbde6a44c515cbc0121499f228fba2c0dd",
+    "original_line": 144,
+    "original_position": 4,
+    "original_start_line": null,
+    "path": "coderd/notifications/manager.go",
+    "position": 1,
+    "pull_request_review_id": 2824138587,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/17702",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2079097025/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-05-08T07:42:19Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2079097025",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/14044910?v=4",
+      "events_url": "https://api.github.com/users/mtojek/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mtojek/followers",
+      "following_url": "https://api.github.com/users/mtojek/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mtojek/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mtojek",
+      "id": 14044910,
+      "login": "mtojek",
+      "node_id": "MDQ6VXNlcjE0MDQ0OTEw",
+      "organizations_url": "https://api.github.com/users/mtojek/orgs",
+      "received_events_url": "https://api.github.com/users/mtojek/received_events",
+      "repos_url": "https://api.github.com/users/mtojek/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mtojek/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mtojek/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mtojek",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/17702#discussion_r2079229517"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/17702"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2079229517"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I think the Run and Close of the manager is still racy, probably needs a mutex to avoid Run after Close, etc.",
+    "commit_id": "3dd31745962cfb0be8f6881fe255296e954b7bd6",
+    "created_at": "2025-05-08T09:00:10Z",
+    "diff_hunk": "@@ -141,6 +141,7 @@ func (m *Manager) Run(ctx context.Context) {\n \tm.log.Info(ctx, \"started\")\n \n \tm.runOnce.Do(func() {\n+\t\tm.notifier = newNotifier(ctx, m.cfg, uuid.New(), m.log, m.store, m.handlers, m.helpers, m.metrics, m.clock)",
+    "html_url": "https://github.com/coder/coder/pull/17702#discussion_r2079229517",
+    "id": 2079229517,
+    "in_reply_to_id": 2077820966,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s577oZN",
+    "original_commit_id": "ab8560dbde6a44c515cbc0121499f228fba2c0dd",
+    "original_line": 144,
+    "original_position": 4,
+    "original_start_line": null,
+    "path": "coderd/notifications/manager.go",
+    "position": 1,
+    "pull_request_review_id": 2824349429,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/17702",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2079229517/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-05-08T09:01:12Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2079229517",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/17702#discussion_r2079695439"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/17702"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2079695439"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "nit: `testutil.WaitSuperLong` - can we shorten the period?\r\n",
+    "commit_id": "3dd31745962cfb0be8f6881fe255296e954b7bd6",
+    "created_at": "2025-05-08T13:14:24Z",
+    "diff_hunk": "@@ -182,6 +182,25 @@ func TestStopBeforeRun(t *testing.T) {\n \t}, testutil.WaitShort, testutil.IntervalFast)\n }\n \n+func TestRunStopRace(t *testing.T) {\n+\tt.Parallel()\n+\n+\t// SETUP\n+\n+\t// nolint:gocritic // Unit test.\n+\tctx := dbauthz.AsSystemRestricted(testutil.Context(t, testutil.WaitSuperLong))",
+    "html_url": "https://github.com/coder/coder/pull/17702#discussion_r2079695439",
+    "id": 2079695439,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s579aJP",
+    "original_commit_id": "869782bfd16bfd3e5392d0124747378c922f7f13",
+    "original_line": 191,
+    "original_position": 10,
+    "original_start_line": null,
+    "path": "coderd/notifications/manager_test.go",
+    "position": 1,
+    "pull_request_review_id": 2825100054,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/17702",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2079695439/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-05-08T13:14:56Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2079695439",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/14044910?v=4",
+      "events_url": "https://api.github.com/users/mtojek/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mtojek/followers",
+      "following_url": "https://api.github.com/users/mtojek/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mtojek/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mtojek",
+      "id": 14044910,
+      "login": "mtojek",
+      "node_id": "MDQ6VXNlcjE0MDQ0OTEw",
+      "organizations_url": "https://api.github.com/users/mtojek/orgs",
+      "received_events_url": "https://api.github.com/users/mtojek/received_events",
+      "repos_url": "https://api.github.com/users/mtojek/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mtojek/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mtojek/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mtojek",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/17702#discussion_r2079697164"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/17702"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2079697164"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "For sure, this was copy \ud83c\udf5d ",
+    "commit_id": "3dd31745962cfb0be8f6881fe255296e954b7bd6",
+    "created_at": "2025-05-08T13:15:22Z",
+    "diff_hunk": "@@ -182,6 +182,25 @@ func TestStopBeforeRun(t *testing.T) {\n \t}, testutil.WaitShort, testutil.IntervalFast)\n }\n \n+func TestRunStopRace(t *testing.T) {\n+\tt.Parallel()\n+\n+\t// SETUP\n+\n+\t// nolint:gocritic // Unit test.\n+\tctx := dbauthz.AsSystemRestricted(testutil.Context(t, testutil.WaitSuperLong))",
+    "html_url": "https://github.com/coder/coder/pull/17702#discussion_r2079697164",
+    "id": 2079697164,
+    "in_reply_to_id": 2079695439,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s579akM",
+    "original_commit_id": "869782bfd16bfd3e5392d0124747378c922f7f13",
+    "original_line": 191,
+    "original_position": 10,
+    "original_start_line": null,
+    "path": "coderd/notifications/manager_test.go",
+    "position": 1,
+    "pull_request_review_id": 2825102940,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/17702",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2079697164/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-05-08T13:15:22Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2079697164",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  }
+]

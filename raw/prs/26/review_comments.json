@@ -1,0 +1,141 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26#discussion_r784962715"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/784962715"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "__thought (non-blocking):__ It's not clear to me why it would timeout at all given the connections are local \ud83e\udd14  ",
+    "commit_id": "30ea590ee656a099db56ac6e7f2782b88002170b",
+    "created_at": "2022-01-14T16:02:23Z",
+    "diff_hunk": "@@ -23,7 +23,7 @@ import (\n )\n \n const (\n-\tdisconnectedTimeout = time.Millisecond * 200",
+    "html_url": "https://github.com/coder/coder/pull/26#discussion_r784962715",
+    "id": 784962715,
+    "line": 26,
+    "node_id": "PRRC_kwDOGkVX1s4uyZSb",
+    "original_commit_id": "30ea590ee656a099db56ac6e7f2782b88002170b",
+    "original_line": 26,
+    "original_position": 4,
+    "original_start_line": null,
+    "path": "peer/conn_test.go",
+    "position": 4,
+    "pull_request_review_id": 853088019,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/784962715/reactions"
+    },
+    "side": "LEFT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-01-14T16:02:23Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/784962715",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/88213859?v=4",
+      "events_url": "https://api.github.com/users/bryphe-coder/events{/privacy}",
+      "followers_url": "https://api.github.com/users/bryphe-coder/followers",
+      "following_url": "https://api.github.com/users/bryphe-coder/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bryphe-coder/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/bryphe-coder",
+      "id": 88213859,
+      "login": "bryphe-coder",
+      "node_id": "MDQ6VXNlcjg4MjEzODU5",
+      "organizations_url": "https://api.github.com/users/bryphe-coder/orgs",
+      "received_events_url": "https://api.github.com/users/bryphe-coder/received_events",
+      "repos_url": "https://api.github.com/users/bryphe-coder/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/bryphe-coder/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bryphe-coder/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/bryphe-coder",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/26#discussion_r784971206"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/26"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/784971206"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "When CPU is contended in CI... this flake occurred because it took >200ms to negotiate the connection (which is ridiculously slow execution)!",
+    "commit_id": "30ea590ee656a099db56ac6e7f2782b88002170b",
+    "created_at": "2022-01-14T16:11:58Z",
+    "diff_hunk": "@@ -23,7 +23,7 @@ import (\n )\n \n const (\n-\tdisconnectedTimeout = time.Millisecond * 200",
+    "html_url": "https://github.com/coder/coder/pull/26#discussion_r784971206",
+    "id": 784971206,
+    "in_reply_to_id": 784962715,
+    "line": 26,
+    "node_id": "PRRC_kwDOGkVX1s4uybXG",
+    "original_commit_id": "30ea590ee656a099db56ac6e7f2782b88002170b",
+    "original_line": 26,
+    "original_position": 4,
+    "original_start_line": null,
+    "path": "peer/conn_test.go",
+    "position": 4,
+    "pull_request_review_id": 853100378,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/26",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/784971206/reactions"
+    },
+    "side": "LEFT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-01-14T16:11:58Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/784971206",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  }
+]

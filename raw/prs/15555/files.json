@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 9,
+    "blob_url": "https://github.com/coder/coder/blob/98c35a9aa74dd60ea438183464a8c91b72e459f5/tailnet%2Fconn_test.go",
+    "changes": 13,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/tailnet%2Fconn_test.go?ref=98c35a9aa74dd60ea438183464a8c91b72e459f5",
+    "deletions": 4,
+    "filename": "tailnet/conn_test.go",
+    "patch": "@@ -131,23 +131,28 @@ func TestTailnet(t *testing.T) {\n \t\tstitch(t, w2, w1)\n \t\tstitch(t, w1, w2)\n \t\trequire.True(t, w2.AwaitReachable(ctx, w1IP))\n-\t\tconn := make(chan struct{}, 1)\n+\t\tdone := make(chan struct{})\n+\t\tlistening := make(chan struct{})\n \t\tgo func() {\n+\t\t\tdefer close(done)\n \t\t\tlistener, err := w1.Listen(\"tcp\", \":35565\")\n-\t\t\tassert.NoError(t, err)\n+\t\t\tif !assert.NoError(t, err) {\n+\t\t\t\treturn\n+\t\t\t}\n \t\t\tdefer listener.Close()\n+\t\t\tclose(listening)\n \t\t\tnc, err := listener.Accept()\n \t\t\tif !assert.NoError(t, err) {\n \t\t\t\treturn\n \t\t\t}\n \t\t\t_ = nc.Close()\n-\t\t\tconn <- struct{}{}\n \t\t}()\n \n+\t\ttestutil.RequireRecvCtx(ctx, t, listening)\n \t\tnc, err := w2.DialContextTCP(ctx, netip.AddrPortFrom(w1IP, 35565))\n \t\trequire.NoError(t, err)\n \t\t_ = nc.Close()\n-\t\t<-conn\n+\t\ttestutil.RequireRecvCtx(ctx, t, done)\n \n \t\tnodes := make(chan *tailnet.Node, 1)\n \t\tw2.SetNodeCallback(func(node *tailnet.Node) {",
+    "raw_url": "https://github.com/coder/coder/raw/98c35a9aa74dd60ea438183464a8c91b72e459f5/tailnet%2Fconn_test.go",
+    "sha": "068032e642d74bafd5338e0e21acf0ab203c3eab",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/304bbded472dc84292ed25cdc955c2cc9d1914fe/dogfood%2Fcontents%2FDockerfile.nix",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/dogfood%2Fcontents%2FDockerfile.nix?ref=304bbded472dc84292ed25cdc955c2cc9d1914fe",
+    "deletions": 2,
+    "filename": "dogfood/contents/Dockerfile.nix",
+    "patch": "@@ -1,5 +1,5 @@\n # Build stage\n-FROM nixos/nix:2.19.2 as nix\n+FROM nixos/nix:2.19.2 AS nix\n \n # enable --experimental-features 'nix-command flakes' globally\n # nix does not enable these features by default these are required to run commands like\n@@ -14,7 +14,7 @@ RUN nix profile install \"/app#all\" --priority 4 && \\\n     nix-collect-garbage -d\n \n # Final image\n-FROM codercom/enterprise-base:latest as final\n+FROM codercom/enterprise-base:latest AS final\n \n # Set the non-root user\n USER root",
+    "raw_url": "https://github.com/coder/coder/raw/304bbded472dc84292ed25cdc955c2cc9d1914fe/dogfood%2Fcontents%2FDockerfile.nix",
+    "sha": "b17325b625b803767090d6736ad6dbf941e9a0fb",
+    "status": "modified"
+  },
+  {
+    "additions": 9,
+    "blob_url": "https://github.com/coder/coder/blob/304bbded472dc84292ed25cdc955c2cc9d1914fe/flake.nix",
+    "changes": 14,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=304bbded472dc84292ed25cdc955c2cc9d1914fe",
+    "deletions": 5,
+    "filename": "flake.nix",
+    "patch": "@@ -58,20 +58,22 @@\n \n         # The minimal set of packages to build Coder.\n         devShellPackages = with pkgs; [\n-          # google-chrome is not available on OSX and aarch64 linux\n-          (if pkgs.stdenv.hostPlatform.isDarwin || pkgs.stdenv.hostPlatform.isAarch64 then null else google-chrome)\n+          # google-chrome is not available on aarch64 linux\n+          (lib.optionalDrvAttr ( !stdenv.isLinux || !stdenv.isAarch64 ) google-chrome)\n           # strace is not available on OSX\n-          (if pkgs.stdenv.hostPlatform.isDarwin then null else strace)\n+          (lib.optionalDrvAttr ( !pkgs.stdenv.isDarwin ) strace)\n           bat\n           cairo\n           curl\n           delve\n           drpc.defaultPackage.${system}\n+          fzf\n           gcc\n           gdk\n           getopt\n           gh\n           git\n+          (lib.optionalDrvAttr stdenv.isLinux glibcLocales)\n           gnumake\n           gnused\n           go_1_22\n@@ -85,8 +87,10 @@\n           kubernetes-helm\n           less\n           mockgen\n+          moreutils\n           nfpm\n           nodejs\n+          neovim\n           pnpm\n           openssh\n           openssl\n@@ -98,8 +102,6 @@\n           protobuf\n           proto_gen_go_1_30\n           ripgrep\n-          # This doesn't build on latest nixpkgs (July 10 2024)\n-          (pinnedPkgs.sapling)\n           shellcheck\n           (pinnedPkgs.shfmt)\n           sqlc\n@@ -165,6 +167,8 @@\n             export PLAYWRIGHT_BROWSERS_PATH=${pkgs.playwright-driver.browsers}\n             export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true\n           '';\n+\n+          LOCALE_ARCHIVE = with pkgs; lib.optionalDrvAttr stdenv.isLinux \"${glibcLocales}/lib/locale/locale-archive\";\n         };\n         packages = {\n           proto_gen_go = proto_gen_go_1_30;",
+    "raw_url": "https://github.com/coder/coder/raw/304bbded472dc84292ed25cdc955c2cc9d1914fe/flake.nix",
+    "sha": "de604bfb48a8eec4ee4e6ab68639f0914bbb7fe2",
+    "status": "modified"
+  }
+]

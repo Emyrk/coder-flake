@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/7f4c97aa379e45b7f7658241b167e2d5f00920d7/site%2Fsrc%2Fpages%2FWorkspacePage%2FWorkspacePage.test.tsx",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FWorkspacePage%2FWorkspacePage.test.tsx?ref=7f4c97aa379e45b7f7658241b167e2d5f00920d7",
+    "deletions": 2,
+    "filename": "site/src/pages/WorkspacePage/WorkspacePage.test.tsx",
+    "patch": "@@ -309,7 +309,7 @@ describe(\"WorkspacePage\", () => {\n \t// Started flaking after upgrading react-router. Tests the old parameters path\n \t// and isn't worth spending more time to fix since this code will be removed\n \t// in a few releases when dynamic parameters takes over the world.\n-\tit.skip(\"updates the parameters when they are missing during update\", async () => {\n+\tit(\"updates the parameters when they are missing during update\", async () => {\n \t\t// Mocks\n \t\tjest\n \t\t\t.spyOn(API, \"getWorkspaceByOwnerAndName\")\n@@ -340,7 +340,9 @@ describe(\"WorkspacePage\", () => {\n \n \t\t// After trying to update, a new dialog asking for missed parameters should\n \t\t// be displayed and filled\n-\t\tconst dialog = await waitFor(() => screen.findByTestId(\"dialog\"));\n+\t\tconst dialog = await screen.findByRole(\"dialog\", {\n+\t\t\tname: /workspace parameters/i,\n+\t\t});\n \t\tconst firstParameterInput = within(dialog).getByLabelText(\n \t\t\tMockTemplateVersionParameter1.name,\n \t\t\t{ exact: false },",
+    "raw_url": "https://github.com/coder/coder/raw/7f4c97aa379e45b7f7658241b167e2d5f00920d7/site%2Fsrc%2Fpages%2FWorkspacePage%2FWorkspacePage.test.tsx",
+    "sha": "c204a3bb9df6be64665089b1bd4930fba76bf5ca",
+    "status": "modified"
+  }
+]

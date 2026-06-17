@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/7b64e0454cef14e36afa4543237fe6c3cfac8c1c/site%2Fsrc%2Fpages%2FTemplateVersionEditorPage%2FTemplateVersionEditorPage.test.tsx",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FTemplateVersionEditorPage%2FTemplateVersionEditorPage.test.tsx?ref=7b64e0454cef14e36afa4543237fe6c3cfac8c1c",
+    "deletions": 1,
+    "filename": "site/src/pages/TemplateVersionEditorPage/TemplateVersionEditorPage.test.tsx",
+    "patch": "@@ -156,7 +156,7 @@ test(\"Use custom name, message and set it as active when publishing\", async () =\n \tawait waitFor(() => {\n \t\texpect(screen.queryByTestId(\"dialog\")).not.toBeInTheDocument();\n \t});\n-});\n+}, 20_000);\n \n test(\"Do not mark as active if promote is not checked\", async () => {\n \tconst user = userEvent.setup();",
+    "raw_url": "https://github.com/coder/coder/raw/7b64e0454cef14e36afa4543237fe6c3cfac8c1c/site%2Fsrc%2Fpages%2FTemplateVersionEditorPage%2FTemplateVersionEditorPage.test.tsx",
+    "sha": "4c7a594f2969fe1d6facbdc2910a91dc86ecb71b",
+    "status": "modified"
+  }
+]

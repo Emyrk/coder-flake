@@ -1,0 +1,141 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/20#discussion_r784171249"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/20"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/784171249"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "That's very cool that `gotestsum` has a count option. Having the multiple-iteration run should go a long way in helping us catch these intermittent failures!",
+    "commit_id": "f61d9ead68a1de6bb13623993ad55032f192c714",
+    "created_at": "2022-01-13T17:25:11Z",
+    "diff_hunk": "@@ -129,7 +129,7 @@ jobs:\n \n       - run:\n           gotestsum --jsonfile=\"gotests.json\" --packages=\"./...\" --\n-          -covermode=atomic -coverprofile=\"gotests.coverage\" -timeout=1m\n+          -covermode=atomic -coverprofile=\"gotests.coverage\" -timeout=3m -count=10 -race",
+    "html_url": "https://github.com/coder/coder/pull/20#discussion_r784171249",
+    "id": 784171249,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s4uvYDx",
+    "original_commit_id": "d5de363cfd630ddfdc97a8fcaa3fe15455f19d72",
+    "original_line": 132,
+    "original_position": 5,
+    "original_start_line": null,
+    "path": ".github/workflows/coder.yaml",
+    "position": 1,
+    "pull_request_review_id": 852019269,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/20",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 1,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/784171249/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-01-13T17:25:12Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/784171249",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/88213859?v=4",
+      "events_url": "https://api.github.com/users/bryphe-coder/events{/privacy}",
+      "followers_url": "https://api.github.com/users/bryphe-coder/followers",
+      "following_url": "https://api.github.com/users/bryphe-coder/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bryphe-coder/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/bryphe-coder",
+      "id": 88213859,
+      "login": "bryphe-coder",
+      "node_id": "MDQ6VXNlcjg4MjEzODU5",
+      "organizations_url": "https://api.github.com/users/bryphe-coder/orgs",
+      "received_events_url": "https://api.github.com/users/bryphe-coder/received_events",
+      "repos_url": "https://api.github.com/users/bryphe-coder/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/bryphe-coder/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bryphe-coder/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/bryphe-coder",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/20#discussion_r784172064"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/20"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/784172064"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "Plus we're actually get a 30x run out of this since it is running 10x in parallel on Windows/mac/linux",
+    "commit_id": "f61d9ead68a1de6bb13623993ad55032f192c714",
+    "created_at": "2022-01-13T17:26:10Z",
+    "diff_hunk": "@@ -129,7 +129,7 @@ jobs:\n \n       - run:\n           gotestsum --jsonfile=\"gotests.json\" --packages=\"./...\" --\n-          -covermode=atomic -coverprofile=\"gotests.coverage\" -timeout=1m\n+          -covermode=atomic -coverprofile=\"gotests.coverage\" -timeout=3m -count=10 -race",
+    "html_url": "https://github.com/coder/coder/pull/20#discussion_r784172064",
+    "id": 784172064,
+    "in_reply_to_id": 784171249,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s4uvYQg",
+    "original_commit_id": "d5de363cfd630ddfdc97a8fcaa3fe15455f19d72",
+    "original_line": 132,
+    "original_position": 5,
+    "original_start_line": null,
+    "path": ".github/workflows/coder.yaml",
+    "position": 1,
+    "pull_request_review_id": 852020406,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/20",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 1,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/784172064/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-01-13T17:26:10Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/784172064",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/88213859?v=4",
+      "events_url": "https://api.github.com/users/bryphe-coder/events{/privacy}",
+      "followers_url": "https://api.github.com/users/bryphe-coder/followers",
+      "following_url": "https://api.github.com/users/bryphe-coder/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bryphe-coder/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/bryphe-coder",
+      "id": 88213859,
+      "login": "bryphe-coder",
+      "node_id": "MDQ6VXNlcjg4MjEzODU5",
+      "organizations_url": "https://api.github.com/users/bryphe-coder/orgs",
+      "received_events_url": "https://api.github.com/users/bryphe-coder/received_events",
+      "repos_url": "https://api.github.com/users/bryphe-coder/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/bryphe-coder/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bryphe-coder/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/bryphe-coder",
+      "user_view_type": "public"
+    }
+  }
+]

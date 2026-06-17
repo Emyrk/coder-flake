@@ -1,0 +1,209 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14534#discussion_r1741723306"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14534"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1741723306"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I love these ticker tags \u2764\ufe0f ",
+    "commit_id": "3ae3fbb0315b4b23d23b3b83f83aba354ef60d3b",
+    "created_at": "2024-09-03T09:18:00Z",
+    "diff_hunk": "@@ -29,26 +29,33 @@ type notifier struct {\n \tlog   slog.Logger\n \tstore Store\n \n-\ttick     *time.Ticker\n+\ttick     *quartz.Ticker\n \tstopOnce sync.Once\n \tquit     chan any\n \tdone     chan any\n \n \thandlers map[database.NotificationMethod]Handler\n \tmetrics  *Metrics\n+\n+\t// clock is for testing\n+\tclock quartz.Clock\n }\n \n-func newNotifier(cfg codersdk.NotificationsConfig, id uuid.UUID, log slog.Logger, db Store, hr map[database.NotificationMethod]Handler, metrics *Metrics) *notifier {\n+func newNotifier(cfg codersdk.NotificationsConfig, id uuid.UUID, log slog.Logger, db Store,\n+\thr map[database.NotificationMethod]Handler, metrics *Metrics, clock quartz.Clock,\n+) *notifier {\n+\ttick := clock.NewTicker(cfg.FetchInterval.Value(), \"notifier\", \"fetchInterval\")",
+    "html_url": "https://github.com/coder/coder/pull/14534#discussion_r1741723306",
+    "id": 1741723306,
+    "line": 47,
+    "node_id": "PRRC_kwDOGkVX1s5n0Jaq",
+    "original_commit_id": "0747bb8bc09416591214b2b797bdb63422a80775",
+    "original_line": 47,
+    "original_position": 37,
+    "original_start_line": null,
+    "path": "coderd/notifications/notifier.go",
+    "position": 37,
+    "pull_request_review_id": 2276876370,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14534",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1741723306/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-09-03T09:21:03Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1741723306",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14534#discussion_r1741724889"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14534"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1741724889"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "This introduces a subtle behaviour change because unfortunately `dbtime.Now` forces the input to UTC while `dbtime.Time` does not.\r\n\r\n```suggestion\r\n\t\tts:       dbtime.Time(n.clock.Now().UTC()),\r\n```",
+    "commit_id": "3ae3fbb0315b4b23d23b3b83f83aba354ef60d3b",
+    "created_at": "2024-09-03T09:19:02Z",
+    "diff_hunk": "@@ -291,7 +298,7 @@ func (n *notifier) newSuccessfulDispatch(msg database.AcquireNotificationMessage\n \treturn dispatchResult{\n \t\tnotifier: n.id,\n \t\tmsg:      msg.ID,\n-\t\tts:       dbtime.Now(),\n+\t\tts:       dbtime.Time(n.clock.Now()),",
+    "html_url": "https://github.com/coder/coder/pull/14534#discussion_r1741724889",
+    "id": 1741724889,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5n0JzZ",
+    "original_commit_id": "0747bb8bc09416591214b2b797bdb63422a80775",
+    "original_line": 301,
+    "original_position": 71,
+    "original_start_line": null,
+    "path": "coderd/notifications/notifier.go",
+    "position": 1,
+    "pull_request_review_id": 2276876370,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14534",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1741724889/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-09-03T09:21:03Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1741724889",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14534#discussion_r1741726174"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14534"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1741726174"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Thanks for introducing this pattern \ud83d\udc4d ",
+    "commit_id": "3ae3fbb0315b4b23d23b3b83f83aba354ef60d3b",
+    "created_at": "2024-09-03T09:19:56Z",
+    "diff_hunk": "@@ -54,13 +55,25 @@ type Manager struct {\n \tstopOnce sync.Once\n \tstop     chan any\n \tdone     chan any\n+\n+\t// clock is for testing only\n+\tclock quartz.Clock\n+}\n+\n+type ManagerOption func(*Manager)",
+    "html_url": "https://github.com/coder/coder/pull/14534#discussion_r1741726174",
+    "id": 1741726174,
+    "line": 63,
+    "node_id": "PRRC_kwDOGkVX1s5n0KHe",
+    "original_commit_id": "0747bb8bc09416591214b2b797bdb63422a80775",
+    "original_line": 63,
+    "original_position": 17,
+    "original_start_line": null,
+    "path": "coderd/notifications/manager.go",
+    "position": 17,
+    "pull_request_review_id": 2276876370,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14534",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1741726174/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-09-03T09:21:03Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1741726174",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  }
+]

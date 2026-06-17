@@ -1,0 +1,211 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/389#discussion_r817025958"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/389"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/817025958"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "__thought:__ Would it be safer to `defer openPortMutex.Unlock()` right after acquiring the lock? Just worried we may add a new `if` and forgot to unlock the mutex down the road.",
+    "commit_id": "d46072d8c4ee18a4099033f750e4673d28aae6ad",
+    "created_at": "2022-03-01T18:15:34Z",
+    "diff_hunk": "@@ -23,10 +28,12 @@ func Open() (string, func(), error) {\n \tif err != nil {\n \t\treturn \"\", nil, xerrors.Errorf(\"create tempdir: %w\", err)\n \t}\n+\topenPortMutex.Lock()\n \t// Pick an explicit port on the host to connect to 5432.\n \t// This is necessary so we can configure the port to only use ipv4.\n \tport, err := getFreePort()\n \tif err != nil {\n+\t\topenPortMutex.Unlock()",
+    "html_url": "https://github.com/coder/coder/pull/389#discussion_r817025958",
+    "id": 817025958,
+    "line": 36,
+    "node_id": "PRRC_kwDOGkVX1s4wstOm",
+    "original_commit_id": "d9f4a5771597a1d0cd1d78027b42b7e02e02858d",
+    "original_line": 36,
+    "original_position": 28,
+    "original_start_line": null,
+    "path": "database/postgres/postgres.go",
+    "position": 28,
+    "pull_request_review_id": 896662870,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/389",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/817025958/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-03-01T18:15:34Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/817025958",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/88213859?v=4",
+      "events_url": "https://api.github.com/users/bryphe-coder/events{/privacy}",
+      "followers_url": "https://api.github.com/users/bryphe-coder/followers",
+      "following_url": "https://api.github.com/users/bryphe-coder/following{/other_user}",
+      "gists_url": "https://api.github.com/users/bryphe-coder/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/bryphe-coder",
+      "id": 88213859,
+      "login": "bryphe-coder",
+      "node_id": "MDQ6VXNlcjg4MjEzODU5",
+      "organizations_url": "https://api.github.com/users/bryphe-coder/orgs",
+      "received_events_url": "https://api.github.com/users/bryphe-coder/received_events",
+      "repos_url": "https://api.github.com/users/bryphe-coder/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/bryphe-coder/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/bryphe-coder/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/bryphe-coder",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/389#discussion_r817029191"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/389"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/817029191"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I had that initially but didn't want each execution to wait for the PostgreSQL instance to start up.",
+    "commit_id": "d46072d8c4ee18a4099033f750e4673d28aae6ad",
+    "created_at": "2022-03-01T18:20:11Z",
+    "diff_hunk": "@@ -23,10 +28,12 @@ func Open() (string, func(), error) {\n \tif err != nil {\n \t\treturn \"\", nil, xerrors.Errorf(\"create tempdir: %w\", err)\n \t}\n+\topenPortMutex.Lock()\n \t// Pick an explicit port on the host to connect to 5432.\n \t// This is necessary so we can configure the port to only use ipv4.\n \tport, err := getFreePort()\n \tif err != nil {\n+\t\topenPortMutex.Unlock()",
+    "html_url": "https://github.com/coder/coder/pull/389#discussion_r817029191",
+    "id": 817029191,
+    "in_reply_to_id": 817025958,
+    "line": 36,
+    "node_id": "PRRC_kwDOGkVX1s4wsuBH",
+    "original_commit_id": "d9f4a5771597a1d0cd1d78027b42b7e02e02858d",
+    "original_line": 36,
+    "original_position": 28,
+    "original_start_line": null,
+    "path": "database/postgres/postgres.go",
+    "position": 28,
+    "pull_request_review_id": 896667378,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/389",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/817029191/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-03-01T18:20:11Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/817029191",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/389#discussion_r817030291"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/389"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/817030291"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "We could separate out these functions though. I'm happy to do that if you feel it'd prevent a bug in the future!",
+    "commit_id": "d46072d8c4ee18a4099033f750e4673d28aae6ad",
+    "created_at": "2022-03-01T18:21:48Z",
+    "diff_hunk": "@@ -23,10 +28,12 @@ func Open() (string, func(), error) {\n \tif err != nil {\n \t\treturn \"\", nil, xerrors.Errorf(\"create tempdir: %w\", err)\n \t}\n+\topenPortMutex.Lock()\n \t// Pick an explicit port on the host to connect to 5432.\n \t// This is necessary so we can configure the port to only use ipv4.\n \tport, err := getFreePort()\n \tif err != nil {\n+\t\topenPortMutex.Unlock()",
+    "html_url": "https://github.com/coder/coder/pull/389#discussion_r817030291",
+    "id": 817030291,
+    "in_reply_to_id": 817025958,
+    "line": 36,
+    "node_id": "PRRC_kwDOGkVX1s4wsuST",
+    "original_commit_id": "d9f4a5771597a1d0cd1d78027b42b7e02e02858d",
+    "original_line": 36,
+    "original_position": 28,
+    "original_start_line": null,
+    "path": "database/postgres/postgres.go",
+    "position": 28,
+    "pull_request_review_id": 896668901,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/389",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/817030291/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-03-01T18:21:48Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/817030291",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  }
+]

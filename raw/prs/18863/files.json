@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 12,
+    "blob_url": "https://github.com/coder/coder/blob/d99373f9b1cfc569dc55bcb5876f38aea55b0963/agent%2Fagentcontainers%2Fapi_test.go",
+    "changes": 16,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagentcontainers%2Fapi_test.go?ref=d99373f9b1cfc569dc55bcb5876f38aea55b0963",
+    "deletions": 4,
+    "filename": "agent/agentcontainers/api_test.go",
+    "patch": "@@ -2883,8 +2883,12 @@ func TestAPI(t *testing.T) {\n \t\t\tOp:   fsnotify.Write,\n \t\t})\n \n-\t\terr = api.RefreshContainers(ctx)\n-\t\trequire.NoError(t, err)\n+\t\trequire.Eventuallyf(t, func() bool {\n+\t\t\terr = api.RefreshContainers(ctx)\n+\t\t\trequire.NoError(t, err)\n+\n+\t\t\treturn len(fakeSAC.agents) == 1\n+\t\t}, testutil.WaitShort, testutil.IntervalFast, \"subagent should be created after config change\")\n \n \t\tt.Log(\"Phase 2: Cont, waiting for sub agent to exit\")\n \t\texitSubAgentOnce.Do(func() {\n@@ -2919,8 +2923,12 @@ func TestAPI(t *testing.T) {\n \t\t\tOp:   fsnotify.Write,\n \t\t})\n \n-\t\terr = api.RefreshContainers(ctx)\n-\t\trequire.NoError(t, err)\n+\t\trequire.Eventuallyf(t, func() bool {\n+\t\t\terr = api.RefreshContainers(ctx)\n+\t\t\trequire.NoError(t, err)\n+\n+\t\t\treturn len(fakeSAC.agents) == 0\n+\t\t}, testutil.WaitShort, testutil.IntervalFast, \"subagent should be deleted after config change\")\n \n \t\treq = httptest.NewRequest(http.MethodGet, \"/\", nil).WithContext(ctx)\n \t\trec = httptest.NewRecorder()",
+    "raw_url": "https://github.com/coder/coder/raw/d99373f9b1cfc569dc55bcb5876f38aea55b0963/agent%2Fagentcontainers%2Fapi_test.go",
+    "sha": "9451461bb3215f1ec1fb7015d7cdb1624fdf7789",
+    "status": "modified"
+  }
+]

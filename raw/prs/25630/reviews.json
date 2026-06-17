@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25630#pullrequestreview-4356010216"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25630"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "LGTM \ud83d\udc4d \nMight be worth adding https://github.com/coder/internal/issues/1544 in the PR description for future reference",
+    "commit_id": "6ec8d6f0631c56d4465631b70fbe3eafa45103f9",
+    "html_url": "https://github.com/coder/coder/pull/25630#pullrequestreview-4356010216",
+    "id": 4356010216,
+    "node_id": "PRR_kwDOGkVX1s8AAAABA6Nw6A",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25630",
+    "state": "APPROVED",
+    "submitted_at": "2026-05-25T10:32:50Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5222392?u=ad9b4e827e055907c47449851892f096623687aa&v=4",
+      "events_url": "https://api.github.com/users/ssncferreira/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ssncferreira/followers",
+      "following_url": "https://api.github.com/users/ssncferreira/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ssncferreira/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ssncferreira",
+      "id": 5222392,
+      "login": "ssncferreira",
+      "node_id": "MDQ6VXNlcjUyMjIzOTI=",
+      "organizations_url": "https://api.github.com/users/ssncferreira/orgs",
+      "received_events_url": "https://api.github.com/users/ssncferreira/received_events",
+      "repos_url": "https://api.github.com/users/ssncferreira/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ssncferreira/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ssncferreira/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ssncferreira",
+      "user_view_type": "public"
+    }
+  }
+]

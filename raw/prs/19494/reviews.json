@@ -1,0 +1,162 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19494#pullrequestreview-3144708358"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19494"
+      }
+    },
+    "author_association": "NONE",
+    "body": "**Actionable comments posted: 3**\n\n<details>\n<summary>\ud83e\uddf9 Nitpick comments (6)</summary><blockquote>\n\n<details>\n<summary>.github/workflows/flake-go.yaml (6)</summary><blockquote>\n\n`79-85`: **Output handling: `pkgs` is multiline; use the multiline output syntax**\n\nWriting multiline values to `$GITHUB_OUTPUT` with `echo \"name=value\"` is brittle. Use the heredoc form to preserve newlines.\n\n\n\n```diff\n-          echo \"pkgs=$pkgs\" >> \"$GITHUB_OUTPUT\"\n+          {\n+            echo 'pkgs<<EOF'\n+            printf '%s\\n' \"$pkgs\"\n+            echo 'EOF'\n+          } >> \"$GITHUB_OUTPUT\"\n```\n\n---\n\n`31-37`: **Safer changed-file parsing: use JSON output from changed-files**\n\nSpace-delimited file lists are fragile (spaces, unicode). Expose `all_changed_files_json` and parse with jq.\n\n\n\n```diff\n@@\n     outputs:\n       any_changed: ${{ steps.changed.outputs.any_changed }}\n-      files: ${{ steps.changed.outputs.all_changed_files }}\n+      files: ${{ steps.changed.outputs.all_changed_files }}\n+      files_json: ${{ steps.changed.outputs.all_changed_files_json }}\n@@\n-          printf '%s\\n' \"${{ needs.changed-go-tests.outputs.files }}\" | tr ' ' '\\n' | sed '/^$/d' > /tmp/go_changed_files.txt\n+          jq -r '.[]' <<< '${{ needs.changed-go-tests.outputs.files_json }}' > /tmp/go_changed_files.txt\n           sort -u /tmp/go_changed_files.txt -o /tmp/go_changed_files.txt\n```\nAdditionally, consider pinning `tj-actions/changed-files` to a commit SHA for supply-chain safety.\n\n\nAlso applies to: 17-20, 71-78\n\n---\n\n`7-12`: **Permissions: include pull-requests: read**\n\n`tj-actions/changed-files` may require `pull-requests: read` in some repo settings. Adding it prevents permission-related flakes.\n\n\n\n```diff\n permissions:\n   contents: read\n+  pull-requests: read\n```\n\n---\n\n`52-66`: **Minor: package install step can be simplified**\n\nYou already guard `jq` presence\u2014nice. Consider installing with `apt-get install -y --no-install-recommends jq` to reduce image churn. Not critical.\n\n---\n\n`102-107`: **Optional: capture the shuffle seed for reproducibility**\n\n`-shuffle=on` uses a random seed per run. Emitting the seed helps reproduce flakes locally.\n\n\n\n```diff\n-              go test -json -run \"$regex\" -count=1 -shuffle=on \"$p\" \\\n+              go test -json -run \"$regex\" -count=1 -shuffle=on \"$p\" \\\n                 | tee \"json/run-$i-$(echo \"$p\" | tr '/.' '__').json\" >/dev/null || true\n+              # Extract and persist the seed line (if present) for reproducibility\n+              grep -a -m1 -E '\"Action\":\"output\".*seed' \"json/run-$i-$(echo \"$p\" | tr '/.' '__').json\" \\\n+                || true\n```\n\n---\n\n`98-101`: **Nit: unused directory**\n\n`mkdir -p flake/go json` creates `flake/go` which isn\u2019t used. Drop it.\n\n\n\n```diff\n-          mkdir -p flake/go json\n+          mkdir -p json\n```\n\n</blockquote></details>\n\n</blockquote></details>\n\n<details>\n<summary>\ud83d\udcdc Review details</summary>\n\n**Configuration used**: CodeRabbit UI\n\n**Review profile**: CHILL\n\n**Plan**: Pro\n\n**\ud83d\udca1 Knowledge Base configuration:**\n\n- MCP integration is disabled by default for public repositories\n- Jira integration is disabled by default for public repositories\n- Linear integration is disabled by default for public repositories\n\nYou can enable these sources in your CodeRabbit configuration.\n\n<details>\n<summary>\ud83d\udce5 Commits</summary>\n\nReviewing files that changed from the base of the PR and between 427b23f49af028969d4ab9ab047a1845b55f3e9a and 651b5b079fe7e426cd5bc801f56b66f97c762565.\n\n</details>\n\n<details>\n<summary>\ud83d\udcd2 Files selected for processing (2)</summary>\n\n* `.github/workflows/flake-go.yaml` (1 hunks)\n* `cli/agent_internal_test.go` (1 hunks)\n\n</details>\n\n<details>\n<summary>\ud83e\uddf0 Additional context used</summary>\n\n<details>\n<summary>\ud83d\udcd3 Path-based instructions (3)</summary>\n\n<details>\n<summary>**/*_test.go</summary>\n\n\n**\ud83d\udcc4 CodeRabbit inference engine (.cursorrules)**\n\n> `**/*_test.go`: All tests must use `t.Parallel()` to run concurrently, which improves test suite performance and helps identify race conditions.\n> All tests should run in parallel using `t.Parallel()` to ensure efficient testing and expose potential race conditions.\n> \n> Use unique identifiers (e.g., fmt.Sprintf(\"test-client-%s-%d\", t.Name(), time.Now().UnixNano())) and never use hardcoded names in concurrent tests to prevent race conditions.\n\nFiles:\n- `cli/agent_internal_test.go`\n\n</details>\n<details>\n<summary>**/*.go</summary>\n\n\n**\ud83d\udcc4 CodeRabbit inference engine (.cursorrules)**\n\n> `**/*.go`: The codebase is rigorously linted with golangci-lint to maintain consistent code quality.\n> Coder emphasizes clear error handling, with specific patterns required: Concise error messages that avoid phrases like \"failed to\"; Wrapping errors with `%w` to maintain error chains; Using sentinel errors with the \"err\" prefix (e.g., `errNotFound`).\n> \n> `**/*.go`: NEVER use time.Sleep to mitigate timing issues. If an issue seems like it should use time.Sleep, read through https://github.com/coder/quartz and specifically the README to better understand how to handle timing issues.\n> Return OAuth2-compliant error responses using writeOAuth2Error(ctx, rw, http.StatusBadRequest, \"invalid_grant\", \"description\") for OAuth2 errors.\n> Follow Uber Go Style Guide for Go code style.\n> Use dbauthz.AsSystemRestricted(ctx) for public endpoints needing system access and plain ctx for authenticated endpoints with user context.\n\nFiles:\n- `cli/agent_internal_test.go`\n\n</details>\n<details>\n<summary>**/*.{go,sql,ts,tsx,js,jsx,md}</summary>\n\n\n**\ud83d\udcc4 CodeRabbit inference engine (CLAUDE.md)**\n\n> Ensure files end with a newline to avoid missing newlines.\n\nFiles:\n- `cli/agent_internal_test.go`\n\n</details>\n\n</details>\n\n</details>\n\n<details>\n<summary>\u23f0 Context from checks skipped due to timeout of 90000ms. You can increase the timeout in your CodeRabbit configuration to a maximum of 15 minutes (900000ms). (8)</summary>\n\n* GitHub Check: check-build\n* GitHub Check: test-go-race-pg\n* GitHub Check: test-e2e\n* GitHub Check: test-go-pg (windows-2022)\n* GitHub Check: test-go-pg (ubuntu-latest)\n* GitHub Check: test-go-pg (macos-latest)\n* GitHub Check: test-go-pg-17\n* GitHub Check: gen\n\n</details>\n\n</details>\n\n<!-- This is an auto-generated comment by CodeRabbit for review status -->",
+    "commit_id": "651b5b079fe7e426cd5bc801f56b66f97c762565",
+    "html_url": "https://github.com/coder/coder/pull/19494#pullrequestreview-3144708358",
+    "id": 3144708358,
+    "node_id": "PRR_kwDOGkVX1s67cHEG",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19494",
+    "state": "COMMENTED",
+    "submitted_at": "2025-08-22T14:24:04Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/347564?v=4",
+      "events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coderabbitai",
+      "id": 136622811,
+      "login": "coderabbitai[bot]",
+      "node_id": "BOT_kgDOCCSy2w",
+      "organizations_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coderabbitai%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19494#pullrequestreview-3145008423"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19494"
+      }
+    },
+    "author_association": "NONE",
+    "body": "**Actionable comments posted: 1**\n\n<details>\n<summary>\u267b\ufe0f Duplicate comments (2)</summary><blockquote>\n\n<details>\n<summary>.github/workflows/flake-go.yaml (2)</summary><blockquote>\n\n`128-133`: **Use printf for newlines; closing fi now present**\n\nThe missing `fi` from an earlier revision is fixed\u2014thanks. The newline in `echo \"\\n...\"` won\u2019t render on many shells. Prefer `printf`.\n\n\n```diff\n-          echo \"\\nConsistently failing tests:\" >> \"$GITHUB_STEP_SUMMARY\"\n+          printf \"\\nConsistently failing tests:\\n\" >> \"$GITHUB_STEP_SUMMARY\"\n```\n\n---\n\n`109-116`: **Disambiguate tests by package to avoid false flakiness**\n\nCounts are keyed by `.Test` only, merging identically named tests across different packages. Key by `Package/Test`. The summaries will automatically print the combined key.\n\n\n```diff\n-          jq -s '\n-            map(select(.Action==\"pass\" or .Action==\"fail\") | select(.Test)) as $events\n-            | reduce $events[] as $e ({}; .[$e.Test] = (\n-                .[$e.Test] // {pass:0,fail:0}\n-                | if $e.Action==\"pass\" then (.pass+=1) else (.fail+=1) end\n-              )\n-            )\n-          ' json/*.json > json/counts.json\n+          jq -s '\n+            map(select((.Action==\"pass\" or .Action==\"fail\") and .Test)) as $events\n+            | reduce $events[] as $e ({}; .[($e.Package // \"unknown\") + \"/\" + $e.Test] = (\n+                .[($e.Package // \"unknown\") + \"/\" + $e.Test] // {pass:0,fail:0}\n+                | if $e.Action==\"pass\" then (.pass+=1) else (.fail+=1) end\n+              ))\n+          ' json/*.json > json/counts.json\n```\nNo changes needed for the downstream jq that reads `.name`; it will show `pkg/test`.\n\n\nAlso applies to: 118-119\n\n</blockquote></details>\n\n</blockquote></details>\n\n<details>\n<summary>\ud83e\uddf9 Nitpick comments (5)</summary><blockquote>\n\n<details>\n<summary>.github/workflows/flake-go.yaml (5)</summary><blockquote>\n\n`31-37`: **Pin third-party action to a commit SHA**\n\n`tj-actions/changed-files@v44` is tag-pinned; pin to the release commit SHA to reduce supply-chain risk. Keep the human-readable tag in a comment for discoverability.\n\nExample:\n\n```diff\n-        uses: tj-actions/changed-files@v44\n+        uses: tj-actions/changed-files@<COMMIT_SHA> # v44\n```\n\n---\n\n`44-46`: **Unused env var POSTGRES_VERSION**\n\n`POSTGRES_VERSION` isn\u2019t referenced in this workflow. Either wire it into the Make target or drop it to avoid confusion.\n\n```diff\n   env:\n     ATTEMPTS: '10'\n-    POSTGRES_VERSION: '17'\n```\n\n---\n\n`98-98`: **Remove unused directory creation**\n\n`flake/go` is created but never used. Keep it lean.\n\n```diff\n-          mkdir -p flake/go json\n+          mkdir -p json\n```\n\n---\n\n`102-107`: **Consider capturing shuffle seeds for repro**\n\nOptional: record the `-shuffle` seed per attempt/package to ease reproducing flake patterns locally (grep the `output` events for \u201cseed\u201d and store alongside each run).\n\nIf helpful, I can provide a small jq/awk snippet to extract and save seeds next to each JSON.\n\n---\n\n`134-134`: **Fix trailing whitespace flagged by yamllint**\n\nThere\u2019s trailing space on this blank line; remove to appease linters.\n\n```diff\n-          \n+\n```\n\n</blockquote></details>\n\n</blockquote></details>\n\n<details>\n<summary>\ud83d\udcdc Review details</summary>\n\n**Configuration used**: CodeRabbit UI\n\n**Review profile**: CHILL\n\n**Plan**: Pro\n\n**\ud83d\udca1 Knowledge Base configuration:**\n\n- MCP integration is disabled by default for public repositories\n- Jira integration is disabled by default for public repositories\n- Linear integration is disabled by default for public repositories\n\nYou can enable these sources in your CodeRabbit configuration.\n\n<details>\n<summary>\ud83d\udce5 Commits</summary>\n\nReviewing files that changed from the base of the PR and between 651b5b079fe7e426cd5bc801f56b66f97c762565 and 73b6d0592951ebcf457cff26ca128fa6516ec558.\n\n</details>\n\n<details>\n<summary>\ud83d\udcd2 Files selected for processing (1)</summary>\n\n* `.github/workflows/flake-go.yaml` (1 hunks)\n\n</details>\n\n<details>\n<summary>\ud83e\uddf0 Additional context used</summary>\n\n<details>\n<summary>\ud83e\ude9b YAMLlint (1.37.1)</summary>\n\n<details>\n<summary>.github/workflows/flake-go.yaml</summary>\n\n[error] 134-134: trailing spaces\n\n(trailing-spaces)\n\n</details>\n\n</details>\n\n</details>\n\n<details>\n<summary>\u23f0 Context from checks skipped due to timeout of 90000ms. You can increase the timeout in your CodeRabbit configuration to a maximum of 15 minutes (900000ms). (11)</summary>\n\n* GitHub Check: go-flake\n* GitHub Check: build-dylib\n* GitHub Check: test-go-race-pg\n* GitHub Check: test-e2e\n* GitHub Check: test-go-pg (windows-2022)\n* GitHub Check: test-go-pg (ubuntu-latest)\n* GitHub Check: check-build\n* GitHub Check: test-go-pg (macos-latest)\n* GitHub Check: lint\n* GitHub Check: test-go-pg-17\n* GitHub Check: gen\n\n</details>\n\n</details>\n\n<details>\n<summary>\ud83d\udd07 Additional comments (3)</summary><blockquote>\n\n<details>\n<summary>.github/workflows/flake-go.yaml (3)</summary><blockquote>\n\n`10-13`: **Good use of concurrency controls for PRs**\n\nGrouping by workflow/ref and canceling non-main in-progress runs is sane for CI cost control.\n\n---\n\n`71-93`: **Package/test discovery looks solid**\n\nDeriving packages via `go list` per changed test dir and building a strict `^(... )$` regex from `Test*` symbols is a reasonable, low-risk approach.\n\n---\n\n`121-127`: **Summary section LGTM**\n\nClear aggregation and formatting of flakies; good use of `jq -r` for clean names.\n\n</blockquote></details>\n\n</blockquote></details>\n\n<!-- This is an auto-generated comment by CodeRabbit for review status -->",
+    "commit_id": "73b6d0592951ebcf457cff26ca128fa6516ec558",
+    "html_url": "https://github.com/coder/coder/pull/19494#pullrequestreview-3145008423",
+    "id": 3145008423,
+    "node_id": "PRR_kwDOGkVX1s67dQUn",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19494",
+    "state": "COMMENTED",
+    "submitted_at": "2025-08-22T15:48:27Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/347564?v=4",
+      "events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coderabbitai",
+      "id": 136622811,
+      "login": "coderabbitai[bot]",
+      "node_id": "BOT_kgDOCCSy2w",
+      "organizations_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coderabbitai%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19494#pullrequestreview-3145038142"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19494"
+      }
+    },
+    "author_association": "NONE",
+    "body": "**Actionable comments posted: 2**\n\n<details>\n<summary>\ud83d\udcdc Review details</summary>\n\n**Configuration used**: CodeRabbit UI\n\n**Review profile**: CHILL\n\n**Plan**: Pro\n\n**\ud83d\udca1 Knowledge Base configuration:**\n\n- MCP integration is disabled by default for public repositories\n- Jira integration is disabled by default for public repositories\n- Linear integration is disabled by default for public repositories\n\nYou can enable these sources in your CodeRabbit configuration.\n\n<details>\n<summary>\ud83d\udce5 Commits</summary>\n\nReviewing files that changed from the base of the PR and between 73b6d0592951ebcf457cff26ca128fa6516ec558 and ca1bd6cf58e4b207a8c38a09ed85c4cbffe29491.\n\n</details>\n\n<details>\n<summary>\ud83d\udcd2 Files selected for processing (2)</summary>\n\n* `.github/workflows/flake-go.yaml` (1 hunks)\n* `cli/agent_test.go` (2 hunks)\n\n</details>\n\n<details>\n<summary>\ud83d\udea7 Files skipped from review as they are similar to previous changes (1)</summary>\n\n* .github/workflows/flake-go.yaml\n\n</details>\n\n<details>\n<summary>\ud83e\uddf0 Additional context used</summary>\n\n<details>\n<summary>\ud83d\udcd3 Path-based instructions (3)</summary>\n\n<details>\n<summary>**/*_test.go</summary>\n\n\n**\ud83d\udcc4 CodeRabbit inference engine (.cursorrules)**\n\n> `**/*_test.go`: All tests must use `t.Parallel()` to run concurrently, which improves test suite performance and helps identify race conditions.\n> All tests should run in parallel using `t.Parallel()` to ensure efficient testing and expose potential race conditions.\n> \n> Use unique identifiers (e.g., fmt.Sprintf(\"test-client-%s-%d\", t.Name(), time.Now().UnixNano())) and never use hardcoded names in concurrent tests to prevent race conditions.\n\nFiles:\n- `cli/agent_test.go`\n\n</details>\n<details>\n<summary>**/*.go</summary>\n\n\n**\ud83d\udcc4 CodeRabbit inference engine (.cursorrules)**\n\n> `**/*.go`: The codebase is rigorously linted with golangci-lint to maintain consistent code quality.\n> Coder emphasizes clear error handling, with specific patterns required: Concise error messages that avoid phrases like \"failed to\"; Wrapping errors with `%w` to maintain error chains; Using sentinel errors with the \"err\" prefix (e.g., `errNotFound`).\n> \n> `**/*.go`: NEVER use time.Sleep to mitigate timing issues. If an issue seems like it should use time.Sleep, read through https://github.com/coder/quartz and specifically the README to better understand how to handle timing issues.\n> Return OAuth2-compliant error responses using writeOAuth2Error(ctx, rw, http.StatusBadRequest, \"invalid_grant\", \"description\") for OAuth2 errors.\n> Follow Uber Go Style Guide for Go code style.\n> Use dbauthz.AsSystemRestricted(ctx) for public endpoints needing system access and plain ctx for authenticated endpoints with user context.\n\nFiles:\n- `cli/agent_test.go`\n\n</details>\n<details>\n<summary>**/*.{go,sql,ts,tsx,js,jsx,md}</summary>\n\n\n**\ud83d\udcc4 CodeRabbit inference engine (CLAUDE.md)**\n\n> Ensure files end with a newline to avoid missing newlines.\n\nFiles:\n- `cli/agent_test.go`\n\n</details>\n\n</details><details>\n<summary>\ud83e\uddec Code graph analysis (1)</summary>\n\n<details>\n<summary>cli/agent_test.go (1)</summary><blockquote>\n\n<details>\n<summary>cryptorand/numbers.go (1)</summary>\n\n* `Float64` (63-66)\n\n</details>\n\n</blockquote></details>\n\n</details>\n\n</details>\n\n<details>\n<summary>\u23f0 Context from checks skipped due to timeout of 90000ms. You can increase the timeout in your CodeRabbit configuration to a maximum of 15 minutes (900000ms). (11)</summary>\n\n* GitHub Check: go-flake\n* GitHub Check: test-go-pg (windows-2022)\n* GitHub Check: build-dylib\n* GitHub Check: check-build\n* GitHub Check: test-go-pg (ubuntu-latest)\n* GitHub Check: test-go-pg (macos-latest)\n* GitHub Check: test-go-race-pg\n* GitHub Check: test-e2e\n* GitHub Check: lint\n* GitHub Check: test-go-pg-17\n* GitHub Check: gen\n\n</details>\n\n</details>\n\n<!-- This is an auto-generated comment by CodeRabbit for review status -->",
+    "commit_id": "ca1bd6cf58e4b207a8c38a09ed85c4cbffe29491",
+    "html_url": "https://github.com/coder/coder/pull/19494#pullrequestreview-3145038142",
+    "id": 3145038142,
+    "node_id": "PRR_kwDOGkVX1s67dXk-",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19494",
+    "state": "COMMENTED",
+    "submitted_at": "2025-08-22T15:59:21Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/347564?v=4",
+      "events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coderabbitai",
+      "id": 136622811,
+      "login": "coderabbitai[bot]",
+      "node_id": "BOT_kgDOCCSy2w",
+      "organizations_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coderabbitai%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coderabbitai%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19494#pullrequestreview-3149993004"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19494"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I agree that this is too complicated and hard to follow for bash.\r\n\r\nFurthermore, we need to keep business logic out of GitHub actions. Actions should be as simple as possible, just calling scripts that we can independently run and test.",
+    "commit_id": "b9a562b1882aea8345f48e407ae9ed2e06bf96f9",
+    "html_url": "https://github.com/coder/coder/pull/19494#pullrequestreview-3149993004",
+    "id": 3149993004,
+    "node_id": "PRR_kwDOGkVX1s67wRQs",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19494",
+    "state": "COMMENTED",
+    "submitted_at": "2025-08-25T05:45:29Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  }
+]

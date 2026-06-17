@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/a0b7ef7b3d0e17e0cb8fde373c4c5bf512370f6b/enterprise%2Fcoderd%2Fworkspaces_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcoderd%2Fworkspaces_test.go?ref=a0b7ef7b3d0e17e0cb8fde373c4c5bf512370f6b",
+    "deletions": 1,
+    "filename": "enterprise/coderd/workspaces_test.go",
+    "patch": "@@ -697,7 +697,7 @@ func TestWorkspaceAutobuild(t *testing.T) {\n \t\t\tcwr.AutostartSchedule = ptr.Ref(sched.String())\n \t\t})\n \t\tcoderdtest.AwaitWorkspaceBuildJobCompleted(t, client, ws.LatestBuild.ID)\n-\t\tcoderdtest.MustTransitionWorkspace(t, client, ws.ID, database.WorkspaceTransitionStart, database.WorkspaceTransitionStop)\n+\t\tws = coderdtest.MustTransitionWorkspace(t, client, ws.ID, database.WorkspaceTransitionStart, database.WorkspaceTransitionStop)\n \n \t\t// Assert that autostart works when the workspace isn't dormant..\n \t\ttickCh <- sched.Next(ws.LatestBuild.CreatedAt)",
+    "raw_url": "https://github.com/coder/coder/raw/a0b7ef7b3d0e17e0cb8fde373c4c5bf512370f6b/enterprise%2Fcoderd%2Fworkspaces_test.go",
+    "sha": "f95a5f4784776d3abe8242298a329f8c6af5d49d",
+    "status": "modified"
+  }
+]

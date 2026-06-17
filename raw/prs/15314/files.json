@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/ebbdfd9aba06985ac9ffe26f1c49bfa265c1276e/coderd%2Fdatabase%2Fquerier_test.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdatabase%2Fquerier_test.go?ref=ebbdfd9aba06985ac9ffe26f1c49bfa265c1276e",
+    "deletions": 1,
+    "filename": "coderd/database/querier_test.go",
+    "patch": "@@ -620,7 +620,6 @@ func TestGetAuthorizedWorkspacesAndAgentsByOwnerID(t *testing.T) {\n \t\tt.SkipNow()\n \t}\n \n-\tctx := testutil.Context(t, testutil.WaitLong)\n \tsqlDB := testSQLDB(t)\n \terr := migrations.Up(sqlDB)\n \trequire.NoError(t, err)\n@@ -695,6 +694,7 @@ func TestGetAuthorizedWorkspacesAndAgentsByOwnerID(t *testing.T) {\n \t}\n \tt.Run(\"sqlQuerier\", func(t *testing.T) {\n \t\tt.Parallel()\n+\t\tctx := testutil.Context(t, testutil.WaitMedium)\n \n \t\tuserSubject, _, err := httpmw.UserRBACSubject(ctx, db, user.ID, rbac.ExpandableScope(rbac.ScopeAll))\n \t\trequire.NoError(t, err)\n@@ -717,6 +717,7 @@ func TestGetAuthorizedWorkspacesAndAgentsByOwnerID(t *testing.T) {\n \n \tt.Run(\"dbauthz\", func(t *testing.T) {\n \t\tt.Parallel()\n+\t\tctx := testutil.Context(t, testutil.WaitMedium)\n \n \t\tauthzdb := dbauthz.New(db, authorizer, slogtest.Make(t, &slogtest.Options{}), coderdtest.AccessControlStorePointer())\n ",
+    "raw_url": "https://github.com/coder/coder/raw/ebbdfd9aba06985ac9ffe26f1c49bfa265c1276e/coderd%2Fdatabase%2Fquerier_test.go",
+    "sha": "b3fde5a558e6bb9098b3dcaf7cd4139f0e4eb19f",
+    "status": "modified"
+  }
+]

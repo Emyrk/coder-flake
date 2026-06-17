@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/1a2e47f492b3fe9e1e3335c8a36d357fb8170e4b/coderd%2Fidpsync%2Frole_test.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fidpsync%2Frole_test.go?ref=1a2e47f492b3fe9e1e3335c8a36d357fb8170e4b",
+    "deletions": 2,
+    "filename": "coderd/idpsync/role_test.go",
+    "patch": "@@ -225,9 +225,8 @@ func TestRoleSyncTable(t *testing.T) {\n \t// deployment. This tests all organizations being synced together.\n \t// The reason we do them individually, is that it is much easier to\n \t// debug a single test case.\n+\t//nolint:paralleltest, tparallel // This should run after all the individual tests\n \tt.Run(\"AllTogether\", func(t *testing.T) {\n-\t\tt.Parallel()\n-\n \t\tdb, _ := dbtestutil.NewDB(t)\n \t\tmanager := runtimeconfig.NewManager()\n \t\ts := idpsync.NewAGPLSync(slogtest.Make(t, &slogtest.Options{",
+    "raw_url": "https://github.com/coder/coder/raw/1a2e47f492b3fe9e1e3335c8a36d357fb8170e4b/coderd%2Fidpsync%2Frole_test.go",
+    "sha": "d766ada6057f7b461d5eaf5223c18c3ab909ebd9",
+    "status": "modified"
+  }
+]

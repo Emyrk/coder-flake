@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/b887f4f2e496ba15c8d6c53a987171191313c427/agent%2Fagentscripts%2Fagentscripts_test.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagentscripts%2Fagentscripts_test.go?ref=b887f4f2e496ba15c8d6c53a987171191313c427",
+    "deletions": 1,
+    "filename": "agent/agentscripts/agentscripts_test.go",
+    "patch": "@@ -69,12 +69,18 @@ func TestEnv(t *testing.T) {\n \n \tctx := testutil.Context(t, testutil.WaitLong)\n \n-\ttestutil.Go(t, func() {\n+\tdone := testutil.Go(t, func() {\n \t\terr := runner.Execute(ctx, func(script codersdk.WorkspaceAgentScript) bool {\n \t\t\treturn true\n \t\t})\n \t\tassert.NoError(t, err)\n \t})\n+\tdefer func() {\n+\t\tselect {\n+\t\tcase <-ctx.Done():\n+\t\tcase <-done:\n+\t\t}\n+\t}()\n \n \tvar log []agentsdk.Log\n \tfor {",
+    "raw_url": "https://github.com/coder/coder/raw/b887f4f2e496ba15c8d6c53a987171191313c427/agent%2Fagentscripts%2Fagentscripts_test.go",
+    "sha": "2be7e76c54f6af7cc12d9007289958d0f8598c7b",
+    "status": "modified"
+  }
+]

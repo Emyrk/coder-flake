@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 15,
+    "blob_url": "https://github.com/coder/coder/blob/d62fa455b4d2f52c67aac274c70b7aeb8ceeb06b/agent%2Fx%2Fagentdesktop%2Fportabledesktop_internal_test.go",
+    "changes": 18,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fx%2Fagentdesktop%2Fportabledesktop_internal_test.go?ref=d62fa455b4d2f52c67aac274c70b7aeb8ceeb06b",
+    "deletions": 3,
+    "filename": "agent/x/agentdesktop/portabledesktop_internal_test.go",
+    "patch": "@@ -812,12 +812,18 @@ func TestPortableDesktop_IdleTimeout_StopsRecordings(t *testing.T) {\n \tstopTrap := clk.Trap().NewTimer(\"agentdesktop\", \"stop_timeout\")\n \n \t// Advance past idle timeout to trigger the stop-all.\n-\tclk.Advance(idleTimeout)\n+\tclk.Advance(idleTimeout).MustWait(ctx)\n \n \t// Wait for the stop timer to be created, then release it.\n \tstopTrap.MustWait(ctx).MustRelease(ctx)\n \tstopTrap.Close()\n \n+\t// Advance past the 15s stop timeout so the process is\n+\t// forcibly killed. Without this the test depends on the real\n+\t// shell handling SIGINT promptly, which is unreliable on\n+\t// macOS CI runners (the flake in #1461).\n+\tclk.Advance(15 * time.Second).MustWait(ctx)\n+\n \t// The recording process should now be stopped.\n \trequire.Eventually(t, func() bool {\n \t\tpd.mu.Lock()\n@@ -939,11 +945,17 @@ func TestPortableDesktop_IdleTimeout_MultipleRecordings(t *testing.T) {\n \tstopTrap := clk.Trap().NewTimer(\"agentdesktop\", \"stop_timeout\")\n \n \t// Advance past idle timeout.\n-\tclk.Advance(idleTimeout)\n+\tclk.Advance(idleTimeout).MustWait(ctx)\n \n-\t// Wait for both stop timers.\n+\t// Each idle monitor goroutine serializes on p.mu, so the\n+\t// second stop timer is only created after the first stop\n+\t// completes. Advance past the 15s stop timeout after each\n+\t// release so the process is forcibly killed instead of\n+\t// depending on SIGINT (unreliable on macOS \u2014 see #1461).\n \tstopTrap.MustWait(ctx).MustRelease(ctx)\n+\tclk.Advance(15 * time.Second).MustWait(ctx)\n \tstopTrap.MustWait(ctx).MustRelease(ctx)\n+\tclk.Advance(15 * time.Second).MustWait(ctx)\n \tstopTrap.Close()\n \n \t// Both recordings should be stopped.",
+    "raw_url": "https://github.com/coder/coder/raw/d62fa455b4d2f52c67aac274c70b7aeb8ceeb06b/agent%2Fx%2Fagentdesktop%2Fportabledesktop_internal_test.go",
+    "sha": "c63a252309c694ec80de69b67bc250212879076a",
+    "status": "modified"
+  }
+]

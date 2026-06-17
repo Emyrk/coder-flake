@@ -1,0 +1,122 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14052#pullrequestreview-2206955358"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14052"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "295078efda2c7d60fcc0823d4c0c568cb707c5fc",
+    "html_url": "https://github.com/coder/coder/pull/14052#pullrequestreview-2206955358",
+    "id": 2206955358,
+    "node_id": "PRR_kwDOGkVX1s6Di3de",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14052",
+    "state": "COMMENTED",
+    "submitted_at": "2024-07-30T08:05:19Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/10648092?u=60d24b35d3cbbee840ff2e795098dcf04190bb92&v=4",
+      "events_url": "https://api.github.com/users/matifali/events{/privacy}",
+      "followers_url": "https://api.github.com/users/matifali/followers",
+      "following_url": "https://api.github.com/users/matifali/following{/other_user}",
+      "gists_url": "https://api.github.com/users/matifali/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/matifali",
+      "id": 10648092,
+      "login": "matifali",
+      "node_id": "MDQ6VXNlcjEwNjQ4MDky",
+      "organizations_url": "https://api.github.com/users/matifali/orgs",
+      "received_events_url": "https://api.github.com/users/matifali/received_events",
+      "repos_url": "https://api.github.com/users/matifali/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/matifali/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/matifali/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/matifali",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14052#pullrequestreview-2210219668"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14052"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "c15cf47b9b1a6a12abc0f1b9d8ab55d40b825f88",
+    "html_url": "https://github.com/coder/coder/pull/14052#pullrequestreview-2210219668",
+    "id": 2210219668,
+    "node_id": "PRR_kwDOGkVX1s6DvUaU",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14052",
+    "state": "APPROVED",
+    "submitted_at": "2024-07-31T13:46:56Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?u=260538c7d8b8c3c5350dba175ebb8294358441e0&v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14052#pullrequestreview-2210224774"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14052"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "295078efda2c7d60fcc0823d4c0c568cb707c5fc",
+    "html_url": "https://github.com/coder/coder/pull/14052#pullrequestreview-2210224774",
+    "id": 2210224774,
+    "node_id": "PRR_kwDOGkVX1s6DvVqG",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14052",
+    "state": "COMMENTED",
+    "submitted_at": "2024-07-31T13:47:01Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?u=260538c7d8b8c3c5350dba175ebb8294358441e0&v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  }
+]

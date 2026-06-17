@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/30ea590ee656a099db56ac6e7f2782b88002170b/.github%2Fworkflows%2Fcoder.yaml",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Fcoder.yaml?ref=30ea590ee656a099db56ac6e7f2782b88002170b",
+    "deletions": 1,
+    "filename": ".github/workflows/coder.yaml",
+    "patch": "@@ -130,7 +130,7 @@ jobs:\n       - run:\n           gotestsum --jsonfile=\"gotests.json\" --packages=\"./...\" --\n           -covermode=atomic -coverprofile=\"gotests.coverage\" -timeout=3m\n-          -count=3 -race\n+          -count=3 -race -parallel=2\n \n       - uses: codecov/codecov-action@v2\n         with:",
+    "raw_url": "https://github.com/coder/coder/raw/30ea590ee656a099db56ac6e7f2782b88002170b/.github%2Fworkflows%2Fcoder.yaml",
+    "sha": "1b7f1df5f866b8400607175b248dc1cfdc384445",
+    "status": "modified"
+  },
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/30ea590ee656a099db56ac6e7f2782b88002170b/peer%2Fconn_test.go",
+    "changes": 5,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/peer%2Fconn_test.go?ref=30ea590ee656a099db56ac6e7f2782b88002170b",
+    "deletions": 1,
+    "filename": "peer/conn_test.go",
+    "patch": "@@ -23,7 +23,7 @@ import (\n )\n \n const (\n-\tdisconnectedTimeout = time.Millisecond * 200\n+\tdisconnectedTimeout = time.Second\n \tfailedTimeout       = disconnectedTimeout * 5\n \tkeepAliveInterval   = time.Millisecond * 2\n )\n@@ -89,6 +89,7 @@ func TestConn(t *testing.T) {\n \n \t\tsch, err := server.Accept(context.Background())\n \t\trequire.NoError(t, err)\n+\t\tdefer sch.Close()\n \n \t\t_ = cch.Close()\n \t\t_, err = sch.Read(make([]byte, 4))\n@@ -102,6 +103,7 @@ func TestConn(t *testing.T) {\n \t\trequire.NoError(t, err)\n \t\tsch, err := server.Accept(context.Background())\n \t\trequire.NoError(t, err)\n+\t\tdefer sch.Close()\n \n \t\terr = wan.Stop()\n \t\trequire.NoError(t, err)\n@@ -117,6 +119,7 @@ func TestConn(t *testing.T) {\n \t\trequire.NoError(t, err)\n \t\tsch, err := server.Accept(context.Background())\n \t\trequire.NoError(t, err)\n+\t\tdefer sch.Close()\n \t\tgo func() {\n \t\t\tfor i := 0; i < 1024; i++ {\n \t\t\t\t_, err := cch.Write(make([]byte, 4096))",
+    "raw_url": "https://github.com/coder/coder/raw/30ea590ee656a099db56ac6e7f2782b88002170b/peer%2Fconn_test.go",
+    "sha": "c6912a24c0faa826ee6353b2e42f78079ec67e2f",
+    "status": "modified"
+  }
+]

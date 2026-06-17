@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/f5a4b93682fa04248ea0bc9ccfcbbbd004e3c94c/provisioner%2Fterraform%2Fmodules_internal_test.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/provisioner%2Fterraform%2Fmodules_internal_test.go?ref=f5a4b93682fa04248ea0bc9ccfcbbbd004e3c94c",
+    "deletions": 0,
+    "filename": "provisioner/terraform/modules_internal_test.go",
+    "patch": "@@ -23,6 +23,9 @@ import (\n // platform specific.\n func TestGetModulesArchive(t *testing.T) {\n \tt.Parallel()\n+\tif runtime.GOOS == \"windows\" {\n+\t\tt.Skip(\"Windows path separators and newline handling make this test unreliable.\")\n+\t}\n \n \tt.Run(\"Success\", func(t *testing.T) {\n \t\tt.Parallel()",
+    "raw_url": "https://github.com/coder/coder/raw/f5a4b93682fa04248ea0bc9ccfcbbbd004e3c94c/provisioner%2Fterraform%2Fmodules_internal_test.go",
+    "sha": "39e29342edefbf0a72ed6b65e77e78af61a2e244",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/229866f7c970d503bad4a287014d761a64bb4407/enterprise%2Fcoderd%2Fworkspaces_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcoderd%2Fworkspaces_test.go?ref=229866f7c970d503bad4a287014d761a64bb4407",
+    "deletions": 1,
+    "filename": "enterprise/coderd/workspaces_test.go",
+    "patch": "@@ -1277,7 +1277,7 @@ func TestWorkspaceAutobuild(t *testing.T) {\n \n \t\t// We should see the workspace get stopped now.\n \t\ttickTime2 := ws.LastUsedAt.Add(inactiveTTL * 2)\n-\t\tcoderdtest.UpdateProvisionerLastSeenAt(t, db, p.ID, tickTime)\n+\t\tcoderdtest.UpdateProvisionerLastSeenAt(t, db, p.ID, tickTime2)\n \t\ttickCh <- tickTime2\n \t\tstats = <-statsCh\n \t\trequire.Len(t, stats.Errors, 0)",
+    "raw_url": "https://github.com/coder/coder/raw/229866f7c970d503bad4a287014d761a64bb4407/enterprise%2Fcoderd%2Fworkspaces_test.go",
+    "sha": "97a223b17751ca1c89a385e992643e86bbda8873",
+    "status": "modified"
+  }
+]

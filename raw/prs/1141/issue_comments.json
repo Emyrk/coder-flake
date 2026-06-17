@@ -1,0 +1,47 @@
+[
+  {
+    "author_association": "NONE",
+    "body": "# [Codecov](https://codecov.io/gh/coder/coder/pull/1141?src=pr&el=h1&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder) Report\n> Merging [#1141](https://codecov.io/gh/coder/coder/pull/1141?src=pr&el=desc&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder) (13bedba) into [main](https://codecov.io/gh/coder/coder/commit/5575e3c485dd57c050f8008de385d2d8babbaa1a?el=desc&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder) (5575e3c) will **increase** coverage by `8.78%`.\n> The diff coverage is `72.72%`.\n\n```diff\n@@            Coverage Diff             @@\n##             main    #1141      +/-   ##\n==========================================\n+ Coverage   57.54%   66.33%   +8.78%     \n==========================================\n  Files         261      261              \n  Lines       16237    16248      +11     \n  Branches      156      156              \n==========================================\n+ Hits         9344    10778    +1434     \n+ Misses       5873     4360    -1513     \n- Partials     1020     1110      +90     \n```\n\n| Flag | Coverage \u0394 | |\n|---|---|---|\n| unittest-go-macos-latest | `53.84% <72.72%> (+0.13%)` | :arrow_up: |\n| unittest-go-postgres- | `65.73% <72.72%> (?)` | |\n| unittest-go-ubuntu-latest | `56.24% <72.72%> (-0.11%)` | :arrow_down: |\n| unittest-go-windows-2022 | `53.31% <72.72%> (+0.08%)` | :arrow_up: |\n| unittest-js | `67.28% <\u00f8> (\u00f8)` | |\n\n| [Impacted Files](https://codecov.io/gh/coder/coder/pull/1141?src=pr&el=tree&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder) | Coverage \u0394 | |\n|---|---|---|\n| [pty/ptytest/ptytest.go](https://codecov.io/gh/coder/coder/pull/1141/diff?src=pr&el=tree&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder#diff-cHR5L3B0eXRlc3QvcHR5dGVzdC5nbw==) | `91.30% <72.72%> (-3.53%)` | :arrow_down: |\n| [coderd/turnconn/turnconn.go](https://codecov.io/gh/coder/coder/pull/1141/diff?src=pr&el=tree&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder#diff-Y29kZXJkL3R1cm5jb25uL3R1cm5jb25uLmdv) | `81.91% <0.00%> (-3.20%)` | :arrow_down: |\n| [codersdk/workspaceagents.go](https://codecov.io/gh/coder/coder/pull/1141/diff?src=pr&el=tree&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder#diff-Y29kZXJzZGsvd29ya3NwYWNlYWdlbnRzLmdv) | `52.14% <0.00%> (-1.56%)` | :arrow_down: |\n| [peer/conn.go](https://codecov.io/gh/coder/coder/pull/1141/diff?src=pr&el=tree&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder#diff-cGVlci9jb25uLmdv) | `78.93% <0.00%> (\u00f8)` | |\n| [provisioner/echo/serve.go](https://codecov.io/gh/coder/coder/pull/1141/diff?src=pr&el=tree&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder#diff-cHJvdmlzaW9uZXIvZWNoby9zZXJ2ZS5nbw==) | `56.80% <0.00%> (\u00f8)` | |\n| [coderd/provisionerdaemons.go](https://codecov.io/gh/coder/coder/pull/1141/diff?src=pr&el=tree&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder#diff-Y29kZXJkL3Byb3Zpc2lvbmVyZGFlbW9ucy5nbw==) | `62.79% <0.00%> (+0.50%)` | :arrow_up: |\n| [coderd/workspaceagents.go](https://codecov.io/gh/coder/coder/pull/1141/diff?src=pr&el=tree&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder#diff-Y29kZXJkL3dvcmtzcGFjZWFnZW50cy5nbw==) | `59.62% <0.00%> (+1.11%)` | :arrow_up: |\n| [provisionerd/provisionerd.go](https://codecov.io/gh/coder/coder/pull/1141/diff?src=pr&el=tree&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder#diff-cHJvdmlzaW9uZXJkL3Byb3Zpc2lvbmVyZC5nbw==) | `76.54% <0.00%> (+1.34%)` | :arrow_up: |\n| [coderd/templates.go](https://codecov.io/gh/coder/coder/pull/1141/diff?src=pr&el=tree&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder#diff-Y29kZXJkL3RlbXBsYXRlcy5nbw==) | `62.29% <0.00%> (+1.63%)` | :arrow_up: |\n| [peer/channel.go](https://codecov.io/gh/coder/coder/pull/1141/diff?src=pr&el=tree&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder#diff-cGVlci9jaGFubmVsLmdv) | `84.97% <0.00%> (+1.73%)` | :arrow_up: |\n| ... and [9 more](https://codecov.io/gh/coder/coder/pull/1141/diff?src=pr&el=tree-more&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder) | |\n\n------\n\n[Continue to review full report at Codecov](https://codecov.io/gh/coder/coder/pull/1141?src=pr&el=continue&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder).\n> **Legend** - [Click here to learn more](https://docs.codecov.io/docs/codecov-delta?utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder)\n> `\u0394 = absolute <relative> (impact)`, `\u00f8 = not affected`, `? = missing data`\n> Powered by [Codecov](https://codecov.io/gh/coder/coder/pull/1141?src=pr&el=footer&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder). Last update [5575e3c...13bedba](https://codecov.io/gh/coder/coder/pull/1141?src=pr&el=lastupdated&utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder). Read the [comment docs](https://docs.codecov.io/docs/pull-request-comments?utm_medium=referral&utm_source=github&utm_content=comment&utm_campaign=pr+comments&utm_term=coder).\n",
+    "created_at": "2022-04-25T14:29:49Z",
+    "html_url": "https://github.com/coder/coder/pull/1141#issuecomment-1108652643",
+    "id": 1108652643,
+    "issue_url": "https://api.github.com/repos/coder/coder/issues/1141",
+    "node_id": "IC_kwDOGkVX1s5CFLJj",
+    "performed_via_github_app": null,
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/issues/comments/1108652643/reactions"
+    },
+    "updated_at": "2022-04-25T16:28:09Z",
+    "url": "https://api.github.com/repos/coder/coder/issues/comments/1108652643",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/254?v=4",
+      "events_url": "https://api.github.com/users/codecov%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/codecov%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/codecov%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/codecov%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/codecov",
+      "id": 22429695,
+      "login": "codecov[bot]",
+      "node_id": "MDM6Qm90MjI0Mjk2OTU=",
+      "organizations_url": "https://api.github.com/users/codecov%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/codecov%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/codecov%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/codecov%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/codecov%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/codecov%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  }
+]

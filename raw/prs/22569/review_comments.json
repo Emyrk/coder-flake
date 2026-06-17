@@ -1,0 +1,71 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/22569#discussion_r2881798479"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/22569"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2881798479"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I wonder if it would help to add something like this `await popup.waitForLoadState()`",
+    "commit_id": "42e2d76e743580da2b70f7f4d4081346fb8cc8bc",
+    "created_at": "2026-03-04T04:55:34Z",
+    "diff_hunk": "@@ -39,6 +39,18 @@ export const beforeCoderTest = (page: Page) => {\n \t\t\t`[response] url=${response.url()} status=${response.status()} body=${responseText}`,\n \t\t);\n \t});\n+\n+\tpage.on(\"popup\", async (popup) => {\n+\t\tconsole.info(`[popup] url=${popup.url()}`);",
+    "html_url": "https://github.com/coder/coder/pull/22569#discussion_r2881798479",
+    "id": 2881798479,
+    "line": 44,
+    "node_id": "PRRC_kwDOGkVX1s6rxMFP",
+    "original_commit_id": "42e2d76e743580da2b70f7f4d4081346fb8cc8bc",
+    "original_line": 44,
+    "original_position": 6,
+    "original_start_line": null,
+    "path": "site/e2e/hooks.ts",
+    "position": 6,
+    "pull_request_review_id": 3886691955,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/22569",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2881798479/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-03-04T04:55:34Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2881798479",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/1858163?v=4",
+      "events_url": "https://api.github.com/users/jaaydenh/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jaaydenh/followers",
+      "following_url": "https://api.github.com/users/jaaydenh/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jaaydenh/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jaaydenh",
+      "id": 1858163,
+      "login": "jaaydenh",
+      "node_id": "MDQ6VXNlcjE4NTgxNjM=",
+      "organizations_url": "https://api.github.com/users/jaaydenh/orgs",
+      "received_events_url": "https://api.github.com/users/jaaydenh/received_events",
+      "repos_url": "https://api.github.com/users/jaaydenh/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jaaydenh/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jaaydenh/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jaaydenh",
+      "user_view_type": "public"
+    }
+  }
+]

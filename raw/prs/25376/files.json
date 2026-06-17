@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/f4de07e010e69bca7e8e4d82f867b179cc4f893b/coderd%2Fexp_chats_test.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fexp_chats_test.go?ref=f4de07e010e69bca7e8e4d82f867b179cc4f893b",
+    "deletions": 0,
+    "filename": "coderd/exp_chats_test.go",
+    "patch": "@@ -7761,6 +7761,14 @@ func TestPatchChatMessage(t *testing.T) {\n \n \tt.Run(\"ChangesModel\", func(t *testing.T) {\n \t\tt.Parallel()\n+\t\t// TODO(CODAGT-353): Re-enable this test after the chatd notification flow\n+\t\t// refactor gives workers enough causal information to distinguish stale\n+\t\t// control NOTIFY messages from real interrupts. The current design reuses\n+\t\t// the same status notification shape for wake-only and interrupt intents,\n+\t\t// so a stale NOTIFY can cancel a new processChat run. This subtest hits the\n+\t\t// same root cause via the persistInterruptedStep ownership gate, where a\n+\t\t// late insert from the previous turn regresses chats.last_model_config_id.\n+\t\tt.Skip(\"skipped until chatd notification flow refactor handles stale control notifications\")\n \n \t\tctx := testutil.Context(t, testutil.WaitLong)\n \t\tclient := newChatClient(t)",
+    "raw_url": "https://github.com/coder/coder/raw/f4de07e010e69bca7e8e4d82f867b179cc4f893b/coderd%2Fexp_chats_test.go",
+    "sha": "61720a426c815e5d9ff740471864f6d408ec4dd0",
+    "status": "modified"
+  },
+  {
+    "additions": 12,
+    "blob_url": "https://github.com/coder/coder/blob/f4de07e010e69bca7e8e4d82f867b179cc4f893b/coderd%2Fx%2Fchatd%2Fchatd_test.go",
+    "changes": 14,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fx%2Fchatd%2Fchatd_test.go?ref=f4de07e010e69bca7e8e4d82f867b179cc4f893b",
+    "deletions": 2,
+    "filename": "coderd/x/chatd/chatd_test.go",
+    "patch": "@@ -1100,8 +1100,12 @@ func TestRootExploreChatExcludesWebSearchProviderToolAtRuntime(t *testing.T) {\n \n func TestExploreChatSendMessageCannotMutateMCPSnapshot(t *testing.T) {\n \tt.Parallel()\n-\t// TODO(hugodutka): Unskip when chatd is free of race conditions.\n-\tt.Skip(\"skipped due to inherent race condition; see https://github.com/coder/internal/issues/1493\")\n+\t// TODO(CODAGT-353): Re-enable this test after the chatd notification flow\n+\t// refactor gives workers enough causal information to distinguish stale\n+\t// control NOTIFY messages from real interrupts. The current design reuses\n+\t// the same status notification shape for wake-only and interrupt intents,\n+\t// so a stale NOTIFY can cancel a new processChat run.\n+\tt.Skip(\"skipped until chatd notification flow refactor handles stale control notifications\")\n \n \tdb, ps := dbtestutil.NewDB(t)\n \tctx := testutil.Context(t, testutil.WaitLong)\n@@ -10104,6 +10108,12 @@ func TestAdvisorGating_ExploreSubagent(t *testing.T) {\n // message, losing the context the outer model had been building on.\n func TestAdvisorChainMode_SnapshotKeepsFullHistory(t *testing.T) {\n \tt.Parallel()\n+\t// TODO(CODAGT-353): Re-enable this test after the chatd notification flow\n+\t// refactor gives workers enough causal information to distinguish stale\n+\t// control NOTIFY messages from real interrupts. The current design reuses\n+\t// the same status notification shape for wake-only and interrupt intents,\n+\t// so a stale NOTIFY can cancel a new processChat run.\n+\tt.Skip(\"skipped until chatd notification flow refactor handles stale control notifications\")\n \n \tdb, ps := dbtestutil.NewDB(t)\n \tctx := testutil.Context(t, testutil.WaitLong)",
+    "raw_url": "https://github.com/coder/coder/raw/f4de07e010e69bca7e8e4d82f867b179cc4f893b/coderd%2Fx%2Fchatd%2Fchatd_test.go",
+    "sha": "ed90c601d577055dc4a7d58ad76761968521b614",
+    "status": "modified"
+  },
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/f4de07e010e69bca7e8e4d82f867b179cc4f893b/enterprise%2Fcoderd%2Fx%2Fchatd%2Fchatd_test.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcoderd%2Fx%2Fchatd%2Fchatd_test.go?ref=f4de07e010e69bca7e8e4d82f867b179cc4f893b",
+    "deletions": 2,
+    "filename": "enterprise/coderd/x/chatd/chatd_test.go",
+    "patch": "@@ -1426,8 +1426,12 @@ func TestSubscribeRelayDialCanceledOnFastCompletion(t *testing.T) {\n // condition where the relay is too slow.\n func TestSubscribeRelayEstablishedMidStream(t *testing.T) {\n \tt.Parallel()\n-\t// TODO(hugodutka): Unskip when chatd is free of race conditions.\n-\tt.Skip(\"skipped due to inherent race condition; see https://github.com/coder/internal/issues/1455\")\n+\t// TODO(CODAGT-353): Re-enable this test after the chatd notification flow\n+\t// refactor gives workers enough causal information to distinguish stale\n+\t// control NOTIFY messages from real interrupts. The current design reuses\n+\t// the same status notification shape for wake-only and interrupt intents,\n+\t// so a stale NOTIFY can cancel a new processChat run.\n+\tt.Skip(\"skipped until chatd notification flow refactor handles stale control notifications\")\n \n \tdb, ps := dbtestutil.NewDB(t)\n \tworkerID := uuid.New()",
+    "raw_url": "https://github.com/coder/coder/raw/f4de07e010e69bca7e8e4d82f867b179cc4f893b/enterprise%2Fcoderd%2Fx%2Fchatd%2Fchatd_test.go",
+    "sha": "f94df3be8d9332cfc4c9f88d41106a265d827999",
+    "status": "modified"
+  }
+]

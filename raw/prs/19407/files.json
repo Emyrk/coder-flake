@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/08547261fa9d360249f6f852a17b85690c7e5eb1/agent%2Fagentcontainers%2Fapi_test.go",
+    "changes": 11,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagentcontainers%2Fapi_test.go?ref=08547261fa9d360249f6f852a17b85690c7e5eb1",
+    "deletions": 7,
+    "filename": "agent/agentcontainers/api_test.go",
+    "patch": "@@ -2096,9 +2096,6 @@ func TestAPI(t *testing.T) {\n \t\t\t\t}\n \t\t\t)\n \n-\t\t\tcoderBin, err := os.Executable()\n-\t\t\trequire.NoError(t, err)\n-\n \t\t\t// Mock the `List` function to always return the test container.\n \t\t\tmCCLI.EXPECT().List(gomock.Any()).Return(codersdk.WorkspaceAgentListContainersResponse{\n \t\t\t\tContainers: []codersdk.WorkspaceAgentContainer{testContainer},\n@@ -2139,7 +2136,7 @@ func TestAPI(t *testing.T) {\n \t\t\trequire.Equal(t, http.StatusOK, rec.Code)\n \n \t\t\tvar response codersdk.WorkspaceAgentListContainersResponse\n-\t\t\terr = json.NewDecoder(rec.Body).Decode(&response)\n+\t\t\terr := json.NewDecoder(rec.Body).Decode(&response)\n \t\t\trequire.NoError(t, err)\n \n \t\t\t// Then: We expect that there will be an error associated with the devcontainer.\n@@ -2149,16 +2146,16 @@ func TestAPI(t *testing.T) {\n \t\t\tgomock.InOrder(\n \t\t\t\tmCCLI.EXPECT().DetectArchitecture(gomock.Any(), testContainer.ID).Return(runtime.GOARCH, nil),\n \t\t\t\tmCCLI.EXPECT().ExecAs(gomock.Any(), testContainer.ID, \"root\", \"mkdir\", \"-p\", \"/.coder-agent\").Return(nil, nil),\n-\t\t\t\tmCCLI.EXPECT().Copy(gomock.Any(), testContainer.ID, coderBin, \"/.coder-agent/coder\").Return(nil),\n+\t\t\t\tmCCLI.EXPECT().Copy(gomock.Any(), testContainer.ID, gomock.Any(), \"/.coder-agent/coder\").Return(nil),\n \t\t\t\tmCCLI.EXPECT().ExecAs(gomock.Any(), testContainer.ID, \"root\", \"chmod\", \"0755\", \"/.coder-agent\", \"/.coder-agent/coder\").Return(nil, nil),\n \t\t\t\tmCCLI.EXPECT().ExecAs(gomock.Any(), testContainer.ID, \"root\", \"/bin/sh\", \"-c\", \"chown $(id -u):$(id -g) /.coder-agent/coder\").Return(nil, nil),\n \t\t\t)\n \n \t\t\t// Given: We allow creation to succeed.\n \t\t\ttestutil.RequireSend(ctx, t, fSAC.createErrC, nil)\n \n-\t\t\t_, aw := mClock.AdvanceNext()\n-\t\t\taw.MustWait(ctx)\n+\t\t\terr = api.RefreshContainers(ctx)\n+\t\t\trequire.NoError(t, err)\n \n \t\t\treq = httptest.NewRequest(http.MethodGet, \"/\", nil)\n \t\t\trec = httptest.NewRecorder()",
+    "raw_url": "https://github.com/coder/coder/raw/08547261fa9d360249f6f852a17b85690c7e5eb1/agent%2Fagentcontainers%2Fapi_test.go",
+    "sha": "8c8e3b5411ed0d82d532d17d5e774a26f50ca678",
+    "status": "modified"
+  }
+]

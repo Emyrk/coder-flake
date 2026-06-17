@@ -1,0 +1,1682 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023871060"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023871060",
+    "id": 1023871060,
+    "node_id": "PRR_kwDOGkVX1s49BwhU",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-29T19:14:14Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023877796"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023877796",
+    "id": 1023877796,
+    "node_id": "PRR_kwDOGkVX1s49ByKk",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-29T19:30:18Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?u=ca786d69e9499bdc2d6e362245d35f70632ddc55&v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023939450"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023939450",
+    "id": 1023939450,
+    "node_id": "PRR_kwDOGkVX1s49CBN6",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-29T20:13:32Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023957554"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023957554",
+    "id": 1023957554,
+    "node_id": "PRR_kwDOGkVX1s49CFoy",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-29T20:13:58Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023961084"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023961084",
+    "id": 1023961084,
+    "node_id": "PRR_kwDOGkVX1s49CGf8",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-29T20:17:26Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023963191"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023963191",
+    "id": 1023963191,
+    "node_id": "PRR_kwDOGkVX1s49CHA3",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-29T20:19:31Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023963716"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023963716",
+    "id": 1023963716,
+    "node_id": "PRR_kwDOGkVX1s49CHJE",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-29T20:20:03Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023964850"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023964850",
+    "id": 1023964850,
+    "node_id": "PRR_kwDOGkVX1s49CHay",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-29T20:21:11Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023966242"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023966242",
+    "id": 1023966242,
+    "node_id": "PRR_kwDOGkVX1s49CHwi",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-29T20:22:34Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023967151"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1023967151",
+    "id": 1023967151,
+    "node_id": "PRR_kwDOGkVX1s49CH-v",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-29T20:23:26Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024002810"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024002810",
+    "id": 1024002810,
+    "node_id": "PRR_kwDOGkVX1s49CQr6",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-29T20:57:45Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024005126"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024005126",
+    "id": 1024005126,
+    "node_id": "PRR_kwDOGkVX1s49CRQG",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-29T21:00:05Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024006062"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024006062",
+    "id": 1024006062,
+    "node_id": "PRR_kwDOGkVX1s49CReu",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-29T21:00:59Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024006637"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024006637",
+    "id": 1024006637,
+    "node_id": "PRR_kwDOGkVX1s49CRnt",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-29T21:01:35Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024006861"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024006861",
+    "id": 1024006861,
+    "node_id": "PRR_kwDOGkVX1s49CRrN",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-29T21:01:47Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024007055"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024007055",
+    "id": 1024007055,
+    "node_id": "PRR_kwDOGkVX1s49CRuP",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-29T21:01:58Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024254179"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024254179",
+    "id": 1024254179,
+    "node_id": "PRR_kwDOGkVX1s49DODj",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T04:40:03Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024257418"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024257418",
+    "id": 1024257418,
+    "node_id": "PRR_kwDOGkVX1s49DO2K",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T04:46:17Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024259113"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024259113",
+    "id": 1024259113,
+    "node_id": "PRR_kwDOGkVX1s49DPQp",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T04:49:33Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024514437"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024514437",
+    "id": 1024514437,
+    "node_id": "PRR_kwDOGkVX1s49ENmF",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T08:56:05Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?u=bd1828de93463cc139feb1dc4b4f6871dec2a7b3&v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024861044"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024861044",
+    "id": 1024861044,
+    "node_id": "PRR_kwDOGkVX1s49FiN0",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T13:19:06Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024863064"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024863064",
+    "id": 1024863064,
+    "node_id": "PRR_kwDOGkVX1s49FitY",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T13:20:23Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024868773"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024868773",
+    "id": 1024868773,
+    "node_id": "PRR_kwDOGkVX1s49FkGl",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T13:23:58Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024854671"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Some questions and minor stylistic comments, but in general this looks good to me! I'm deferring approval to someone more familiar with the previous logic, though.\r\n\r\nSide-note: Being somewhat unfamiliar with provisionerd, it'd have been nice to have this as two PRs, one breaking out the functionality from one file, and another implementing the fix so it's clearer what's new and old code.",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1024854671",
+    "id": 1024854671,
+    "node_id": "PRR_kwDOGkVX1s49FgqP",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T15:05:22Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025126760"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025126760",
+    "id": 1025126760,
+    "node_id": "PRR_kwDOGkVX1s49GjFo",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T15:57:35Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025260568"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025260568",
+    "id": 1025260568,
+    "node_id": "PRR_kwDOGkVX1s49HDwY",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T17:32:43Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025262751"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025262751",
+    "id": 1025262751,
+    "node_id": "PRR_kwDOGkVX1s49HESf",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T17:34:30Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025265989"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025265989",
+    "id": 1025265989,
+    "node_id": "PRR_kwDOGkVX1s49HFFF",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T17:36:45Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025272589"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025272589",
+    "id": 1025272589,
+    "node_id": "PRR_kwDOGkVX1s49HGsN",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T17:41:12Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025274372"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025274372",
+    "id": 1025274372,
+    "node_id": "PRR_kwDOGkVX1s49HHIE",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T17:42:20Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025274444"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025274444",
+    "id": 1025274444,
+    "node_id": "PRR_kwDOGkVX1s49HHJM",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T17:42:24Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025275515"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025275515",
+    "id": 1025275515,
+    "node_id": "PRR_kwDOGkVX1s49HHZ7",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T17:43:09Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025275910"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025275910",
+    "id": 1025275910,
+    "node_id": "PRR_kwDOGkVX1s49HHgG",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T17:43:24Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025278114"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025278114",
+    "id": 1025278114,
+    "node_id": "PRR_kwDOGkVX1s49HICi",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T17:44:52Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025287187"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025287187",
+    "id": 1025287187,
+    "node_id": "PRR_kwDOGkVX1s49HKQT",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T17:51:11Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025381707"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025381707",
+    "id": 1025381707,
+    "node_id": "PRR_kwDOGkVX1s49HhVL",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T19:13:16Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025413269"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1025413269",
+    "id": 1025413269,
+    "node_id": "PRR_kwDOGkVX1s49HpCV",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-06-30T19:44:25Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1026368993"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1026368993",
+    "id": 1026368993,
+    "node_id": "PRR_kwDOGkVX1s49LSXh",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-07-01T15:29:28Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1026392955"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Did a second pass on this and it looks good! I like the refactor into a separate package, turned out well. \ud83d\udc4d\ud83c\udffb\r\n\r\n(Approving, although I still think approval from someone more familiar with `provisionerd` might be good.)",
+    "commit_id": "164a3024fe52aa47af23a9605d8b2238a2ad78a6",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1026392955",
+    "id": 1026392955,
+    "node_id": "PRR_kwDOGkVX1s49LYN7",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "APPROVED",
+    "submitted_at": "2022-07-01T16:03:30Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1026417110"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "bcf1d8f1107314c79d6ccf7f929388470793e7e1",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1026417110",
+    "id": 1026417110,
+    "node_id": "PRR_kwDOGkVX1s49LeHW",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-07-01T16:18:21Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1026425260"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I'm nervous about the lack of tests on the `runner` package. What do you think about moving those over from `provisionerd_test.go`?",
+    "commit_id": "164a3024fe52aa47af23a9605d8b2238a2ad78a6",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1026425260",
+    "id": 1026425260,
+    "node_id": "PRR_kwDOGkVX1s49LgGs",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "COMMENTED",
+    "submitted_at": "2022-07-01T16:28:00Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/2732#pullrequestreview-1026447236"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/2732"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "164a3024fe52aa47af23a9605d8b2238a2ad78a6",
+    "html_url": "https://github.com/coder/coder/pull/2732#pullrequestreview-1026447236",
+    "id": 1026447236,
+    "node_id": "PRR_kwDOGkVX1s49LleE",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/2732",
+    "state": "APPROVED",
+    "submitted_at": "2022-07-01T16:51:30Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?u=bd91d4be5ac6ff75cd1dece7bdab508cb081eaba&v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  }
+]

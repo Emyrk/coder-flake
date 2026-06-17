@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/3fa9a50c516413184895c60f7f94f4a0c6a49659/site%2Fe2e%2Fhelpers.ts",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fe2e%2Fhelpers.ts?ref=3fa9a50c516413184895c60f7f94f4a0c6a49659",
+    "deletions": 1,
+    "filename": "site/e2e/helpers.ts",
+    "patch": "@@ -60,7 +60,9 @@ export const createWorkspace = async (\n   await fillParameters(page, richParameters, buildParameters);\n   await page.getByTestId(\"form-submit\").click();\n \n-  await expect(page).toHaveURL(\"/@admin/\" + name);\n+  // Workaround: OutdatedAgent lands at \"http://localhost:3111/@admin/8d6225b7?resources=echo_dev\"\n+  // and this is also a correct location.\n+  await page.waitForURL(new RegExp(\"/@admin/\" + name));\n \n   await page.waitForSelector(\"*[data-testid='build-status'] >> text=Running\", {\n     state: \"visible\",",
+    "raw_url": "https://github.com/coder/coder/raw/3fa9a50c516413184895c60f7f94f4a0c6a49659/site%2Fe2e%2Fhelpers.ts",
+    "sha": "040bcb6d55b0286c5629534bc4ba332649e2df99",
+    "status": "modified"
+  },
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/3fa9a50c516413184895c60f7f94f4a0c6a49659/site%2Fe2e%2Ftests%2FoutdatedAgent.spec.ts",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fe2e%2Ftests%2FoutdatedAgent.spec.ts?ref=3fa9a50c516413184895c60f7f94f4a0c6a49659",
+    "deletions": 0,
+    "filename": "site/e2e/tests/outdatedAgent.spec.ts",
+    "patch": "@@ -17,6 +17,8 @@ const agentVersion = \"v0.27.0\";\n test.beforeEach(async ({ page }) => await beforeCoderTest(page));\n \n test(\"ssh with agent \" + agentVersion, async ({ page }) => {\n+  test.setTimeout(40_000); // This is a slow test, 20s may not be enough on Mac.\n+\n   const token = randomUUID();\n   const template = await createTemplate(page, {\n     apply: [",
+    "raw_url": "https://github.com/coder/coder/raw/3fa9a50c516413184895c60f7f94f4a0c6a49659/site%2Fe2e%2Ftests%2FoutdatedAgent.spec.ts",
+    "sha": "56207e9dbca645fc9f5f042ca2b3e852d09ead3e",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/82c60e6cbaadbd1412525d265e33b69f0c8b7b34/coderd%2Fdatabase%2Fdbmem%2Fdbmem.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdatabase%2Fdbmem%2Fdbmem.go?ref=82c60e6cbaadbd1412525d265e33b69f0c8b7b34",
+    "deletions": 1,
+    "filename": "coderd/database/dbmem/dbmem.go",
+    "patch": "@@ -7014,7 +7014,7 @@ func (q *FakeQuerier) GetWorkspaceAgentUsageStatsAndLabels(_ context.Context, cr\n \t\t}\n \t\t// WHERE usage = true AND created_at > now() - '1 minute'::interval\n \t\t// GROUP BY user_id, agent_id, workspace_id\n-\t\tif agentStat.Usage && agentStat.CreatedAt.After(time.Now().Add(-time.Minute)) {\n+\t\tif agentStat.Usage && agentStat.CreatedAt.After(dbtime.Now().Add(-time.Minute)) {\n \t\t\tval, ok := latestAgentStats[key]\n \t\t\tif !ok {\n \t\t\t\tlatestAgentStats[key] = agentStat",
+    "raw_url": "https://github.com/coder/coder/raw/82c60e6cbaadbd1412525d265e33b69f0c8b7b34/coderd%2Fdatabase%2Fdbmem%2Fdbmem.go",
+    "sha": "cc559a7e77f16f7973263fa3b600e1f231cd4669",
+    "status": "modified"
+  }
+]

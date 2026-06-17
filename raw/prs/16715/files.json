@@ -1,0 +1,74 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561/dogfood%2Fcontents%2FDockerfile",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/dogfood%2Fcontents%2FDockerfile?ref=ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561",
+    "deletions": 0,
+    "filename": "dogfood/contents/Dockerfile",
+    "patch": "@@ -244,6 +244,8 @@ ENV PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH\n RUN npm install -g npm@^10.8\n RUN npm install -g pnpm@^9.6\n \n+RUN pnpx playwright@1.47.0 install --with-deps chromium\n+\n # Ensure PostgreSQL binaries are in the users $PATH.\n RUN update-alternatives --install /usr/local/bin/initdb initdb /usr/lib/postgresql/16/bin/initdb 100 && \\\n \tupdate-alternatives --install /usr/local/bin/postgres postgres /usr/lib/postgresql/16/bin/postgres 100",
+    "raw_url": "https://github.com/coder/coder/raw/ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561/dogfood%2Fcontents%2FDockerfile",
+    "sha": "c4e76b6402b3b3e563da756e6d13470b31a8c968",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561/dogfood%2Fcontents%2Fmain.tf",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/dogfood%2Fcontents%2Fmain.tf?ref=ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561",
+    "deletions": 1,
+    "filename": "dogfood/contents/main.tf",
+    "patch": "@@ -351,7 +351,7 @@ resource \"coder_agent\" \"dev\" {\n       sleep 1\n     done\n     cd \"${local.repo_dir}\" && make clean\n-    cd \"${local.repo_dir}/site\" && pnpm install && pnpm playwright:install\n+    cd \"${local.repo_dir}/site\" && pnpm install\n   EOT\n }\n ",
+    "raw_url": "https://github.com/coder/coder/raw/ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561/dogfood%2Fcontents%2Fmain.tf",
+    "sha": "1679b59ea39f6dbe40e3e0faed9fcfdf7cba1b29",
+    "status": "modified"
+  },
+  {
+    "additions": 11,
+    "blob_url": "https://github.com/coder/coder/blob/ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561/flake.nix",
+    "changes": 12,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561",
+    "deletions": 1,
+    "filename": "flake.nix",
+    "patch": "@@ -121,6 +121,7 @@\n             (pinnedPkgs.golangci-lint)\n             gopls\n             gotestsum\n+            hadolint\n             jq\n             kubectl\n             kubectx\n@@ -216,6 +217,14 @@\n             '';\n           };\n       in\n+      # \"Keep in mind that you need to use the same version of playwright in your node playwright project as in your nixpkgs, or else playwright will try to use browsers versions that aren't installed!\"\n+      # - https://nixos.wiki/wiki/Playwright\n+      assert pkgs.lib.assertMsg\n+        (\n+          (pkgs.lib.importJSON ./site/package.json).devDependencies.\"@playwright/test\"\n+          == pkgs.playwright-driver.version\n+        )\n+        \"There is a mismatch between the playwright versions in the ./nix.flake and the ./site/package.json file. Please make sure that they use the exact same version.\";\n       rec {\n         inherit formatter;\n \n@@ -261,12 +270,13 @@\n \n               uname = \"coder\";\n               homeDirectory = \"/home/${uname}\";\n+              releaseName = version;\n \n               drv = devShells.default.overrideAttrs (oldAttrs: {\n                 buildInputs =\n                   (with pkgs; [\n                     coreutils\n-                    nix\n+                    nix.out\n                     curl.bin # Ensure the actual curl binary is included in the PATH\n                     glibc.bin # Ensure the glibc binaries are included in the PATH\n                     jq.bin",
+    "raw_url": "https://github.com/coder/coder/raw/ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561/flake.nix",
+    "sha": "9cf6ef4b7d781343d251554d1deb1f178837bf15",
+    "status": "modified"
+  },
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561/nix%2Fdocker.nix",
+    "changes": 9,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/nix%2Fdocker.nix?ref=ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561",
+    "deletions": 4,
+    "filename": "nix/docker.nix",
+    "patch": "@@ -50,10 +50,6 @@ let\n     experimental-features = nix-command flakes\n   '';\n \n-  etcReleaseName = writeTextDir \"etc/coderniximage-release\" ''\n-    0.0.0\n-  '';\n-\n   etcPamdSudoFile = writeText \"pam-sudo\" ''\n     # Allow root to bypass authentication (optional)\n     auth      sufficient pam_rootok.so\n@@ -115,6 +111,7 @@ let\n       run ? null,\n       maxLayers ? 100,\n       uname ? \"nixbld\",\n+      releaseName ? \"0.0.0\",\n     }:\n     assert lib.assertMsg (!(drv.drvAttrs.__structuredAttrs or false))\n       \"streamNixShellImage: Does not work with the derivation ${drv.name} because it uses __structuredAttrs\";\n@@ -207,6 +204,10 @@ let\n         '';\n       };\n \n+      etcReleaseName = writeTextDir \"etc/coderniximage-release\" ''\n+        ${releaseName}\n+      '';\n+\n       # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/globals.hh#L464-L465\n       sandboxBuildDir = \"/build\";\n ",
+    "raw_url": "https://github.com/coder/coder/raw/ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561/nix%2Fdocker.nix",
+    "sha": "9455c74c81a9f8e911a38e8293ff205ed8a2f97c",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561/site%2Fpackage.json",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fpackage.json?ref=ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561",
+    "deletions": 1,
+    "filename": "site/package.json",
+    "patch": "@@ -126,7 +126,7 @@\n \t\t\"@biomejs/biome\": \"1.9.4\",\n \t\t\"@chromatic-com/storybook\": \"3.2.2\",\n \t\t\"@octokit/types\": \"12.3.0\",\n-\t\t\"@playwright/test\": \"1.47.2\",\n+\t\t\"@playwright/test\": \"1.47.0\",\n \t\t\"@storybook/addon-actions\": \"8.5.2\",\n \t\t\"@storybook/addon-essentials\": \"8.4.6\",\n \t\t\"@storybook/addon-interactions\": \"8.5.3\",",
+    "raw_url": "https://github.com/coder/coder/raw/ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561/site%2Fpackage.json",
+    "sha": "abe6a943225f2b173b47cc666b13e5c50f021d56",
+    "status": "modified"
+  },
+  {
+    "additions": 14,
+    "blob_url": "https://github.com/coder/coder/blob/ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561/site%2Fpnpm-lock.yaml",
+    "changes": 27,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fpnpm-lock.yaml?ref=ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561",
+    "deletions": 13,
+    "filename": "site/pnpm-lock.yaml",
+    "patch": "@@ -284,8 +284,8 @@ importers:\n         specifier: 12.3.0\n         version: 12.3.0\n       '@playwright/test':\n-        specifier: 1.47.2\n-        version: 1.47.2\n+        specifier: 1.47.0\n+        version: 1.47.0\n       '@storybook/addon-actions':\n         specifier: 8.5.2\n         version: 8.5.2(storybook@8.5.3(prettier@3.4.1))\n@@ -1528,8 +1528,8 @@ packages:\n     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==, tarball: https://registry.npmjs.org/@pkgjs/parseargs/-/parseargs-0.11.0.tgz}\n     engines: {node: '>=14'}\n \n-  '@playwright/test@1.47.2':\n-    resolution: {integrity: sha512-jTXRsoSPONAs8Za9QEQdyjFn+0ZQFjCiIztAIF6bi1HqhBzG9Ma7g1WotyiGqFSBRZjIEqMdT8RUlbk1QVhzCQ==, tarball: https://registry.npmjs.org/@playwright/test/-/test-1.47.2.tgz}\n+  '@playwright/test@1.47.0':\n+    resolution: {integrity: sha512-SgAdlSwYVpToI4e/IH19IHHWvoijAYH5hu2MWSXptRypLSnzj51PcGD+rsOXFayde4P9ZLi+loXVwArg6IUkCA==, tarball: https://registry.npmjs.org/@playwright/test/-/test-1.47.0.tgz}\n     engines: {node: '>=18'}\n     hasBin: true\n \n@@ -3694,6 +3694,7 @@ packages:\n   eslint@8.52.0:\n     resolution: {integrity: sha512-zh/JHnaixqHZsolRB/w9/02akBk9EPrOs9JwcTP2ek7yL5bVvXuRariiaAjjoJ5DvuwQ1WAE/HsMz+w17YgBCg==, tarball: https://registry.npmjs.org/eslint/-/eslint-8.52.0.tgz}\n     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}\n+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.\n     hasBin: true\n \n   espree@9.6.1:\n@@ -5173,13 +5174,13 @@ packages:\n     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==, tarball: https://registry.npmjs.org/pkg-dir/-/pkg-dir-4.2.0.tgz}\n     engines: {node: '>=8'}\n \n-  playwright-core@1.47.2:\n-    resolution: {integrity: sha512-3JvMfF+9LJfe16l7AbSmU555PaTl2tPyQsVInqm3id16pdDfvZ8TTZ/pyzmkbDrZTQefyzU7AIHlZqQnxpqHVQ==, tarball: https://registry.npmjs.org/playwright-core/-/playwright-core-1.47.2.tgz}\n+  playwright-core@1.47.0:\n+    resolution: {integrity: sha512-1DyHT8OqkcfCkYUD9zzUTfg7EfTd+6a8MkD/NWOvjo0u/SCNd5YmY/lJwFvUZOxJbWNds+ei7ic2+R/cRz/PDg==, tarball: https://registry.npmjs.org/playwright-core/-/playwright-core-1.47.0.tgz}\n     engines: {node: '>=18'}\n     hasBin: true\n \n-  playwright@1.47.2:\n-    resolution: {integrity: sha512-nx1cLMmQWqmA3UsnjaaokyoUpdVaaDhJhMoxX2qj3McpjnsqFHs516QAKYhqHAgOP+oCFTEOCOAaD1RgD/RQfA==, tarball: https://registry.npmjs.org/playwright/-/playwright-1.47.2.tgz}\n+  playwright@1.47.0:\n+    resolution: {integrity: sha512-jOWiRq2pdNAX/mwLiwFYnPHpEZ4rM+fRSQpRHwEwZlP2PUANvL3+aJOF/bvISMhFD30rqMxUB4RJx9aQbfh4Ww==, tarball: https://registry.npmjs.org/playwright/-/playwright-1.47.0.tgz}\n     engines: {node: '>=18'}\n     hasBin: true\n \n@@ -7588,9 +7589,9 @@ snapshots:\n   '@pkgjs/parseargs@0.11.0':\n     optional: true\n \n-  '@playwright/test@1.47.2':\n+  '@playwright/test@1.47.0':\n     dependencies:\n-      playwright: 1.47.2\n+      playwright: 1.47.0\n \n   '@popperjs/core@2.11.8': {}\n \n@@ -11898,11 +11899,11 @@ snapshots:\n     dependencies:\n       find-up: 4.1.0\n \n-  playwright-core@1.47.2: {}\n+  playwright-core@1.47.0: {}\n \n-  playwright@1.47.2:\n+  playwright@1.47.0:\n     dependencies:\n-      playwright-core: 1.47.2\n+      playwright-core: 1.47.0\n     optionalDependencies:\n       fsevents: 2.3.2\n ",
+    "raw_url": "https://github.com/coder/coder/raw/ab42451bb78bd3a5a1fc1e0f82a2010a63a0a561/site%2Fpnpm-lock.yaml",
+    "sha": "1282148db96b23934cdfd2355f1e198f1fbf1417",
+    "status": "modified"
+  }
+]

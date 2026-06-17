@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/e9c92f7be60c51878bb3e8f0a9e60290e652ce85/coderd%2Factivitybump_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Factivitybump_test.go?ref=e9c92f7be60c51878bb3e8f0a9e60290e652ce85",
+    "deletions": 1,
+    "filename": "coderd/activitybump_test.go",
+    "patch": "@@ -42,7 +42,7 @@ func TestWorkspaceActivityBump(t *testing.T) {\n \t\trequire.NoError(t, err)\n \t\trequire.WithinDuration(t,\n \t\t\ttime.Now().Add(time.Duration(ttlMillis)*time.Millisecond),\n-\t\t\tworkspace.LatestBuild.Deadline.Time, testutil.WaitShort,\n+\t\t\tworkspace.LatestBuild.Deadline.Time, testutil.WaitMedium,\n \t\t)\n \t\tfirstDeadline := workspace.LatestBuild.Deadline.Time\n ",
+    "raw_url": "https://github.com/coder/coder/raw/e9c92f7be60c51878bb3e8f0a9e60290e652ce85/coderd%2Factivitybump_test.go",
+    "sha": "fe8c947dcea620544601369b7bf276f0770cd23d",
+    "status": "modified"
+  }
+]

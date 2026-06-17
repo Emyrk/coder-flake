@@ -1,0 +1,490 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/3086#discussion_r926677553"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/3086"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/926677553"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Why do we need this check? Is it a problem if `sendMore` gets a value in the buffered channel? I don't think it matters which one is prioritized. Either one will exit the select statement and \"return\". If `sendMore` is sent a write will happen. But if you close the connection, a write will also happen because the `<-c.sendMore` gets unblocked.\r\n\r\n```golang\r\nif c.isClosed() {\r\n\treturn\r\n}\r\n```\r\n\r\nIdk, just seems redundant. \r\n\r\nGrabbing the closed lock doesn't seem necessary because of the same argument.",
+    "commit_id": "445e8b097a10998eb85e9de95af2cea1bae7d0a0",
+    "created_at": "2022-07-21T13:29:40Z",
+    "diff_hunk": "@@ -106,12 +106,15 @@ func (c *Channel) init() {\n \t// write operations to block once the threshold is set.\n \tc.dc.SetBufferedAmountLowThreshold(bufferedAmountLowThreshold)\n \tc.dc.OnBufferedAmountLow(func() {\n+\t\t// Grab the lock to protect the sendMore channel from being\n+\t\t// closed in between the isClosed check and the send.\n+\t\tc.closeMutex.Lock()\n+\t\tdefer c.closeMutex.Unlock()\n \t\tif c.isClosed() {\n \t\t\treturn\n \t\t}\n \t\tselect {\n \t\tcase <-c.closed:",
+    "html_url": "https://github.com/coder/coder/pull/3086#discussion_r926677553",
+    "id": 926677553,
+    "line": 117,
+    "node_id": "PRRC_kwDOGkVX1s43O_ox",
+    "original_commit_id": "5e33a9a4a72681b27354050f20f24f3edef4e6d8",
+    "original_line": 117,
+    "original_position": 12,
+    "original_start_line": 113,
+    "path": "peer/channel.go",
+    "position": 12,
+    "pull_request_review_id": 1046533982,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/3086",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/926677553/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 113,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-21T13:37:53Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/926677553",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/3086#discussion_r926679486"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/3086"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/926679486"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": ":+1: An alternative. Exact same code, but reuses that `isClosed` function\r\n```suggestion\r\n\t\tif c.isClosed() {\r\n\t\t\treturn c.closeError\r\n\t\t}\r\n\t\treturn nil\r\n```",
+    "commit_id": "445e8b097a10998eb85e9de95af2cea1bae7d0a0",
+    "created_at": "2022-07-21T13:31:23Z",
+    "diff_hunk": "@@ -308,7 +306,13 @@ func (c *Channel) isClosed() bool {\n func (c *Channel) waitOpened() error {\n \tselect {\n \tcase <-c.opened:\n-\t\treturn nil\n+\t\t// Re-check to prioritize the closed channel.\n+\t\tselect {\n+\t\tcase <-c.closed:\n+\t\t\treturn c.closeError\n+\t\tdefault:\n+\t\t\treturn nil\n+\t\t}",
+    "html_url": "https://github.com/coder/coder/pull/3086#discussion_r926679486",
+    "id": 926679486,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s43PAG-",
+    "original_commit_id": "5e33a9a4a72681b27354050f20f24f3edef4e6d8",
+    "original_line": 315,
+    "original_position": 67,
+    "original_start_line": 309,
+    "path": "peer/channel.go",
+    "position": 1,
+    "pull_request_review_id": 1046533982,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/3086",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/926679486/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-21T13:37:53Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/926679486",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/3086#discussion_r926697694"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/3086"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/926697694"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Both (check and mutex) are needed because `c.sendMore` is closed in `c.closeWithError`, so we want to guard against potentially sending on a closed channel (which would panic).\r\n\r\nBy holding the mutex, we ensure that closure doesn't happen between the `isClosed()` check and send on `c.sendMore`.",
+    "commit_id": "445e8b097a10998eb85e9de95af2cea1bae7d0a0",
+    "created_at": "2022-07-21T13:47:18Z",
+    "diff_hunk": "@@ -106,12 +106,15 @@ func (c *Channel) init() {\n \t// write operations to block once the threshold is set.\n \tc.dc.SetBufferedAmountLowThreshold(bufferedAmountLowThreshold)\n \tc.dc.OnBufferedAmountLow(func() {\n+\t\t// Grab the lock to protect the sendMore channel from being\n+\t\t// closed in between the isClosed check and the send.\n+\t\tc.closeMutex.Lock()\n+\t\tdefer c.closeMutex.Unlock()\n \t\tif c.isClosed() {\n \t\t\treturn\n \t\t}\n \t\tselect {\n \t\tcase <-c.closed:",
+    "html_url": "https://github.com/coder/coder/pull/3086#discussion_r926697694",
+    "id": 926697694,
+    "in_reply_to_id": 926677553,
+    "line": 117,
+    "node_id": "PRRC_kwDOGkVX1s43PEje",
+    "original_commit_id": "5e33a9a4a72681b27354050f20f24f3edef4e6d8",
+    "original_line": 117,
+    "original_position": 12,
+    "original_start_line": 113,
+    "path": "peer/channel.go",
+    "position": 12,
+    "pull_request_review_id": 1046563143,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/3086",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/926697694/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 113,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-21T13:47:18Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/926697694",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/3086#discussion_r926698822"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/3086"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/926698822"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Nice! \ud83d\ude0e",
+    "commit_id": "445e8b097a10998eb85e9de95af2cea1bae7d0a0",
+    "created_at": "2022-07-21T13:48:18Z",
+    "diff_hunk": "@@ -308,7 +306,13 @@ func (c *Channel) isClosed() bool {\n func (c *Channel) waitOpened() error {\n \tselect {\n \tcase <-c.opened:\n-\t\treturn nil\n+\t\t// Re-check to prioritize the closed channel.\n+\t\tselect {\n+\t\tcase <-c.closed:\n+\t\t\treturn c.closeError\n+\t\tdefault:\n+\t\t\treturn nil\n+\t\t}",
+    "html_url": "https://github.com/coder/coder/pull/3086#discussion_r926698822",
+    "id": 926698822,
+    "in_reply_to_id": 926679486,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s43PE1G",
+    "original_commit_id": "5e33a9a4a72681b27354050f20f24f3edef4e6d8",
+    "original_line": 315,
+    "original_position": 67,
+    "original_start_line": 309,
+    "path": "peer/channel.go",
+    "position": 1,
+    "pull_request_review_id": 1046564804,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/3086",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/926698822/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-21T13:48:19Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/926698822",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/3086#discussion_r926705287"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/3086"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/926705287"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Oh btw, I was also first of the impression that the check might not be needed, but without it the `pion/sctp` library may try to unlock an unlocked mutex:\r\n\r\n```\r\nfatal error: sync: Unlock of unlocked RWMutex\r\n\r\ngoroutine 447 [running]:\r\nruntime.throw({0xe70b28?, 0x0?})\r\n\t/usr/local/go/src/runtime/panic.go:992 +0x71 fp=0xc0001d26c8 sp=0xc0001d2698 pc=0x469d71\r\nsync.throw({0xe70b28?, 0x418f30?})\r\n\t/usr/local/go/src/runtime/panic.go:978 +0x1e fp=0xc0001d26e8 sp=0xc0001d26c8 pc=0x499abe\r\nsync.(*RWMutex).Unlock(0xc000158550)\r\n\t/usr/local/go/src/sync/rwmutex.go:201 +0x7e fp=0xc0001d2728 sp=0xc0001d26e8 pc=0x4afbfe\r\ngithub.com/pion/sctp.(*Association).handleChunk.func1()\r\n\t/home/maf/go/pkg/mod/github.com/pion/sctp@v1.8.2/association.go:2244 +0x3a fp=0xc0001d2748 sp=0xc0001d2728 pc=0x77e4da\r\npanic({0xdb16e0, 0xfd2780})\r\n\t/usr/local/go/src/runtime/panic.go:844 +0x258 fp=0xc0001d2808 sp=0xc0001d2748 pc=0x4697d8\r\nruntime.selectgo(0xc0001d29c8, 0xc0001d2998, 0x47ad94?, 0x1, 0x7fc6abe90008?, 0x0)\r\n\t/usr/local/go/src/runtime/select.go:516 +0xf3c fp=0xc0001d2968 sp=0xc0001d2808 pc=0x47dfbc\r\ngithub.com/coder/coder/peer.(*Channel).init.func1()\r\n\t/home/maf/src/coder/peer/channel.go:109 +0xd0 fp=0xc0001d29f8 sp=0xc0001d2968 pc=0xb13710\r\ngithub.com/pion/sctp.(*Stream).onBufferReleased(0xc00020e500, 0x16a0)\r\n\t/home/maf/go/pkg/mod/github.com/pion/sctp@v1.8.2/stream.go:357 +0x4af fp=0xc0001d2a80 sp=0xc0001d29f8 pc=0x79faef\r\ngithub.com/pion/sctp.(*Association).handleSack(0xc000158540, 0xc000c32000)\r\n\t/home/maf/go/pkg/mod/github.com/pion/sctp@v1.8.2/association.go:1623 +0x9bb fp=0xc0001d2c28 sp=0xc0001d2a80 pc=0x776a1b\r\ngithub.com/pion/sctp.(*Association).handleChunk(0xc000158540, 0xc000e02d60?, {0xfd88e8?, 0xc000c32000?})\r\n\t/home/maf/go/pkg/mod/github.com/pion/sctp@v1.8.2/association.go:2288 +0x30d fp=0xc0001d2df0 sp=0xc0001d2c28 pc=0x77d88d\r\ngithub.com/pion/sctp.(*Association).handleInbound(0xc000158540, {0xc000e02d60, 0x1c, 0x1c})\r\n\t/home/maf/go/pkg/mod/github.com/pion/sctp@v1.8.2/association.go:603 +0x505 fp=0xc0001d2ec0 sp=0xc0001d2df0 pc=0x769585\r\ngithub.com/pion/sctp.(*Association).readLoop(0xc000158540)\r\n\t/home/maf/go/pkg/mod/github.com/pion/sctp@v1.8.2/association.go:521 +0x29c fp=0xc0001d2fc0 sp=0xc0001d2ec0 pc=0x76783c\r\ngithub.com/pion/sctp.(*Association).init.func2()\r\n\t/home/maf/go/pkg/mod/github.com/pion/sctp@v1.8.2/association.go:339 +0x3a fp=0xc0001d2fe0 sp=0xc0001d2fc0 pc=0x765a1a\r\nruntime.goexit()\r\n\t/usr/local/go/src/runtime/asm_amd64.s:1571 +0x1 fp=0xc0001d2fe8 sp=0xc0001d2fe0 pc=0x49edc1\r\ncreated by github.com/pion/sctp.(*Association).init\r\n\t/home/maf/go/pkg/mod/github.com/pion/sctp@v1.8.2/association.go:339 +0x12a\r\n```",
+    "commit_id": "445e8b097a10998eb85e9de95af2cea1bae7d0a0",
+    "created_at": "2022-07-21T13:53:58Z",
+    "diff_hunk": "@@ -106,12 +106,15 @@ func (c *Channel) init() {\n \t// write operations to block once the threshold is set.\n \tc.dc.SetBufferedAmountLowThreshold(bufferedAmountLowThreshold)\n \tc.dc.OnBufferedAmountLow(func() {\n+\t\t// Grab the lock to protect the sendMore channel from being\n+\t\t// closed in between the isClosed check and the send.\n+\t\tc.closeMutex.Lock()\n+\t\tdefer c.closeMutex.Unlock()\n \t\tif c.isClosed() {\n \t\t\treturn\n \t\t}\n \t\tselect {\n \t\tcase <-c.closed:",
+    "html_url": "https://github.com/coder/coder/pull/3086#discussion_r926705287",
+    "id": 926705287,
+    "in_reply_to_id": 926677553,
+    "line": 117,
+    "node_id": "PRRC_kwDOGkVX1s43PGaH",
+    "original_commit_id": "5e33a9a4a72681b27354050f20f24f3edef4e6d8",
+    "original_line": 117,
+    "original_position": 12,
+    "original_start_line": 113,
+    "path": "peer/channel.go",
+    "position": 12,
+    "pull_request_review_id": 1046574296,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/3086",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/926705287/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 113,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-21T13:53:58Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/926705287",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/3086#discussion_r926727470"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/3086"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/926727470"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Will a select send something on a closed channel? If so TIL.\r\n\r\n:+1: ",
+    "commit_id": "445e8b097a10998eb85e9de95af2cea1bae7d0a0",
+    "created_at": "2022-07-21T14:11:44Z",
+    "diff_hunk": "@@ -106,12 +106,15 @@ func (c *Channel) init() {\n \t// write operations to block once the threshold is set.\n \tc.dc.SetBufferedAmountLowThreshold(bufferedAmountLowThreshold)\n \tc.dc.OnBufferedAmountLow(func() {\n+\t\t// Grab the lock to protect the sendMore channel from being\n+\t\t// closed in between the isClosed check and the send.\n+\t\tc.closeMutex.Lock()\n+\t\tdefer c.closeMutex.Unlock()\n \t\tif c.isClosed() {\n \t\t\treturn\n \t\t}\n \t\tselect {\n \t\tcase <-c.closed:",
+    "html_url": "https://github.com/coder/coder/pull/3086#discussion_r926727470",
+    "id": 926727470,
+    "in_reply_to_id": 926677553,
+    "line": 117,
+    "node_id": "PRRC_kwDOGkVX1s43PL0u",
+    "original_commit_id": "5e33a9a4a72681b27354050f20f24f3edef4e6d8",
+    "original_line": 117,
+    "original_position": 12,
+    "original_start_line": 113,
+    "path": "peer/channel.go",
+    "position": 12,
+    "pull_request_review_id": 1046607214,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/3086",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/926727470/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 113,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-21T14:11:44Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/926727470",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5446298?v=4",
+      "events_url": "https://api.github.com/users/Emyrk/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Emyrk/followers",
+      "following_url": "https://api.github.com/users/Emyrk/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Emyrk/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/Emyrk",
+      "id": 5446298,
+      "login": "Emyrk",
+      "node_id": "MDQ6VXNlcjU0NDYyOTg=",
+      "organizations_url": "https://api.github.com/users/Emyrk/orgs",
+      "received_events_url": "https://api.github.com/users/Emyrk/received_events",
+      "repos_url": "https://api.github.com/users/Emyrk/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Emyrk/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Emyrk/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/Emyrk",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/3086#discussion_r926732935"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/3086"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/926732935"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Yup, if you try to run this playground a couple of times, you will notice that sometimes it exits 0, and sometimes panics: https://go.dev/play/p/c35kE0948kl",
+    "commit_id": "445e8b097a10998eb85e9de95af2cea1bae7d0a0",
+    "created_at": "2022-07-21T14:16:08Z",
+    "diff_hunk": "@@ -106,12 +106,15 @@ func (c *Channel) init() {\n \t// write operations to block once the threshold is set.\n \tc.dc.SetBufferedAmountLowThreshold(bufferedAmountLowThreshold)\n \tc.dc.OnBufferedAmountLow(func() {\n+\t\t// Grab the lock to protect the sendMore channel from being\n+\t\t// closed in between the isClosed check and the send.\n+\t\tc.closeMutex.Lock()\n+\t\tdefer c.closeMutex.Unlock()\n \t\tif c.isClosed() {\n \t\t\treturn\n \t\t}\n \t\tselect {\n \t\tcase <-c.closed:",
+    "html_url": "https://github.com/coder/coder/pull/3086#discussion_r926732935",
+    "id": 926732935,
+    "in_reply_to_id": 926677553,
+    "line": 117,
+    "node_id": "PRRC_kwDOGkVX1s43PNKH",
+    "original_commit_id": "5e33a9a4a72681b27354050f20f24f3edef4e6d8",
+    "original_line": 117,
+    "original_position": 12,
+    "original_start_line": 113,
+    "path": "peer/channel.go",
+    "position": 12,
+    "pull_request_review_id": 1046614478,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/3086",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/926732935/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 113,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-07-21T14:16:08Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/926732935",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  }
+]

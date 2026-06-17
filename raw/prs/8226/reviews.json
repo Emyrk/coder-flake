@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/8226#pullrequestreview-1500547398"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/8226"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "6e142605e0098a6e4c73cd05d47075c3ebd55c4f",
+    "html_url": "https://github.com/coder/coder/pull/8226#pullrequestreview-1500547398",
+    "id": 1500547398,
+    "node_id": "PRR_kwDOGkVX1s5ZcIlG",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/8226",
+    "state": "APPROVED",
+    "submitted_at": "2023-06-27T10:49:30Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?u=bd1828de93463cc139feb1dc4b4f6871dec2a7b3&v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  }
+]

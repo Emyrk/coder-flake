@@ -1,0 +1,71 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/18905#discussion_r2212738278"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/18905"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2212738278"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "There's a typo in the comment: `intefere` should be spelled `interfere`.\n```suggestion\n\t\t// the test so that it does not interfere.\n```",
+    "commit_id": "5bb2756f6f4fa8575bb0225562bfc5a8b757e3d8",
+    "created_at": "2025-07-17T08:51:36Z",
+    "diff_hunk": "@@ -358,15 +358,22 @@ func TestAPI(t *testing.T) {\n \t\t\tfakeCLI    = &fakeContainerCLI{\n \t\t\t\tlistErr: firstErr,\n \t\t\t}\n+\t\t\tfWatcher = newFakeWatcher(t)\n \t\t)\n \n \t\tapi := agentcontainers.NewAPI(logger,\n+\t\t\tagentcontainers.WithWatcher(fWatcher),\n \t\t\tagentcontainers.WithClock(mClock),\n \t\t\tagentcontainers.WithContainerCLI(fakeCLI),\n \t\t)\n \t\tapi.Start()\n \t\tdefer api.Close()\n \n+\t\t// The watcherLoop writes a log when it is initialized.\n+\t\t// We want to ensure this has happened before we start\n+\t\t// the test so that it does not intefere.",
+    "html_url": "https://github.com/coder/coder/pull/18905#discussion_r2212738278",
+    "id": 2212738278,
+    "line": 374,
+    "node_id": "PRRC_kwDOGkVX1s6D47Tm",
+    "original_commit_id": "e4152993eac6b73bbaf132b3cf71f97841b05d51",
+    "original_line": 374,
+    "original_position": 17,
+    "original_start_line": null,
+    "path": "agent/agentcontainers/api_test.go",
+    "position": 17,
+    "pull_request_review_id": 3028577064,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/18905",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2212738278/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-07-17T08:51:37Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2212738278",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+      "followers_url": "https://api.github.com/users/Copilot/followers",
+      "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+      "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "id": 175728472,
+      "login": "Copilot",
+      "node_id": "BOT_kgDOCnlnWA",
+      "organizations_url": "https://api.github.com/users/Copilot/orgs",
+      "received_events_url": "https://api.github.com/users/Copilot/received_events",
+      "repos_url": "https://api.github.com/users/Copilot/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/Copilot",
+      "user_view_type": "public"
+    }
+  }
+]

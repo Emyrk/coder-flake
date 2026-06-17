@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/7f6e14df7c6866d46f76fff36036df7e325be6c7/go.mod",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/go.mod?ref=7f6e14df7c6866d46f76fff36036df7e325be6c7",
+    "deletions": 1,
+    "filename": "go.mod",
+    "patch": "@@ -98,7 +98,7 @@ require (\n \tgithub.com/coder/flog v1.1.0\n \tgithub.com/coder/guts v1.3.1-0.20250428170043-ad369017e95b\n \tgithub.com/coder/pretty v0.0.0-20230908205945-e89ba86370e0\n-\tgithub.com/coder/quartz v0.1.2\n+\tgithub.com/coder/quartz v0.1.3\n \tgithub.com/coder/retry v1.5.1\n \tgithub.com/coder/serpent v0.10.0\n \tgithub.com/coder/terraform-provider-coder/v2 v2.4.0-pre1.0.20250417100258-c86bb5c3ddcd",
+    "raw_url": "https://github.com/coder/coder/raw/7f6e14df7c6866d46f76fff36036df7e325be6c7/go.mod",
+    "sha": "656d4e8068882183d81f8cecdcf000f5e95fc9b9",
+    "status": "modified"
+  },
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/7f6e14df7c6866d46f76fff36036df7e325be6c7/go.sum",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/go.sum?ref=7f6e14df7c6866d46f76fff36036df7e325be6c7",
+    "deletions": 2,
+    "filename": "go.sum",
+    "patch": "@@ -909,8 +909,8 @@ github.com/coder/pretty v0.0.0-20230908205945-e89ba86370e0 h1:3A0ES21Ke+FxEM8CXx\n github.com/coder/pretty v0.0.0-20230908205945-e89ba86370e0/go.mod h1:5UuS2Ts+nTToAMeOjNlnHFkPahrtDkmpydBen/3wgZc=\n github.com/coder/preview v0.0.2-0.20250506154333-6f500ca7b245 h1:RGoANNubwwPZF8puiYAk2qbzhVgipBMNu8WIrY1VIbI=\n github.com/coder/preview v0.0.2-0.20250506154333-6f500ca7b245/go.mod h1:5VnO9yw7vq19hBgBqqBksE2BH53UTmNYH1QltkYLXJI=\n-github.com/coder/quartz v0.1.2 h1:PVhc9sJimTdKd3VbygXtS4826EOCpB1fXoRlLnCrE+s=\n-github.com/coder/quartz v0.1.2/go.mod h1:vsiCc+AHViMKH2CQpGIpFgdHIEQsxwm8yCscqKmzbRA=\n+github.com/coder/quartz v0.1.3 h1:hA2nI8uUA2fNN9uhXv2I4xZD4aHkA7oH3g2t03v4xf8=\n+github.com/coder/quartz v0.1.3/go.mod h1:vsiCc+AHViMKH2CQpGIpFgdHIEQsxwm8yCscqKmzbRA=\n github.com/coder/retry v1.5.1 h1:iWu8YnD8YqHs3XwqrqsjoBTAVqT9ml6z9ViJ2wlMiqc=\n github.com/coder/retry v1.5.1/go.mod h1:blHMk9vs6LkoRT9ZHyuZo360cufXEhrxqvEzeMtRGoY=\n github.com/coder/serpent v0.10.0 h1:ofVk9FJXSek+SmL3yVE3GoArP83M+1tX+H7S4t8BSuM=",
+    "raw_url": "https://github.com/coder/coder/raw/7f6e14df7c6866d46f76fff36036df7e325be6c7/go.sum",
+    "sha": "555332e8a81738c2aacbbce80e8282400a0eafab",
+    "status": "modified"
+  },
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/7f6e14df7c6866d46f76fff36036df7e325be6c7/vpn%2Ftunnel_internal_test.go",
+    "changes": 10,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/vpn%2Ftunnel_internal_test.go?ref=7f6e14df7c6866d46f76fff36036df7e325be6c7",
+    "deletions": 2,
+    "filename": "vpn/tunnel_internal_test.go",
+    "patch": "@@ -573,7 +573,6 @@ func TestTunnel_sendAgentUpdateReconnect(t *testing.T) {\n \trequire.NoError(t, err)\n \n \t// The new update only contains the new agent\n-\tmClock.AdvanceNext()\n \treq = testutil.TryReceive(ctx, t, mgr.requests)\n \trequire.Nil(t, req.msg.Rpc)\n \tpeerUpdate := req.msg.GetPeerUpdate()\n@@ -695,14 +694,19 @@ func TestTunnel_sendAgentUpdateWorkspaceReconnect(t *testing.T) {\n }\n \n //nolint:revive // t takes precedence\n-func setupTunnel(t *testing.T, ctx context.Context, client *fakeClient, mClock quartz.Clock) (*Tunnel, *speaker[*ManagerMessage, *TunnelMessage, TunnelMessage]) {\n+func setupTunnel(t *testing.T, ctx context.Context, client *fakeClient, mClock *quartz.Mock) (*Tunnel, *speaker[*ManagerMessage, *TunnelMessage, TunnelMessage]) {\n \tmp, tp := net.Pipe()\n \tt.Cleanup(func() { _ = mp.Close() })\n \tt.Cleanup(func() { _ = tp.Close() })\n \tlogger := testutil.Logger(t)\n+\t// We're creating a trap for the mClock to ensure that\n+\t// AdvanceNext() is not called before the ticker is created.\n+\ttrap := mClock.Trap().NewTicker()\n+\tdefer trap.Close()\n \n \tvar tun *Tunnel\n \tvar mgr *speaker[*ManagerMessage, *TunnelMessage, TunnelMessage]\n+\n \terrCh := make(chan error, 2)\n \tgo func() {\n \t\ttunnel, err := NewTunnel(ctx, logger.Named(\"tunnel\"), tp, client, WithClock(mClock))\n@@ -719,6 +723,8 @@ func setupTunnel(t *testing.T, ctx context.Context, client *fakeClient, mClock q\n \terr = testutil.TryReceive(ctx, t, errCh)\n \trequire.NoError(t, err)\n \tmgr.start()\n+\t// We're releasing the trap to allow the clock to advance the ticker.\n+\ttrap.MustWait(ctx).Release()\n \treturn tun, mgr\n }\n ",
+    "raw_url": "https://github.com/coder/coder/raw/7f6e14df7c6866d46f76fff36036df7e325be6c7/vpn%2Ftunnel_internal_test.go",
+    "sha": "7325cfc813cf117ca51d7981966a02d9174a94d9",
+    "status": "modified"
+  }
+]

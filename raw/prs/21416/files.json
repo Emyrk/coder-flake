@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/f3b0ab65c58ceb7b5fb04b8e28a5592fe773d05c/provisioner%2Fterraform%2Ftestdata%2Fversion.txt",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/provisioner%2Fterraform%2Ftestdata%2Fversion.txt?ref=f3b0ab65c58ceb7b5fb04b8e28a5592fe773d05c",
+    "deletions": 1,
+    "filename": "provisioner/terraform/testdata/version.txt",
+    "patch": "@@ -1 +1 @@\n-1.13.4\n+1.14.1",
+    "raw_url": "https://github.com/coder/coder/raw/f3b0ab65c58ceb7b5fb04b8e28a5592fe773d05c/provisioner%2Fterraform%2Ftestdata%2Fversion.txt",
+    "sha": "63e799cf451bcbd0904b3c5dc93f2d328369d80e",
+    "status": "modified"
+  }
+]

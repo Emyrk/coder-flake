@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/a57d02be8e005669510110afcee4ea2db580deee/cli%2Fusercreate.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fusercreate.go?ref=a57d02be8e005669510110afcee4ea2db580deee",
+    "deletions": 1,
+    "filename": "cli/usercreate.go",
+    "patch": "@@ -53,7 +53,7 @@ func userCreate() *cobra.Command {\n \t\t\t\t}\n \t\t\t}\n \t\t\tif password == \"\" {\n-\t\t\t\tpassword, err = cryptorand.StringCharset(cryptorand.Human, 12)\n+\t\t\t\tpassword, err = cryptorand.StringCharset(cryptorand.Human, 20)\n \t\t\t\tif err != nil {\n \t\t\t\t\treturn err\n \t\t\t\t}",
+    "raw_url": "https://github.com/coder/coder/raw/a57d02be8e005669510110afcee4ea2db580deee/cli%2Fusercreate.go",
+    "sha": "203686d6ff72093f132413289eea3078723095ae",
+    "status": "modified"
+  }
+]

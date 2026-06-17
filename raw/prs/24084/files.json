@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 7,
+    "blob_url": "https://github.com/coder/coder/blob/09da6254163672acc8f4d76660bfb9e8fdbde311/site%2Fsrc%2Fmodules%2Fresources%2FAgentRow.stories.tsx",
+    "changes": 12,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fmodules%2Fresources%2FAgentRow.stories.tsx?ref=09da6254163672acc8f4d76660bfb9e8fdbde311",
+    "deletions": 5,
+    "filename": "site/src/modules/resources/AgentRow.stories.tsx",
+    "patch": "@@ -76,6 +76,8 @@ const defaultAgentMetadata = [\n \t},\n ];\n \n+const fixedLogTimestamp = \"2021-05-05T00:00:00.000Z\";\n+\n const logs = [\n \t\"\\x1b[91mCloning Git repository...\",\n \t\"\\x1b[2;37;41mStarting Docker Daemon...\",\n@@ -87,7 +89,7 @@ const logs = [\n \tlevel: \"info\",\n \toutput: line,\n \tsource_id: M.MockWorkspaceAgentLogSource.id,\n-\tcreated_at: new Date().toISOString(),\n+\tcreated_at: fixedLogTimestamp,\n }));\n \n const installScriptLogSource: TypesGen.WorkspaceAgentLogSource = {\n@@ -102,21 +104,21 @@ const tabbedLogs = [\n \t\tlevel: \"info\",\n \t\toutput: \"startup: preparing workspace\",\n \t\tsource_id: M.MockWorkspaceAgentLogSource.id,\n-\t\tcreated_at: new Date().toISOString(),\n+\t\tcreated_at: fixedLogTimestamp,\n \t},\n \t{\n \t\tid: 101,\n \t\tlevel: \"info\",\n \t\toutput: \"install: pnpm install\",\n \t\tsource_id: installScriptLogSource.id,\n-\t\tcreated_at: new Date().toISOString(),\n+\t\tcreated_at: fixedLogTimestamp,\n \t},\n \t{\n \t\tid: 102,\n \t\tlevel: \"info\",\n \t\toutput: \"install: setup complete\",\n \t\tsource_id: installScriptLogSource.id,\n-\t\tcreated_at: new Date().toISOString(),\n+\t\tcreated_at: fixedLogTimestamp,\n \t},\n ];\n \n@@ -153,7 +155,7 @@ const overflowLogs = overflowLogSources.map((source, index) => ({\n \tlevel: \"info\",\n \toutput: `${source.display_name}: line`,\n \tsource_id: source.id,\n-\tcreated_at: new Date().toISOString(),\n+\tcreated_at: fixedLogTimestamp,\n }));\n \n const meta: Meta<typeof AgentRow> = {",
+    "raw_url": "https://github.com/coder/coder/raw/09da6254163672acc8f4d76660bfb9e8fdbde311/site%2Fsrc%2Fmodules%2Fresources%2FAgentRow.stories.tsx",
+    "sha": "39697f330ec4644f16e71d60f9c0ec2224cf7c8a",
+    "status": "modified"
+  }
+]

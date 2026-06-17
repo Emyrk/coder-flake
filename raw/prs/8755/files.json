@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/0809dbb4c4ac2f531c09e624fa5850a53b0eadaf/enterprise%2Fcoderd%2Fworkspaceproxy.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcoderd%2Fworkspaceproxy.go?ref=0809dbb4c4ac2f531c09e624fa5850a53b0eadaf",
+    "deletions": 1,
+    "filename": "enterprise/coderd/workspaceproxy.go",
+    "patch": "@@ -34,7 +34,7 @@ import (\n // forceWorkspaceProxyHealthUpdate forces an update of the proxy health.\n // This is useful when a proxy is created or deleted. Errors will be logged.\n func (api *API) forceWorkspaceProxyHealthUpdate(ctx context.Context) {\n-\tif err := api.ProxyHealth.ForceUpdate(ctx); err != nil && !xerrors.Is(err, context.Canceled) {\n+\tif err := api.ProxyHealth.ForceUpdate(ctx); err != nil && !database.IsQueryCanceledError(err) && !xerrors.Is(err, context.Canceled) {\n \t\tapi.Logger.Error(ctx, \"force proxy health update\", slog.Error(err))\n \t}\n }",
+    "raw_url": "https://github.com/coder/coder/raw/0809dbb4c4ac2f531c09e624fa5850a53b0eadaf/enterprise%2Fcoderd%2Fworkspaceproxy.go",
+    "sha": "1842302cb4d82e9557cda900fae2c0a9a2328a52",
+    "status": "modified"
+  }
+]

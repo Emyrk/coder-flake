@@ -1,0 +1,82 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/11453#pullrequestreview-1806230792"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/11453"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "To make this more robust, I think we should make `heartbeatChan` buffered (2 slots) and the send on the chan should select on both it and default (or ctx, in which case slots are optional).\r\n\r\nAlso, it might be good for the select on `heartbeatChan` to also select on context, just in case it's made into a deadline context at some point.\r\n\r\nAt least in this current incantation, it's possible for `hearbeatFn` to get stuck on the send due to race between checking `hbCtx.Err` and calling `cancel`.",
+    "commit_id": "676fbdd905765b27dd706818063361ccd2501d2f",
+    "html_url": "https://github.com/coder/coder/pull/11453#pullrequestreview-1806230792",
+    "id": 1806230792,
+    "node_id": "PRR_kwDOGkVX1s5rqOUI",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/11453",
+    "state": "COMMENTED",
+    "submitted_at": "2024-01-05T16:02:29Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/11453#pullrequestreview-1806248003"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/11453"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "676fbdd905765b27dd706818063361ccd2501d2f",
+    "html_url": "https://github.com/coder/coder/pull/11453#pullrequestreview-1806248003",
+    "id": 1806248003,
+    "node_id": "PRR_kwDOGkVX1s5rqShD",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/11453",
+    "state": "COMMENTED",
+    "submitted_at": "2024-01-05T16:09:02Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  }
+]

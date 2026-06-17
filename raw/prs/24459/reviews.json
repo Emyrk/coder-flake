@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/24459#pullrequestreview-4147970377"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/24459"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "ab9dd48f4acda2ca9adf3ed3fe247fa4115673d5",
+    "html_url": "https://github.com/coder/coder/pull/24459#pullrequestreview-4147970377",
+    "id": 4147970377,
+    "node_id": "PRR_kwDOGkVX1s73PQFJ",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/24459",
+    "state": "APPROVED",
+    "submitted_at": "2026-04-21T13:23:30Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/251146?v=4",
+      "events_url": "https://api.github.com/users/jeremyruppel/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jeremyruppel/followers",
+      "following_url": "https://api.github.com/users/jeremyruppel/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jeremyruppel/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jeremyruppel",
+      "id": 251146,
+      "login": "jeremyruppel",
+      "node_id": "MDQ6VXNlcjI1MTE0Ng==",
+      "organizations_url": "https://api.github.com/users/jeremyruppel/orgs",
+      "received_events_url": "https://api.github.com/users/jeremyruppel/received_events",
+      "repos_url": "https://api.github.com/users/jeremyruppel/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jeremyruppel/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jeremyruppel/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jeremyruppel",
+      "user_view_type": "public"
+    }
+  }
+]

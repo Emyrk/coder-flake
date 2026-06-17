@@ -1,0 +1,48 @@
+[
+  {
+    "author_association": "MEMBER",
+    "body": "The issue is that we use an agent startup script that echos a known phrase to detect when the SSH connection is ready to accept input.  But, this is racy because \r\n\r\n1) we don't display the logs at all if the agent is up and ready when we SSH in\r\n2) if the log has already been emitted, then our log follow doesn't always pick it up.",
+    "created_at": "2023-11-20T11:16:59Z",
+    "html_url": "https://github.com/coder/coder/issues/10578#issuecomment-1818855236",
+    "id": 1818855236,
+    "issue_url": "https://api.github.com/repos/coder/coder/issues/10578",
+    "node_id": "IC_kwDOGkVX1s5saYdE",
+    "performed_via_github_app": null,
+    "pin": null,
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/issues/comments/1818855236/reactions"
+    },
+    "updated_at": "2023-11-20T11:16:59Z",
+    "url": "https://api.github.com/repos/coder/coder/issues/comments/1818855236",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  }
+]

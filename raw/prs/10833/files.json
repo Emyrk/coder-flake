@@ -1,0 +1,50 @@
+[
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/f15f75e57f437d2fc8265cefb749fd6b671c4ee2/agent%2Fagent.go",
+    "changes": 10,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagent.go?ref=f15f75e57f437d2fc8265cefb749fd6b671c4ee2",
+    "deletions": 2,
+    "filename": "agent/agent.go",
+    "patch": "@@ -68,6 +68,7 @@ type Options struct {\n \tEnvironmentVariables         map[string]string\n \tLogger                       slog.Logger\n \tIgnorePorts                  map[int]string\n+\tPortCacheDuration            time.Duration\n \tSSHMaxTimeout                time.Duration\n \tTailnetListenPort            uint16\n \tSubsystems                   []codersdk.AgentSubsystem\n@@ -126,6 +127,9 @@ func New(options Options) Agent {\n \tif options.ServiceBannerRefreshInterval == 0 {\n \t\toptions.ServiceBannerRefreshInterval = 2 * time.Minute\n \t}\n+\tif options.PortCacheDuration == 0 {\n+\t\toptions.PortCacheDuration = 1 * time.Second\n+\t}\n \n \tprometheusRegistry := options.PrometheusRegistry\n \tif prometheusRegistry == nil {\n@@ -153,6 +157,7 @@ func New(options Options) Agent {\n \t\tlifecycleReported:            make(chan codersdk.WorkspaceAgentLifecycle, 1),\n \t\tlifecycleStates:              []agentsdk.PostLifecycleRequest{{State: codersdk.WorkspaceAgentLifecycleCreated}},\n \t\tignorePorts:                  options.IgnorePorts,\n+\t\tportCacheDuration:            options.PortCacheDuration,\n \t\tconnStatsChan:                make(chan *agentsdk.Stats, 1),\n \t\treportMetadataInterval:       options.ReportMetadataInterval,\n \t\tserviceBannerRefreshInterval: options.ServiceBannerRefreshInterval,\n@@ -181,8 +186,9 @@ type agent struct {\n \t// ignorePorts tells the api handler which ports to ignore when\n \t// listing all listening ports. This is helpful to hide ports that\n \t// are used by the agent, that the user does not care about.\n-\tignorePorts map[int]string\n-\tsubsystems  []codersdk.AgentSubsystem\n+\tignorePorts       map[int]string\n+\tportCacheDuration time.Duration\n+\tsubsystems        []codersdk.AgentSubsystem\n \n \treconnectingPTYs       sync.Map\n \treconnectingPTYTimeout time.Duration",
+    "raw_url": "https://github.com/coder/coder/raw/f15f75e57f437d2fc8265cefb749fd6b671c4ee2/agent%2Fagent.go",
+    "sha": "1b5247331b4c40b57b05c4d62f9561250fb2ddb9",
+    "status": "modified"
+  },
+  {
+    "additions": 15,
+    "blob_url": "https://github.com/coder/coder/blob/f15f75e57f437d2fc8265cefb749fd6b671c4ee2/agent%2Fapi.go",
+    "changes": 20,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fapi.go?ref=f15f75e57f437d2fc8265cefb749fd6b671c4ee2",
+    "deletions": 5,
+    "filename": "agent/api.go",
+    "patch": "@@ -26,17 +26,27 @@ func (a *agent) apiHandler() http.Handler {\n \t\tcpy[k] = b\n \t}\n \n-\tlp := &listeningPortsHandler{ignorePorts: cpy}\n+\tcacheDuration := 1 * time.Second\n+\tif a.portCacheDuration > 0 {\n+\t\tcacheDuration = a.portCacheDuration\n+\t}\n+\n+\tlp := &listeningPortsHandler{\n+\t\tignorePorts:   cpy,\n+\t\tcacheDuration: cacheDuration,\n+\t}\n \tr.Get(\"/api/v0/listening-ports\", lp.handler)\n \n \treturn r\n }\n \n type listeningPortsHandler struct {\n-\tmut         sync.Mutex\n-\tports       []codersdk.WorkspaceAgentListeningPort\n-\tmtime       time.Time\n-\tignorePorts map[int]string\n+\tignorePorts   map[int]string\n+\tcacheDuration time.Duration\n+\n+\tmut   sync.Mutex\n+\tports []codersdk.WorkspaceAgentListeningPort\n+\tmtime time.Time\n }\n \n // handler returns a list of listening ports. This is tested by coderd's",
+    "raw_url": "https://github.com/coder/coder/raw/f15f75e57f437d2fc8265cefb749fd6b671c4ee2/agent%2Fapi.go",
+    "sha": "857c30e31acabcf32a7ea95de81aec5ded41550a",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/f15f75e57f437d2fc8265cefb749fd6b671c4ee2/agent%2Fports_supported.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fports_supported.go?ref=f15f75e57f437d2fc8265cefb749fd6b671c4ee2",
+    "deletions": 1,
+    "filename": "agent/ports_supported.go",
+    "patch": "@@ -15,7 +15,7 @@ func (lp *listeningPortsHandler) getListeningPorts() ([]codersdk.WorkspaceAgentL\n \tlp.mut.Lock()\n \tdefer lp.mut.Unlock()\n \n-\tif time.Since(lp.mtime) < time.Second {\n+\tif time.Since(lp.mtime) < lp.cacheDuration {\n \t\t// copy\n \t\tports := make([]codersdk.WorkspaceAgentListeningPort, len(lp.ports))\n \t\tcopy(ports, lp.ports)",
+    "raw_url": "https://github.com/coder/coder/raw/f15f75e57f437d2fc8265cefb749fd6b671c4ee2/agent%2Fports_supported.go",
+    "sha": "c6d7b3406255b4ee47ab0de2f71918f3e00edb6f",
+    "status": "modified"
+  },
+  {
+    "additions": 17,
+    "blob_url": "https://github.com/coder/coder/blob/f15f75e57f437d2fc8265cefb749fd6b671c4ee2/coderd%2Fworkspaceagents_test.go",
+    "changes": 25,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaceagents_test.go?ref=f15f75e57f437d2fc8265cefb749fd6b671c4ee2",
+    "deletions": 8,
+    "filename": "coderd/workspaceagents_test.go",
+    "patch": "@@ -21,6 +21,7 @@ import (\n \n \t\"cdr.dev/slog\"\n \t\"cdr.dev/slog/sloggers/slogtest\"\n+\t\"github.com/coder/coder/v2/agent\"\n \t\"github.com/coder/coder/v2/agent/agenttest\"\n \t\"github.com/coder/coder/v2/coderd\"\n \t\"github.com/coder/coder/v2/coderd/coderdtest\"\n@@ -551,7 +552,9 @@ func TestWorkspaceAgentListeningPorts(t *testing.T) {\n \t\t\t\t},\n \t\t\t}},\n \t\t}).Do()\n-\t\t_ = agenttest.New(t, client.URL, authToken)\n+\t\t_ = agenttest.New(t, client.URL, authToken, func(o *agent.Options) {\n+\t\t\to.PortCacheDuration = time.Millisecond\n+\t\t})\n \t\tresources := coderdtest.AwaitWorkspaceAgents(t, client, ws.ID)\n \t\treturn client, uint16(coderdPort), resources[0].Agents[0].ID\n \t}\n@@ -670,15 +673,21 @@ func TestWorkspaceAgentListeningPorts(t *testing.T) {\n \n \t\t\t// Close the listener and check that the port is no longer in the response.\n \t\t\trequire.NoError(t, l.Close())\n-\t\t\ttime.Sleep(2 * time.Second) // avoid cache\n-\t\t\tres, err = client.WorkspaceAgentListeningPorts(ctx, agentID)\n-\t\t\trequire.NoError(t, err)\n+\t\t\tt.Log(\"checking for ports after listener close:\")\n+\t\t\trequire.Eventually(t, func() bool {\n+\t\t\t\tres, err = client.WorkspaceAgentListeningPorts(ctx, agentID)\n+\t\t\t\tif !assert.NoError(t, err) {\n+\t\t\t\t\treturn false\n+\t\t\t\t}\n \n-\t\t\tfor _, port := range res.Ports {\n-\t\t\t\tif port.Network == \"tcp\" && port.Port == lPort {\n-\t\t\t\t\tt.Fatalf(\"expected to not find TCP port %d in response\", lPort)\n+\t\t\t\tfor _, port := range res.Ports {\n+\t\t\t\t\tif port.Network == \"tcp\" && port.Port == lPort {\n+\t\t\t\t\t\tt.Logf(\"expected to not find TCP port %d in response\", lPort)\n+\t\t\t\t\t\treturn false\n+\t\t\t\t\t}\n \t\t\t\t}\n-\t\t\t}\n+\t\t\t\treturn true\n+\t\t\t}, testutil.WaitLong, testutil.IntervalMedium)\n \t\t})\n \n \t\tt.Run(\"Filter\", func(t *testing.T) {",
+    "raw_url": "https://github.com/coder/coder/raw/f15f75e57f437d2fc8265cefb749fd6b671c4ee2/coderd%2Fworkspaceagents_test.go",
+    "sha": "bccaaab7bc4242e23bdf1ff65787994bd4331407",
+    "status": "modified"
+  }
+]

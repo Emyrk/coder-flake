@@ -1,0 +1,1325 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1926972682"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1926972682"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Is this multi-arch? The image we are building with depot runners is multi-arch. ",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-23T13:23:26Z",
+    "diff_hunk": "@@ -72,17 +77,23 @@ jobs:\n           tags: \"codercom/oss-dogfood:${{ steps.docker-tag-name.outputs.tag }},codercom/oss-dogfood:latest\"\n \n       - name: Build and push Nix image\n-        uses: depot/build-push-action@636daae76684e38c301daa0c5eca1c095b24e780 # v1.14.0\n-        with:\n-          project: b4q6ltmpzh\n-          token: ${{ secrets.DEPOT_TOKEN }}\n-          buildx-fallback: true\n-          context: \".\"\n-          file: \"dogfood/contents/Dockerfile.nix\"\n-          pull: true\n-          save: true\n-          push: ${{ github.ref == 'refs/heads/main' }}\n-          tags: \"codercom/oss-dogfood-nix:${{ steps.docker-tag-name.outputs.tag }},codercom/oss-dogfood-nix:latest\"\n+        run: |\n+          nix build .#dev_image\n+\n+          # If github.ref is not refs/head/main then exit here early\n+           if [ \"${{ github.ref }}\" != \"refs/heads/main\" ]; then\n+             exit 0\n+           fi\n+\n+          docker load -i result\n+\n+          CURRENT_SYSTEM=$(nix eval --impure --raw --expr 'builtins.currentSystem')\n+\n+          docker image tag codercom/oss-dogfood-nix:latest-$CURRENT_SYSTEM codercom/oss-dogfood-nix:${{ steps.docker-tag-name.outputs.tag }}\n+          docker image push codercom/oss-dogfood-nix:${{ steps.docker-tag-name.outputs.tag }}\n+\n+          docker image tag codercom/oss-dogfood-nix:latest-$CURRENT_SYSTEM codercom/oss-dogfood-nix:latest\n+          docker image push codercom/oss-dogfood-nix:latest",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1926972682",
+    "id": 1926972682,
+    "line": 94,
+    "node_id": "PRRC_kwDOGkVX1s5y20UK",
+    "original_commit_id": "32d343758b1188d599512c72db9ac3c149d6a748",
+    "original_line": 94,
+    "original_position": 52,
+    "original_start_line": 92,
+    "path": ".github/workflows/dogfood.yaml",
+    "position": 52,
+    "pull_request_review_id": 2569856137,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1926972682/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 90,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-01-23T13:23:38Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1926972682",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/10648092?v=4",
+      "events_url": "https://api.github.com/users/matifali/events{/privacy}",
+      "followers_url": "https://api.github.com/users/matifali/followers",
+      "following_url": "https://api.github.com/users/matifali/following{/other_user}",
+      "gists_url": "https://api.github.com/users/matifali/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/matifali",
+      "id": 10648092,
+      "login": "matifali",
+      "node_id": "MDQ6VXNlcjEwNjQ4MDky",
+      "organizations_url": "https://api.github.com/users/matifali/orgs",
+      "received_events_url": "https://api.github.com/users/matifali/received_events",
+      "repos_url": "https://api.github.com/users/matifali/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/matifali/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/matifali/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/matifali",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1926980213"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1926980213"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "No, this is a single arch image build.\r\n\r\nAlso, I can't find us building multi-arch images on Depot. Would you mind pointing me to where we're doing that?",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-23T13:28:44Z",
+    "diff_hunk": "@@ -72,17 +77,23 @@ jobs:\n           tags: \"codercom/oss-dogfood:${{ steps.docker-tag-name.outputs.tag }},codercom/oss-dogfood:latest\"\n \n       - name: Build and push Nix image\n-        uses: depot/build-push-action@636daae76684e38c301daa0c5eca1c095b24e780 # v1.14.0\n-        with:\n-          project: b4q6ltmpzh\n-          token: ${{ secrets.DEPOT_TOKEN }}\n-          buildx-fallback: true\n-          context: \".\"\n-          file: \"dogfood/contents/Dockerfile.nix\"\n-          pull: true\n-          save: true\n-          push: ${{ github.ref == 'refs/heads/main' }}\n-          tags: \"codercom/oss-dogfood-nix:${{ steps.docker-tag-name.outputs.tag }},codercom/oss-dogfood-nix:latest\"\n+        run: |\n+          nix build .#dev_image\n+\n+          # If github.ref is not refs/head/main then exit here early\n+           if [ \"${{ github.ref }}\" != \"refs/heads/main\" ]; then\n+             exit 0\n+           fi\n+\n+          docker load -i result\n+\n+          CURRENT_SYSTEM=$(nix eval --impure --raw --expr 'builtins.currentSystem')\n+\n+          docker image tag codercom/oss-dogfood-nix:latest-$CURRENT_SYSTEM codercom/oss-dogfood-nix:${{ steps.docker-tag-name.outputs.tag }}\n+          docker image push codercom/oss-dogfood-nix:${{ steps.docker-tag-name.outputs.tag }}\n+\n+          docker image tag codercom/oss-dogfood-nix:latest-$CURRENT_SYSTEM codercom/oss-dogfood-nix:latest\n+          docker image push codercom/oss-dogfood-nix:latest",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1926980213",
+    "id": 1926980213,
+    "in_reply_to_id": 1926972682,
+    "line": 94,
+    "node_id": "PRRC_kwDOGkVX1s5y22J1",
+    "original_commit_id": "32d343758b1188d599512c72db9ac3c149d6a748",
+    "original_line": 94,
+    "original_position": 52,
+    "original_start_line": 92,
+    "path": ".github/workflows/dogfood.yaml",
+    "position": 52,
+    "pull_request_review_id": 2569868453,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1926980213/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 90,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-01-23T13:28:44Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1926980213",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/2198487?v=4",
+      "events_url": "https://api.github.com/users/ThomasK33/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ThomasK33/followers",
+      "following_url": "https://api.github.com/users/ThomasK33/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ThomasK33/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ThomasK33",
+      "id": 2198487,
+      "login": "ThomasK33",
+      "node_id": "MDQ6VXNlcjIxOTg0ODc=",
+      "organizations_url": "https://api.github.com/users/ThomasK33/orgs",
+      "received_events_url": "https://api.github.com/users/ThomasK33/received_events",
+      "repos_url": "https://api.github.com/users/ThomasK33/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ThomasK33/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ThomasK33/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ThomasK33",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1926999717"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1926999717"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I am sorry for the confusion. Multi-arch builds are for our github.com/coder/images repo. Depot does that automatically. \r\n\r\nDogfood is still `amd64` only. ",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-23T13:42:36Z",
+    "diff_hunk": "@@ -72,17 +77,23 @@ jobs:\n           tags: \"codercom/oss-dogfood:${{ steps.docker-tag-name.outputs.tag }},codercom/oss-dogfood:latest\"\n \n       - name: Build and push Nix image\n-        uses: depot/build-push-action@636daae76684e38c301daa0c5eca1c095b24e780 # v1.14.0\n-        with:\n-          project: b4q6ltmpzh\n-          token: ${{ secrets.DEPOT_TOKEN }}\n-          buildx-fallback: true\n-          context: \".\"\n-          file: \"dogfood/contents/Dockerfile.nix\"\n-          pull: true\n-          save: true\n-          push: ${{ github.ref == 'refs/heads/main' }}\n-          tags: \"codercom/oss-dogfood-nix:${{ steps.docker-tag-name.outputs.tag }},codercom/oss-dogfood-nix:latest\"\n+        run: |\n+          nix build .#dev_image\n+\n+          # If github.ref is not refs/head/main then exit here early\n+           if [ \"${{ github.ref }}\" != \"refs/heads/main\" ]; then\n+             exit 0\n+           fi\n+\n+          docker load -i result\n+\n+          CURRENT_SYSTEM=$(nix eval --impure --raw --expr 'builtins.currentSystem')\n+\n+          docker image tag codercom/oss-dogfood-nix:latest-$CURRENT_SYSTEM codercom/oss-dogfood-nix:${{ steps.docker-tag-name.outputs.tag }}\n+          docker image push codercom/oss-dogfood-nix:${{ steps.docker-tag-name.outputs.tag }}\n+\n+          docker image tag codercom/oss-dogfood-nix:latest-$CURRENT_SYSTEM codercom/oss-dogfood-nix:latest\n+          docker image push codercom/oss-dogfood-nix:latest",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1926999717",
+    "id": 1926999717,
+    "in_reply_to_id": 1926972682,
+    "line": 94,
+    "node_id": "PRRC_kwDOGkVX1s5y266l",
+    "original_commit_id": "32d343758b1188d599512c72db9ac3c149d6a748",
+    "original_line": 94,
+    "original_position": 52,
+    "original_start_line": 92,
+    "path": ".github/workflows/dogfood.yaml",
+    "position": 52,
+    "pull_request_review_id": 2569901704,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1926999717/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 90,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-01-23T13:42:48Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1926999717",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/10648092?v=4",
+      "events_url": "https://api.github.com/users/matifali/events{/privacy}",
+      "followers_url": "https://api.github.com/users/matifali/followers",
+      "following_url": "https://api.github.com/users/matifali/following{/other_user}",
+      "gists_url": "https://api.github.com/users/matifali/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/matifali",
+      "id": 10648092,
+      "login": "matifali",
+      "node_id": "MDQ6VXNlcjEwNjQ4MDky",
+      "organizations_url": "https://api.github.com/users/matifali/orgs",
+      "received_events_url": "https://api.github.com/users/matifali/received_events",
+      "repos_url": "https://api.github.com/users/matifali/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/matifali/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/matifali/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/matifali",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1927001817"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1927001817"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "```suggestion\r\n      - name: Setup Nix\r\n        uses: DeterminateSystems/nix-installer-action@e50d5f73bfe71c2dd0aa4218de8f4afa59f8f81d # v16\r\n\r\n      - name: Setup GHA Nix cache\r\n        uses: DeterminateSystems/magic-nix-cache-action@6221693898146dc97e38ad0e013488a16477a4c4 # v9\r\n```\r\nFor readability.",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-23T13:44:07Z",
+    "diff_hunk": "@@ -34,6 +34,11 @@ jobs:\n       - name: Checkout\n         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1\n \n+      - name: Setup Nix\n+        uses: DeterminateSystems/nix-installer-action@e50d5f73bfe71c2dd0aa4218de8f4afa59f8f81d # v16\n+      - name: Setup GHA Nix cache\n+        uses: DeterminateSystems/magic-nix-cache-action@6221693898146dc97e38ad0e013488a16477a4c4 # v9",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1927001817",
+    "id": 1927001817,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5y27bZ",
+    "original_commit_id": "32d343758b1188d599512c72db9ac3c149d6a748",
+    "original_line": 41,
+    "original_position": 16,
+    "original_start_line": 37,
+    "path": ".github/workflows/dogfood.yaml",
+    "position": 1,
+    "pull_request_review_id": 2569905385,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927001817/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 37,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-01-23T13:57:58Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927001817",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/10648092?v=4",
+      "events_url": "https://api.github.com/users/matifali/events{/privacy}",
+      "followers_url": "https://api.github.com/users/matifali/followers",
+      "following_url": "https://api.github.com/users/matifali/following{/other_user}",
+      "gists_url": "https://api.github.com/users/matifali/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/matifali",
+      "id": 10648092,
+      "login": "matifali",
+      "node_id": "MDQ6VXNlcjEwNjQ4MDky",
+      "organizations_url": "https://api.github.com/users/matifali/orgs",
+      "received_events_url": "https://api.github.com/users/matifali/received_events",
+      "repos_url": "https://api.github.com/users/matifali/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/matifali/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/matifali/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/matifali",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1927005725"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1927005725"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "```suggestion\r\n        if: github.ref == 'refs/heads/main'\r\n        run: |\r\n          nix build .#dev_image\r\n\r\n```\r\nMay we only run this step on the `main` branch? instead of exiting early?",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-23T13:46:50Z",
+    "diff_hunk": "@@ -72,17 +77,23 @@ jobs:\n           tags: \"codercom/oss-dogfood:${{ steps.docker-tag-name.outputs.tag }},codercom/oss-dogfood:latest\"\n \n       - name: Build and push Nix image\n-        uses: depot/build-push-action@636daae76684e38c301daa0c5eca1c095b24e780 # v1.14.0\n-        with:\n-          project: b4q6ltmpzh\n-          token: ${{ secrets.DEPOT_TOKEN }}\n-          buildx-fallback: true\n-          context: \".\"\n-          file: \"dogfood/contents/Dockerfile.nix\"\n-          pull: true\n-          save: true\n-          push: ${{ github.ref == 'refs/heads/main' }}\n-          tags: \"codercom/oss-dogfood-nix:${{ steps.docker-tag-name.outputs.tag }},codercom/oss-dogfood-nix:latest\"\n+        run: |\n+          nix build .#dev_image\n+\n+          # If github.ref is not refs/head/main then exit here early\n+           if [ \"${{ github.ref }}\" != \"refs/heads/main\" ]; then\n+             exit 0\n+           fi",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1927005725",
+    "id": 1927005725,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5y28Yd",
+    "original_commit_id": "32d343758b1188d599512c72db9ac3c149d6a748",
+    "original_line": 87,
+    "original_position": 42,
+    "original_start_line": 80,
+    "path": ".github/workflows/dogfood.yaml",
+    "position": 1,
+    "pull_request_review_id": 2569912003,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927005725/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-01-23T13:54:48Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927005725",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/10648092?v=4",
+      "events_url": "https://api.github.com/users/matifali/events{/privacy}",
+      "followers_url": "https://api.github.com/users/matifali/followers",
+      "following_url": "https://api.github.com/users/matifali/following{/other_user}",
+      "gists_url": "https://api.github.com/users/matifali/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/matifali",
+      "id": 10648092,
+      "login": "matifali",
+      "node_id": "MDQ6VXNlcjEwNjQ4MDky",
+      "organizations_url": "https://api.github.com/users/matifali/orgs",
+      "received_events_url": "https://api.github.com/users/matifali/received_events",
+      "repos_url": "https://api.github.com/users/matifali/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/matifali/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/matifali/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/matifali",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1927025024"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1927025024"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "We always build the images and only push them on the main branch.\r\nThis aligns with the 'Build and push Non-Nix image' step, which also builds the image without pushing it and with the behavior before the refactoring.",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-23T13:59:27Z",
+    "diff_hunk": "@@ -72,17 +77,23 @@ jobs:\n           tags: \"codercom/oss-dogfood:${{ steps.docker-tag-name.outputs.tag }},codercom/oss-dogfood:latest\"\n \n       - name: Build and push Nix image\n-        uses: depot/build-push-action@636daae76684e38c301daa0c5eca1c095b24e780 # v1.14.0\n-        with:\n-          project: b4q6ltmpzh\n-          token: ${{ secrets.DEPOT_TOKEN }}\n-          buildx-fallback: true\n-          context: \".\"\n-          file: \"dogfood/contents/Dockerfile.nix\"\n-          pull: true\n-          save: true\n-          push: ${{ github.ref == 'refs/heads/main' }}\n-          tags: \"codercom/oss-dogfood-nix:${{ steps.docker-tag-name.outputs.tag }},codercom/oss-dogfood-nix:latest\"\n+        run: |\n+          nix build .#dev_image\n+\n+          # If github.ref is not refs/head/main then exit here early\n+           if [ \"${{ github.ref }}\" != \"refs/heads/main\" ]; then\n+             exit 0\n+           fi",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1927025024",
+    "id": 1927025024,
+    "in_reply_to_id": 1927005725,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5y3BGA",
+    "original_commit_id": "32d343758b1188d599512c72db9ac3c149d6a748",
+    "original_line": 87,
+    "original_position": 42,
+    "original_start_line": 80,
+    "path": ".github/workflows/dogfood.yaml",
+    "position": 1,
+    "pull_request_review_id": 2569944033,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927025024/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-01-23T13:59:28Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927025024",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/2198487?v=4",
+      "events_url": "https://api.github.com/users/ThomasK33/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ThomasK33/followers",
+      "following_url": "https://api.github.com/users/ThomasK33/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ThomasK33/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ThomasK33",
+      "id": 2198487,
+      "login": "ThomasK33",
+      "node_id": "MDQ6VXNlcjIxOTg0ODc=",
+      "organizations_url": "https://api.github.com/users/ThomasK33/orgs",
+      "received_events_url": "https://api.github.com/users/ThomasK33/received_events",
+      "repos_url": "https://api.github.com/users/ThomasK33/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ThomasK33/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ThomasK33/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ThomasK33",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1927026787"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1927026787"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Makes sense. Maybe we can split the build and push to separate steps here. But I am happy with the current approach.",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-23T14:00:39Z",
+    "diff_hunk": "@@ -72,17 +77,23 @@ jobs:\n           tags: \"codercom/oss-dogfood:${{ steps.docker-tag-name.outputs.tag }},codercom/oss-dogfood:latest\"\n \n       - name: Build and push Nix image\n-        uses: depot/build-push-action@636daae76684e38c301daa0c5eca1c095b24e780 # v1.14.0\n-        with:\n-          project: b4q6ltmpzh\n-          token: ${{ secrets.DEPOT_TOKEN }}\n-          buildx-fallback: true\n-          context: \".\"\n-          file: \"dogfood/contents/Dockerfile.nix\"\n-          pull: true\n-          save: true\n-          push: ${{ github.ref == 'refs/heads/main' }}\n-          tags: \"codercom/oss-dogfood-nix:${{ steps.docker-tag-name.outputs.tag }},codercom/oss-dogfood-nix:latest\"\n+        run: |\n+          nix build .#dev_image\n+\n+          # If github.ref is not refs/head/main then exit here early\n+           if [ \"${{ github.ref }}\" != \"refs/heads/main\" ]; then\n+             exit 0\n+           fi",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1927026787",
+    "id": 1927026787,
+    "in_reply_to_id": 1927005725,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5y3Bhj",
+    "original_commit_id": "32d343758b1188d599512c72db9ac3c149d6a748",
+    "original_line": 87,
+    "original_position": 42,
+    "original_start_line": 80,
+    "path": ".github/workflows/dogfood.yaml",
+    "position": 1,
+    "pull_request_review_id": 2569947247,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927026787/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-01-23T14:01:24Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927026787",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/10648092?v=4",
+      "events_url": "https://api.github.com/users/matifali/events{/privacy}",
+      "followers_url": "https://api.github.com/users/matifali/followers",
+      "following_url": "https://api.github.com/users/matifali/following{/other_user}",
+      "gists_url": "https://api.github.com/users/matifali/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/matifali",
+      "id": 10648092,
+      "login": "matifali",
+      "node_id": "MDQ6VXNlcjEwNjQ4MDky",
+      "organizations_url": "https://api.github.com/users/matifali/orgs",
+      "received_events_url": "https://api.github.com/users/matifali/received_events",
+      "repos_url": "https://api.github.com/users/matifali/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/matifali/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/matifali/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/matifali",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1927031066"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1927031066"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Oh yeah, it would look cleaner/more GitHub Actions native. \u2728 \r\nLet me change that quickly",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-23T14:03:31Z",
+    "diff_hunk": "@@ -72,17 +77,23 @@ jobs:\n           tags: \"codercom/oss-dogfood:${{ steps.docker-tag-name.outputs.tag }},codercom/oss-dogfood:latest\"\n \n       - name: Build and push Nix image\n-        uses: depot/build-push-action@636daae76684e38c301daa0c5eca1c095b24e780 # v1.14.0\n-        with:\n-          project: b4q6ltmpzh\n-          token: ${{ secrets.DEPOT_TOKEN }}\n-          buildx-fallback: true\n-          context: \".\"\n-          file: \"dogfood/contents/Dockerfile.nix\"\n-          pull: true\n-          save: true\n-          push: ${{ github.ref == 'refs/heads/main' }}\n-          tags: \"codercom/oss-dogfood-nix:${{ steps.docker-tag-name.outputs.tag }},codercom/oss-dogfood-nix:latest\"\n+        run: |\n+          nix build .#dev_image\n+\n+          # If github.ref is not refs/head/main then exit here early\n+           if [ \"${{ github.ref }}\" != \"refs/heads/main\" ]; then\n+             exit 0\n+           fi",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1927031066",
+    "id": 1927031066,
+    "in_reply_to_id": 1927005725,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5y3Cka",
+    "original_commit_id": "32d343758b1188d599512c72db9ac3c149d6a748",
+    "original_line": 87,
+    "original_position": 42,
+    "original_start_line": 80,
+    "path": ".github/workflows/dogfood.yaml",
+    "position": 1,
+    "pull_request_review_id": 2569954760,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927031066/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-01-23T14:03:31Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927031066",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/2198487?v=4",
+      "events_url": "https://api.github.com/users/ThomasK33/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ThomasK33/followers",
+      "following_url": "https://api.github.com/users/ThomasK33/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ThomasK33/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ThomasK33",
+      "id": 2198487,
+      "login": "ThomasK33",
+      "node_id": "MDQ6VXNlcjIxOTg0ODc=",
+      "organizations_url": "https://api.github.com/users/ThomasK33/orgs",
+      "received_events_url": "https://api.github.com/users/ThomasK33/received_events",
+      "repos_url": "https://api.github.com/users/ThomasK33/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ThomasK33/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ThomasK33/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ThomasK33",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1927077540"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1927077540"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Are you using a formatter like https://github.com/kamadorueda/alejandra?",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-23T14:32:23Z",
+    "diff_hunk": "@@ -129,13 +144,22 @@\n \n           src = ./site/.;\n           # Required for the `canvas` package!\n-          extraBuildInputs = with pkgs; [\n-            cairo\n-            pango\n-            pixman\n-            libpng libjpeg giflib librsvg\n-            python312Packages.setuptools\n-          ] ++ ( lib.optionals stdenv.targetPlatform.isDarwin [ darwin.apple_sdk.frameworks.Foundation xcbuild ] );\n+          extraBuildInputs =\n+            with pkgs;\n+            [\n+              cairo\n+              pango\n+              pixman\n+              libpng\n+              libjpeg\n+              giflib\n+              librsvg\n+              python312Packages.setuptools\n+            ]\n+            ++ (lib.optionals stdenv.targetPlatform.isDarwin [\n+              darwin.apple_sdk.frameworks.Foundation\n+              xcbuild\n+            ]);\n           installInPlace = true;",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1927077540",
+    "id": 1927077540,
+    "line": 161,
+    "node_id": "PRRC_kwDOGkVX1s5y3N6k",
+    "original_commit_id": "56640ad12e131f87d2fd9b96e75b1a313ddfe979",
+    "original_line": 161,
+    "original_position": 90,
+    "original_start_line": 147,
+    "path": "flake.nix",
+    "position": 128,
+    "pull_request_review_id": 2570034420,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927077540/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 145,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-01-23T14:32:24Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927077540",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/10648092?v=4",
+      "events_url": "https://api.github.com/users/matifali/events{/privacy}",
+      "followers_url": "https://api.github.com/users/matifali/followers",
+      "following_url": "https://api.github.com/users/matifali/following{/other_user}",
+      "gists_url": "https://api.github.com/users/matifali/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/matifali",
+      "id": 10648092,
+      "login": "matifali",
+      "node_id": "MDQ6VXNlcjEwNjQ4MDky",
+      "organizations_url": "https://api.github.com/users/matifali/orgs",
+      "received_events_url": "https://api.github.com/users/matifali/received_events",
+      "repos_url": "https://api.github.com/users/matifali/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/matifali/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/matifali/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/matifali",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1927080915"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1927080915"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Yes. [`nixfmt-rfc-style`](https://github.com/NixOS/nixfmt) to be more specific.\r\nIts also defined in line 44 and included in the devshell.",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-23T14:34:35Z",
+    "diff_hunk": "@@ -129,13 +144,22 @@\n \n           src = ./site/.;\n           # Required for the `canvas` package!\n-          extraBuildInputs = with pkgs; [\n-            cairo\n-            pango\n-            pixman\n-            libpng libjpeg giflib librsvg\n-            python312Packages.setuptools\n-          ] ++ ( lib.optionals stdenv.targetPlatform.isDarwin [ darwin.apple_sdk.frameworks.Foundation xcbuild ] );\n+          extraBuildInputs =\n+            with pkgs;\n+            [\n+              cairo\n+              pango\n+              pixman\n+              libpng\n+              libjpeg\n+              giflib\n+              librsvg\n+              python312Packages.setuptools\n+            ]\n+            ++ (lib.optionals stdenv.targetPlatform.isDarwin [\n+              darwin.apple_sdk.frameworks.Foundation\n+              xcbuild\n+            ]);\n           installInPlace = true;",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1927080915",
+    "id": 1927080915,
+    "in_reply_to_id": 1927077540,
+    "line": 161,
+    "node_id": "PRRC_kwDOGkVX1s5y3OvT",
+    "original_commit_id": "56640ad12e131f87d2fd9b96e75b1a313ddfe979",
+    "original_line": 161,
+    "original_position": 90,
+    "original_start_line": 147,
+    "path": "flake.nix",
+    "position": 128,
+    "pull_request_review_id": 2570040495,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927080915/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 145,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-01-23T14:34:35Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927080915",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/2198487?v=4",
+      "events_url": "https://api.github.com/users/ThomasK33/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ThomasK33/followers",
+      "following_url": "https://api.github.com/users/ThomasK33/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ThomasK33/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ThomasK33",
+      "id": 2198487,
+      "login": "ThomasK33",
+      "node_id": "MDQ6VXNlcjIxOTg0ODc=",
+      "organizations_url": "https://api.github.com/users/ThomasK33/orgs",
+      "received_events_url": "https://api.github.com/users/ThomasK33/received_events",
+      "repos_url": "https://api.github.com/users/ThomasK33/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ThomasK33/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ThomasK33/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ThomasK33",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1927081217"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1927081217"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Can this live in the repo root if it is consumed by someone running `nix develop` in the repo root?\r\nOr is it only useful for building the Docker image?\r\n\r\n",
+    "commit_id": "56640ad12e131f87d2fd9b96e75b1a313ddfe979",
+    "created_at": "2025-01-23T14:34:46Z",
+    "diff_hunk": "",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1927081217",
+    "id": 1927081217,
+    "line": 1,
+    "node_id": "PRRC_kwDOGkVX1s5y3O0B",
+    "original_commit_id": "56640ad12e131f87d2fd9b96e75b1a313ddfe979",
+    "original_line": 1,
+    "original_position": 1,
+    "original_start_line": null,
+    "path": "dogfood/contents/nix.hash",
+    "position": 1,
+    "pull_request_review_id": 2570041047,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927081217/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "file",
+    "updated_at": "2025-01-23T14:36:08Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927081217",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/10648092?v=4",
+      "events_url": "https://api.github.com/users/matifali/events{/privacy}",
+      "followers_url": "https://api.github.com/users/matifali/followers",
+      "following_url": "https://api.github.com/users/matifali/following{/other_user}",
+      "gists_url": "https://api.github.com/users/matifali/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/matifali",
+      "id": 10648092,
+      "login": "matifali",
+      "node_id": "MDQ6VXNlcjEwNjQ4MDky",
+      "organizations_url": "https://api.github.com/users/matifali/orgs",
+      "received_events_url": "https://api.github.com/users/matifali/received_events",
+      "repos_url": "https://api.github.com/users/matifali/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/matifali/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/matifali/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/matifali",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1927083168"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1927083168"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "It's only useful as a trigger for the dogfood environment to pull a new image.",
+    "commit_id": "56640ad12e131f87d2fd9b96e75b1a313ddfe979",
+    "created_at": "2025-01-23T14:36:00Z",
+    "diff_hunk": "",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1927083168",
+    "id": 1927083168,
+    "in_reply_to_id": 1927081217,
+    "line": 1,
+    "node_id": "PRRC_kwDOGkVX1s5y3PSg",
+    "original_commit_id": "56640ad12e131f87d2fd9b96e75b1a313ddfe979",
+    "original_line": 1,
+    "original_position": 1,
+    "original_start_line": null,
+    "path": "dogfood/contents/nix.hash",
+    "position": 1,
+    "pull_request_review_id": 2570044413,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927083168/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "file",
+    "updated_at": "2025-01-23T14:36:01Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927083168",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/2198487?v=4",
+      "events_url": "https://api.github.com/users/ThomasK33/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ThomasK33/followers",
+      "following_url": "https://api.github.com/users/ThomasK33/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ThomasK33/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ThomasK33",
+      "id": 2198487,
+      "login": "ThomasK33",
+      "node_id": "MDQ6VXNlcjIxOTg0ODc=",
+      "organizations_url": "https://api.github.com/users/ThomasK33/orgs",
+      "received_events_url": "https://api.github.com/users/ThomasK33/received_events",
+      "repos_url": "https://api.github.com/users/ThomasK33/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ThomasK33/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ThomasK33/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ThomasK33",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1927085617"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1927085617"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "How are we keeping this file up to date? Is it manual, i.e., whenever someone updates the Nix flake?",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-23T14:37:32Z",
+    "diff_hunk": "@@ -129,13 +144,22 @@\n \n           src = ./site/.;\n           # Required for the `canvas` package!\n-          extraBuildInputs = with pkgs; [\n-            cairo\n-            pango\n-            pixman\n-            libpng libjpeg giflib librsvg\n-            python312Packages.setuptools\n-          ] ++ ( lib.optionals stdenv.targetPlatform.isDarwin [ darwin.apple_sdk.frameworks.Foundation xcbuild ] );\n+          extraBuildInputs =\n+            with pkgs;\n+            [\n+              cairo\n+              pango\n+              pixman\n+              libpng\n+              libjpeg\n+              giflib\n+              librsvg\n+              python312Packages.setuptools\n+            ]\n+            ++ (lib.optionals stdenv.targetPlatform.isDarwin [\n+              darwin.apple_sdk.frameworks.Foundation\n+              xcbuild\n+            ]);\n           installInPlace = true;",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1927085617",
+    "id": 1927085617,
+    "in_reply_to_id": 1927077540,
+    "line": 161,
+    "node_id": "PRRC_kwDOGkVX1s5y3P4x",
+    "original_commit_id": "56640ad12e131f87d2fd9b96e75b1a313ddfe979",
+    "original_line": 161,
+    "original_position": 90,
+    "original_start_line": 147,
+    "path": "flake.nix",
+    "position": 128,
+    "pull_request_review_id": 2570048711,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927085617/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 145,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-01-23T14:37:33Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927085617",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/10648092?v=4",
+      "events_url": "https://api.github.com/users/matifali/events{/privacy}",
+      "followers_url": "https://api.github.com/users/matifali/followers",
+      "following_url": "https://api.github.com/users/matifali/following{/other_user}",
+      "gists_url": "https://api.github.com/users/matifali/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/matifali",
+      "id": 10648092,
+      "login": "matifali",
+      "node_id": "MDQ6VXNlcjEwNjQ4MDky",
+      "organizations_url": "https://api.github.com/users/matifali/orgs",
+      "received_events_url": "https://api.github.com/users/matifali/received_events",
+      "repos_url": "https://api.github.com/users/matifali/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/matifali/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/matifali/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/matifali",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1927099564"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1927099564"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Are you asking how we keep our flake up to date?\r\n\r\nWhen the go.mod contents change, we have a script at `scripts/update-flake.sh` that updates the vendor hash for the Go module, the proto gen, and the dogfood nix.hash file. As is the current status quo, this will have to be performed manually on each go.mod change.\r\n\r\nThe nix flake's lock file can be updated using `nix flake update` (assuming the nix commands and flake experiment are enabled on one's machine).",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-23T14:45:15Z",
+    "diff_hunk": "@@ -129,13 +144,22 @@\n \n           src = ./site/.;\n           # Required for the `canvas` package!\n-          extraBuildInputs = with pkgs; [\n-            cairo\n-            pango\n-            pixman\n-            libpng libjpeg giflib librsvg\n-            python312Packages.setuptools\n-          ] ++ ( lib.optionals stdenv.targetPlatform.isDarwin [ darwin.apple_sdk.frameworks.Foundation xcbuild ] );\n+          extraBuildInputs =\n+            with pkgs;\n+            [\n+              cairo\n+              pango\n+              pixman\n+              libpng\n+              libjpeg\n+              giflib\n+              librsvg\n+              python312Packages.setuptools\n+            ]\n+            ++ (lib.optionals stdenv.targetPlatform.isDarwin [\n+              darwin.apple_sdk.frameworks.Foundation\n+              xcbuild\n+            ]);\n           installInPlace = true;",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1927099564",
+    "id": 1927099564,
+    "in_reply_to_id": 1927077540,
+    "line": 161,
+    "node_id": "PRRC_kwDOGkVX1s5y3TSs",
+    "original_commit_id": "56640ad12e131f87d2fd9b96e75b1a313ddfe979",
+    "original_line": 161,
+    "original_position": 90,
+    "original_start_line": 147,
+    "path": "flake.nix",
+    "position": 128,
+    "pull_request_review_id": 2570073070,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927099564/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 145,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-01-23T14:45:15Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927099564",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/2198487?v=4",
+      "events_url": "https://api.github.com/users/ThomasK33/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ThomasK33/followers",
+      "following_url": "https://api.github.com/users/ThomasK33/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ThomasK33/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ThomasK33",
+      "id": 2198487,
+      "login": "ThomasK33",
+      "node_id": "MDQ6VXNlcjIxOTg0ODc=",
+      "organizations_url": "https://api.github.com/users/ThomasK33/orgs",
+      "received_events_url": "https://api.github.com/users/ThomasK33/received_events",
+      "repos_url": "https://api.github.com/users/ThomasK33/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ThomasK33/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ThomasK33/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ThomasK33",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1927101928"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1927101928"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Yes.\r\nThank you.",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-23T14:46:46Z",
+    "diff_hunk": "@@ -129,13 +144,22 @@\n \n           src = ./site/.;\n           # Required for the `canvas` package!\n-          extraBuildInputs = with pkgs; [\n-            cairo\n-            pango\n-            pixman\n-            libpng libjpeg giflib librsvg\n-            python312Packages.setuptools\n-          ] ++ ( lib.optionals stdenv.targetPlatform.isDarwin [ darwin.apple_sdk.frameworks.Foundation xcbuild ] );\n+          extraBuildInputs =\n+            with pkgs;\n+            [\n+              cairo\n+              pango\n+              pixman\n+              libpng\n+              libjpeg\n+              giflib\n+              librsvg\n+              python312Packages.setuptools\n+            ]\n+            ++ (lib.optionals stdenv.targetPlatform.isDarwin [\n+              darwin.apple_sdk.frameworks.Foundation\n+              xcbuild\n+            ]);\n           installInPlace = true;",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1927101928",
+    "id": 1927101928,
+    "in_reply_to_id": 1927077540,
+    "line": 161,
+    "node_id": "PRRC_kwDOGkVX1s5y3T3o",
+    "original_commit_id": "56640ad12e131f87d2fd9b96e75b1a313ddfe979",
+    "original_line": 161,
+    "original_position": 90,
+    "original_start_line": 147,
+    "path": "flake.nix",
+    "position": 128,
+    "pull_request_review_id": 2570077240,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927101928/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 145,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-01-23T14:46:46Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1927101928",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/10648092?v=4",
+      "events_url": "https://api.github.com/users/matifali/events{/privacy}",
+      "followers_url": "https://api.github.com/users/matifali/followers",
+      "following_url": "https://api.github.com/users/matifali/following{/other_user}",
+      "gists_url": "https://api.github.com/users/matifali/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/matifali",
+      "id": 10648092,
+      "login": "matifali",
+      "node_id": "MDQ6VXNlcjEwNjQ4MDky",
+      "organizations_url": "https://api.github.com/users/matifali/orgs",
+      "received_events_url": "https://api.github.com/users/matifali/received_events",
+      "repos_url": "https://api.github.com/users/matifali/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/matifali/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/matifali/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/matifali",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1928572943"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1928572943"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "`./scripts/update_flake.sh` seems to need this variable defined.",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-24T11:57:52Z",
+    "diff_hunk": "@@ -186,26 +217,36 @@\n               export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true\n             '';\n \n-            LOCALE_ARCHIVE = with pkgs; lib.optionalDrvAttr stdenv.isLinux \"${glibcLocales}/lib/locale/locale-archive\";\n+            LOCALE_ARCHIVE =\n+              with pkgs;\n+              lib.optionalDrvAttr stdenv.isLinux \"${glibcLocales}/lib/locale/locale-archive\";\n           };\n         };\n \n-        packages = {\n-          proto_gen_go = proto_gen_go_1_30;",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1928572943",
+    "id": 1928572943,
+    "line": 194,
+    "node_id": "PRRC_kwDOGkVX1s5y87AP",
+    "original_commit_id": "c18c4cab7615199ba6acb5fee9951552e767e963",
+    "original_line": 194,
+    "original_position": 140,
+    "original_start_line": null,
+    "path": "flake.nix",
+    "position": 178,
+    "pull_request_review_id": 2572459453,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1928572943/reactions"
+    },
+    "side": "LEFT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-01-24T11:57:53Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1928572943",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1928592205"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1928592205"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Is this only expected to work on Linux systems?\r\n```\r\nerror: flake 'git+file:///Users/cian/src/coder/coder' does not provide attribute 'packages.aarch64-darwin.dev_image', 'legacyPackages.aarch64-darwin.dev_image' or 'dev_image'\r\n\r\n```",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-24T12:15:50Z",
+    "diff_hunk": "@@ -186,26 +217,36 @@\n               export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true\n             '';\n \n-            LOCALE_ARCHIVE = with pkgs; lib.optionalDrvAttr stdenv.isLinux \"${glibcLocales}/lib/locale/locale-archive\";\n+            LOCALE_ARCHIVE =\n+              with pkgs;\n+              lib.optionalDrvAttr stdenv.isLinux \"${glibcLocales}/lib/locale/locale-archive\";\n           };\n         };\n \n-        packages = {\n-          proto_gen_go = proto_gen_go_1_30;\n-          all = pkgs.buildEnv {\n-            name = \"all-packages\";\n-            paths = devShellPackages;\n-          };\n-          site = buildSite;\n-\n-          # Copying `OS_ARCHES` from the Makefile.\n-          linux_amd64 = buildFat \"linux_amd64\";\n-          linux_arm64 = buildFat \"linux_arm64\";\n-          darwin_amd64 = buildFat \"darwin_amd64\";\n-          darwin_arm64 = buildFat \"darwin_arm64\";\n-          windows_amd64 = buildFat \"windows_amd64.exe\";\n-          windows_arm64 = buildFat \"windows_arm64.exe\";\n-        };\n+        packages =\n+          {\n+            default = packages.${system};\n+\n+            site = buildSite;\n+\n+            # Copying `OS_ARCHES` from the Makefile.\n+            x86_64-linux = buildFat \"linux_amd64\";\n+            aarch64-linux = buildFat \"linux_arm64\";\n+            x86_64-darwin = buildFat \"darwin_amd64\";\n+            aarch64-darwin = buildFat \"darwin_arm64\";\n+            x86_64-windows = buildFat \"windows_amd64.exe\";\n+            aarch64-windows = buildFat \"windows_arm64.exe\";\n+          }\n+          // (pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {\n+            dev_image = pkgs.dockerTools.buildNixShellImage {\n+              name = \"codercom/oss-dogfood-nix\";\n+              tag = \"latest-${system}\";\n+\n+              drv = devShells.default.overrideAttrs (oldAttrs: {\n+                buildInputs = oldAttrs.buildInputs ++ [ pkgs.nix ];\n+              });",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1928592205",
+    "id": 1928592205,
+    "line": 246,
+    "node_id": "PRRC_kwDOGkVX1s5y8_tN",
+    "original_commit_id": "c18c4cab7615199ba6acb5fee9951552e767e963",
+    "original_line": 246,
+    "original_position": 176,
+    "original_start_line": 240,
+    "path": "flake.nix",
+    "position": 215,
+    "pull_request_review_id": 2572493612,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1928592205/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 239,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-01-24T12:16:01Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1928592205",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1928594291"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1928594291"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Yes, building an OCI image is only supported on Linux systems.",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-24T12:17:46Z",
+    "diff_hunk": "@@ -186,26 +217,36 @@\n               export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true\n             '';\n \n-            LOCALE_ARCHIVE = with pkgs; lib.optionalDrvAttr stdenv.isLinux \"${glibcLocales}/lib/locale/locale-archive\";\n+            LOCALE_ARCHIVE =\n+              with pkgs;\n+              lib.optionalDrvAttr stdenv.isLinux \"${glibcLocales}/lib/locale/locale-archive\";\n           };\n         };\n \n-        packages = {\n-          proto_gen_go = proto_gen_go_1_30;\n-          all = pkgs.buildEnv {\n-            name = \"all-packages\";\n-            paths = devShellPackages;\n-          };\n-          site = buildSite;\n-\n-          # Copying `OS_ARCHES` from the Makefile.\n-          linux_amd64 = buildFat \"linux_amd64\";\n-          linux_arm64 = buildFat \"linux_arm64\";\n-          darwin_amd64 = buildFat \"darwin_amd64\";\n-          darwin_arm64 = buildFat \"darwin_arm64\";\n-          windows_amd64 = buildFat \"windows_amd64.exe\";\n-          windows_arm64 = buildFat \"windows_arm64.exe\";\n-        };\n+        packages =\n+          {\n+            default = packages.${system};\n+\n+            site = buildSite;\n+\n+            # Copying `OS_ARCHES` from the Makefile.\n+            x86_64-linux = buildFat \"linux_amd64\";\n+            aarch64-linux = buildFat \"linux_arm64\";\n+            x86_64-darwin = buildFat \"darwin_amd64\";\n+            aarch64-darwin = buildFat \"darwin_arm64\";\n+            x86_64-windows = buildFat \"windows_amd64.exe\";\n+            aarch64-windows = buildFat \"windows_arm64.exe\";\n+          }\n+          // (pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {\n+            dev_image = pkgs.dockerTools.buildNixShellImage {\n+              name = \"codercom/oss-dogfood-nix\";\n+              tag = \"latest-${system}\";\n+\n+              drv = devShells.default.overrideAttrs (oldAttrs: {\n+                buildInputs = oldAttrs.buildInputs ++ [ pkgs.nix ];\n+              });",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1928594291",
+    "id": 1928594291,
+    "in_reply_to_id": 1928592205,
+    "line": 246,
+    "node_id": "PRRC_kwDOGkVX1s5y9ANz",
+    "original_commit_id": "c18c4cab7615199ba6acb5fee9951552e767e963",
+    "original_line": 246,
+    "original_position": 176,
+    "original_start_line": 240,
+    "path": "flake.nix",
+    "position": 215,
+    "pull_request_review_id": 2572497373,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1928594291/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 239,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-01-24T12:17:46Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1928594291",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/2198487?v=4",
+      "events_url": "https://api.github.com/users/ThomasK33/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ThomasK33/followers",
+      "following_url": "https://api.github.com/users/ThomasK33/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ThomasK33/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ThomasK33",
+      "id": 2198487,
+      "login": "ThomasK33",
+      "node_id": "MDQ6VXNlcjIxOTg0ODc=",
+      "organizations_url": "https://api.github.com/users/ThomasK33/orgs",
+      "received_events_url": "https://api.github.com/users/ThomasK33/received_events",
+      "repos_url": "https://api.github.com/users/ThomasK33/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ThomasK33/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ThomasK33/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ThomasK33",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16223#discussion_r1928596538"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16223"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1928596538"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Personally/locally, I've spun up a VM with nixOS and configured it as a remote builder, but any other Linux OS will do.\n\nIt's the same thing that Docker Desktop/Colima/OrbStack/... do for one under the hood but without the hood and magic abstractions part.",
+    "commit_id": "0ed90c64b78dca147dca690d55b2c4ddc9dd17b6",
+    "created_at": "2025-01-24T12:19:41Z",
+    "diff_hunk": "@@ -186,26 +217,36 @@\n               export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true\n             '';\n \n-            LOCALE_ARCHIVE = with pkgs; lib.optionalDrvAttr stdenv.isLinux \"${glibcLocales}/lib/locale/locale-archive\";\n+            LOCALE_ARCHIVE =\n+              with pkgs;\n+              lib.optionalDrvAttr stdenv.isLinux \"${glibcLocales}/lib/locale/locale-archive\";\n           };\n         };\n \n-        packages = {\n-          proto_gen_go = proto_gen_go_1_30;\n-          all = pkgs.buildEnv {\n-            name = \"all-packages\";\n-            paths = devShellPackages;\n-          };\n-          site = buildSite;\n-\n-          # Copying `OS_ARCHES` from the Makefile.\n-          linux_amd64 = buildFat \"linux_amd64\";\n-          linux_arm64 = buildFat \"linux_arm64\";\n-          darwin_amd64 = buildFat \"darwin_amd64\";\n-          darwin_arm64 = buildFat \"darwin_arm64\";\n-          windows_amd64 = buildFat \"windows_amd64.exe\";\n-          windows_arm64 = buildFat \"windows_arm64.exe\";\n-        };\n+        packages =\n+          {\n+            default = packages.${system};\n+\n+            site = buildSite;\n+\n+            # Copying `OS_ARCHES` from the Makefile.\n+            x86_64-linux = buildFat \"linux_amd64\";\n+            aarch64-linux = buildFat \"linux_arm64\";\n+            x86_64-darwin = buildFat \"darwin_amd64\";\n+            aarch64-darwin = buildFat \"darwin_arm64\";\n+            x86_64-windows = buildFat \"windows_amd64.exe\";\n+            aarch64-windows = buildFat \"windows_arm64.exe\";\n+          }\n+          // (pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {\n+            dev_image = pkgs.dockerTools.buildNixShellImage {\n+              name = \"codercom/oss-dogfood-nix\";\n+              tag = \"latest-${system}\";\n+\n+              drv = devShells.default.overrideAttrs (oldAttrs: {\n+                buildInputs = oldAttrs.buildInputs ++ [ pkgs.nix ];\n+              });",
+    "html_url": "https://github.com/coder/coder/pull/16223#discussion_r1928596538",
+    "id": 1928596538,
+    "in_reply_to_id": 1928592205,
+    "line": 246,
+    "node_id": "PRRC_kwDOGkVX1s5y9Aw6",
+    "original_commit_id": "c18c4cab7615199ba6acb5fee9951552e767e963",
+    "original_line": 246,
+    "original_position": 176,
+    "original_start_line": 240,
+    "path": "flake.nix",
+    "position": 215,
+    "pull_request_review_id": 2572501428,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16223",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1928596538/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 239,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-01-24T12:19:41Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1928596538",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/2198487?v=4",
+      "events_url": "https://api.github.com/users/ThomasK33/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ThomasK33/followers",
+      "following_url": "https://api.github.com/users/ThomasK33/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ThomasK33/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ThomasK33",
+      "id": 2198487,
+      "login": "ThomasK33",
+      "node_id": "MDQ6VXNlcjIxOTg0ODc=",
+      "organizations_url": "https://api.github.com/users/ThomasK33/orgs",
+      "received_events_url": "https://api.github.com/users/ThomasK33/received_events",
+      "repos_url": "https://api.github.com/users/ThomasK33/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ThomasK33/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ThomasK33/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ThomasK33",
+      "user_view_type": "public"
+    }
+  }
+]

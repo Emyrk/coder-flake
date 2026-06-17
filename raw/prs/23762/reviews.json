@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/23762#pullrequestreview-4028322836"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/23762"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "2088fe681fb3519654b54dabcd98a0a35d60c467",
+    "html_url": "https://github.com/coder/coder/pull/23762#pullrequestreview-4028322836",
+    "id": 4028322836,
+    "node_id": "PRR_kwDOGkVX1s7wG1QU",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/23762",
+    "state": "APPROVED",
+    "submitted_at": "2026-03-30T06:27:15Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/203725896?u=414f1b6c538cbd892cbaec2bdbb7f4cfb5be126d&v=4",
+      "events_url": "https://api.github.com/users/ibetitsmike/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ibetitsmike/followers",
+      "following_url": "https://api.github.com/users/ibetitsmike/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ibetitsmike/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ibetitsmike",
+      "id": 203725896,
+      "login": "ibetitsmike",
+      "node_id": "U_kgDODCScSA",
+      "organizations_url": "https://api.github.com/users/ibetitsmike/orgs",
+      "received_events_url": "https://api.github.com/users/ibetitsmike/received_events",
+      "repos_url": "https://api.github.com/users/ibetitsmike/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ibetitsmike/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ibetitsmike/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ibetitsmike",
+      "user_view_type": "public"
+    }
+  }
+]

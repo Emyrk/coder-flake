@@ -1,0 +1,82 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/23416#pullrequestreview-3990070874"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/23416"
+      }
+    },
+    "author_association": "NONE",
+    "body": "\n### \ud83d\udca1 Codex Review\n\nHere are some automated review suggestions for this pull request.\n\n**Reviewed commit:** `bc902883af`\n    \n\n<details> <summary>\u2139\ufe0f About Codex in GitHub</summary>\n<br/>\n\n[Your team has set up Codex to review pull requests in this repo](http://chatgpt.com/codex/settings/general). Reviews are triggered when you\n- Open a pull request for review\n- Mark a draft as ready\n- Comment \"@codex review\".\n\nIf Codex has suggestions, it will comment; otherwise it will react with \ud83d\udc4d.\n\n\n\n\nCodex can also answer questions or update the PR. Try commenting \"@codex address that feedback\".\n            \n</details>",
+    "commit_id": "bc902883af35d281864956e185c7fad2596e8109",
+    "html_url": "https://github.com/coder/coder/pull/23416#pullrequestreview-3990070874",
+    "id": 3990070874,
+    "node_id": "PRR_kwDOGkVX1s7t06Za",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/23416",
+    "state": "COMMENTED",
+    "submitted_at": "2026-03-23T08:28:19Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/1144995?v=4",
+      "events_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/chatgpt-codex-connector",
+      "id": 199175422,
+      "login": "chatgpt-codex-connector[bot]",
+      "node_id": "BOT_kgDOC98s_g",
+      "organizations_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/chatgpt-codex-connector%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/23416#pullrequestreview-3990154142"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/23416"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "68cd6091252dcf12133132b18e2e95d124aa2084",
+    "html_url": "https://github.com/coder/coder/pull/23416#pullrequestreview-3990154142",
+    "id": 3990154142,
+    "node_id": "PRR_kwDOGkVX1s7t1Oue",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/23416",
+    "state": "APPROVED",
+    "submitted_at": "2026-03-23T08:44:54Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/40153966?u=f9361ea910fccdf9e76c3ee799b9f0791ef74f9e&v=4",
+      "events_url": "https://api.github.com/users/DanielleMaywood/events{/privacy}",
+      "followers_url": "https://api.github.com/users/DanielleMaywood/followers",
+      "following_url": "https://api.github.com/users/DanielleMaywood/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DanielleMaywood/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/DanielleMaywood",
+      "id": 40153966,
+      "login": "DanielleMaywood",
+      "node_id": "MDQ6VXNlcjQwMTUzOTY2",
+      "organizations_url": "https://api.github.com/users/DanielleMaywood/orgs",
+      "received_events_url": "https://api.github.com/users/DanielleMaywood/received_events",
+      "repos_url": "https://api.github.com/users/DanielleMaywood/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/DanielleMaywood/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DanielleMaywood/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/DanielleMaywood",
+      "user_view_type": "public"
+    }
+  }
+]

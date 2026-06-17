@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/62ce1c5fd5f6ffb3a96c4ea5bc0fbed4928aec6d/cli%2Fnetcheck_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fnetcheck_test.go?ref=62ce1c5fd5f6ffb3a96c4ea5bc0fbed4928aec6d",
+    "deletions": 2,
+    "filename": "cli/netcheck_test.go",
+    "patch": "@@ -5,7 +5,6 @@ import (\n \t\"encoding/json\"\n \t\"testing\"\n \n-\t\"github.com/stretchr/testify/assert\"\n \t\"github.com/stretchr/testify/require\"\n \n \t\"github.com/coder/coder/v2/cli/clitest\"\n@@ -30,7 +29,8 @@ func TestNetcheck(t *testing.T) {\n \tvar report healthsdk.DERPHealthReport\n \trequire.NoError(t, json.Unmarshal(b, &report))\n \n-\tassert.True(t, report.Healthy)\n+\t// We do not assert that the report is healthy, just that\n+\t// it has the expected number of reports per region.\n \trequire.Len(t, report.Regions, 1+1) // 1 built-in region + 1 test-managed STUN region\n \tfor _, v := range report.Regions {\n \t\trequire.Len(t, v.NodeReports, len(v.Region.Nodes))",
+    "raw_url": "https://github.com/coder/coder/raw/62ce1c5fd5f6ffb3a96c4ea5bc0fbed4928aec6d/cli%2Fnetcheck_test.go",
+    "sha": "16b72beb2fd893e9aaf6058261dc3a3b522e4e42",
+    "status": "modified"
+  },
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/62ce1c5fd5f6ffb3a96c4ea5bc0fbed4928aec6d/coderd%2Fhealthcheck%2Fderphealth%2Fderp.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fhealthcheck%2Fderphealth%2Fderp.go?ref=62ce1c5fd5f6ffb3a96c4ea5bc0fbed4928aec6d",
+    "deletions": 2,
+    "filename": "coderd/healthcheck/derphealth/derp.go",
+    "patch": "@@ -236,8 +236,12 @@ func (r *NodeReport) derpURL() *url.URL {\n }\n \n func (r *NodeReport) Run(ctx context.Context) {\n-\tctx, cancel := context.WithTimeout(ctx, 10*time.Second)\n-\tdefer cancel()\n+\t// If there already is a deadline set on the context, do not override it.\n+\tif _, ok := ctx.Deadline(); !ok {\n+\t\tdCtx, cancel := context.WithTimeout(ctx, 10*time.Second)\n+\t\tdefer cancel()\n+\t\tctx = dCtx\n+\t}\n \n \tr.Severity = health.SeverityOK\n \tr.ClientLogs = [][]string{}",
+    "raw_url": "https://github.com/coder/coder/raw/62ce1c5fd5f6ffb3a96c4ea5bc0fbed4928aec6d/coderd%2Fhealthcheck%2Fderphealth%2Fderp.go",
+    "sha": "f74db243cbc18665c1fe5344bfff4d06a8ac5661",
+    "status": "modified"
+  },
+  {
+    "additions": 40,
+    "blob_url": "https://github.com/coder/coder/blob/62ce1c5fd5f6ffb3a96c4ea5bc0fbed4928aec6d/coderd%2Fhealthcheck%2Fderphealth%2Fderp_test.go",
+    "changes": 40,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fhealthcheck%2Fderphealth%2Fderp_test.go?ref=62ce1c5fd5f6ffb3a96c4ea5bc0fbed4928aec6d",
+    "deletions": 0,
+    "filename": "coderd/healthcheck/derphealth/derp_test.go",
+    "patch": "@@ -8,6 +8,7 @@ import (\n \t\"net/http/httptest\"\n \t\"net/url\"\n \t\"testing\"\n+\t\"time\"\n \n \t\"github.com/stretchr/testify/assert\"\n \t\"github.com/stretchr/testify/require\"\n@@ -84,6 +85,45 @@ func TestDERP(t *testing.T) {\n \t\t}\n \t})\n \n+\tt.Run(\"TimeoutCtx\", func(t *testing.T) {\n+\t\tt.Parallel()\n+\n+\t\tderpSrv := derp.NewServer(key.NewNode(), func(format string, args ...any) { t.Logf(format, args...) })\n+\t\tdefer derpSrv.Close()\n+\t\tsrv := httptest.NewServer(derphttp.Handler(derpSrv))\n+\t\tdefer srv.Close()\n+\n+\t\tvar (\n+\t\t\t// nolint:gocritic // testing a deadline exceeded\n+\t\t\tctx, cancel = context.WithTimeout(context.Background(), time.Nanosecond)\n+\t\t\treport      = derphealth.Report{}\n+\t\t\tderpURL, _  = url.Parse(srv.URL)\n+\t\t\topts        = &derphealth.ReportOptions{\n+\t\t\t\tDERPMap: &tailcfg.DERPMap{Regions: map[int]*tailcfg.DERPRegion{\n+\t\t\t\t\t1: {\n+\t\t\t\t\t\tEmbeddedRelay: true,\n+\t\t\t\t\t\tRegionID:      999,\n+\t\t\t\t\t\tNodes: []*tailcfg.DERPNode{{\n+\t\t\t\t\t\t\tName:             \"1a\",\n+\t\t\t\t\t\t\tRegionID:         999,\n+\t\t\t\t\t\t\tHostName:         derpURL.Host,\n+\t\t\t\t\t\t\tIPv4:             derpURL.Host,\n+\t\t\t\t\t\t\tSTUNPort:         -1,\n+\t\t\t\t\t\t\tInsecureForTests: true,\n+\t\t\t\t\t\t\tForceHTTP:        true,\n+\t\t\t\t\t\t}},\n+\t\t\t\t\t},\n+\t\t\t\t}},\n+\t\t\t}\n+\t\t)\n+\t\tcancel()\n+\n+\t\treport.Run(ctx, opts)\n+\n+\t\tassert.False(t, report.Healthy)\n+\t\tassert.Nil(t, report.Error)\n+\t})\n+\n \tt.Run(\"HealthyWithNodeDegraded\", func(t *testing.T) {\n \t\tt.Parallel()\n ",
+    "raw_url": "https://github.com/coder/coder/raw/62ce1c5fd5f6ffb3a96c4ea5bc0fbed4928aec6d/coderd%2Fhealthcheck%2Fderphealth%2Fderp_test.go",
+    "sha": "c009ea982d62049fb15d6552871b045ba8314409",
+    "status": "modified"
+  }
+]

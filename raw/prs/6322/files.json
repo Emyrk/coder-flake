@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/517135a64d6188009856d2c2f3e85fc9087fc78d/cli%2Fspeedtest_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fspeedtest_test.go?ref=517135a64d6188009856d2c2f3e85fc9087fc78d",
+    "deletions": 0,
+    "filename": "cli/speedtest_test.go",
+    "patch": "@@ -19,6 +19,7 @@ import (\n \n func TestSpeedtest(t *testing.T) {\n \tt.Parallel()\n+\tt.Skip(\"Flaky test - see https://github.com/coder/coder/issues/6321\")\n \tif testing.Short() {\n \t\tt.Skip(\"This test takes a minimum of 5ms per a hardcoded value in Tailscale!\")\n \t}",
+    "raw_url": "https://github.com/coder/coder/raw/517135a64d6188009856d2c2f3e85fc9087fc78d/cli%2Fspeedtest_test.go",
+    "sha": "e31f8f79d08ffec6357cb5f2ae6f9f3f0399433a",
+    "status": "modified"
+  }
+]

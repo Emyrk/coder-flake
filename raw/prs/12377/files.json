@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/2d31ca3fb738c09d7609b66820235bad2a93df1b/coderd%2Finsights_internal_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Finsights_internal_test.go?ref=2d31ca3fb738c09d7609b66820235bad2a93df1b",
+    "deletions": 2,
+    "filename": "coderd/insights_internal_test.go",
+    "patch": "@@ -81,13 +81,13 @@ func Test_parseInsightsStartAndEndTime(t *testing.T) {\n \t\t\twantOk: false,\n \t\t},\n \t\t{\n-\t\t\tname: \"Today (hour round up)\",\n+\t\t\tname: \"Today hour round up\",\n \t\t\targs: args{\n \t\t\t\tstartTime: today.Format(layout),\n \t\t\t\tendTime:   thisHourRoundUp.Format(layout),\n \t\t\t},\n \t\t\twantStartTime: time.Date(today.Year(), today.Month(), today.Day(), 0, 0, 0, 0, time.UTC),\n-\t\t\twantEndTime:   time.Date(today.Year(), today.Month(), thisHourRoundUp.Day(), thisHourRoundUp.Hour(), 0, 0, 0, time.UTC),\n+\t\t\twantEndTime:   time.Date(thisHourRoundUp.Year(), thisHourRoundUp.Month(), thisHourRoundUp.Day(), thisHourRoundUp.Hour(), 0, 0, 0, time.UTC),\n \t\t\twantOk:        true,\n \t\t},\n \t\t{",
+    "raw_url": "https://github.com/coder/coder/raw/2d31ca3fb738c09d7609b66820235bad2a93df1b/coderd%2Finsights_internal_test.go",
+    "sha": "88086581f1b51b353f8961d91a3c2bebd58de2f0",
+    "status": "modified"
+  }
+]

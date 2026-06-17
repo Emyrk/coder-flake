@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 10,
+    "blob_url": "https://github.com/coder/coder/blob/68cd6091252dcf12133132b18e2e95d124aa2084/site%2Fsrc%2Fpages%2FAgentsPage%2FAgentSettingsPageView.stories.tsx",
+    "changes": 24,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FAgentsPage%2FAgentSettingsPageView.stories.tsx?ref=68cd6091252dcf12133132b18e2e95d124aa2084",
+    "deletions": 14,
+    "filename": "site/src/pages/AgentsPage/AgentSettingsPageView.stories.tsx",
+    "patch": "@@ -484,20 +484,15 @@ export const UsageUserDrillIn: Story = {\n \tplay: async ({ canvasElement }) => {\n \t\tconst body = within(canvasElement.ownerDocument.body);\n \n-\t\t// Wait for the user list to load.\n+\t\t// Click Alice's row to drill into the detail view.\n \t\tawait userEvent.click(await body.findByText(\"Alice Liddell\"));\n \n-\t\t// The detail view should show the user header with name\n-\t\t// and username subtitle.\n-\t\tawait expect(await body.findByText(\"Alice Liddell\")).toBeInTheDocument();\n-\t\tawait expect(body.getByText(\"@alice\")).toBeInTheDocument();\n+\t\t// Wait for the detail view to mount. \"User ID:\" only\n+\t\t// renders in the detail panel, not the list.\n+\t\tawait body.findByText(`User ID: ${mockUserProfile.id}`);\n \n-\t\t// The user profile was pre-seeded in the query cache via\n-\t\t// parameters.queries, so the detail header should show the\n-\t\t// user ID from that data.\n-\t\tawait expect(\n-\t\t\tbody.getByText(`User ID: ${mockUserProfile.id}`),\n-\t\t).toBeInTheDocument();\n+\t\tawait expect(body.getByText(\"Alice Liddell\")).toBeInTheDocument();\n+\t\tawait expect(body.getByText(\"@alice\")).toBeInTheDocument();\n \n \t\t// The cost summary should have been fetched.\n \t\tawait waitFor(() => {\n@@ -523,11 +518,12 @@ export const UsageUserDrillInAndBack: Story = {\n \tplay: async ({ canvasElement }) => {\n \t\tconst body = within(canvasElement.ownerDocument.body);\n \n-\t\t// Click Alice's row to drill in.\n+\t\t// Click Alice's row to drill into the detail view.\n \t\tawait userEvent.click(await body.findByText(\"Alice Liddell\"));\n \n-\t\t// Wait for the detail view to appear.\n-\t\tawait body.findByText(\"@alice\");\n+\t\t// Wait for the detail view to mount. \"User ID:\" only\n+\t\t// renders in the detail panel, not the list.\n+\t\tawait body.findByText(`User ID: ${mockUserProfile.id}`);\n \n \t\t// Click Back to return to the list.\n \t\tawait userEvent.click(body.getByText(\"Back\"));",
+    "raw_url": "https://github.com/coder/coder/raw/68cd6091252dcf12133132b18e2e95d124aa2084/site%2Fsrc%2Fpages%2FAgentsPage%2FAgentSettingsPageView.stories.tsx",
+    "sha": "1c33dd1a8415e72363962868d4e478d7f0542d5d",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 18,
+    "blob_url": "https://github.com/coder/coder/blob/90ad6fd8739f4f1fe899d908f0cae63a0bf6683e/cli%2Fexp_mcp_test.go",
+    "changes": 33,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fexp_mcp_test.go?ref=90ad6fd8739f4f1fe899d908f0cae63a0bf6683e",
+    "deletions": 15,
+    "filename": "cli/exp_mcp_test.go",
+    "patch": "@@ -133,26 +133,29 @@ func TestExpMcpServer(t *testing.T) {\n \t\trequire.Equal(t, 1.0, initializeResponse[\"id\"])\n \t\trequire.NotNil(t, initializeResponse[\"result\"])\n \t})\n+}\n \n-\tt.Run(\"NoCredentials\", func(t *testing.T) {\n-\t\tt.Parallel()\n+func TestExpMcpServerNoCredentials(t *testing.T) {\n+\t// Ensure that no credentials are set from the environment.\n+\tt.Setenv(\"CODER_AGENT_TOKEN\", \"\")\n+\tt.Setenv(\"CODER_AGENT_TOKEN_FILE\", \"\")\n+\tt.Setenv(\"CODER_SESSION_TOKEN\", \"\")\n \n-\t\tctx := testutil.Context(t, testutil.WaitShort)\n-\t\tcancelCtx, cancel := context.WithCancel(ctx)\n-\t\tt.Cleanup(cancel)\n+\tctx := testutil.Context(t, testutil.WaitShort)\n+\tcancelCtx, cancel := context.WithCancel(ctx)\n+\tt.Cleanup(cancel)\n \n-\t\tclient := coderdtest.New(t, nil)\n-\t\tinv, root := clitest.New(t, \"exp\", \"mcp\", \"server\")\n-\t\tinv = inv.WithContext(cancelCtx)\n+\tclient := coderdtest.New(t, nil)\n+\tinv, root := clitest.New(t, \"exp\", \"mcp\", \"server\")\n+\tinv = inv.WithContext(cancelCtx)\n \n-\t\tpty := ptytest.New(t)\n-\t\tinv.Stdin = pty.Input()\n-\t\tinv.Stdout = pty.Output()\n-\t\tclitest.SetupConfig(t, client, root)\n+\tpty := ptytest.New(t)\n+\tinv.Stdin = pty.Input()\n+\tinv.Stdout = pty.Output()\n+\tclitest.SetupConfig(t, client, root)\n \n-\t\terr := inv.Run()\n-\t\tassert.ErrorContains(t, err, \"are not logged in\")\n-\t})\n+\terr := inv.Run()\n+\tassert.ErrorContains(t, err, \"are not logged in\")\n }\n \n //nolint:tparallel,paralleltest",
+    "raw_url": "https://github.com/coder/coder/raw/90ad6fd8739f4f1fe899d908f0cae63a0bf6683e/cli%2Fexp_mcp_test.go",
+    "sha": "2d9a0475b0452212812f25577cece9050a3a414e",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/a15a0fcabb83be48e1b7ec86be565e1ef1a22937/site%2Fsrc%2Fpages%2FTemplateSettingsPage%2FTemplateVariablesPage%2FTemplateVariablesPage.jest.tsx",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FTemplateSettingsPage%2FTemplateVariablesPage%2FTemplateVariablesPage.jest.tsx?ref=a15a0fcabb83be48e1b7ec86be565e1ef1a22937",
+    "deletions": 0,
+    "filename": "site/src/pages/TemplateSettingsPage/TemplateVariablesPage/TemplateVariablesPage.jest.tsx",
+    "patch": "@@ -15,6 +15,14 @@ import { API } from \"api/api\";\n import { toast } from \"sonner\";\n import TemplateVariablesPage from \"./TemplateVariablesPage\";\n \n+// The createAndBuildTemplateVersion mutation polls getTemplateVersion behind\n+// a real `delay(1000)` call. Without this mock the 1 s wall-clock wait races\n+// against the default `waitFor` timeout (also 1 s), making the \"submit\"\n+// assertion flaky in CI.\n+jest.mock(\"utils/delay\", () => ({\n+\tdelay: () => Promise.resolve(),\n+}));\n+\n const validFormValues = {\n \tfirst_variable: \"Hello world\",\n \tsecond_variable: \"123\",",
+    "raw_url": "https://github.com/coder/coder/raw/a15a0fcabb83be48e1b7ec86be565e1ef1a22937/site%2Fsrc%2Fpages%2FTemplateSettingsPage%2FTemplateVariablesPage%2FTemplateVariablesPage.jest.tsx",
+    "sha": "56ef1b7f6f0e10ad11e9378bbcfb8bb4f50c72ca",
+    "status": "modified"
+  }
+]

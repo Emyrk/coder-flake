@@ -1,0 +1,202 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25603#pullrequestreview-4344660064"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25603"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "Clean fix. The race diagnosis is correct: the chat daemon can insert an assistant response between `CreateChatMessage` and the subsequent `GetChatMessagesByChatID` query, inflating the message count. The fix replaces the brittle count assertion with a role-based lookup, which matches the test's actual contract (model override persistence, not message bookkeeping).\n\n2 Nits (inline), 1 Nit + 1 Note (commit message). No correctness issues.\n\n12/13 reviewers found no defects. Pariston's differential diagnosis considered four alternative framings and concluded: \"The problem is correctly understood, the solution matches the problem's scope, and the fix is at the right level.\"\n\n**Nit** [DEREM-3] Commit subject is 79 chars (7 over the 72-char limit) and reads \"fix(coderd): fix flaky...\" with a \"fix: fix\" stutter. Consider something like `fix(coderd): stabilize flaky model-override chat tests` (49 chars). *(Leorio)*\n\n**Note** [DEREM-4] Commit body says \"The test\" (singular) but both `TestSendMessageWithModelOverrideUpdatesLastModelConfigID` and `TestSubsequentSendWithoutOverrideUsesPersistedModel` were modified. *(Leorio)*\n\n> \ud83e\udd16 This review was automatically generated with Coder Agents.",
+    "commit_id": "72fd03f4561d113e668b933fa0ef89e3cf646ed3",
+    "html_url": "https://github.com/coder/coder/pull/25603#pullrequestreview-4344660064",
+    "id": 4344660064,
+    "node_id": "PRR_kwDOGkVX1s8AAAABAvZAYA",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25603",
+    "state": "APPROVED",
+    "submitted_at": "2026-05-22T10:25:12Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25603#pullrequestreview-4344766105"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25603"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "72fd03f4561d113e668b933fa0ef89e3cf646ed3",
+    "html_url": "https://github.com/coder/coder/pull/25603#pullrequestreview-4344766105",
+    "id": 4344766105,
+    "node_id": "PRR_kwDOGkVX1s8AAAABAvfemQ",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25603",
+    "state": "COMMENTED",
+    "submitted_at": "2026-05-22T10:44:52Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?u=bd1828de93463cc139feb1dc4b4f6871dec2a7b3&v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25603#pullrequestreview-4344766270"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25603"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "72fd03f4561d113e668b933fa0ef89e3cf646ed3",
+    "html_url": "https://github.com/coder/coder/pull/25603#pullrequestreview-4344766270",
+    "id": 4344766270,
+    "node_id": "PRR_kwDOGkVX1s8AAAABAvffPg",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25603",
+    "state": "COMMENTED",
+    "submitted_at": "2026-05-22T10:44:54Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?u=bd1828de93463cc139feb1dc4b4f6871dec2a7b3&v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25603#pullrequestreview-4344775363"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25603"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "## Pull request overview\n\nThis PR fixes flaky behavior in chat-related tests in `coderd` by making assertions resilient to concurrent background processing by the chat daemon (which can insert an assistant response before the test inspects stored messages).\n\n**Changes:**\n- Add a small test helper (`findUserMessage`) to locate the user-role message within stored chat messages.\n- Update `TestSendMessageWithModelOverrideUpdatesLastModelConfigID` to validate `ModelConfigID` on the user message instead of asserting an exact message count.\n- Update `TestSubsequentSendWithoutOverrideUsesPersistedModel` with the same pattern to avoid the same flake.\n\n\n\n\n\n\n---\n\n\ud83d\udca1 <a href=\"/coder/coder/new/main?filename=.github/instructions/*.instructions.md\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Add Copilot custom instructions</a> for smarter, more guided reviews. <a href=\"https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Learn how to get started</a>.",
+    "commit_id": "a79da45b3915854198cb49ea6fb09af155a09a6e",
+    "html_url": "https://github.com/coder/coder/pull/25603#pullrequestreview-4344775363",
+    "id": 4344775363,
+    "node_id": "PRR_kwDOGkVX1s8AAAABAvgCww",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25603",
+    "state": "COMMENTED",
+    "submitted_at": "2026-05-22T10:46:37Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+      "events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+      "id": 175728472,
+      "login": "copilot-pull-request-reviewer[bot]",
+      "node_id": "BOT_kgDOCnlnWA",
+      "organizations_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25603#pullrequestreview-4345076739"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25603"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "a79da45b3915854198cb49ea6fb09af155a09a6e",
+    "html_url": "https://github.com/coder/coder/pull/25603#pullrequestreview-4345076739",
+    "id": 4345076739,
+    "node_id": "PRR_kwDOGkVX1s8AAAABAvycAw",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25603",
+    "state": "APPROVED",
+    "submitted_at": "2026-05-22T11:38:13Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/40153966?u=f9361ea910fccdf9e76c3ee799b9f0791ef74f9e&v=4",
+      "events_url": "https://api.github.com/users/DanielleMaywood/events{/privacy}",
+      "followers_url": "https://api.github.com/users/DanielleMaywood/followers",
+      "following_url": "https://api.github.com/users/DanielleMaywood/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DanielleMaywood/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/DanielleMaywood",
+      "id": 40153966,
+      "login": "DanielleMaywood",
+      "node_id": "MDQ6VXNlcjQwMTUzOTY2",
+      "organizations_url": "https://api.github.com/users/DanielleMaywood/orgs",
+      "received_events_url": "https://api.github.com/users/DanielleMaywood/received_events",
+      "repos_url": "https://api.github.com/users/DanielleMaywood/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/DanielleMaywood/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DanielleMaywood/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/DanielleMaywood",
+      "user_view_type": "public"
+    }
+  }
+]

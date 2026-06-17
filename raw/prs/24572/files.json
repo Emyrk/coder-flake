@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 24,
+    "blob_url": "https://github.com/coder/coder/blob/0cbfa46b46cd82c37ff88366b7508797d67f276b/coderd%2Fexp_chats_test.go",
+    "changes": 24,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fexp_chats_test.go?ref=0cbfa46b46cd82c37ff88366b7508797d67f276b",
+    "deletions": 0,
+    "filename": "coderd/exp_chats_test.go",
+    "patch": "@@ -3973,6 +3973,22 @@ func TestPatchChat(t *testing.T) {\n \t\trequire.NoError(t, err)\n \t\treturn db2sdk.Chat(dbChat, nil, nil)\n \t}\n+\n+\t// waitChatSettled polls the chat until its background title-generation\n+\t// daemon has left the Pending/Running state. Without this, an immediate\n+\t// UpdateChat can hit a 409 (title regeneration in progress).\n+\twaitChatSettled := func(ctx context.Context, t *testing.T, client *codersdk.ExperimentalClient, chatID uuid.UUID) {\n+\t\tt.Helper()\n+\t\trequire.Eventually(t, func() bool {\n+\t\t\tc, err := client.GetChat(ctx, chatID)\n+\t\t\tif err != nil {\n+\t\t\t\treturn false\n+\t\t\t}\n+\t\t\treturn c.Status != codersdk.ChatStatusPending &&\n+\t\t\t\tc.Status != codersdk.ChatStatusRunning\n+\t\t}, testutil.WaitShort, testutil.IntervalFast)\n+\t}\n+\n \tt.Run(\"PlanMode\", func(t *testing.T) {\n \t\tt.Parallel()\n \n@@ -4244,6 +4260,8 @@ func TestPatchChat(t *testing.T) {\n \n \t\t\tchat := createChat(ctx, t, client, firstUser.OrganizationID, \"original title\")\n \n+\t\t\twaitChatSettled(ctx, t, client, chat.ID)\n+\n \t\t\terr := client.UpdateChat(ctx, chat.ID, codersdk.UpdateChatRequest{\n \t\t\t\tTitle: ptr.Ref(\"renamed title\"),\n \t\t\t})\n@@ -4263,6 +4281,8 @@ func TestPatchChat(t *testing.T) {\n \n \t\t\tchat := createChat(ctx, t, client, firstUser.OrganizationID, \"before trim\")\n \n+\t\t\twaitChatSettled(ctx, t, client, chat.ID)\n+\n \t\t\terr := client.UpdateChat(ctx, chat.ID, codersdk.UpdateChatRequest{\n \t\t\t\tTitle: ptr.Ref(\"   padded title   \"),\n \t\t\t})\n@@ -4360,6 +4380,8 @@ func TestPatchChat(t *testing.T) {\n \t\t\t\t\t_ = createChatModelConfig(t, client)\n \n \t\t\t\t\tchat := createChat(ctx, t, client, firstUser.OrganizationID, \"boundary baseline\")\n+\t\t\t\t\twaitChatSettled(ctx, t, client, chat.ID)\n+\n \t\t\t\t\terr := client.UpdateChat(ctx, chat.ID, codersdk.UpdateChatRequest{\n \t\t\t\t\t\tTitle: ptr.Ref(tc.title),\n \t\t\t\t\t})\n@@ -4471,6 +4493,8 @@ func TestPatchChat(t *testing.T) {\n \n \t\t\tchat := createChat(ctx, t, client, firstUser.OrganizationID, \"announce me\")\n \n+\t\t\twaitChatSettled(ctx, t, client, chat.ID)\n+\n \t\t\tconn, err := client.Dial(ctx, \"/api/experimental/chats/watch\", nil)\n \t\t\trequire.NoError(t, err)\n \t\t\tdefer conn.Close(websocket.StatusNormalClosure, \"done\")",
+    "raw_url": "https://github.com/coder/coder/raw/0cbfa46b46cd82c37ff88366b7508797d67f276b/coderd%2Fexp_chats_test.go",
+    "sha": "b158096a87c9bebb29ca60ab118671dd7a5b73e4",
+    "status": "modified"
+  }
+]

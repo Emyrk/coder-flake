@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/dcf7c0d931513e049d903a1ae1550808234dc603/coderd%2Fparameters_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fparameters_test.go?ref=dcf7c0d931513e049d903a1ae1550808234dc603",
+    "deletions": 1,
+    "filename": "coderd/parameters_test.go",
+    "patch": "@@ -276,7 +276,7 @@ func TestDynamicParametersWithTerraformValues(t *testing.T) {\n \t\t\t\tEnableDynamicParameters: ptr.Ref(true),\n \t\t\t})\n \t\t\trequire.NoError(t, err)\n-\t\t\tcoderdtest.AwaitWorkspaceBuildJobCompleted(t, setup.client, wrk.LatestBuild.ID)\n+\t\t\tcoderdtest.AwaitWorkspaceBuildJobCompleted(t, setup.client, bld.ID)\n \n \t\t\tlatestParams, err := setup.client.WorkspaceBuildParameters(ctx, bld.ID)\n \t\t\trequire.NoError(t, err)",
+    "raw_url": "https://github.com/coder/coder/raw/dcf7c0d931513e049d903a1ae1550808234dc603/coderd%2Fparameters_test.go",
+    "sha": "e2973dcbac1383f07017b18e3962b776d2bdfe78",
+    "status": "modified"
+  }
+]

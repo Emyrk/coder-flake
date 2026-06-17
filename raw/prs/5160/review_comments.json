@@ -1,0 +1,71 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/5160#discussion_r1030862508"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/5160"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1030862508"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "```suggestion\r\n\tt.Run(\"ReconnectAndComplete\", func(t *testing.T) {\r\n\tt.Skip(\"Test is flakey. See: https://github.com/coder/coder/issues/5159\")\r\n```",
+    "commit_id": "5b29aa4a9db6669d034412b4a35250cc21c32201",
+    "created_at": "2022-11-23T20:53:27Z",
+    "diff_hunk": "@@ -867,7 +867,7 @@ func TestProvisionerd(t *testing.T) {\n \t\trequire.NoError(t, server.Close())\n \t})\n \n-\tt.Run(\"ReconnectAndComplete\", func(t *testing.T) {\n+\tt.Skip(\"ReconnectAndComplete\", func(t *testing.T) {",
+    "html_url": "https://github.com/coder/coder/pull/5160#discussion_r1030862508",
+    "id": 1030862508,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s49cbas",
+    "original_commit_id": "5fe32b4bc085f331cdf16e5f052d30a0d11db5f3",
+    "original_line": 870,
+    "original_position": 5,
+    "original_start_line": null,
+    "path": "provisionerd/provisionerd_test.go",
+    "position": 1,
+    "pull_request_review_id": 1192254056,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/5160",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1030862508/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2022-11-23T20:53:37Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1030862508",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/6332295?v=4",
+      "events_url": "https://api.github.com/users/coadler/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coadler/followers",
+      "following_url": "https://api.github.com/users/coadler/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coadler/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/coadler",
+      "id": 6332295,
+      "login": "coadler",
+      "node_id": "MDQ6VXNlcjYzMzIyOTU=",
+      "organizations_url": "https://api.github.com/users/coadler/orgs",
+      "received_events_url": "https://api.github.com/users/coadler/received_events",
+      "repos_url": "https://api.github.com/users/coadler/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coadler/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coadler/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/coadler",
+      "user_view_type": "public"
+    }
+  }
+]

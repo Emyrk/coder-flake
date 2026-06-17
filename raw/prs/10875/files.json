@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 14,
+    "blob_url": "https://github.com/coder/coder/blob/7ab6bae0766ffcb05347abdbdd5c22ff9b6e2247/coderd%2Ftemplates_test.go",
+    "changes": 14,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Ftemplates_test.go?ref=7ab6bae0766ffcb05347abdbdd5c22ff9b6e2247",
+    "deletions": 0,
+    "filename": "coderd/templates_test.go",
+    "patch": "@@ -525,6 +525,9 @@ func TestPatchTemplateMeta(t *testing.T) {\n \t\tuser := coderdtest.CreateFirstUser(t, client)\n \t\tversion := coderdtest.CreateTemplateVersion(t, client, user.OrganizationID, nil)\n \t\ttemplate := coderdtest.CreateTemplate(t, client, user.OrganizationID, version.ID)\n+\t\t// It is unfortunate we need to sleep, but the test can fail if the\n+\t\t// updatedAt is too close together.\n+\t\ttime.Sleep(time.Millisecond * 5)\n \n \t\treq := codersdk.UpdateTemplateMeta{\n \t\t\tDeprecationMessage: ptr.Ref(\"APGL cannot deprecate\"),\n@@ -550,6 +553,9 @@ func TestPatchTemplateMeta(t *testing.T) {\n \t\tclient, tplAdmin := coderdtest.CreateAnotherUser(t, owner, user.OrganizationID, rbac.RoleTemplateAdmin())\n \t\tversion := coderdtest.CreateTemplateVersion(t, client, user.OrganizationID, nil)\n \t\ttemplate := coderdtest.CreateTemplate(t, client, user.OrganizationID, version.ID)\n+\t\t// It is unfortunate we need to sleep, but the test can fail if the\n+\t\t// updatedAt is too close together.\n+\t\ttime.Sleep(time.Millisecond * 5)\n \n \t\tctx, cancel := context.WithTimeout(context.Background(), testutil.WaitLong)\n \t\tdefer cancel()\n@@ -587,6 +593,10 @@ func TestPatchTemplateMeta(t *testing.T) {\n \t\ttemplate := coderdtest.CreateTemplate(t, client, user.OrganizationID, version.ID, func(ctr *codersdk.CreateTemplateRequest) {\n \t\t\tctr.DefaultTTLMillis = ptr.Ref(24 * time.Hour.Milliseconds())\n \t\t})\n+\t\t// It is unfortunate we need to sleep, but the test can fail if the\n+\t\t// updatedAt is too close together.\n+\t\ttime.Sleep(time.Millisecond * 5)\n+\n \t\treq := codersdk.UpdateTemplateMeta{\n \t\t\tDefaultTTLMillis: 0,\n \t\t}\n@@ -618,6 +628,10 @@ func TestPatchTemplateMeta(t *testing.T) {\n \t\ttemplate := coderdtest.CreateTemplate(t, client, user.OrganizationID, version.ID, func(ctr *codersdk.CreateTemplateRequest) {\n \t\t\tctr.DefaultTTLMillis = ptr.Ref(24 * time.Hour.Milliseconds())\n \t\t})\n+\t\t// It is unfortunate we need to sleep, but the test can fail if the\n+\t\t// updatedAt is too close together.\n+\t\ttime.Sleep(time.Millisecond * 5)\n+\n \t\treq := codersdk.UpdateTemplateMeta{\n \t\t\tDefaultTTLMillis: -1,\n \t\t}",
+    "raw_url": "https://github.com/coder/coder/raw/7ab6bae0766ffcb05347abdbdd5c22ff9b6e2247/coderd%2Ftemplates_test.go",
+    "sha": "4a9ba4745528670da7839d4a340e31cc2aa9558a",
+    "status": "modified"
+  }
+]

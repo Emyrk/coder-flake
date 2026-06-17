@@ -1,0 +1,71 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/7211#discussion_r1172227196"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/7211"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1172227196"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Since the send loop updates last sent every second, do we know that we're actually benchmarking the correct ping/ping?",
+    "commit_id": "6f54a913cf53659bbc838f49cb08c487a0ff0d74",
+    "created_at": "2023-04-20T08:04:37Z",
+    "diff_hunk": "@@ -181,60 +194,78 @@ func (r *DERPNodeReport) doExchangeMessage(ctx context.Context) {\n \t\treturn\n \t}\n \n-\tvar peerKey atomic.Pointer[key.NodePublic]\n-\teg, ctx := errgroup.WithContext(ctx)\n+\tvar (\n+\t\tpeerKey  atomic.Pointer[key.NodePublic]\n+\t\tlastSent atomic.Pointer[time.Time]\n+\t)\n+\tctx, cancel := context.WithCancel(ctx)\n+\tdefer cancel()\n+\twg := &sync.WaitGroup{}\n \n \treceive, receiveID, err := r.derpClient(ctx, r.derpURL())\n \tif err != nil {\n \t\treturn\n \t}\n \tdefer receive.Close()\n \n-\teg.Go(func() error {\n+\twg.Add(2)\n+\tgo func() {\n+\t\tdefer wg.Done()\n \t\tdefer receive.Close()\n \n \t\tpkt, err := r.recvData(receive)\n \t\tif err != nil {\n \t\t\tr.writeClientErr(receiveID, xerrors.Errorf(\"recv derp message: %w\", err))\n-\t\t\treturn err\n+\t\t\treturn\n \t\t}\n \n \t\tif *peerKey.Load() != pkt.Source {\n \t\t\tr.writeClientErr(receiveID, xerrors.Errorf(\"received pkt from unknown peer: %s\", pkt.Source.ShortString()))\n-\t\t\treturn err\n+\t\t\treturn\n \t\t}\n \n-\t\tt, err := time.Parse(time.RFC3339Nano, string(pkt.Data))\n-\t\tif err != nil {\n-\t\t\tr.writeClientErr(receiveID, xerrors.Errorf(\"parse time from peer: %w\", err))\n-\t\t\treturn err\n-\t\t}\n+\t\tt := lastSent.Load()\n \n \t\tr.mu.Lock()\n \t\tr.CanExchangeMessages = true\n-\t\tr.RoundTripPing = time.Since(t)\n+\t\tr.RoundTripPing = time.Since(*t)",
+    "html_url": "https://github.com/coder/coder/pull/7211#discussion_r1172227196",
+    "id": 1172227196,
+    "line": 231,
+    "node_id": "PRRC_kwDOGkVX1s5F3sR8",
+    "original_commit_id": "6f54a913cf53659bbc838f49cb08c487a0ff0d74",
+    "original_line": 231,
+    "original_position": 106,
+    "original_start_line": null,
+    "path": "coderd/healthcheck/derp.go",
+    "position": 106,
+    "pull_request_review_id": 1393437360,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/7211",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1172227196/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2023-04-20T08:05:31Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1172227196",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  }
+]

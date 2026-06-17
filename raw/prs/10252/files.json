@@ -1,0 +1,122 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/21603b107147e189f7768399a0230beea3c6aff0/cli%2Fexp_scaletest.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fexp_scaletest.go?ref=21603b107147e189f7768399a0230beea3c6aff0",
+    "deletions": 2,
+    "filename": "cli/exp_scaletest.go",
+    "patch": "@@ -1241,7 +1241,7 @@ func (r *runnableTraceWrapper) Run(ctx context.Context, id string, logs io.Write\n \treturn r.runner.Run(ctx2, id, logs)\n }\n \n-func (r *runnableTraceWrapper) Cleanup(ctx context.Context, id string) error {\n+func (r *runnableTraceWrapper) Cleanup(ctx context.Context, id string, logs io.Writer) error {\n \tc, ok := r.runner.(harness.Cleanable)\n \tif !ok {\n \t\treturn nil\n@@ -1253,7 +1253,7 @@ func (r *runnableTraceWrapper) Cleanup(ctx context.Context, id string) error {\n \tctx, span := r.tracer.Start(ctx, r.spanName+\" cleanup\")\n \tdefer span.End()\n \n-\treturn c.Cleanup(ctx, id)\n+\treturn c.Cleanup(ctx, id, logs)\n }\n \n // newScaleTestUser returns a random username and email address that can be used",
+    "raw_url": "https://github.com/coder/coder/raw/21603b107147e189f7768399a0230beea3c6aff0/cli%2Fexp_scaletest.go",
+    "sha": "f615e650b53b220353db22a8d03001586d8e7fba",
+    "status": "modified"
+  },
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fcreateworkspaces%2Frun.go",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scaletest%2Fcreateworkspaces%2Frun.go?ref=21603b107147e189f7768399a0230beea3c6aff0",
+    "deletions": 2,
+    "filename": "scaletest/createworkspaces/run.go",
+    "patch": "@@ -176,13 +176,14 @@ resourceLoop:\n }\n \n // Cleanup implements Cleanable.\n-func (r *Runner) Cleanup(ctx context.Context, id string) error {\n+func (r *Runner) Cleanup(ctx context.Context, id string, logs io.Writer) error {\n \tif r.cfg.NoCleanup {\n+\t\t_, _ = fmt.Fprintln(logs, \"skipping cleanup\")\n \t\treturn nil\n \t}\n \n \tif r.workspacebuildRunner != nil {\n-\t\terr := r.workspacebuildRunner.Cleanup(ctx, id)\n+\t\terr := r.workspacebuildRunner.Cleanup(ctx, id, logs)\n \t\tif err != nil {\n \t\t\treturn xerrors.Errorf(\"cleanup workspace: %w\", err)\n \t\t}\n@@ -191,6 +192,7 @@ func (r *Runner) Cleanup(ctx context.Context, id string) error {\n \tif r.userID != uuid.Nil {\n \t\terr := r.client.DeleteUser(ctx, r.userID)\n \t\tif err != nil {\n+\t\t\t_, _ = fmt.Fprintf(logs, \"failed to delete user %q: %v\\n\", r.userID.String(), err)\n \t\t\treturn xerrors.Errorf(\"delete user: %w\", err)\n \t\t}\n \t}",
+    "raw_url": "https://github.com/coder/coder/raw/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fcreateworkspaces%2Frun.go",
+    "sha": "679347501219420378391e3b3debc6e5211ebe51",
+    "status": "modified"
+  },
+  {
+    "additions": 27,
+    "blob_url": "https://github.com/coder/coder/blob/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fcreateworkspaces%2Frun_test.go",
+    "changes": 34,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scaletest%2Fcreateworkspaces%2Frun_test.go?ref=21603b107147e189f7768399a0230beea3c6aff0",
+    "deletions": 7,
+    "filename": "scaletest/createworkspaces/run_test.go",
+    "patch": "@@ -177,8 +177,13 @@ func Test_Runner(t *testing.T) {\n \t\trequire.Contains(t, logsStr, \"Opening reconnecting PTY connection to agent\")\n \t\trequire.Contains(t, logsStr, \"Opening connection to workspace agent\")\n \n-\t\terr = runner.Cleanup(ctx, \"1\")\n+\t\tcleanupLogs := bytes.NewBuffer(nil)\n+\t\terr = runner.Cleanup(ctx, \"1\", cleanupLogs)\n \t\trequire.NoError(t, err)\n+\t\tcleanupLogsStr := cleanupLogs.String()\n+\t\trequire.Contains(t, cleanupLogsStr, \"deleting workspace\")\n+\t\trequire.NotContains(t, cleanupLogsStr, \"canceling workspace build\") // The build should have already completed.\n+\t\trequire.Contains(t, cleanupLogsStr, \"Build succeeded!\")\n \n \t\t// Ensure the user and workspace were deleted.\n \t\tusers, err = client.Users(ctx, codersdk.UsersRequest{})\n@@ -217,7 +222,7 @@ func Test_Runner(t *testing.T) {\n \t\t\t},\n \t\t\tProvisionApply: []*proto.Response{\n \t\t\t\t{\n-\t\t\t\t\tType: &proto.Response_Log{Log: &proto.Log{}},\n+\t\t\t\t\tType: &proto.Response_Log{Log: &proto.Log{}}, // This provisioner job will never complete.\n \t\t\t\t},\n \t\t\t},\n \t\t})\n@@ -257,24 +262,36 @@ func Test_Runner(t *testing.T) {\n \t\t\tclose(done)\n \t\t}()\n \n+\t\t// Wait for the workspace build job to be picked up.\n \t\trequire.Eventually(t, func() bool {\n \t\t\tworkspaces, err := client.Workspaces(ctx, codersdk.WorkspaceFilter{})\n \t\t\tif err != nil {\n \t\t\t\treturn false\n \t\t\t}\n+\t\t\tif len(workspaces.Workspaces) == 0 {\n+\t\t\t\treturn false\n+\t\t\t}\n \n-\t\t\treturn len(workspaces.Workspaces) > 0\n-\t\t}, testutil.WaitShort, testutil.IntervalFast)\n+\t\t\tws := workspaces.Workspaces[0]\n+\t\t\tt.Logf(\"checking build: %s | %s\", ws.LatestBuild.Transition, ws.LatestBuild.Job.Status)\n+\t\t\t// There should be only one build at present.\n+\t\t\tif ws.LatestBuild.Transition != codersdk.WorkspaceTransitionStart {\n+\t\t\t\tt.Errorf(\"expected build transition %s, got %s\", codersdk.WorkspaceTransitionStart, ws.LatestBuild.Transition)\n+\t\t\t\treturn false\n+\t\t\t}\n+\t\t\treturn ws.LatestBuild.Job.Status == codersdk.ProvisionerJobRunning\n+\t\t}, testutil.WaitShort, testutil.IntervalMedium)\n \n \t\tcancelFunc()\n \t\t<-done\n \n \t\t// When we run the cleanup, it should be canceled\n+\t\tcleanupLogs := bytes.NewBuffer(nil)\n \t\tcancelCtx, cancelFunc = context.WithCancel(ctx)\n \t\tdone = make(chan struct{})\n \t\tgo func() {\n \t\t\t// This will return an error as the \"delete\" operation will never complete.\n-\t\t\t_ = runner.Cleanup(cancelCtx, \"1\")\n+\t\t\t_ = runner.Cleanup(cancelCtx, \"1\", cleanupLogs)\n \t\t\tclose(done)\n \t\t}()\n \n@@ -311,9 +328,11 @@ func Test_Runner(t *testing.T) {\n \t\t\t\t}\n \t\t\t}\n \t\t\treturn false\n-\t\t}, testutil.WaitShort, testutil.IntervalFast)\n+\t\t}, testutil.WaitShort, testutil.IntervalMedium)\n \t\tcancelFunc()\n \t\t<-done\n+\t\tcleanupLogsStr := cleanupLogs.String()\n+\t\trequire.Contains(t, cleanupLogsStr, \"canceling workspace build\")\n \t})\n \n \tt.Run(\"NoCleanup\", func(t *testing.T) {\n@@ -447,7 +466,8 @@ func Test_Runner(t *testing.T) {\n \t\trequire.Contains(t, logsStr, \"Opening reconnecting PTY connection to agent\")\n \t\trequire.Contains(t, logsStr, \"Opening connection to workspace agent\")\n \n-\t\terr = runner.Cleanup(ctx, \"1\")\n+\t\tcleanupLogs := bytes.NewBuffer(nil)\n+\t\terr = runner.Cleanup(ctx, \"1\", cleanupLogs)\n \t\trequire.NoError(t, err)\n \n \t\t// Ensure the user and workspace were not deleted.",
+    "raw_url": "https://github.com/coder/coder/raw/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fcreateworkspaces%2Frun_test.go",
+    "sha": "88e1e59cd9f379177b1993b024843ba18da8d130",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fdashboard%2Frun.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scaletest%2Fdashboard%2Frun.go?ref=21603b107147e189f7768399a0230beea3c6aff0",
+    "deletions": 1,
+    "filename": "scaletest/dashboard/run.go",
+    "patch": "@@ -125,6 +125,6 @@ func (r *Runner) runUntilDeadlineExceeded(ctx context.Context) error {\n \t}\n }\n \n-func (*Runner) Cleanup(_ context.Context, _ string) error {\n+func (*Runner) Cleanup(_ context.Context, _ string, _ io.Writer) error {\n \treturn nil\n }",
+    "raw_url": "https://github.com/coder/coder/raw/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fdashboard%2Frun.go",
+    "sha": "0c80d98d59e1b637ec287b157f34fdb4713e4bd3",
+    "status": "modified"
+  },
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fharness%2Fharness_test.go",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scaletest%2Fharness%2Fharness_test.go?ref=21603b107147e189f7768399a0230beea3c6aff0",
+    "deletions": 3,
+    "filename": "scaletest/harness/harness_test.go",
+    "patch": "@@ -112,7 +112,7 @@ func Test_TestHarness(t *testing.T) {\n \t\t\t\tRunFn: func(_ context.Context, _ string, _ io.Writer) error {\n \t\t\t\t\treturn nil\n \t\t\t\t},\n-\t\t\t\tCleanupFn: func(_ context.Context, _ string) error {\n+\t\t\t\tCleanupFn: func(_ context.Context, _ string, _ io.Writer) error {\n \t\t\t\t\tpanic(testPanicMessage)\n \t\t\t\t},\n \t\t\t})\n@@ -150,7 +150,7 @@ func Test_TestHarness(t *testing.T) {\n \t\t\t\tRunFn: func(_ context.Context, _ string, _ io.Writer) error {\n \t\t\t\t\treturn nil\n \t\t\t\t},\n-\t\t\t\tCleanupFn: func(_ context.Context, _ string) error {\n+\t\t\t\tCleanupFn: func(_ context.Context, _ string, _ io.Writer) error {\n \t\t\t\t\treturn nil\n \t\t\t\t},\n \t\t\t})\n@@ -295,7 +295,7 @@ func fakeTestFns(err, cleanupErr error) testFns {\n \t\tRunFn: func(_ context.Context, _ string, _ io.Writer) error {\n \t\t\treturn err\n \t\t},\n-\t\tCleanupFn: func(_ context.Context, _ string) error {\n+\t\tCleanupFn: func(_ context.Context, _ string, _ io.Writer) error {\n \t\t\treturn cleanupErr\n \t\t},\n \t}",
+    "raw_url": "https://github.com/coder/coder/raw/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fharness%2Fharness_test.go",
+    "sha": "10e1f87bd70b1fb052913abe746b82078480f9b6",
+    "status": "modified"
+  },
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fharness%2Frun.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scaletest%2Fharness%2Frun.go?ref=21603b107147e189f7768399a0230beea3c6aff0",
+    "deletions": 2,
+    "filename": "scaletest/harness/run.go",
+    "patch": "@@ -28,7 +28,7 @@ type Runnable interface {\n type Cleanable interface {\n \tRunnable\n \t// Cleanup should clean up any lingering resources from the test.\n-\tCleanup(ctx context.Context, id string) error\n+\tCleanup(ctx context.Context, id string, logs io.Writer) error\n }\n \n // AddRun creates a new *TestRun with the given name, ID and Runnable, adds it\n@@ -131,7 +131,7 @@ func (r *TestRun) Cleanup(ctx context.Context) (err error) {\n \t\t}\n \t}()\n \n-\terr = c.Cleanup(ctx, r.id)\n+\terr = c.Cleanup(ctx, r.id, r.logs)\n \t//nolint:revive // we use named returns because we mutate it in a defer\n \treturn\n }",
+    "raw_url": "https://github.com/coder/coder/raw/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fharness%2Frun.go",
+    "sha": "00cdc0dbf1936f999fde287aee05d11864255cd3",
+    "status": "modified"
+  },
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fharness%2Frun_test.go",
+    "changes": 10,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scaletest%2Fharness%2Frun_test.go?ref=21603b107147e189f7768399a0230beea3c6aff0",
+    "deletions": 5,
+    "filename": "scaletest/harness/run_test.go",
+    "patch": "@@ -16,7 +16,7 @@ import (\n type testFns struct {\n \tRunFn func(ctx context.Context, id string, logs io.Writer) error\n \t// CleanupFn is optional if no cleanup is required.\n-\tCleanupFn func(ctx context.Context, id string) error\n+\tCleanupFn func(ctx context.Context, id string, logs io.Writer) error\n }\n \n // Run implements Runnable.\n@@ -25,12 +25,12 @@ func (fns testFns) Run(ctx context.Context, id string, logs io.Writer) error {\n }\n \n // Cleanup implements Cleanable.\n-func (fns testFns) Cleanup(ctx context.Context, id string) error {\n+func (fns testFns) Cleanup(ctx context.Context, id string, logs io.Writer) error {\n \tif fns.CleanupFn == nil {\n \t\treturn nil\n \t}\n \n-\treturn fns.CleanupFn(ctx, id)\n+\treturn fns.CleanupFn(ctx, id, logs)\n }\n \n func Test_TestRun(t *testing.T) {\n@@ -49,7 +49,7 @@ func Test_TestRun(t *testing.T) {\n \t\t\t\t\tatomic.AddInt64(&runCalled, 1)\n \t\t\t\t\treturn nil\n \t\t\t\t},\n-\t\t\t\tCleanupFn: func(ctx context.Context, id string) error {\n+\t\t\t\tCleanupFn: func(ctx context.Context, id string, logs io.Writer) error {\n \t\t\t\t\tatomic.AddInt64(&cleanupCalled, 1)\n \t\t\t\t\treturn nil\n \t\t\t\t},\n@@ -93,7 +93,7 @@ func Test_TestRun(t *testing.T) {\n \t\t\t\tRunFn: func(ctx context.Context, id string, logs io.Writer) error {\n \t\t\t\t\treturn nil\n \t\t\t\t},\n-\t\t\t\tCleanupFn: func(ctx context.Context, id string) error {\n+\t\t\t\tCleanupFn: func(ctx context.Context, id string, logs io.Writer) error {\n \t\t\t\t\tatomic.AddInt64(&cleanupCalled, 1)\n \t\t\t\t\treturn nil\n \t\t\t\t},",
+    "raw_url": "https://github.com/coder/coder/raw/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fharness%2Frun_test.go",
+    "sha": "7466e974352fa79623648d3dda60594105dea508",
+    "status": "modified"
+  },
+  {
+    "additions": 13,
+    "blob_url": "https://github.com/coder/coder/blob/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fworkspacebuild%2Frun.go",
+    "changes": 20,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scaletest%2Fworkspacebuild%2Frun.go?ref=21603b107147e189f7768399a0230beea3c6aff0",
+    "deletions": 7,
+    "filename": "scaletest/workspacebuild/run.go",
+    "patch": "@@ -4,6 +4,7 @@ import (\n \t\"context\"\n \t\"fmt\"\n \t\"io\"\n+\t\"net/http\"\n \t\"time\"\n \n \t\"github.com/google/uuid\"\n@@ -106,25 +107,31 @@ func NewCleanupRunner(client *codersdk.Client, workspaceID uuid.UUID) *CleanupRu\n \n // Run implements Runnable.\n func (r *CleanupRunner) Run(ctx context.Context, _ string, logs io.Writer) error {\n-\tif r.workspaceID == uuid.Nil {\n-\t\treturn nil\n-\t}\n \tctx, span := tracing.StartSpan(ctx)\n \tdefer span.End()\n-\n \tlogs = loadtestutil.NewSyncWriter(logs)\n \tlogger := slog.Make(sloghuman.Sink(logs)).Leveled(slog.LevelDebug)\n+\tif r.workspaceID == uuid.Nil {\n+\t\treturn nil\n+\t}\n+\tlogger.Info(ctx, \"deleting workspace\", slog.F(\"workspace_id\", r.workspaceID))\n \tr.client.SetLogger(logger)\n \tr.client.SetLogBodies(true)\n \n \tws, err := r.client.Workspace(ctx, r.workspaceID)\n \tif err != nil {\n+\t\tvar sdkErr *codersdk.Error\n+\t\tif xerrors.As(err, &sdkErr) && sdkErr.StatusCode() == http.StatusNotFound {\n+\t\t\tlogger.Info(ctx, \"workspace not found, skipping delete\", slog.F(\"workspace_id\", r.workspaceID))\n+\t\t\treturn nil\n+\t\t}\n \t\treturn err\n \t}\n \n \tbuild, err := r.client.WorkspaceBuild(ctx, ws.LatestBuild.ID)\n \tif err == nil && build.Job.Status.Active() {\n \t\t// mark the build as canceled\n+\t\tlogger.Info(ctx, \"canceling workspace build\", slog.F(\"build_id\", build.ID), slog.F(\"workspace_id\", r.workspaceID))\n \t\tif err = r.client.CancelWorkspaceBuild(ctx, build.ID); err == nil {\n \t\t\t// Wait for the job to cancel before we delete it\n \t\t\t_ = waitForBuild(ctx, logs, r.client, build.ID) // it will return a \"build canceled\" error\n@@ -151,12 +158,11 @@ func (r *CleanupRunner) Run(ctx context.Context, _ string, logs io.Writer) error\n }\n \n // Cleanup implements Cleanable by wrapping CleanupRunner.\n-func (r *Runner) Cleanup(ctx context.Context, id string) error {\n-\t// TODO: capture these logs\n+func (r *Runner) Cleanup(ctx context.Context, id string, w io.Writer) error {\n \treturn (&CleanupRunner{\n \t\tclient:      r.client,\n \t\tworkspaceID: r.workspaceID,\n-\t}).Run(ctx, id, io.Discard)\n+\t}).Run(ctx, id, w)\n }\n \n func waitForBuild(ctx context.Context, w io.Writer, client *codersdk.Client, buildID uuid.UUID) error {",
+    "raw_url": "https://github.com/coder/coder/raw/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fworkspacebuild%2Frun.go",
+    "sha": "7d5046eabf78df11f371656c77c5b0eeac873846",
+    "status": "modified"
+  },
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fworkspacebuild%2Frun_test.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scaletest%2Fworkspacebuild%2Frun_test.go?ref=21603b107147e189f7768399a0230beea3c6aff0",
+    "deletions": 1,
+    "filename": "scaletest/workspacebuild/run_test.go",
+    "patch": "@@ -180,7 +180,8 @@ func Test_Runner(t *testing.T) {\n \t\tcoderdtest.AwaitWorkspaceBuildJobCompleted(t, client, workspaces[0].LatestBuild.ID)\n \t\tcoderdtest.AwaitWorkspaceAgents(t, client, workspaces[0].ID)\n \n-\t\terr = runner.Cleanup(ctx, \"1\")\n+\t\tcleanupLogs := bytes.NewBuffer(nil)\n+\t\terr = runner.Cleanup(ctx, \"1\", cleanupLogs)\n \t\trequire.NoError(t, err)\n \t})\n ",
+    "raw_url": "https://github.com/coder/coder/raw/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fworkspacebuild%2Frun_test.go",
+    "sha": "2ed5b09c0c9de75fc7391859aceb7fbe5ac4ce41",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fworkspacetraffic%2Frun.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scaletest%2Fworkspacetraffic%2Frun.go?ref=21603b107147e189f7768399a0230beea3c6aff0",
+    "deletions": 1,
+    "filename": "scaletest/workspacetraffic/run.go",
+    "patch": "@@ -169,7 +169,7 @@ func (r *Runner) Run(ctx context.Context, _ string, logs io.Writer) error {\n }\n \n // Cleanup does nothing, successfully.\n-func (*Runner) Cleanup(context.Context, string) error {\n+func (*Runner) Cleanup(context.Context, string, io.Writer) error {\n \treturn nil\n }\n ",
+    "raw_url": "https://github.com/coder/coder/raw/21603b107147e189f7768399a0230beea3c6aff0/scaletest%2Fworkspacetraffic%2Frun.go",
+    "sha": "d3fcd6033be253dc0a8bcbe9f7f287a8380a6d39",
+    "status": "modified"
+  }
+]

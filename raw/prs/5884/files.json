@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/5c54d8b8cd43cd96910e6274ab6b8332bee04671/site%2Fe2e%2Ftests%2FbasicFlow.spec.ts",
+    "changes": 48,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fe2e%2Ftests%2FbasicFlow.spec.ts?ref=5c54d8b8cd43cd96910e6274ab6b8332bee04671",
+    "deletions": 48,
+    "filename": "site/e2e/tests/basicFlow.spec.ts",
+    "patch": "@@ -1,48 +0,0 @@\n-import { test, expect } from \"@playwright/test\"\n-import { email, password } from \"../constants\"\n-import { SignInPage } from \"../pom\"\n-import { clickButton, buttons, fillInput } from \"../helpers\"\n-import dayjs from \"dayjs\"\n-\n-test(\"Basic flow\", async ({ baseURL, page }) => {\n-  // We're keeping entire flows in one test, which means the test needs extra time.\n-  test.setTimeout(5 * 60 * 1000)\n-  await page.goto(baseURL + \"/\", { waitUntil: \"networkidle\" })\n-\n-  // Log-in with the default credentials we set up in the development server\n-  const signInPage = new SignInPage(baseURL, page)\n-  await signInPage.submitBuiltInAuthentication(email, password)\n-\n-  // create Docker template\n-  await page.click(\"text=Templates\")\n-\n-  await clickButton(page, buttons.starterTemplates)\n-\n-  await page.click(`text=${buttons.dockerTemplate}`)\n-\n-  await clickButton(page, buttons.useTemplate)\n-\n-  await clickButton(page, buttons.createTemplate)\n-\n-  // create workspace\n-  await clickButton(page, buttons.createWorkspace)\n-\n-  // give workspace a unique name to avoid failure\n-  await fillInput(\n-    page,\n-    \"Workspace Name\",\n-    `workspace-${dayjs().format(\"MM-DD-hh-mm-ss\")}`,\n-  )\n-  await clickButton(page, buttons.submitCreateWorkspace)\n-\n-  // stop workspace\n-  await clickButton(page, buttons.stopWorkspace)\n-\n-  // start workspace\n-  await clickButton(page, buttons.startWorkspace)\n-  const stopButton = page.getByRole(\"button\", {\n-    name: buttons.stopWorkspace,\n-    exact: true,\n-  })\n-  await expect(stopButton).toBeEnabled({ timeout: 60_000 })\n-})",
+    "raw_url": "https://github.com/coder/coder/raw/5c54d8b8cd43cd96910e6274ab6b8332bee04671/site%2Fe2e%2Ftests%2FbasicFlow.spec.ts",
+    "sha": "95fc6817cbe6c2d1196f2bf33bca52df264cbd12",
+    "status": "removed"
+  }
+]

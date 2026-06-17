@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/15259#pullrequestreview-2401608533"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/15259"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "LGTM\r\n\r\n> On Linux, network access isn't available inside of a build.\r\n@coadler do you have a reference for this?",
+    "commit_id": "33da64d32e71c9be9d0a347ccd6873e0eb19ccc8",
+    "html_url": "https://github.com/coder/coder/pull/15259#pullrequestreview-2401608533",
+    "id": 2401608533,
+    "node_id": "PRR_kwDOGkVX1s6PJaNV",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/15259",
+    "state": "APPROVED",
+    "submitted_at": "2024-10-29T11:46:20Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/373762?u=4c3e3776b7cc9cb346e9f43196fb387c845a4adc&v=4",
+      "events_url": "https://api.github.com/users/dannykopping/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dannykopping/followers",
+      "following_url": "https://api.github.com/users/dannykopping/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dannykopping/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dannykopping",
+      "id": 373762,
+      "login": "dannykopping",
+      "node_id": "MDQ6VXNlcjM3Mzc2Mg==",
+      "organizations_url": "https://api.github.com/users/dannykopping/orgs",
+      "received_events_url": "https://api.github.com/users/dannykopping/received_events",
+      "repos_url": "https://api.github.com/users/dannykopping/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dannykopping/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dannykopping/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dannykopping",
+      "user_view_type": "public"
+    }
+  }
+]

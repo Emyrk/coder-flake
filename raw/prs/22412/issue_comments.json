@@ -1,0 +1,47 @@
+[
+  {
+    "author_association": "MEMBER",
+    "body": "> For what these tests are doing, it feels odd that we're exceeding 5 seconds. It would be good to know what is causing them to be so slow.\r\n\r\n@DanielleMaywood very fair point\u2013 I'm going to scope this down to just the one test that's failing to hopefully fix this flake, but you're totally right it would be good to get to the bottom of this. \r\n\r\nFrom what I can tell from previous builds where this was written in jest (heh), it regularly takes upwards of 10s for the TemplateVersionsEditorPage tests to run. I'm pretty confident increasing the timeout is necessary to get the test to pass as-is, and probably will be for a few more of these page-level sort of tests. ",
+    "created_at": "2026-02-28T00:03:21Z",
+    "html_url": "https://github.com/coder/coder/pull/22412#issuecomment-3975786854",
+    "id": 3975786854,
+    "issue_url": "https://api.github.com/repos/coder/coder/issues/22412",
+    "node_id": "IC_kwDOGkVX1s7s-bFm",
+    "performed_via_github_app": null,
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/issues/comments/3975786854/reactions"
+    },
+    "updated_at": "2026-02-28T00:03:21Z",
+    "url": "https://api.github.com/repos/coder/coder/issues/comments/3975786854",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/251146?v=4",
+      "events_url": "https://api.github.com/users/jeremyruppel/events{/privacy}",
+      "followers_url": "https://api.github.com/users/jeremyruppel/followers",
+      "following_url": "https://api.github.com/users/jeremyruppel/following{/other_user}",
+      "gists_url": "https://api.github.com/users/jeremyruppel/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/jeremyruppel",
+      "id": 251146,
+      "login": "jeremyruppel",
+      "node_id": "MDQ6VXNlcjI1MTE0Ng==",
+      "organizations_url": "https://api.github.com/users/jeremyruppel/orgs",
+      "received_events_url": "https://api.github.com/users/jeremyruppel/received_events",
+      "repos_url": "https://api.github.com/users/jeremyruppel/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/jeremyruppel/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/jeremyruppel/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/jeremyruppel",
+      "user_view_type": "public"
+    }
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "additions": 9,
+    "blob_url": "https://github.com/coder/coder/blob/98a81ba6d5c14f087713cb3445dde3b6d1e8c79a/peer%2Fchannel.go",
+    "changes": 9,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/peer%2Fchannel.go?ref=98a81ba6d5c14f087713cb3445dde3b6d1e8c79a",
+    "deletions": 0,
+    "filename": "peer/channel.go",
+    "patch": "@@ -6,6 +6,7 @@ import (\n \t\"io\"\n \t\"net\"\n \t\"sync\"\n+\t\"time\"\n \n \t\"github.com/pion/datachannel\"\n \t\"github.com/pion/webrtc/v3\"\n@@ -244,6 +245,14 @@ func (c *Channel) Write(bytes []byte) (n int, err error) {\n \tif c.dc.BufferedAmount()+uint64(len(bytes)) >= maxBufferedAmount {\n \t\t<-c.sendMore\n \t}\n+\n+\t// There's an obvious race-condition here. This is an edge-case, as\n+\t// most-frequently data won't be pooled so synchronously, but is\n+\t// definitely possible.\n+\t//\n+\t// See: https://github.com/pion/sctp/issues/181\n+\ttime.Sleep(time.Microsecond)\n+\n \treturn c.rwc.Write(bytes)\n }\n ",
+    "raw_url": "https://github.com/coder/coder/raw/98a81ba6d5c14f087713cb3445dde3b6d1e8c79a/peer%2Fchannel.go",
+    "sha": "4af4fbcb465f2db0c58b91a086a7d12d834c3bfb",
+    "status": "modified"
+  },
+  {
+    "additions": 13,
+    "blob_url": "https://github.com/coder/coder/blob/98a81ba6d5c14f087713cb3445dde3b6d1e8c79a/peer%2Fconn.go",
+    "changes": 25,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/peer%2Fconn.go?ref=98a81ba6d5c14f087713cb3445dde3b6d1e8c79a",
+    "deletions": 12,
+    "filename": "peer/conn.go",
+    "patch": "@@ -73,6 +73,7 @@ func newWithClientOrServer(servers []webrtc.ICEServer, client bool, opts *ConnOp\n \t\tdcFailedChannel:                 make(chan struct{}),\n \t\tlocalCandidateChannel:           make(chan webrtc.ICECandidateInit),\n \t\tlocalSessionDescriptionChannel:  make(chan webrtc.SessionDescription, 1),\n+\t\tnegotiated:                      make(chan struct{}),\n \t\tremoteSessionDescriptionChannel: make(chan webrtc.SessionDescription, 1),\n \t\tsettingEngine:                   opts.SettingEngine,\n \t}\n@@ -124,8 +125,7 @@ type Conn struct {\n \tlocalSessionDescriptionChannel  chan webrtc.SessionDescription\n \tremoteSessionDescriptionChannel chan webrtc.SessionDescription\n \n-\tnegotiateMutex sync.Mutex\n-\thasNegotiated  bool\n+\tnegotiated chan struct{}\n \n \tloggerValue   atomic.Value\n \tsettingEngine webrtc.SettingEngine\n@@ -152,9 +152,6 @@ func (c *Conn) logger() slog.Logger {\n }\n \n func (c *Conn) init() error {\n-\t// The negotiation needed callback can take a little bit to execute!\n-\tc.negotiateMutex.Lock()\n-\n \tc.rtc.OnNegotiationNeeded(c.negotiate)\n \tc.rtc.OnICEConnectionStateChange(func(iceConnectionState webrtc.ICEConnectionState) {\n \t\tc.closedICEMutex.Lock()\n@@ -290,11 +287,13 @@ func (c *Conn) negotiate() {\n \tc.logger().Debug(context.Background(), \"negotiating\")\n \t// ICE candidates cannot be added until SessionDescriptions have been\n \t// exchanged between peers.\n-\tif c.hasNegotiated {\n-\t\tc.negotiateMutex.Lock()\n-\t}\n-\tc.hasNegotiated = true\n-\tdefer c.negotiateMutex.Unlock()\n+\tdefer func() {\n+\t\tselect {\n+\t\tcase <-c.negotiated:\n+\t\tdefault:\n+\t\t\tclose(c.negotiated)\n+\t\t}\n+\t}()\n \n \tif c.offerer {\n \t\toffer, err := c.rtc.CreateOffer(&webrtc.OfferOptions{})\n@@ -368,8 +367,10 @@ func (c *Conn) AddRemoteCandidate(i webrtc.ICECandidateInit) {\n \t// This must occur in a goroutine to allow the SessionDescriptions\n \t// to be exchanged first.\n \tgo func() {\n-\t\tc.negotiateMutex.Lock()\n-\t\tdefer c.negotiateMutex.Unlock()\n+\t\tselect {\n+\t\tcase <-c.closed:\n+\t\tcase <-c.negotiated:\n+\t\t}\n \t\tif c.isClosed() {\n \t\t\treturn\n \t\t}",
+    "raw_url": "https://github.com/coder/coder/raw/98a81ba6d5c14f087713cb3445dde3b6d1e8c79a/peer%2Fconn.go",
+    "sha": "ed2f8dc746a8dbbd27d24dd64e2359461d08c64b",
+    "status": "modified"
+  },
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/98a81ba6d5c14f087713cb3445dde3b6d1e8c79a/peer%2Fconn_test.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/peer%2Fconn_test.go?ref=98a81ba6d5c14f087713cb3445dde3b6d1e8c79a",
+    "deletions": 2,
+    "filename": "peer/conn_test.go",
+    "patch": "@@ -59,9 +59,7 @@ func TestMain(m *testing.M) {\n }\n \n func TestConn(t *testing.T) {\n-\tt.Skip(\"known flake -- https://github.com/coder/coder/issues/1644\")\n \tt.Parallel()\n-\n \tt.Run(\"Ping\", func(t *testing.T) {\n \t\tt.Parallel()\n \t\tclient, server, _ := createPair(t)",
+    "raw_url": "https://github.com/coder/coder/raw/98a81ba6d5c14f087713cb3445dde3b6d1e8c79a/peer%2Fconn_test.go",
+    "sha": "20f4c84638b0ce516dd93a74e5d52db7261fdd48",
+    "status": "modified"
+  }
+]

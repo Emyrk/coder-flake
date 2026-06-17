@@ -1,0 +1,86 @@
+[
+  {
+    "additions": 47,
+    "blob_url": "https://github.com/coder/coder/blob/7dabbe3ca6f961143c7f876ca8ee53e9fe332e41/site%2Fsrc%2Fcomponents%2FGlobalSnackbar%2FGlobalSnackbar.tsx",
+    "changes": 104,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fcomponents%2FGlobalSnackbar%2FGlobalSnackbar.tsx?ref=7dabbe3ca6f961143c7f876ca8ee53e9fe332e41",
+    "deletions": 57,
+    "filename": "site/src/components/GlobalSnackbar/GlobalSnackbar.tsx",
+    "patch": "@@ -1,6 +1,5 @@\n-import { type FC, useCallback, useState } from \"react\";\n+import { type FC, useState } from \"react\";\n import { useCustomEvent } from \"hooks/events\";\n-import type { CustomEventListener } from \"utils/events\";\n import { EnterpriseSnackbar } from \"./EnterpriseSnackbar\";\n import { ErrorIcon } from \"../Icons/ErrorIcon\";\n import { Typography } from \"../Typography/Typography\";\n@@ -29,54 +28,10 @@ export const GlobalSnackbar: FC = () => {\n   const [open, setOpen] = useState<boolean>(false);\n   const [notification, setNotification] = useState<NotificationMsg>();\n \n-  const handleNotification = useCallback<CustomEventListener<NotificationMsg>>(\n-    (event) => {\n-      setNotification(event.detail);\n-      setOpen(true);\n-    },\n-    [],\n-  );\n-\n-  useCustomEvent(SnackbarEventType, handleNotification);\n-\n-  const renderAdditionalMessage = (msg: AdditionalMessage, idx: number) => {\n-    if (isNotificationText(msg)) {\n-      return (\n-        <Typography\n-          key={idx}\n-          gutterBottom\n-          variant=\"body2\"\n-          css={styles.messageSubtitle}\n-        >\n-          {msg}\n-        </Typography>\n-      );\n-    } else if (isNotificationTextPrefixed(msg)) {\n-      return (\n-        <Typography\n-          key={idx}\n-          gutterBottom\n-          variant=\"body2\"\n-          css={styles.messageSubtitle}\n-        >\n-          <strong>{msg.prefix}:</strong> {msg.text}\n-        </Typography>\n-      );\n-    } else if (isNotificationList(msg)) {\n-      return (\n-        <ul css={styles.list} key={idx}>\n-          {msg.map((item, idx) => (\n-            <li key={idx}>\n-              <Typography variant=\"body2\" css={styles.messageSubtitle}>\n-                {item}\n-              </Typography>\n-            </li>\n-          ))}\n-        </ul>\n-      );\n-    }\n-    return null;\n-  };\n+  useCustomEvent<NotificationMsg>(SnackbarEventType, (event) => {\n+    setNotification(event.detail);\n+    setOpen(true);\n+  });\n \n   if (!notification) {\n     return null;\n@@ -87,26 +42,27 @@ export const GlobalSnackbar: FC = () => {\n       key={notification.msg}\n       open={open}\n       variant={variantFromMsgType(notification.msgType)}\n+      onClose={() => setOpen(false)}\n+      autoHideDuration={notification.msgType === MsgType.Error ? 22000 : 6000}\n+      anchorOrigin={{ vertical: \"bottom\", horizontal: \"right\" }}\n       message={\n         <div css={styles.messageWrapper}>\n           {notification.msgType === MsgType.Error && (\n             <ErrorIcon css={styles.errorIcon} />\n           )}\n+\n           <div css={styles.message}>\n             <Typography variant=\"body1\" css={styles.messageTitle}>\n               {notification.msg}\n             </Typography>\n+\n             {notification.additionalMsgs &&\n-              notification.additionalMsgs.map(renderAdditionalMessage)}\n+              notification.additionalMsgs.map((msg, index) => (\n+                <AdditionalMessageDisplay key={index} message={msg} />\n+              ))}\n           </div>\n         </div>\n       }\n-      onClose={() => setOpen(false)}\n-      autoHideDuration={notification.msgType === MsgType.Error ? 22000 : 6000}\n-      anchorOrigin={{\n-        vertical: \"bottom\",\n-        horizontal: \"right\",\n-      }}\n     />\n   );\n };\n@@ -133,3 +89,37 @@ const styles = {\n     marginRight: theme.spacing(2),\n   }),\n } satisfies Record<string, Interpolation<Theme>>;\n+\n+function AdditionalMessageDisplay({ message }: { message: AdditionalMessage }) {\n+  if (isNotificationText(message)) {\n+    return (\n+      <Typography gutterBottom variant=\"body2\" css={styles.messageSubtitle}>\n+        {message}\n+      </Typography>\n+    );\n+  }\n+\n+  if (isNotificationTextPrefixed(message)) {\n+    return (\n+      <Typography gutterBottom variant=\"body2\" css={styles.messageSubtitle}>\n+        <strong>{message.prefix}:</strong> {message.text}\n+      </Typography>\n+    );\n+  }\n+\n+  if (isNotificationList(message)) {\n+    return (\n+      <ul css={styles.list}>\n+        {message.map((item, idx) => (\n+          <li key={idx}>\n+            <Typography variant=\"body2\" css={styles.messageSubtitle}>\n+              {item}\n+            </Typography>\n+          </li>\n+        ))}\n+      </ul>\n+    );\n+  }\n+\n+  return null;\n+}",
+    "raw_url": "https://github.com/coder/coder/raw/7dabbe3ca6f961143c7f876ca8ee53e9fe332e41/site%2Fsrc%2Fcomponents%2FGlobalSnackbar%2FGlobalSnackbar.tsx",
+    "sha": "a2f2b9b11f4ac582c23e8425b1b11d93db659a6e",
+    "status": "modified"
+  },
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/7dabbe3ca6f961143c7f876ca8ee53e9fe332e41/site%2Fsrc%2Fhooks%2Fevents.ts",
+    "changes": 15,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fhooks%2Fevents.ts?ref=7dabbe3ca6f961143c7f876ca8ee53e9fe332e41",
+    "deletions": 7,
+    "filename": "site/src/hooks/events.ts",
+    "patch": "@@ -1,5 +1,6 @@\n import { useEffect } from \"react\";\n import { CustomEventListener } from \"utils/events\";\n+import { useEffectEvent } from \"./hookPolyfills\";\n \n /**\n  * Handles a custom event with descriptive type information.\n@@ -11,14 +12,14 @@ export const useCustomEvent = <T, E extends string = string>(\n   eventType: E,\n   listener: CustomEventListener<T>,\n ): void => {\n-  useEffect(() => {\n-    const handleEvent: CustomEventListener<T> = (event) => {\n-      listener(event);\n-    };\n-    window.addEventListener(eventType, handleEvent as EventListener);\n+  // Ensures that the useEffect call only re-syncs when the eventType changes,\n+  // without needing parent component to memoize via useCallback\n+  const stableListener = useEffectEvent(listener);\n \n+  useEffect(() => {\n+    window.addEventListener(eventType, stableListener as EventListener);\n     return () => {\n-      window.removeEventListener(eventType, handleEvent as EventListener);\n+      window.removeEventListener(eventType, stableListener as EventListener);\n     };\n-  }, [eventType, listener]);\n+  }, [eventType, stableListener]);\n };",
+    "raw_url": "https://github.com/coder/coder/raw/7dabbe3ca6f961143c7f876ca8ee53e9fe332e41/site%2Fsrc%2Fhooks%2Fevents.ts",
+    "sha": "82004ea1d7ed57d71cd2678094312026cca62542",
+    "status": "modified"
+  },
+  {
+    "additions": 14,
+    "blob_url": "https://github.com/coder/coder/blob/7dabbe3ca6f961143c7f876ca8ee53e9fe332e41/site%2Fsrc%2Fhooks%2FhookPolyfills.ts",
+    "changes": 20,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fhooks%2FhookPolyfills.ts?ref=7dabbe3ca6f961143c7f876ca8ee53e9fe332e41",
+    "deletions": 6,
+    "filename": "site/src/hooks/hookPolyfills.ts",
+    "patch": "@@ -12,14 +12,22 @@ import { useCallback, useEffect, useRef } from \"react\";\n  * A DIY version of useEffectEvent.\n  *\n  * Works like useCallback, except that it doesn't take a dependency array, and\n- * always returns out a stable function on every single render. The returned-out\n+ * always returns out the same function on every single render. The returned-out\n  * function is always able to \"see\" the most up-to-date version of the callback\n- * passed in.\n+ * passed in (including its closure values).\n  *\n- * Should only be used as a last resort when useCallback does not work, but you\n- * still need to avoid dependency array violations. (e.g., You need an on-mount\n- * effect, but an external library doesn't give their functions stable\n- * references, so useEffect/useMemo/useCallback run too often).\n+ * This is not a 1:1 replacement for useCallback. 99% of the time,\n+ * useEffectEvent should be called in the same component/custom hook where you\n+ * have a useEffect call. A useEffectEvent function probably shouldn't be a\n+ * prop, unless you're trying to wrangle a weird library.\n+ *\n+ * Example uses of useEffectEvent:\n+ * 1. Stabilizing a function that you don't have direct control over (because it\n+ *    comes from a library) without violating useEffect dependency arrays\n+ * 2. Moving the burden of memoization from the parent to the custom hook (e.g.,\n+ *    making it so that you don't need your components to always use useCallback\n+ *    just to get things wired up properly. Similar example: the queryFn\n+ *    property on React Query's useQuery)\n  *\n  * @see {@link https://react.dev/reference/react/experimental_useEffectEvent}\n  */",
+    "raw_url": "https://github.com/coder/coder/raw/7dabbe3ca6f961143c7f876ca8ee53e9fe332e41/site%2Fsrc%2Fhooks%2FhookPolyfills.ts",
+    "sha": "e5ba7052962299b3af9f87e887558035c910b561",
+    "status": "modified"
+  },
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/7dabbe3ca6f961143c7f876ca8ee53e9fe332e41/site%2Fsrc%2Fpages%2FUserSettingsPage%2FSSHKeysPage%2FSSHKeysPage.test.tsx",
+    "changes": 5,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FUserSettingsPage%2FSSHKeysPage%2FSSHKeysPage.test.tsx?ref=7dabbe3ca6f961143c7f876ca8ee53e9fe332e41",
+    "deletions": 2,
+    "filename": "site/src/pages/UserSettingsPage/SSHKeysPage/SSHKeysPage.test.tsx",
+    "patch": "@@ -59,7 +59,7 @@ describe(\"SSH keys Page\", () => {\n \n         jest.spyOn(API, \"regenerateUserSSHKey\").mockRejectedValueOnce(\n           mockApiError({\n-            message: \"Error regenerating SSH key\",\n+            message: SSHKeysPageLanguage.regenerationError,\n           }),\n         );\n \n@@ -78,7 +78,8 @@ describe(\"SSH keys Page\", () => {\n         fireEvent.click(confirmButton);\n \n         // Check if the error message is displayed\n-        await screen.findByText(\"Error regenerating SSH key\");\n+        const alert = await screen.findByRole(\"alert\");\n+        expect(alert).toHaveTextContent(SSHKeysPageLanguage.regenerationError);\n \n         // Check if the API was called correctly\n         expect(API.regenerateUserSSHKey).toBeCalledTimes(1);",
+    "raw_url": "https://github.com/coder/coder/raw/7dabbe3ca6f961143c7f876ca8ee53e9fe332e41/site%2Fsrc%2Fpages%2FUserSettingsPage%2FSSHKeysPage%2FSSHKeysPage.test.tsx",
+    "sha": "bb0ddb2535bf1c8ff569071a1aa46cae42a04144",
+    "status": "modified"
+  },
+  {
+    "additions": 9,
+    "blob_url": "https://github.com/coder/coder/blob/7dabbe3ca6f961143c7f876ca8ee53e9fe332e41/site%2Fsrc%2Fpages%2FUserSettingsPage%2FSSHKeysPage%2FSSHKeysPage.tsx",
+    "changes": 22,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FUserSettingsPage%2FSSHKeysPage%2FSSHKeysPage.tsx?ref=7dabbe3ca6f961143c7f876ca8ee53e9fe332e41",
+    "deletions": 13,
+    "filename": "site/src/pages/UserSettingsPage/SSHKeysPage/SSHKeysPage.tsx",
+    "patch": "@@ -10,6 +10,8 @@ import { getErrorMessage } from \"api/errors\";\n export const Language = {\n   title: \"SSH keys\",\n   regenerateDialogTitle: \"Regenerate SSH key?\",\n+  regenerationError: \"Failed to regenerate SSH key\",\n+  regenerationSuccess: \"SSH Key regenerated successfully.\",\n   regenerateDialogMessage:\n     \"You will need to replace the public SSH key on services you use it with, and you'll need to rebuild existing workspaces.\",\n   confirmLabel: \"Confirm\",\n@@ -19,8 +21,9 @@ export const Language = {\n export const SSHKeysPage: FC<PropsWithChildren<unknown>> = () => {\n   const [isConfirmingRegeneration, setIsConfirmingRegeneration] =\n     useState(false);\n-  const queryClient = useQueryClient();\n+\n   const userSSHKeyQuery = useQuery(userSSHKey(\"me\"));\n+  const queryClient = useQueryClient();\n   const regenerateSSHKeyMutation = useMutation(\n     regenerateUserSSHKey(\"me\", queryClient),\n   );\n@@ -31,11 +34,8 @@ export const SSHKeysPage: FC<PropsWithChildren<unknown>> = () => {\n         <SSHKeysPageView\n           isLoading={userSSHKeyQuery.isLoading}\n           getSSHKeyError={userSSHKeyQuery.error}\n-          regenerateSSHKeyError={regenerateSSHKeyMutation.error}\n           sshKey={userSSHKeyQuery.data}\n-          onRegenerateClick={() => {\n-            setIsConfirmingRegeneration(true);\n-          }}\n+          onRegenerateClick={() => setIsConfirmingRegeneration(true)}\n         />\n       </Section>\n \n@@ -45,23 +45,19 @@ export const SSHKeysPage: FC<PropsWithChildren<unknown>> = () => {\n         open={isConfirmingRegeneration}\n         confirmLoading={regenerateSSHKeyMutation.isLoading}\n         title={Language.regenerateDialogTitle}\n+        description={Language.regenerateDialogMessage}\n         confirmText={Language.confirmLabel}\n+        onClose={() => setIsConfirmingRegeneration(false)}\n         onConfirm={async () => {\n           try {\n             await regenerateSSHKeyMutation.mutateAsync();\n-            displaySuccess(\"SSH Key regenerated successfully.\");\n+            displaySuccess(Language.regenerationSuccess);\n           } catch (error) {\n-            displayError(\n-              getErrorMessage(error, \"Failed to regenerate SSH key\"),\n-            );\n+            displayError(getErrorMessage(error, Language.regenerationError));\n           } finally {\n             setIsConfirmingRegeneration(false);\n           }\n         }}\n-        onClose={() => {\n-          setIsConfirmingRegeneration(false);\n-        }}\n-        description={<>{Language.regenerateDialogMessage}</>}\n       />\n     </>\n   );",
+    "raw_url": "https://github.com/coder/coder/raw/7dabbe3ca6f961143c7f876ca8ee53e9fe332e41/site%2Fsrc%2Fpages%2FUserSettingsPage%2FSSHKeysPage%2FSSHKeysPage.tsx",
+    "sha": "a2222262433ca94bd897f2581951f9222e7286a3",
+    "status": "modified"
+  },
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/7dabbe3ca6f961143c7f876ca8ee53e9fe332e41/site%2Fsrc%2Fpages%2FUserSettingsPage%2FSSHKeysPage%2FSSHKeysPageView.stories.tsx",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FUserSettingsPage%2FSSHKeysPage%2FSSHKeysPageView.stories.tsx?ref=7dabbe3ca6f961143c7f876ca8ee53e9fe332e41",
+    "deletions": 8,
+    "filename": "site/src/pages/UserSettingsPage/SSHKeysPage/SSHKeysPageView.stories.tsx",
+    "patch": "@@ -35,11 +35,3 @@ export const WithGetSSHKeyError: Story = {\n     }),\n   },\n };\n-\n-export const WithRegenerateSSHKeyError: Story = {\n-  args: {\n-    regenerateSSHKeyError: mockApiError({\n-      message: \"Failed to regenerate SSH key\",\n-    }),\n-  },\n-};",
+    "raw_url": "https://github.com/coder/coder/raw/7dabbe3ca6f961143c7f876ca8ee53e9fe332e41/site%2Fsrc%2Fpages%2FUserSettingsPage%2FSSHKeysPage%2FSSHKeysPageView.stories.tsx",
+    "sha": "1986c7ef0cbdd26a4ec9400fbb39e4fe269de668",
+    "status": "modified"
+  },
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/7dabbe3ca6f961143c7f876ca8ee53e9fe332e41/site%2Fsrc%2Fpages%2FUserSettingsPage%2FSSHKeysPage%2FSSHKeysPageView.tsx",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fsrc%2Fpages%2FUserSettingsPage%2FSSHKeysPage%2FSSHKeysPageView.tsx?ref=7dabbe3ca6f961143c7f876ca8ee53e9fe332e41",
+    "deletions": 5,
+    "filename": "site/src/pages/UserSettingsPage/SSHKeysPage/SSHKeysPageView.tsx",
+    "patch": "@@ -11,15 +11,13 @@ import { ErrorAlert } from \"components/Alert/ErrorAlert\";\n export interface SSHKeysPageViewProps {\n   isLoading: boolean;\n   getSSHKeyError?: unknown;\n-  regenerateSSHKeyError?: unknown;\n   sshKey?: GitSSHKey;\n   onRegenerateClick: () => void;\n }\n \n export const SSHKeysPageView: FC<PropsWithChildren<SSHKeysPageViewProps>> = ({\n   isLoading,\n   getSSHKeyError,\n-  regenerateSSHKeyError,\n   sshKey,\n   onRegenerateClick,\n }) => {\n@@ -38,9 +36,7 @@ export const SSHKeysPageView: FC<PropsWithChildren<SSHKeysPageViewProps>> = ({\n       {/* Regenerating the key is not an option if getSSHKey fails.\n         Only one of the error messages will exist at a single time */}\n       {Boolean(getSSHKeyError) && <ErrorAlert error={getSSHKeyError} />}\n-      {Boolean(regenerateSSHKeyError) && (\n-        <ErrorAlert error={regenerateSSHKeyError} dismissible />\n-      )}\n+\n       {sshKey && (\n         <>\n           <p",
+    "raw_url": "https://github.com/coder/coder/raw/7dabbe3ca6f961143c7f876ca8ee53e9fe332e41/site%2Fsrc%2Fpages%2FUserSettingsPage%2FSSHKeysPage%2FSSHKeysPageView.tsx",
+    "sha": "a371d487a453bc676105e65ea6052d6edd008f3d",
+    "status": "modified"
+  }
+]

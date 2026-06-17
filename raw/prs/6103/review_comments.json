@@ -1,0 +1,141 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/6103#discussion_r1100192183"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/6103"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1100192183"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "```suggestion\r\n\t\tctx, cancel := context.WithTimeout(ctx, testutil.WaitSuperLong)\r\n```",
+    "commit_id": "41178ed74d549f3b665d6340d8d6bf9994e3d89d",
+    "created_at": "2023-02-08T14:10:33Z",
+    "diff_hunk": "@@ -135,14 +136,20 @@ func TestServerCreateAdminUser(t *testing.T) {\n \t\t\terrC <- err\n \t\t}()\n \n-\t\tpty.ExpectMatch(\"Creating user...\")\n-\t\tpty.ExpectMatch(\"Generating user SSH key...\")\n-\t\tpty.ExpectMatch(fmt.Sprintf(\"Adding user to organization %q (%s) as admin...\", org1Name, org1ID.String()))\n-\t\tpty.ExpectMatch(fmt.Sprintf(\"Adding user to organization %q (%s) as admin...\", org2Name, org2ID.String()))\n-\t\tpty.ExpectMatch(\"User created successfully.\")\n-\t\tpty.ExpectMatch(username)\n-\t\tpty.ExpectMatch(email)\n-\t\tpty.ExpectMatch(\"****\")\n+\t\t// Sometimes generating SSH keys takes a really long time if there isn't\n+\t\t// enough entropy. We don't want the tests to fail in these cases.\n+\t\t//nolint:gocritic\n+\t\tctx, cancel := context.WithTimeout(ctx, 1*time.Minute)",
+    "html_url": "https://github.com/coder/coder/pull/6103#discussion_r1100192183",
+    "id": 1100192183,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5Bk5m3",
+    "original_commit_id": "dfdce8b94f07acdf69ed58a1042c93845e2a12a3",
+    "original_line": 142,
+    "original_position": 23,
+    "original_start_line": null,
+    "path": "cli/server_createadminuser_test.go",
+    "position": 1,
+    "pull_request_review_id": 1289258501,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/6103",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1100192183/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2023-02-08T14:10:47Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1100192183",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/6103#discussion_r1100193985"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/6103"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1100193985"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "wait we have that? awesome",
+    "commit_id": "41178ed74d549f3b665d6340d8d6bf9994e3d89d",
+    "created_at": "2023-02-08T14:11:59Z",
+    "diff_hunk": "@@ -135,14 +136,20 @@ func TestServerCreateAdminUser(t *testing.T) {\n \t\t\terrC <- err\n \t\t}()\n \n-\t\tpty.ExpectMatch(\"Creating user...\")\n-\t\tpty.ExpectMatch(\"Generating user SSH key...\")\n-\t\tpty.ExpectMatch(fmt.Sprintf(\"Adding user to organization %q (%s) as admin...\", org1Name, org1ID.String()))\n-\t\tpty.ExpectMatch(fmt.Sprintf(\"Adding user to organization %q (%s) as admin...\", org2Name, org2ID.String()))\n-\t\tpty.ExpectMatch(\"User created successfully.\")\n-\t\tpty.ExpectMatch(username)\n-\t\tpty.ExpectMatch(email)\n-\t\tpty.ExpectMatch(\"****\")\n+\t\t// Sometimes generating SSH keys takes a really long time if there isn't\n+\t\t// enough entropy. We don't want the tests to fail in these cases.\n+\t\t//nolint:gocritic\n+\t\tctx, cancel := context.WithTimeout(ctx, 1*time.Minute)",
+    "html_url": "https://github.com/coder/coder/pull/6103#discussion_r1100193985",
+    "id": 1100193985,
+    "in_reply_to_id": 1100192183,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5Bk6DB",
+    "original_commit_id": "dfdce8b94f07acdf69ed58a1042c93845e2a12a3",
+    "original_line": 142,
+    "original_position": 23,
+    "original_start_line": null,
+    "path": "cli/server_createadminuser_test.go",
+    "position": 1,
+    "pull_request_review_id": 1289261366,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/6103",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 1,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1100193985/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2023-02-08T14:11:59Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1100193985",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  }
+]

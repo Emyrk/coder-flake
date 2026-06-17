@@ -1,0 +1,82 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/20808#pullrequestreview-3478058399"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/20808"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "I think a better solution might be to remove this logic all together. stories are all snapshot tests, so we already know that the names are present and in the right order because they're in the screenshot. if this logic is flakey, then lets just rely on the snapshot instead.",
+    "commit_id": "0bb3de17efa0fa57c89b37e2d61bc2adb9a629b6",
+    "html_url": "https://github.com/coder/coder/pull/20808#pullrequestreview-3478058399",
+    "id": 3478058399,
+    "node_id": "PRR_kwDOGkVX1s7PTvWf",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/20808",
+    "state": "COMMENTED",
+    "submitted_at": "2025-11-18T14:15:14Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/418348?u=fc5c0d201442aa2342de93feabb308cf51b9555c&v=4",
+      "events_url": "https://api.github.com/users/aslilac/events{/privacy}",
+      "followers_url": "https://api.github.com/users/aslilac/followers",
+      "following_url": "https://api.github.com/users/aslilac/following{/other_user}",
+      "gists_url": "https://api.github.com/users/aslilac/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/aslilac",
+      "id": 418348,
+      "login": "aslilac",
+      "node_id": "MDQ6VXNlcjQxODM0OA==",
+      "organizations_url": "https://api.github.com/users/aslilac/orgs",
+      "received_events_url": "https://api.github.com/users/aslilac/received_events",
+      "repos_url": "https://api.github.com/users/aslilac/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/aslilac/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/aslilac/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/aslilac",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/20808#pullrequestreview-3484012671"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/20808"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "thank you!",
+    "commit_id": "7456fdea10d13d860206f44620476452066e0a7e",
+    "html_url": "https://github.com/coder/coder/pull/20808#pullrequestreview-3484012671",
+    "id": 3484012671,
+    "node_id": "PRR_kwDOGkVX1s7PqdB_",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/20808",
+    "state": "APPROVED",
+    "submitted_at": "2025-11-19T17:44:52Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/418348?u=fc5c0d201442aa2342de93feabb308cf51b9555c&v=4",
+      "events_url": "https://api.github.com/users/aslilac/events{/privacy}",
+      "followers_url": "https://api.github.com/users/aslilac/followers",
+      "following_url": "https://api.github.com/users/aslilac/following{/other_user}",
+      "gists_url": "https://api.github.com/users/aslilac/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/aslilac",
+      "id": 418348,
+      "login": "aslilac",
+      "node_id": "MDQ6VXNlcjQxODM0OA==",
+      "organizations_url": "https://api.github.com/users/aslilac/orgs",
+      "received_events_url": "https://api.github.com/users/aslilac/received_events",
+      "repos_url": "https://api.github.com/users/aslilac/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/aslilac/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/aslilac/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/aslilac",
+      "user_view_type": "public"
+    }
+  }
+]

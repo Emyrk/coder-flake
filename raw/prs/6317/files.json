@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 26,
+    "blob_url": "https://github.com/coder/coder/blob/1e815e8ec14d5effefaa89b941e16a61b6132cc7/cli%2Ftemplatepull_test.go",
+    "changes": 41,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Ftemplatepull_test.go?ref=1e815e8ec14d5effefaa89b941e16a61b6132cc7",
+    "deletions": 15,
+    "filename": "cli/templatepull_test.go",
+    "patch": "@@ -3,14 +3,14 @@ package cli_test\n import (\n \t\"bytes\"\n \t\"context\"\n-\t\"io\"\n+\t\"crypto/sha256\"\n+\t\"encoding/hex\"\n \t\"os\"\n \t\"path/filepath\"\n \t\"testing\"\n \n \t\"github.com/codeclysm/extract\"\n \t\"github.com/google/uuid\"\n-\t\"github.com/ory/dockertest/v3/docker/pkg/archive\"\n \t\"github.com/stretchr/testify/require\"\n \n \t\"github.com/coder/coder/cli/clitest\"\n@@ -20,6 +20,26 @@ import (\n \t\"github.com/coder/coder/pty/ptytest\"\n )\n \n+// dirSum calculates a checksum of the files in a directory.\n+func dirSum(t *testing.T, dir string) string {\n+\tents, err := os.ReadDir(dir)\n+\trequire.NoError(t, err)\n+\tsum := sha256.New()\n+\tfor _, e := range ents {\n+\t\tpath := filepath.Join(dir, e.Name())\n+\n+\t\tstat, err := os.Stat(path)\n+\t\trequire.NoError(t, err)\n+\n+\t\tbyt, err := os.ReadFile(\n+\t\t\tpath,\n+\t\t)\n+\t\trequire.NoError(t, err, \"mode: %+v\", stat.Mode())\n+\t\t_, _ = sum.Write(byt)\n+\t}\n+\treturn hex.EncodeToString(sum.Sum(nil))\n+}\n+\n func TestTemplatePull(t *testing.T) {\n \tt.Parallel()\n \n@@ -73,7 +93,6 @@ func TestTemplatePull(t *testing.T) {\n \t// and writes it to the correct directory.\n \tt.Run(\"ToDir\", func(t *testing.T) {\n \t\tt.Parallel()\n-\t\tt.Skip(\"FLAKE: @ammario to fix imminently\")\n \n \t\tclient := coderdtest.New(t, &coderdtest.Options{IncludeProvisionerDaemon: true})\n \t\tuser := coderdtest.CreateFirstUser(t, client)\n@@ -120,18 +139,10 @@ func TestTemplatePull(t *testing.T) {\n \n \t\trequire.NoError(t, <-errChan)\n \n-\t\texpectedTarRd, err := archive.Tar(expectedDest, archive.Uncompressed)\n-\t\trequire.NoError(t, err)\n-\t\texpectedTar, err := io.ReadAll(expectedTarRd)\n-\t\trequire.NoError(t, err)\n-\n-\t\tactualTarRd, err := archive.Tar(actualDest, archive.Uncompressed)\n-\t\trequire.NoError(t, err)\n-\n-\t\tactualTar, err := io.ReadAll(actualTarRd)\n-\t\trequire.NoError(t, err)\n-\n-\t\trequire.True(t, bytes.Equal(expectedTar, actualTar), \"tar files differ\")\n+\t\trequire.Equal(t,\n+\t\t\tdirSum(t, expectedDest),\n+\t\t\tdirSum(t, actualDest),\n+\t\t)\n \t})\n \n \t// FolderConflict tests that 'templates pull' fails when a folder with has",
+    "raw_url": "https://github.com/coder/coder/raw/1e815e8ec14d5effefaa89b941e16a61b6132cc7/cli%2Ftemplatepull_test.go",
+    "sha": "1fe1631d2328b3c1c7f4ffb0542797a4905d39f4",
+    "status": "modified"
+  },
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/1e815e8ec14d5effefaa89b941e16a61b6132cc7/provisioner%2Fecho%2Fserve.go",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/provisioner%2Fecho%2Fserve.go?ref=1e815e8ec14d5effefaa89b941e16a61b6132cc7",
+    "deletions": 0,
+    "filename": "provisioner/echo/serve.go",
+    "patch": "@@ -225,6 +225,7 @@ func Tar(responses *Responses) ([]byte, error) {\n \t\terr = writer.WriteHeader(&tar.Header{\n \t\t\tName: fmt.Sprintf(\"%d.provision.apply.protobuf\", index),\n \t\t\tSize: int64(len(data)),\n+\t\t\tMode: 0o644,\n \t\t})\n \t\tif err != nil {\n \t\t\treturn nil, err\n@@ -242,6 +243,7 @@ func Tar(responses *Responses) ([]byte, error) {\n \t\terr = writer.WriteHeader(&tar.Header{\n \t\t\tName: fmt.Sprintf(\"%d.provision.plan.protobuf\", index),\n \t\t\tSize: int64(len(data)),\n+\t\t\tMode: 0o644,\n \t\t})\n \t\tif err != nil {\n \t\t\treturn nil, err",
+    "raw_url": "https://github.com/coder/coder/raw/1e815e8ec14d5effefaa89b941e16a61b6132cc7/provisioner%2Fecho%2Fserve.go",
+    "sha": "f9c0a221c10bdb2f3dfeac4734e8b029a11b69fe",
+    "status": "modified"
+  }
+]

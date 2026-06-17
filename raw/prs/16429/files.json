@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/7c8626f573e0d3aa75adf8278e6a5879beee2daf/flake.nix",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=7c8626f573e0d3aa75adf8278e6a5879beee2daf",
+    "deletions": 0,
+    "filename": "flake.nix",
+    "patch": "@@ -113,6 +113,7 @@\n             (lib.optionalDrvAttr stdenv.isLinux glibcLocales)\n             gnumake\n             gnused\n+            gnugrep\n             go_1_22\n             go-migrate\n             (pinnedPkgs.golangci-lint)",
+    "raw_url": "https://github.com/coder/coder/raw/7c8626f573e0d3aa75adf8278e6a5879beee2daf/flake.nix",
+    "sha": "e9bf93f53c13813565c65cd3cf0ac2d3da06190b",
+    "status": "modified"
+  }
+]

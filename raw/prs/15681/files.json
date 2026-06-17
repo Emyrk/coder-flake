@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/8a309d1b03dea69340a5db9ff96b8702d9dfb494/agent%2Fagentexec%2Fcli_linux_test.go",
+    "changes": 7,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagentexec%2Fcli_linux_test.go?ref=8a309d1b03dea69340a5db9ff96b8702d9dfb494",
+    "deletions": 6,
+    "filename": "agent/agentexec/cli_linux_test.go",
+    "patch": "@@ -22,12 +22,9 @@ import (\n \t\"github.com/coder/coder/v2/testutil\"\n )\n \n+//nolint:paralleltest // This test is sensitive to environment variables\n func TestCLI(t *testing.T) {\n-\tt.Parallel()\n-\n \tt.Run(\"OK\", func(t *testing.T) {\n-\t\tt.Parallel()\n-\n \t\tctx := testutil.Context(t, testutil.WaitMedium)\n \t\tcmd, path := cmd(ctx, t, 123, 12)\n \t\terr := cmd.Start()\n@@ -40,8 +37,6 @@ func TestCLI(t *testing.T) {\n \t})\n \n \tt.Run(\"Defaults\", func(t *testing.T) {\n-\t\tt.Parallel()\n-\n \t\tctx := testutil.Context(t, testutil.WaitMedium)\n \t\tcmd, path := cmd(ctx, t, 0, 0)\n \t\terr := cmd.Start()",
+    "raw_url": "https://github.com/coder/coder/raw/8a309d1b03dea69340a5db9ff96b8702d9dfb494/agent%2Fagentexec%2Fcli_linux_test.go",
+    "sha": "aef43a3b6b23b1c0b2041b6c114daf7d57358004",
+    "status": "modified"
+  },
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/8a309d1b03dea69340a5db9ff96b8702d9dfb494/agent%2Fagentexec%2Fexec_test.go",
+    "changes": 10,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/agent%2Fagentexec%2Fexec_test.go?ref=8a309d1b03dea69340a5db9ff96b8702d9dfb494",
+    "deletions": 5,
+    "filename": "agent/agentexec/exec_test.go",
+    "patch": "@@ -36,7 +36,7 @@ func TestExec(t *testing.T) {\n \t\t//nolint:paralleltest // we need to test environment variables\n \t\tt.Run(\"Disabled\", func(t *testing.T) {\n \t\t\tif runtime.GOOS != \"linux\" {\n-\t\t\t\tt.Skip(\"skipping on linux\")\n+\t\t\t\tt.Skip(\"skipping on non-linux\")\n \t\t\t}\n \n \t\t\tcmd, err := agentexec.CommandContext(context.Background(), \"sh\", \"-c\", \"sleep\")\n@@ -52,7 +52,7 @@ func TestExec(t *testing.T) {\n \t\t\tt.Setenv(agentexec.EnvProcPrioMgmt, \"hello\")\n \n \t\t\tif runtime.GOOS != \"linux\" {\n-\t\t\t\tt.Skip(\"skipping on linux\")\n+\t\t\t\tt.Skip(\"skipping on non-linux\")\n \t\t\t}\n \n \t\t\texecutable, err := os.Executable()\n@@ -69,7 +69,7 @@ func TestExec(t *testing.T) {\n \t\t\tt.Setenv(agentexec.EnvProcNiceScore, \"10\")\n \n \t\t\tif runtime.GOOS != \"linux\" {\n-\t\t\t\tt.Skip(\"skipping on linux\")\n+\t\t\t\tt.Skip(\"skipping on non-linux\")\n \t\t\t}\n \n \t\t\texecutable, err := os.Executable()\n@@ -86,7 +86,7 @@ func TestExec(t *testing.T) {\n \t\t\tt.Setenv(agentexec.EnvProcOOMScore, \"123\")\n \n \t\t\tif runtime.GOOS != \"linux\" {\n-\t\t\t\tt.Skip(\"skipping on linux\")\n+\t\t\t\tt.Skip(\"skipping on non-linux\")\n \t\t\t}\n \n \t\t\texecutable, err := os.Executable()\n@@ -104,7 +104,7 @@ func TestExec(t *testing.T) {\n \t\t\tt.Setenv(agentexec.EnvProcNiceScore, \"14\")\n \n \t\t\tif runtime.GOOS != \"linux\" {\n-\t\t\t\tt.Skip(\"skipping on linux\")\n+\t\t\t\tt.Skip(\"skipping on non-linux\")\n \t\t\t}\n \n \t\t\texecutable, err := os.Executable()",
+    "raw_url": "https://github.com/coder/coder/raw/8a309d1b03dea69340a5db9ff96b8702d9dfb494/agent%2Fagentexec%2Fexec_test.go",
+    "sha": "cf25cca473fe95ee1f5a8f000edf73a275437e35",
+    "status": "modified"
+  }
+]

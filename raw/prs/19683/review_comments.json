@@ -1,0 +1,417 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19683#discussion_r2318353515"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19683"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2318353515"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "the `case <-c.done:` arm of this select is unhittable because a waitgroup on `run()` prevents closing the channel until this function exits.  Without that case, this Ticker/select is now the standard form covered by `c.clock.TickerFunc`. This allows you to force a tick just by advancing the clock, without the need for traps on `Reset`.\n\nHowever, you still need to set a trap on the call to `TickerFunc` itself, lest advancing the clock race with starting the ticker and leading to a flaky test.",
+    "commit_id": "5df66d7e7658c14e704e12e20ba0a1cd36833343",
+    "created_at": "2025-09-03T09:21:49Z",
+    "diff_hunk": "@@ -198,12 +198,18 @@ func (c *Cache) run(ctx context.Context, name string, interval time.Duration, re\n \t\t\t\tlogger.Error(ctx, \"refresh metrics failed\", slog.Error(err))\n \t\t\t\tcontinue\n \t\t\t}\n-\t\t\tlogger.Debug(ctx, \"metrics refreshed\", slog.F(\"took\", time.Since(start)))\n+\t\t\tlogger.Debug(ctx, \"metrics refreshed\", slog.F(\"took\", c.clock.Since(start)))\n \t\t\tbreak\n \t\t}\n+\t}\n \n+\tdoRefresh(ctx, c.clock.Now())\n+\n+\tfor {\n \t\tselect {\n-\t\tcase <-ticker.C:\n+\t\tcase tick := <-ticker.C:\n+\t\t\tticker.Stop()\n+\t\t\tdoRefresh(ctx, tick)",
+    "html_url": "https://github.com/coder/coder/pull/19683#discussion_r2318353515",
+    "id": 2318353515,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6KL0Rr",
+    "original_commit_id": "1c19d4ff5618c923a9fd0366d171b5ba593df97e",
+    "original_line": 212,
+    "original_position": 33,
+    "original_start_line": null,
+    "path": "coderd/metricscache/metricscache.go",
+    "position": 1,
+    "pull_request_review_id": 3179767029,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19683",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2318353515/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-09-03T09:24:33Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2318353515",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19683#discussion_r2318357666"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19683"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2318357666"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Setting of the traps races with the function you are trying to test. You need to set your traps _before_ you call the function under test.",
+    "commit_id": "5df66d7e7658c14e704e12e20ba0a1cd36833343",
+    "created_at": "2025-09-03T09:23:22Z",
+    "diff_hunk": "@@ -47,6 +47,27 @@ func newMetricsCache(t *testing.T, log slog.Logger, clock quartz.Clock, interval\n \treturn cache, db\n }\n \n+func awaitCacheRefresh(ctx context.Context, t *testing.T, clock *quartz.Mock) chan struct{} {\n+\tt.Helper()\n+\tch := make(chan struct{})\n+\ttrapNow := clock.Trap().Now()",
+    "html_url": "https://github.com/coder/coder/pull/19683#discussion_r2318357666",
+    "id": 2318357666,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6KL1Si",
+    "original_commit_id": "1c19d4ff5618c923a9fd0366d171b5ba593df97e",
+    "original_line": 53,
+    "original_position": 7,
+    "original_start_line": null,
+    "path": "coderd/metricscache/metricscache_test.go",
+    "position": 1,
+    "pull_request_review_id": 3179767029,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19683",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2318357666/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-09-03T09:24:33Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2318357666",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19683#discussion_r2321121779"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19683"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2321121779"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "This introduces a race where the `Close()` could come before we execute this code, which would complete even though a refresh is still running. The race might not be that hard to hit because you call `tickerFunc()` prior.",
+    "commit_id": "5df66d7e7658c14e704e12e20ba0a1cd36833343",
+    "created_at": "2025-09-04T07:31:20Z",
+    "diff_hunk": "@@ -181,40 +171,45 @@ func (c *Cache) refreshDeploymentStats(ctx context.Context) error {\n \n func (c *Cache) run(ctx context.Context, name string, interval time.Duration, refresh func(context.Context) error) {\n \tlogger := c.log.With(slog.F(\"name\", name), slog.F(\"interval\", interval))\n-\tticker := time.NewTicker(interval)\n-\tdefer ticker.Stop()\n \n-\tfor {\n+\ttickerFunc := func() error {\n+\t\tstart := c.clock.Now()\n \t\tfor r := retry.New(time.Millisecond*100, time.Minute); r.Wait(ctx); {\n-\t\t\tstart := time.Now()\n \t\t\terr := refresh(ctx)\n \t\t\tif err != nil {\n \t\t\t\tif ctx.Err() != nil {\n-\t\t\t\t\treturn\n+\t\t\t\t\treturn nil\n \t\t\t\t}\n \t\t\t\tif xerrors.Is(err, sql.ErrNoRows) {\n \t\t\t\t\tbreak\n \t\t\t\t}\n \t\t\t\tlogger.Error(ctx, \"refresh metrics failed\", slog.Error(err))\n \t\t\t\tcontinue\n \t\t\t}\n-\t\t\tlogger.Debug(ctx, \"metrics refreshed\", slog.F(\"took\", time.Since(start)))\n+\t\t\tlogger.Debug(ctx, \"metrics refreshed\", slog.F(\"took\", c.clock.Since(start)))\n \t\t\tbreak\n \t\t}\n-\n-\t\tselect {\n-\t\tcase <-ticker.C:\n-\t\tcase <-c.done:\n-\t\t\treturn\n-\t\tcase <-ctx.Done():\n-\t\t\treturn\n-\t\t}\n+\t\treturn nil\n \t}\n+\n+\t// Call once immediately before starting ticker\n+\t_ = tickerFunc()\n+\n+\ttkr := c.clock.TickerFunc(ctx, interval, tickerFunc, \"metricscache\", name)\n+\tc.tickersMu.Lock()\n+\tc.tickers = append(c.tickers, tkr)\n+\tc.tickersMu.Unlock()",
+    "html_url": "https://github.com/coder/coder/pull/19683#discussion_r2321121779",
+    "id": 2321121779,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6KWYHz",
+    "original_commit_id": "7246650a8489c3ba9f55081144c2344c90e0fe64",
+    "original_line": 201,
+    "original_position": 95,
+    "original_start_line": null,
+    "path": "coderd/metricscache/metricscache.go",
+    "position": 1,
+    "pull_request_review_id": 3183839108,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19683",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2321121779/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-09-04T07:34:45Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2321121779",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19683#discussion_r2321128847"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19683"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2321128847"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "\ud83e\udd14 ",
+    "commit_id": "5df66d7e7658c14e704e12e20ba0a1cd36833343",
+    "created_at": "2025-09-04T07:34:41Z",
+    "diff_hunk": "@@ -459,7 +459,7 @@ func New(options *Options) *API {\n \tmetricsCache := metricscache.New(\n \t\toptions.Database,\n \t\toptions.Logger.Named(\"metrics_cache\"),\n-\t\toptions.Clock,\n+\t\tquartz.NewReal(),",
+    "html_url": "https://github.com/coder/coder/pull/19683#discussion_r2321128847",
+    "id": 2321128847,
+    "line": 462,
+    "node_id": "PRRC_kwDOGkVX1s6KWZ2P",
+    "original_commit_id": "7246650a8489c3ba9f55081144c2344c90e0fe64",
+    "original_line": 462,
+    "original_position": 5,
+    "original_start_line": null,
+    "path": "coderd/coderd.go",
+    "position": 5,
+    "pull_request_review_id": 3183839108,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19683",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2321128847/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-09-04T07:34:45Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2321128847",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19683#discussion_r2321271564"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19683"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2321271564"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "We discussed this and are 'happy' to keep it",
+    "commit_id": "5df66d7e7658c14e704e12e20ba0a1cd36833343",
+    "created_at": "2025-09-04T08:31:10Z",
+    "diff_hunk": "@@ -459,7 +459,7 @@ func New(options *Options) *API {\n \tmetricsCache := metricscache.New(\n \t\toptions.Database,\n \t\toptions.Logger.Named(\"metrics_cache\"),\n-\t\toptions.Clock,\n+\t\tquartz.NewReal(),",
+    "html_url": "https://github.com/coder/coder/pull/19683#discussion_r2321271564",
+    "id": 2321271564,
+    "in_reply_to_id": 2321128847,
+    "line": 462,
+    "node_id": "PRRC_kwDOGkVX1s6KW8sM",
+    "original_commit_id": "7246650a8489c3ba9f55081144c2344c90e0fe64",
+    "original_line": 462,
+    "original_position": 5,
+    "original_start_line": null,
+    "path": "coderd/coderd.go",
+    "position": 5,
+    "pull_request_review_id": 3184037825,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19683",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2321271564/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-09-04T08:31:27Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2321271564",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/39577870?v=4",
+      "events_url": "https://api.github.com/users/ethanndickson/events{/privacy}",
+      "followers_url": "https://api.github.com/users/ethanndickson/followers",
+      "following_url": "https://api.github.com/users/ethanndickson/following{/other_user}",
+      "gists_url": "https://api.github.com/users/ethanndickson/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/ethanndickson",
+      "id": 39577870,
+      "login": "ethanndickson",
+      "node_id": "MDQ6VXNlcjM5NTc3ODcw",
+      "organizations_url": "https://api.github.com/users/ethanndickson/orgs",
+      "received_events_url": "https://api.github.com/users/ethanndickson/received_events",
+      "repos_url": "https://api.github.com/users/ethanndickson/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/ethanndickson/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/ethanndickson/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/ethanndickson",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/19683#discussion_r2321673391"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/19683"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2321673391"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "You only need to trigger one tick in each of these. Both the template build times and deployment stats have the same interval, so both get triggered on each tick.\n\nAlso, I think it's more understandable and concise to write:\n\n```\nclock.Advance(time.Minute).MustWait(ctx)\n```",
+    "commit_id": "5df66d7e7658c14e704e12e20ba0a1cd36833343",
+    "created_at": "2025-09-04T11:06:57Z",
+    "diff_hunk": "@@ -67,38 +72,47 @@ func TestCache_TemplateWorkspaceOwners(t *testing.T) {\n \t\tProvisioner:    database.ProvisionerTypeEcho,\n \t\tCreatedBy:      user1.ID,\n \t})\n-\trequire.Eventuallyf(t, func() bool {\n-\t\tcount, ok := cache.TemplateWorkspaceOwners(template.ID)\n-\t\treturn ok && count == 0\n-\t}, testutil.WaitShort, testutil.IntervalMedium,\n-\t\t\"TemplateWorkspaceOwners never populated 0 owners\",\n-\t)\n+\n+\t// Wait for both ticker functions to be created (template build times and deployment stats)\n+\ttrapTickerFunc.MustWait(ctx).MustRelease(ctx)\n+\ttrapTickerFunc.MustWait(ctx).MustRelease(ctx)\n+\n+\t_, wait := clock.AdvanceNext()\n+\twait.MustWait(ctx)\n+\t_, wait = clock.AdvanceNext()\n+\twait.MustWait(ctx)",
+    "html_url": "https://github.com/coder/coder/pull/19683#discussion_r2321673391",
+    "id": 2321673391,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s6KYeyv",
+    "original_commit_id": "2f71aaafb79279f33e07734afc135c0c68857122",
+    "original_line": 83,
+    "original_position": 46,
+    "original_start_line": null,
+    "path": "coderd/metricscache/metricscache_test.go",
+    "position": 1,
+    "pull_request_review_id": 3184632373,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/19683",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2321673391/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-09-04T11:15:56Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2321673391",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 0,
+    "blob_url": "https://github.com/coder/coder/blob/02c6364052129623fa5469755690556018e2294b/flake.nix",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=02c6364052129623fa5469755690556018e2294b",
+    "deletions": 8,
+    "filename": "flake.nix",
+    "patch": "@@ -295,14 +295,6 @@\n               lib.optionalDrvAttr stdenv.isLinux \"${glibcLocales}/lib/locale/locale-archive\";\n \n             NODE_OPTIONS = \"--max-old-space-size=8192\";\n-            BIOME_BINARY =\n-              if pkgs.stdenv.isLinux then\n-                if pkgs.stdenv.hostPlatform.isAarch64 then\n-                  \"@biomejs/cli-linux-arm64-musl/biome\"\n-                else\n-                  \"@biomejs/cli-linux-x64-musl/biome\"\n-              else\n-                \"\";\n             GOPRIVATE = \"coder.com,cdr.dev,go.coder.com,github.com/cdr,github.com/coder\";\n           };\n         };",
+    "raw_url": "https://github.com/coder/coder/raw/02c6364052129623fa5469755690556018e2294b/flake.nix",
+    "sha": "e47b07877744c8809bb96e3c2ae89001192428c9",
+    "status": "modified"
+  }
+]

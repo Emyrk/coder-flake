@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/658f440b233a1240027ec0b04b997709c330ad98/coderd%2Ftemplates_test.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Ftemplates_test.go?ref=658f440b233a1240027ec0b04b997709c330ad98",
+    "deletions": 0,
+    "filename": "coderd/templates_test.go",
+    "patch": "@@ -166,6 +166,9 @@ func TestPatchTemplateMeta(t *testing.T) {\n \t\t\tMaxTTLMillis:               12 * time.Hour.Milliseconds(),\n \t\t\tMinAutostartIntervalMillis: time.Minute.Milliseconds(),\n \t\t}\n+\t\t// It is unfortunate we need to sleep, but the test can fail if the\n+\t\t// updatedAt is too close together.\n+\t\ttime.Sleep(time.Millisecond * 5)\n \t\tupdated, err := client.UpdateTemplateMeta(ctx, template.ID, req)\n \t\trequire.NoError(t, err)\n \t\tassert.Greater(t, updated.UpdatedAt, template.UpdatedAt)",
+    "raw_url": "https://github.com/coder/coder/raw/658f440b233a1240027ec0b04b997709c330ad98/coderd%2Ftemplates_test.go",
+    "sha": "0e50463c89dd406136576dd90dac12b1c6a0e1b9",
+    "status": "modified"
+  }
+]

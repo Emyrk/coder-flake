@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/581474c41911927c153b6e0a24603837b5e63b4e/coderd%2Fdatabase%2Fdbpurge%2Fdbpurge_test.go",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdatabase%2Fdbpurge%2Fdbpurge_test.go?ref=581474c41911927c153b6e0a24603837b5e63b4e",
+    "deletions": 0,
+    "filename": "coderd/database/dbpurge/dbpurge_test.go",
+    "patch": "@@ -45,6 +45,9 @@ func TestPurge(t *testing.T) {\n func TestDeleteOldWorkspaceAgentStats(t *testing.T) {\n \tt.Parallel()\n \n+\t// See: https://github.com/coder/coder/issues/13430\n+\tt.Skip()\n+\n \tdb, _ := dbtestutil.NewDB(t)\n \tlogger := slogtest.Make(t, &slogtest.Options{IgnoreErrors: true}).Leveled(slog.LevelDebug)\n ",
+    "raw_url": "https://github.com/coder/coder/raw/581474c41911927c153b6e0a24603837b5e63b4e/coderd%2Fdatabase%2Fdbpurge%2Fdbpurge_test.go",
+    "sha": "9b7a12fd590e6955d93b0eee92233363951721f2",
+    "status": "modified"
+  }
+]

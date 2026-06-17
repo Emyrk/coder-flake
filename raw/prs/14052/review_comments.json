@@ -1,0 +1,279 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14052#discussion_r1696512027"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14052"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1696512027"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "This secret is already available in Secrets. I assume that it has push/write access to the repo. We need to add/update a secret if it does not work.",
+    "commit_id": "c4cf7649423a7baa7762346f35ebe625ce6820f4",
+    "created_at": "2024-07-30T08:05:19Z",
+    "diff_hunk": "@@ -121,25 +121,30 @@ jobs:\n     needs: changes\n     if: needs.changes.outputs.gomod == 'true'\n     runs-on: ${{ github.repository_owner == 'coder' && 'depot-ubuntu-22.04-8' || 'ubuntu-latest' }}\n-    permissions:\n-      # Give the default GITHUB_TOKEN write permission to commit and push the changed files back to the repository.\n-      contents: write\n     steps:\n       - name: Checkout\n         uses: actions/checkout@v4\n         with:\n           fetch-depth: 1\n+          token: ${{ secrets.CDRCI_GITHUB_TOKEN }}",
+    "html_url": "https://github.com/coder/coder/pull/14052#discussion_r1696512027",
+    "id": 1696512027,
+    "line": 130,
+    "node_id": "PRRC_kwDOGkVX1s5lHrgb",
+    "original_commit_id": "295078efda2c7d60fcc0823d4c0c568cb707c5fc",
+    "original_line": 129,
+    "original_position": 12,
+    "original_start_line": null,
+    "path": ".github/workflows/ci.yaml",
+    "position": 14,
+    "pull_request_review_id": 2206955358,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14052",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1696512027/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-07-30T08:05:19Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1696512027",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/10648092?v=4",
+      "events_url": "https://api.github.com/users/matifali/events{/privacy}",
+      "followers_url": "https://api.github.com/users/matifali/followers",
+      "following_url": "https://api.github.com/users/matifali/following{/other_user}",
+      "gists_url": "https://api.github.com/users/matifali/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/matifali",
+      "id": 10648092,
+      "login": "matifali",
+      "node_id": "MDQ6VXNlcjEwNjQ4MDky",
+      "organizations_url": "https://api.github.com/users/matifali/orgs",
+      "received_events_url": "https://api.github.com/users/matifali/received_events",
+      "repos_url": "https://api.github.com/users/matifali/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/matifali/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/matifali/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/matifali",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14052#discussion_r1698539299"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14052"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1698539299"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "```suggestion\r\n      # auto update flake for dependabot\r\n```",
+    "commit_id": "c4cf7649423a7baa7762346f35ebe625ce6820f4",
+    "created_at": "2024-07-31T13:45:18Z",
+    "diff_hunk": "@@ -121,26 +121,31 @@ jobs:\n     needs: changes\n     if: needs.changes.outputs.gomod == 'true'\n     runs-on: ${{ github.repository_owner == 'coder' && 'depot-ubuntu-22.04-8' || 'ubuntu-latest' }}\n-    permissions:\n-      # Give the default GITHUB_TOKEN write permission to commit and push the changed files back to the repository.\n-      contents: write\n     steps:\n       - name: Checkout\n         uses: actions/checkout@v4\n         with:\n           fetch-depth: 1\n+          token: ${{ secrets.CDRCI_GITHUB_TOKEN }}\n \n       - name: Setup Go\n         uses: ./.github/actions/setup-go\n \n       - name: Update Nix Flake SRI Hash\n         run: ./scripts/update-flake.sh\n \n+        # auto update flake for dependabot",
+    "html_url": "https://github.com/coder/coder/pull/14052#discussion_r1698539299",
+    "id": 1698539299,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5lPacj",
+    "original_commit_id": "c15cf47b9b1a6a12abc0f1b9d8ab55d40b825f88",
+    "original_line": 137,
+    "original_position": 20,
+    "original_start_line": null,
+    "path": ".github/workflows/ci.yaml",
+    "position": 1,
+    "pull_request_review_id": 2210219668,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14052",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1698539299/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-07-31T13:46:56Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1698539299",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14052#discussion_r1698539500"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14052"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1698539500"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "```suggestion\r\n      # require everyone else to update it themselves\r\n```",
+    "commit_id": "c4cf7649423a7baa7762346f35ebe625ce6820f4",
+    "created_at": "2024-07-31T13:45:26Z",
+    "diff_hunk": "@@ -121,26 +121,31 @@ jobs:\n     needs: changes\n     if: needs.changes.outputs.gomod == 'true'\n     runs-on: ${{ github.repository_owner == 'coder' && 'depot-ubuntu-22.04-8' || 'ubuntu-latest' }}\n-    permissions:\n-      # Give the default GITHUB_TOKEN write permission to commit and push the changed files back to the repository.\n-      contents: write\n     steps:\n       - name: Checkout\n         uses: actions/checkout@v4\n         with:\n           fetch-depth: 1\n+          token: ${{ secrets.CDRCI_GITHUB_TOKEN }}\n \n       - name: Setup Go\n         uses: ./.github/actions/setup-go\n \n       - name: Update Nix Flake SRI Hash\n         run: ./scripts/update-flake.sh\n \n+        # auto update flake for dependabot\n       - uses: stefanzweifel/git-auto-commit-action@v5\n+        if: github.actor == 'dependabot[bot]'\n         with:\n           # Allows dependabot to still rebase!\n           commit_message: \"[dependabot skip] Update Nix Flake SRI Hash\"\n \n+        # check for other PRs",
+    "html_url": "https://github.com/coder/coder/pull/14052#discussion_r1698539500",
+    "id": 1698539500,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5lPafs",
+    "original_commit_id": "c15cf47b9b1a6a12abc0f1b9d8ab55d40b825f88",
+    "original_line": 144,
+    "original_position": 27,
+    "original_start_line": null,
+    "path": ".github/workflows/ci.yaml",
+    "position": 1,
+    "pull_request_review_id": 2210219668,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14052",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1698539500/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-07-31T13:46:56Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1698539500",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/14052#discussion_r1698542046"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/14052"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1698542046"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "This is a PAT for the cdrci account with write perms, so it should be fine writing to PRs on this repo.",
+    "commit_id": "c4cf7649423a7baa7762346f35ebe625ce6820f4",
+    "created_at": "2024-07-31T13:47:01Z",
+    "diff_hunk": "@@ -121,25 +121,30 @@ jobs:\n     needs: changes\n     if: needs.changes.outputs.gomod == 'true'\n     runs-on: ${{ github.repository_owner == 'coder' && 'depot-ubuntu-22.04-8' || 'ubuntu-latest' }}\n-    permissions:\n-      # Give the default GITHUB_TOKEN write permission to commit and push the changed files back to the repository.\n-      contents: write\n     steps:\n       - name: Checkout\n         uses: actions/checkout@v4\n         with:\n           fetch-depth: 1\n+          token: ${{ secrets.CDRCI_GITHUB_TOKEN }}",
+    "html_url": "https://github.com/coder/coder/pull/14052#discussion_r1698542046",
+    "id": 1698542046,
+    "in_reply_to_id": 1696512027,
+    "line": 130,
+    "node_id": "PRRC_kwDOGkVX1s5lPbHe",
+    "original_commit_id": "295078efda2c7d60fcc0823d4c0c568cb707c5fc",
+    "original_line": 129,
+    "original_position": 12,
+    "original_start_line": null,
+    "path": ".github/workflows/ci.yaml",
+    "position": 14,
+    "pull_request_review_id": 2210224774,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/14052",
+    "reactions": {
+      "+1": 1,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 1,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1698542046/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2024-07-31T13:47:02Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1698542046",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/11241812?v=4",
+      "events_url": "https://api.github.com/users/deansheather/events{/privacy}",
+      "followers_url": "https://api.github.com/users/deansheather/followers",
+      "following_url": "https://api.github.com/users/deansheather/following{/other_user}",
+      "gists_url": "https://api.github.com/users/deansheather/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/deansheather",
+      "id": 11241812,
+      "login": "deansheather",
+      "node_id": "MDQ6VXNlcjExMjQxODEy",
+      "organizations_url": "https://api.github.com/users/deansheather/orgs",
+      "received_events_url": "https://api.github.com/users/deansheather/received_events",
+      "repos_url": "https://api.github.com/users/deansheather/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/deansheather/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/deansheather/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/deansheather",
+      "user_view_type": "public"
+    }
+  }
+]

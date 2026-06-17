@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/aecf194a42ec0b9698b1288906ea9d0a76a81f0b/testutil%2Fduration.go",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/testutil%2Fduration.go?ref=aecf194a42ec0b9698b1288906ea9d0a76a81f0b",
+    "deletions": 3,
+    "filename": "testutil/duration.go",
+    "patch": "@@ -9,9 +9,9 @@ import (\n // Constants for timing out operations, usable for creating contexts\n // that timeout or in require.Eventually.\n const (\n-\tWaitShort     = 5 * time.Second\n-\tWaitMedium    = 10 * time.Second\n-\tWaitLong      = 15 * time.Second\n+\tWaitShort     = 10 * time.Second\n+\tWaitMedium    = 15 * time.Second\n+\tWaitLong      = 25 * time.Second\n \tWaitSuperLong = 60 * time.Second\n )\n ",
+    "raw_url": "https://github.com/coder/coder/raw/aecf194a42ec0b9698b1288906ea9d0a76a81f0b/testutil%2Fduration.go",
+    "sha": "44ae418eba74f139d0903d6c527e78c31784787d",
+    "status": "modified"
+  },
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/aecf194a42ec0b9698b1288906ea9d0a76a81f0b/testutil%2Fduration_windows.go",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/testutil%2Fduration_windows.go?ref=aecf194a42ec0b9698b1288906ea9d0a76a81f0b",
+    "deletions": 3,
+    "filename": "testutil/duration_windows.go",
+    "patch": "@@ -7,10 +7,10 @@ import \"time\"\n //\n // Windows durations are adjusted for slow CI workers.\n const (\n-\tWaitShort     = 10 * time.Second\n+\tWaitShort     = 15 * time.Second\n \tWaitMedium    = 20 * time.Second\n-\tWaitLong      = 30 * time.Second\n-\tWaitSuperLong = 60 * time.Second\n+\tWaitLong      = 35 * time.Second\n+\tWaitSuperLong = 120 * time.Second\n )\n \n // Constants for delaying repeated operations, e.g. in",
+    "raw_url": "https://github.com/coder/coder/raw/aecf194a42ec0b9698b1288906ea9d0a76a81f0b/testutil%2Fduration_windows.go",
+    "sha": "4c3b85e67131ccc461b17231cf29d47c1b9fc9c4",
+    "status": "modified"
+  }
+]

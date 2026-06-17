@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/8f46268aa1d8753147578fa57cd054c4e824f9bd/cli%2Fdelete_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fdelete_test.go?ref=8f46268aa1d8753147578fa57cd054c4e824f9bd",
+    "deletions": 0,
+    "filename": "cli/delete_test.go",
+    "patch": "@@ -184,6 +184,7 @@ func TestDelete(t *testing.T) {\n \t\tuser := coderdtest.CreateFirstUser(t, client)\n \t\ttemplateAdmin, _ := coderdtest.CreateAnotherUser(t, client, user.OrganizationID, rbac.RoleTemplateAdmin())\n \t\tversion := coderdtest.CreateTemplateVersion(t, templateAdmin, user.OrganizationID, nil)\n+\t\tcoderdtest.AwaitTemplateVersionJobCompleted(t, templateAdmin, version.ID)\n \t\ttemplate := coderdtest.CreateTemplate(t, templateAdmin, user.OrganizationID, version.ID)\n \t\tworkspace := coderdtest.CreateWorkspace(t, templateAdmin, template.ID)\n \t\tcoderdtest.AwaitWorkspaceBuildJobCompleted(t, templateAdmin, workspace.LatestBuild.ID)",
+    "raw_url": "https://github.com/coder/coder/raw/8f46268aa1d8753147578fa57cd054c4e824f9bd/cli%2Fdelete_test.go",
+    "sha": "1d4dc8dfb40ad95504226b66f883aaf8167d1509",
+    "status": "modified"
+  }
+]

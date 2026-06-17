@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 2,
+    "blob_url": "https://github.com/coder/coder/blob/09923daa57fbe465d4a00d59b1e8af500a3804aa/coderd%2Fdatabase%2Fdbfake%2Fdbfake.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdatabase%2Fdbfake%2Fdbfake.go?ref=09923daa57fbe465d4a00d59b1e8af500a3804aa",
+    "deletions": 2,
+    "filename": "coderd/database/dbfake/dbfake.go",
+    "patch": "@@ -173,7 +173,7 @@ func (b WorkspaceBuildBuilder) Do() WorkspaceResponse {\n \t\tFileID:         uuid.New(),\n \t\tType:           database.ProvisionerJobTypeWorkspaceBuild,\n \t\tInput:          payload,\n-\t\tTags:           nil,\n+\t\tTags:           map[string]string{},\n \t\tTraceMetadata:  pqtype.NullRawMessage{},\n \t})\n \trequire.NoError(b.t, err, \"insert job\")\n@@ -192,7 +192,7 @@ func (b WorkspaceBuildBuilder) Do() WorkspaceResponse {\n \t\t\t\t\tValid: true,\n \t\t\t\t},\n \t\t\t\tTypes: []database.ProvisionerType{database.ProvisionerTypeEcho},\n-\t\t\t\tTags:  nil,\n+\t\t\t\tTags:  []byte(`{\"scope\": \"organization\"}`),\n \t\t\t})\n \t\t\trequire.NoError(b.t, err, \"acquire starting job\")\n \t\t\tif j.ID == job.ID {",
+    "raw_url": "https://github.com/coder/coder/raw/09923daa57fbe465d4a00d59b1e8af500a3804aa/coderd%2Fdatabase%2Fdbfake%2Fdbfake.go",
+    "sha": "df0538b6262cd78f897f95191d86722fad215ed5",
+    "status": "modified"
+  }
+]

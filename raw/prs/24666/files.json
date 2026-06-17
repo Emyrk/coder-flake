@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/a70763de2301d4cb1512b55c516970710c946b76/coderd%2Fx%2Fchatd%2Fsubagent_context_internal_test.go",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fx%2Fchatd%2Fsubagent_context_internal_test.go?ref=a70763de2301d4cb1512b55c516970710c946b76",
+    "deletions": 0,
+    "filename": "coderd/x/chatd/subagent_context_internal_test.go",
+    "patch": "@@ -477,6 +477,12 @@ func TestSpawnComputerUseAgentInheritsContext(t *testing.T) {\n \tctx := chatdTestContext(t)\n \tparentChat := createParentChatWithInheritedContext(ctx, t, db, server)\n \tinsertEnabledAnthropicProvider(ctx, t, db, parentChat.OwnerID)\n+\t// The direct DB insert above bypasses the pubsub event that\n+\t// production uses to invalidate the provider cache. Explicitly\n+\t// invalidate here so the background processing goroutine does\n+\t// not serve a stale provider list (OpenAI only) that was cached\n+\t// before the Anthropic provider was inserted.\n+\tserver.configCache.InvalidateProviders()\n \n \ttools := server.subagentTools(ctx, func() database.Chat { return parentChat }, parentChat.LastModelConfigID)\n \ttool := findToolByName(tools, spawnAgentToolName)",
+    "raw_url": "https://github.com/coder/coder/raw/a70763de2301d4cb1512b55c516970710c946b76/coderd%2Fx%2Fchatd%2Fsubagent_context_internal_test.go",
+    "sha": "6d5a6e45132ded144beef15077e8b7a8b2dd7337",
+    "status": "modified"
+  }
+]

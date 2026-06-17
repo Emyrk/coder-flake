@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/3c319fc41872cbd70aa352d83ea61ed0e0f73682/cli%2Fexp_rpty_test.go",
+    "changes": 10,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fexp_rpty_test.go?ref=3c319fc41872cbd70aa352d83ea61ed0e0f73682",
+    "deletions": 5,
+    "filename": "cli/exp_rpty_test.go",
+    "patch": "@@ -87,6 +87,11 @@ func TestExpRpty(t *testing.T) {\n \t\t\trequire.NoError(t, err, \"Could not stop container\")\n \t\t})\n \n+\t\t_ = agenttest.New(t, client.URL, agentToken, func(o *agent.Options) {\n+\t\t\to.ExperimentalContainersEnabled = true\n+\t\t})\n+\t\t_ = coderdtest.NewWorkspaceAgentWaiter(t, client, workspace.ID).Wait()\n+\n \t\tinv, root := clitest.New(t, \"exp\", \"rpty\", workspace.Name, \"-c\", ct.Container.ID)\n \t\tclitest.SetupConfig(t, client, root)\n \t\tpty := ptytest.New(t).Attach(inv)\n@@ -96,11 +101,6 @@ func TestExpRpty(t *testing.T) {\n \t\t\tassert.NoError(t, err)\n \t\t})\n \n-\t\t_ = agenttest.New(t, client.URL, agentToken, func(o *agent.Options) {\n-\t\t\to.ExperimentalContainersEnabled = true\n-\t\t})\n-\t\t_ = coderdtest.NewWorkspaceAgentWaiter(t, client, workspace.ID).Wait()\n-\n \t\tpty.ExpectMatch(fmt.Sprintf(\"Connected to %s\", workspace.Name))\n \t\tpty.ExpectMatch(\"Reconnect ID: \")\n \t\tpty.ExpectMatch(\" #\")",
+    "raw_url": "https://github.com/coder/coder/raw/3c319fc41872cbd70aa352d83ea61ed0e0f73682/cli%2Fexp_rpty_test.go",
+    "sha": "782a7b5c08d48bee67fc6eedc948006bb21144f5",
+    "status": "modified"
+  }
+]

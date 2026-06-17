@@ -1,0 +1,42 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/16771#pullrequestreview-2654117389"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/16771"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "Thanks ! \ud83c\udf89 ",
+    "commit_id": "09e1f5f8f00fe2f2af16d445864fe30b9f51997d",
+    "html_url": "https://github.com/coder/coder/pull/16771#pullrequestreview-2654117389",
+    "id": 2654117389,
+    "node_id": "PRR_kwDOGkVX1s6eMp4N",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/16771",
+    "state": "APPROVED",
+    "submitted_at": "2025-03-03T13:22:22Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/15787330?u=9be00b44898487a7befb51ac31eb9fa5dd13d4ac&v=4",
+      "events_url": "https://api.github.com/users/defelmnq/events{/privacy}",
+      "followers_url": "https://api.github.com/users/defelmnq/followers",
+      "following_url": "https://api.github.com/users/defelmnq/following{/other_user}",
+      "gists_url": "https://api.github.com/users/defelmnq/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/defelmnq",
+      "id": 15787330,
+      "login": "defelmnq",
+      "node_id": "MDQ6VXNlcjE1Nzg3MzMw",
+      "organizations_url": "https://api.github.com/users/defelmnq/orgs",
+      "received_events_url": "https://api.github.com/users/defelmnq/received_events",
+      "repos_url": "https://api.github.com/users/defelmnq/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/defelmnq/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/defelmnq/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/defelmnq",
+      "user_view_type": "public"
+    }
+  }
+]

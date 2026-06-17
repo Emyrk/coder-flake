@@ -1,0 +1,71 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21396#discussion_r2651044895"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21396"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2651044895"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "self-review: moving context closer to the first usage",
+    "commit_id": "76109c0825b4e838db267606f30a3b3c968fdd30",
+    "created_at": "2025-12-29T14:03:01Z",
+    "diff_hunk": "@@ -1572,6 +1574,8 @@ func TestTasksNotification(t *testing.T) {\n \t\t\t}\n \t\t\tworkspaceBuild := workspaceBuilder.Do()\n \n+\t\t\tctx := testutil.Context(t, testutil.WaitShort)",
+    "html_url": "https://github.com/coder/coder/pull/21396#discussion_r2651044895",
+    "id": 2651044895,
+    "line": 1577,
+    "node_id": "PRRC_kwDOGkVX1s6eA7wf",
+    "original_commit_id": "76109c0825b4e838db267606f30a3b3c968fdd30",
+    "original_line": 1577,
+    "original_position": 22,
+    "original_start_line": null,
+    "path": "coderd/aitasks_test.go",
+    "position": 22,
+    "pull_request_review_id": 3615954778,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21396",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2651044895/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2025-12-29T14:03:01Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2651044895",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/40153966?v=4",
+      "events_url": "https://api.github.com/users/DanielleMaywood/events{/privacy}",
+      "followers_url": "https://api.github.com/users/DanielleMaywood/followers",
+      "following_url": "https://api.github.com/users/DanielleMaywood/following{/other_user}",
+      "gists_url": "https://api.github.com/users/DanielleMaywood/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/DanielleMaywood",
+      "id": 40153966,
+      "login": "DanielleMaywood",
+      "node_id": "MDQ6VXNlcjQwMTUzOTY2",
+      "organizations_url": "https://api.github.com/users/DanielleMaywood/orgs",
+      "received_events_url": "https://api.github.com/users/DanielleMaywood/received_events",
+      "repos_url": "https://api.github.com/users/DanielleMaywood/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/DanielleMaywood/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/DanielleMaywood/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/DanielleMaywood",
+      "user_view_type": "public"
+    }
+  }
+]

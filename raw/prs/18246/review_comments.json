@@ -1,0 +1,211 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/18246#discussion_r2128841469"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/18246"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2128841469"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Wouldn't exiting with an open transaction be bugged behaviour? Could this mask someone forgetting to close a connection?",
+    "commit_id": "3864e86d48862772b6a16d59d18d605a9ee6ecf1",
+    "created_at": "2025-06-05T13:19:39Z",
+    "diff_hunk": "@@ -168,6 +168,11 @@ func StartWithAssert(t *testing.T, inv *serpent.Invocation, assertCallback func(\n \t\tswitch {\n \t\tcase errors.Is(err, context.Canceled):\n \t\t\treturn\n+\t\tcase err != nil && strings.Contains(err.Error(), \"driver: bad connection\"):\n+\t\t\t// When a test exits it cancels the context. If a transaction is open\n+\t\t\t// and a query is being executed, instead of a context.Canceled error\n+\t\t\t// we get a \"driver: bad connection\" error.\n+\t\t\treturn",
+    "html_url": "https://github.com/coder/coder/pull/18246#discussion_r2128841469",
+    "id": 2128841469,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5-44r9",
+    "original_commit_id": "cf0daf48b26bd60d1b71da926d7ee83c94b74526",
+    "original_line": 176,
+    "original_position": 8,
+    "original_start_line": 172,
+    "path": "cli/clitest/clitest.go",
+    "position": 1,
+    "pull_request_review_id": 2900309602,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/18246",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2128841469/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-06-05T13:20:15Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2128841469",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/18246#discussion_r2128853583"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/18246"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2128853583"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Hmm, I should probably make the comment clearer. It should be\r\n\r\n> When we cancel the context on a query that's being executed within a transaction, sometimes, instead of a context.Canceled error we get a \"driver: bad connection\" error.\r\n\r\nI don't think this could mask someone forgetting to close a connection. I suppose it might mask someone closing a connection while a transaction is being executed? I'm not sure how the database would handle this scenario.",
+    "commit_id": "3864e86d48862772b6a16d59d18d605a9ee6ecf1",
+    "created_at": "2025-06-05T13:25:17Z",
+    "diff_hunk": "@@ -168,6 +168,11 @@ func StartWithAssert(t *testing.T, inv *serpent.Invocation, assertCallback func(\n \t\tswitch {\n \t\tcase errors.Is(err, context.Canceled):\n \t\t\treturn\n+\t\tcase err != nil && strings.Contains(err.Error(), \"driver: bad connection\"):\n+\t\t\t// When a test exits it cancels the context. If a transaction is open\n+\t\t\t// and a query is being executed, instead of a context.Canceled error\n+\t\t\t// we get a \"driver: bad connection\" error.\n+\t\t\treturn",
+    "html_url": "https://github.com/coder/coder/pull/18246#discussion_r2128853583",
+    "id": 2128853583,
+    "in_reply_to_id": 2128841469,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5-47pP",
+    "original_commit_id": "cf0daf48b26bd60d1b71da926d7ee83c94b74526",
+    "original_line": 176,
+    "original_position": 8,
+    "original_start_line": 172,
+    "path": "cli/clitest/clitest.go",
+    "position": 1,
+    "pull_request_review_id": 2900329591,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/18246",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2128853583/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-06-05T13:25:17Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2128853583",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/28019628?v=4",
+      "events_url": "https://api.github.com/users/hugodutka/events{/privacy}",
+      "followers_url": "https://api.github.com/users/hugodutka/followers",
+      "following_url": "https://api.github.com/users/hugodutka/following{/other_user}",
+      "gists_url": "https://api.github.com/users/hugodutka/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/hugodutka",
+      "id": 28019628,
+      "login": "hugodutka",
+      "node_id": "MDQ6VXNlcjI4MDE5NjI4",
+      "organizations_url": "https://api.github.com/users/hugodutka/orgs",
+      "received_events_url": "https://api.github.com/users/hugodutka/received_events",
+      "repos_url": "https://api.github.com/users/hugodutka/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/hugodutka/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/hugodutka/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/hugodutka",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/18246#discussion_r2128857688"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/18246"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/2128857688"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "seems to also be reported here: https://github.com/lib/pq/issues/1137",
+    "commit_id": "3864e86d48862772b6a16d59d18d605a9ee6ecf1",
+    "created_at": "2025-06-05T13:27:07Z",
+    "diff_hunk": "@@ -168,6 +168,11 @@ func StartWithAssert(t *testing.T, inv *serpent.Invocation, assertCallback func(\n \t\tswitch {\n \t\tcase errors.Is(err, context.Canceled):\n \t\t\treturn\n+\t\tcase err != nil && strings.Contains(err.Error(), \"driver: bad connection\"):\n+\t\t\t// When a test exits it cancels the context. If a transaction is open\n+\t\t\t// and a query is being executed, instead of a context.Canceled error\n+\t\t\t// we get a \"driver: bad connection\" error.\n+\t\t\treturn",
+    "html_url": "https://github.com/coder/coder/pull/18246#discussion_r2128857688",
+    "id": 2128857688,
+    "in_reply_to_id": 2128841469,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s5-48pY",
+    "original_commit_id": "cf0daf48b26bd60d1b71da926d7ee83c94b74526",
+    "original_line": 176,
+    "original_position": 8,
+    "original_start_line": 172,
+    "path": "cli/clitest/clitest.go",
+    "position": 1,
+    "pull_request_review_id": 2900336134,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/18246",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/2128857688/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2025-06-05T13:27:07Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/2128857688",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/28019628?v=4",
+      "events_url": "https://api.github.com/users/hugodutka/events{/privacy}",
+      "followers_url": "https://api.github.com/users/hugodutka/followers",
+      "following_url": "https://api.github.com/users/hugodutka/following{/other_user}",
+      "gists_url": "https://api.github.com/users/hugodutka/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/hugodutka",
+      "id": 28019628,
+      "login": "hugodutka",
+      "node_id": "MDQ6VXNlcjI4MDE5NjI4",
+      "organizations_url": "https://api.github.com/users/hugodutka/orgs",
+      "received_events_url": "https://api.github.com/users/hugodutka/received_events",
+      "repos_url": "https://api.github.com/users/hugodutka/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/hugodutka/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/hugodutka/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/hugodutka",
+      "user_view_type": "public"
+    }
+  }
+]

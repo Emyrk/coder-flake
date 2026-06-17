@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/66a7578e23a54d8d73b1260cc517f29ba2ca8c9d/coderd%2Fworkspaces_test.go",
+    "changes": 4,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fworkspaces_test.go?ref=66a7578e23a54d8d73b1260cc517f29ba2ca8c9d",
+    "deletions": 0,
+    "filename": "coderd/workspaces_test.go",
+    "patch": "@@ -586,6 +586,8 @@ func TestPostWorkspacesByOrganization(t *testing.T) {\n \t\tworkspace := coderdtest.CreateWorkspace(t, client, user.OrganizationID, template.ID, func(cwr *codersdk.CreateWorkspaceRequest) {\n \t\t\tcwr.TTLMillis = ptr.Ref(int64(0))\n \t\t})\n+\t\tcoderdtest.AwaitWorkspaceBuildJob(t, client, workspace.LatestBuild.ID)\n+\n \t\t// Then: No TTL should be set by the template\n \t\trequire.Nil(t, workspace.TTLMillis)\n \t})\n@@ -603,6 +605,8 @@ func TestPostWorkspacesByOrganization(t *testing.T) {\n \t\tworkspace := coderdtest.CreateWorkspace(t, client, user.OrganizationID, template.ID, func(cwr *codersdk.CreateWorkspaceRequest) {\n \t\t\tcwr.TTLMillis = nil // ensure that no default TTL is set\n \t\t})\n+\t\tcoderdtest.AwaitWorkspaceBuildJob(t, client, workspace.LatestBuild.ID)\n+\n \t\t// TTL should be set by the template\n \t\trequire.Equal(t, template.DefaultTTLMillis, templateTTL)\n \t\trequire.Equal(t, template.DefaultTTLMillis, *workspace.TTLMillis)",
+    "raw_url": "https://github.com/coder/coder/raw/66a7578e23a54d8d73b1260cc517f29ba2ca8c9d/coderd%2Fworkspaces_test.go",
+    "sha": "da32d66b6ee0ef8a90e117df2b212e78bcdf48ed",
+    "status": "modified"
+  }
+]

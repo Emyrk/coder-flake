@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/d612f064340a5f8f7b2acdcd348638124bca3cde/cli%2Fkeyring_test.go",
+    "changes": 12,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fkeyring_test.go?ref=d612f064340a5f8f7b2acdcd348638124bca3cde",
+    "deletions": 11,
+    "filename": "cli/keyring_test.go",
+    "patch": "@@ -55,14 +55,12 @@ func setupKeyringTestEnv(t *testing.T, clientURL string, args ...string) keyring\n \treturn keyringTestEnv{serviceName, backend, inv, cfg, parsedURL}\n }\n \n+//nolint:paralleltest,tparallel // Windows OS keyring has intermittent failures with concurrent access\n func TestUseKeyring(t *testing.T) {\n \t// Verify that the --use-keyring flag default opts into using a keyring backend\n \t// for storing session tokens instead of plain text files.\n-\tt.Parallel()\n \n \tt.Run(\"Login\", func(t *testing.T) {\n-\t\tt.Parallel()\n-\n \t\tif runtime.GOOS != \"windows\" && runtime.GOOS != \"darwin\" {\n \t\t\tt.Skip(\"keyring is not supported on this OS\")\n \t\t}\n@@ -109,8 +107,6 @@ func TestUseKeyring(t *testing.T) {\n \t})\n \n \tt.Run(\"Logout\", func(t *testing.T) {\n-\t\tt.Parallel()\n-\n \t\tif runtime.GOOS != \"windows\" && runtime.GOOS != \"darwin\" {\n \t\t\tt.Skip(\"keyring is not supported on this OS\")\n \t\t}\n@@ -174,8 +170,6 @@ func TestUseKeyring(t *testing.T) {\n \t})\n \n \tt.Run(\"DefaultFileStorage\", func(t *testing.T) {\n-\t\tt.Parallel()\n-\n \t\tif runtime.GOOS != \"linux\" {\n \t\t\tt.Skip(\"file storage is the default for Linux\")\n \t\t}\n@@ -220,8 +214,6 @@ func TestUseKeyring(t *testing.T) {\n \t})\n \n \tt.Run(\"EnvironmentVariable\", func(t *testing.T) {\n-\t\tt.Parallel()\n-\n \t\tlogger := testutil.Logger(t)\n \t\tctx := testutil.Context(t, testutil.WaitMedium)\n \t\t// Create a test server\n@@ -265,8 +257,6 @@ func TestUseKeyring(t *testing.T) {\n \t})\n \n \tt.Run(\"DisableKeyringWithFlag\", func(t *testing.T) {\n-\t\tt.Parallel()\n-\n \t\tlogger := testutil.Logger(t)\n \t\tctx := testutil.Context(t, testutil.WaitMedium)\n \t\tclient := coderdtest.New(t, nil)",
+    "raw_url": "https://github.com/coder/coder/raw/d612f064340a5f8f7b2acdcd348638124bca3cde/cli%2Fkeyring_test.go",
+    "sha": "c0cca0cfa3b4419f1b5886d1621349fcbb0a0f00",
+    "status": "modified"
+  }
+]

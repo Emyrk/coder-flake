@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 6,
+    "blob_url": "https://github.com/coder/coder/blob/9d5dd5a7f7431bb328385c4ae6310e3ab964fa0e/scaletest%2Fworkspacetraffic%2Fconn.go",
+    "changes": 10,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scaletest%2Fworkspacetraffic%2Fconn.go?ref=9d5dd5a7f7431bb328385c4ae6310e3ab964fa0e",
+    "deletions": 4,
+    "filename": "scaletest/workspacetraffic/conn.go",
+    "patch": "@@ -147,8 +147,9 @@ func connectSSH(ctx context.Context, client *codersdk.Client, agentID uuid.UUID,\n \tvar closers []func() error\n \tdefer func() {\n \t\tif err != nil {\n-\t\t\tfor _, c := range closers {\n-\t\t\t\tif err2 := c(); err2 != nil {\n+\t\t\t// Reverse order, like defer.\n+\t\t\tfor i := len(closers) - 1; i >= 0; i-- {\n+\t\t\t\tif err2 := closers[i](); err2 != nil {\n \t\t\t\t\terr = errors.Join(err, err2)\n \t\t\t\t}\n \t\t\t}\n@@ -227,8 +228,9 @@ func connectSSH(ctx context.Context, client *codersdk.Client, agentID uuid.UUID,\n \t\t\t\t}\n \t\t\t}\n \t\t}\n-\t\tfor _, c := range closers {\n-\t\t\tif err := c(); err != nil {\n+\t\t// Reverse order, like defer.\n+\t\tfor i := len(closers) - 1; i >= 0; i-- {\n+\t\t\tif err := closers[i](); err != nil {\n \t\t\t\tif !errors.Is(err, io.EOF) {\n \t\t\t\t\tmerr = errors.Join(merr, err)\n \t\t\t\t}",
+    "raw_url": "https://github.com/coder/coder/raw/9d5dd5a7f7431bb328385c4ae6310e3ab964fa0e/scaletest%2Fworkspacetraffic%2Fconn.go",
+    "sha": "fd9bf93866cc78903e401cca157ca35ecabb6cbd",
+    "status": "modified"
+  },
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/9d5dd5a7f7431bb328385c4ae6310e3ab964fa0e/scaletest%2Fworkspacetraffic%2Frun.go",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/scaletest%2Fworkspacetraffic%2Frun.go?ref=9d5dd5a7f7431bb328385c4ae6310e3ab964fa0e",
+    "deletions": 1,
+    "filename": "scaletest/workspacetraffic/run.go",
+    "patch": "@@ -3,6 +3,7 @@ package workspacetraffic\n import (\n \t\"bytes\"\n \t\"context\"\n+\t\"errors\"\n \t\"fmt\"\n \t\"io\"\n \t\"math/rand\"\n@@ -131,8 +132,11 @@ func (r *Runner) Run(ctx context.Context, _ string, logs io.Writer) (err error)\n \tcloseConn := func() error {\n \t\tcloseOnce.Do(func() {\n \t\t\tcloseErr = conn.Close()\n-\t\t\tif closeErr != nil {\n+\t\t\tif errors.Is(closeErr, io.EOF) {\n+\t\t\t\tcloseErr = nil\n+\t\t\t} else if closeErr != nil {\n \t\t\t\tlogger.Error(ctx, \"close agent connection\", slog.Error(closeErr))\n+\t\t\t\tcloseErr = xerrors.Errorf(\"close agent connection: %w\", closeErr)\n \t\t\t}\n \t\t})\n \t\treturn closeErr",
+    "raw_url": "https://github.com/coder/coder/raw/9d5dd5a7f7431bb328385c4ae6310e3ab964fa0e/scaletest%2Fworkspacetraffic%2Frun.go",
+    "sha": "6b0819a06b6c5942c5f3f87f4c34e39c8692a5ce",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,322 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21981#pullrequestreview-3782050212"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21981"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "47687fd4be80bc0fd8795efd2718630ec6adb29a",
+    "html_url": "https://github.com/coder/coder/pull/21981#pullrequestreview-3782050212",
+    "id": 3782050212,
+    "node_id": "PRR_kwDOGkVX1s7hbYGk",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21981",
+    "state": "COMMENTED",
+    "submitted_at": "2026-02-10T23:29:30Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/3724288?v=4",
+      "events_url": "https://api.github.com/users/zedkipp/events{/privacy}",
+      "followers_url": "https://api.github.com/users/zedkipp/followers",
+      "following_url": "https://api.github.com/users/zedkipp/following{/other_user}",
+      "gists_url": "https://api.github.com/users/zedkipp/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/zedkipp",
+      "id": 3724288,
+      "login": "zedkipp",
+      "node_id": "MDQ6VXNlcjM3MjQyODg=",
+      "organizations_url": "https://api.github.com/users/zedkipp/orgs",
+      "received_events_url": "https://api.github.com/users/zedkipp/received_events",
+      "repos_url": "https://api.github.com/users/zedkipp/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/zedkipp/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/zedkipp/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/zedkipp",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21981#pullrequestreview-3783200423"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21981"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "The stated problem is that there is a _system-wide_ limit on the number of PTYs. I'm not convinced that setting a per-test-process limit on the PTYs is a good idea.\n\nFirst of all, there will be more than just our Go tests running on most systems, and so other things outside our control could consume PTYs and cause tests to fail in spite of this system.\n\nSecondly, it likely makes for inefficient use of PTYs. Packages that use a lot of PTYs will saturate at 1/8th the total available even if nothing else is using the remaining 7/8ths of the available resources.\n\nJust conceptually, the Kernel is managing the PTY resources from a system-wide pool. We shouldn't also need to separately manage the same resources. If, as this PR is designed, we are willing to wait up to 30s to obtain a PTY if one is not immediately available, why not just retry with a short backoff (e.g. 1s)?\n",
+    "commit_id": "47687fd4be80bc0fd8795efd2718630ec6adb29a",
+    "html_url": "https://github.com/coder/coder/pull/21981#pullrequestreview-3783200423",
+    "id": 3783200423,
+    "node_id": "PRR_kwDOGkVX1s7hfw6n",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21981",
+    "state": "COMMENTED",
+    "submitted_at": "2026-02-11T07:42:47Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/5375600?v=4",
+      "events_url": "https://api.github.com/users/spikecurtis/events{/privacy}",
+      "followers_url": "https://api.github.com/users/spikecurtis/followers",
+      "following_url": "https://api.github.com/users/spikecurtis/following{/other_user}",
+      "gists_url": "https://api.github.com/users/spikecurtis/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/spikecurtis",
+      "id": 5375600,
+      "login": "spikecurtis",
+      "node_id": "MDQ6VXNlcjUzNzU2MDA=",
+      "organizations_url": "https://api.github.com/users/spikecurtis/orgs",
+      "received_events_url": "https://api.github.com/users/spikecurtis/received_events",
+      "repos_url": "https://api.github.com/users/spikecurtis/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/spikecurtis/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/spikecurtis/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/spikecurtis",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21981#pullrequestreview-3783535694"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21981"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Considering the parallelism of our test-suite, I'd expect resource allocation issues is not limited to just PTYs. If we're running into this, we could instead consider upping limits, reducing parallelism, or going over which are the main problematic tests and remove parallelism from those (e.g. no `t.Parallel()`).\n\nThe main problems I see with this approach is adding test-code to a production package (have we considered build-flags?) and all the edge-cases in which it breaks (accurate detection of active parallelism, assumption that the rest of the system isn't under load, breaking expectations of typical context-timeouts in tests). We're also assuming each package is doing PTY testing which is unlikely to be the case. Without verification, I'd expect this number to be around 3-5 packages in total.",
+    "commit_id": "47687fd4be80bc0fd8795efd2718630ec6adb29a",
+    "html_url": "https://github.com/coder/coder/pull/21981#pullrequestreview-3783535694",
+    "id": 3783535694,
+    "node_id": "PRR_kwDOGkVX1s7hhCxO",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21981",
+    "state": "COMMENTED",
+    "submitted_at": "2026-02-16T10:50:57Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21981#pullrequestreview-3814158710"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21981"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "47687fd4be80bc0fd8795efd2718630ec6adb29a",
+    "html_url": "https://github.com/coder/coder/pull/21981#pullrequestreview-3814158710",
+    "id": 3814158710,
+    "node_id": "PRR_kwDOGkVX1s7jV3F2",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21981",
+    "state": "COMMENTED",
+    "submitted_at": "2026-02-17T14:08:05Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/37836031?u=c3a87352a1782a71d372d8d26016ea5a1a7f88fb&v=4",
+      "events_url": "https://api.github.com/users/evgeniy-scherbina/events{/privacy}",
+      "followers_url": "https://api.github.com/users/evgeniy-scherbina/followers",
+      "following_url": "https://api.github.com/users/evgeniy-scherbina/following{/other_user}",
+      "gists_url": "https://api.github.com/users/evgeniy-scherbina/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/evgeniy-scherbina",
+      "id": 37836031,
+      "login": "evgeniy-scherbina",
+      "node_id": "MDQ6VXNlcjM3ODM2MDMx",
+      "organizations_url": "https://api.github.com/users/evgeniy-scherbina/orgs",
+      "received_events_url": "https://api.github.com/users/evgeniy-scherbina/received_events",
+      "repos_url": "https://api.github.com/users/evgeniy-scherbina/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/evgeniy-scherbina/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/evgeniy-scherbina/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/evgeniy-scherbina",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21981#pullrequestreview-3814175438"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21981"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "47687fd4be80bc0fd8795efd2718630ec6adb29a",
+    "html_url": "https://github.com/coder/coder/pull/21981#pullrequestreview-3814175438",
+    "id": 3814175438,
+    "node_id": "PRR_kwDOGkVX1s7jV7LO",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21981",
+    "state": "COMMENTED",
+    "submitted_at": "2026-02-17T14:11:19Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/37836031?u=c3a87352a1782a71d372d8d26016ea5a1a7f88fb&v=4",
+      "events_url": "https://api.github.com/users/evgeniy-scherbina/events{/privacy}",
+      "followers_url": "https://api.github.com/users/evgeniy-scherbina/followers",
+      "following_url": "https://api.github.com/users/evgeniy-scherbina/following{/other_user}",
+      "gists_url": "https://api.github.com/users/evgeniy-scherbina/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/evgeniy-scherbina",
+      "id": 37836031,
+      "login": "evgeniy-scherbina",
+      "node_id": "MDQ6VXNlcjM3ODM2MDMx",
+      "organizations_url": "https://api.github.com/users/evgeniy-scherbina/orgs",
+      "received_events_url": "https://api.github.com/users/evgeniy-scherbina/received_events",
+      "repos_url": "https://api.github.com/users/evgeniy-scherbina/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/evgeniy-scherbina/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/evgeniy-scherbina/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/evgeniy-scherbina",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21981#pullrequestreview-3814191848"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21981"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "47687fd4be80bc0fd8795efd2718630ec6adb29a",
+    "html_url": "https://github.com/coder/coder/pull/21981#pullrequestreview-3814191848",
+    "id": 3814191848,
+    "node_id": "PRR_kwDOGkVX1s7jV_Lo",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21981",
+    "state": "COMMENTED",
+    "submitted_at": "2026-02-17T14:14:12Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/37836031?u=c3a87352a1782a71d372d8d26016ea5a1a7f88fb&v=4",
+      "events_url": "https://api.github.com/users/evgeniy-scherbina/events{/privacy}",
+      "followers_url": "https://api.github.com/users/evgeniy-scherbina/followers",
+      "following_url": "https://api.github.com/users/evgeniy-scherbina/following{/other_user}",
+      "gists_url": "https://api.github.com/users/evgeniy-scherbina/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/evgeniy-scherbina",
+      "id": 37836031,
+      "login": "evgeniy-scherbina",
+      "node_id": "MDQ6VXNlcjM3ODM2MDMx",
+      "organizations_url": "https://api.github.com/users/evgeniy-scherbina/orgs",
+      "received_events_url": "https://api.github.com/users/evgeniy-scherbina/received_events",
+      "repos_url": "https://api.github.com/users/evgeniy-scherbina/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/evgeniy-scherbina/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/evgeniy-scherbina/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/evgeniy-scherbina",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21981#pullrequestreview-3814245495"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21981"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "47687fd4be80bc0fd8795efd2718630ec6adb29a",
+    "html_url": "https://github.com/coder/coder/pull/21981#pullrequestreview-3814245495",
+    "id": 3814245495,
+    "node_id": "PRR_kwDOGkVX1s7jWMR3",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21981",
+    "state": "COMMENTED",
+    "submitted_at": "2026-02-17T14:22:08Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/37836031?u=c3a87352a1782a71d372d8d26016ea5a1a7f88fb&v=4",
+      "events_url": "https://api.github.com/users/evgeniy-scherbina/events{/privacy}",
+      "followers_url": "https://api.github.com/users/evgeniy-scherbina/followers",
+      "following_url": "https://api.github.com/users/evgeniy-scherbina/following{/other_user}",
+      "gists_url": "https://api.github.com/users/evgeniy-scherbina/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/evgeniy-scherbina",
+      "id": 37836031,
+      "login": "evgeniy-scherbina",
+      "node_id": "MDQ6VXNlcjM3ODM2MDMx",
+      "organizations_url": "https://api.github.com/users/evgeniy-scherbina/orgs",
+      "received_events_url": "https://api.github.com/users/evgeniy-scherbina/received_events",
+      "repos_url": "https://api.github.com/users/evgeniy-scherbina/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/evgeniy-scherbina/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/evgeniy-scherbina/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/evgeniy-scherbina",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/21981#pullrequestreview-3814731027"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/21981"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "",
+    "commit_id": "47687fd4be80bc0fd8795efd2718630ec6adb29a",
+    "html_url": "https://github.com/coder/coder/pull/21981#pullrequestreview-3814731027",
+    "id": 3814731027,
+    "node_id": "PRR_kwDOGkVX1s7jYC0T",
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/21981",
+    "state": "COMMENTED",
+    "submitted_at": "2026-02-17T15:40:48Z",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/37836031?u=c3a87352a1782a71d372d8d26016ea5a1a7f88fb&v=4",
+      "events_url": "https://api.github.com/users/evgeniy-scherbina/events{/privacy}",
+      "followers_url": "https://api.github.com/users/evgeniy-scherbina/followers",
+      "following_url": "https://api.github.com/users/evgeniy-scherbina/following{/other_user}",
+      "gists_url": "https://api.github.com/users/evgeniy-scherbina/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/evgeniy-scherbina",
+      "id": 37836031,
+      "login": "evgeniy-scherbina",
+      "node_id": "MDQ6VXNlcjM3ODM2MDMx",
+      "organizations_url": "https://api.github.com/users/evgeniy-scherbina/orgs",
+      "received_events_url": "https://api.github.com/users/evgeniy-scherbina/received_events",
+      "repos_url": "https://api.github.com/users/evgeniy-scherbina/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/evgeniy-scherbina/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/evgeniy-scherbina/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/evgeniy-scherbina",
+      "user_view_type": "public"
+    }
+  }
+]

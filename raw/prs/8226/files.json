@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 24,
+    "blob_url": "https://github.com/coder/coder/blob/6e142605e0098a6e4c73cd05d47075c3ebd55c4f/flake.lock",
+    "changes": 30,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.lock?ref=6e142605e0098a6e4c73cd05d47075c3ebd55c4f",
+    "deletions": 6,
+    "filename": "flake.lock",
+    "patch": "@@ -36,12 +36,15 @@\n       }\n     },\n     \"flake-utils_2\": {\n+      \"inputs\": {\n+        \"systems\": \"systems\"\n+      },\n       \"locked\": {\n-        \"lastModified\": 1676283394,\n-        \"narHash\": \"sha256-XX2f9c3iySLCw54rJ/CZs+ZK6IQy7GXNY4nSOyu2QG4=\",\n+        \"lastModified\": 1687709756,\n+        \"narHash\": \"sha256-Y5wKlQSkgEK2weWdOu4J3riRd+kV/VCgHsqLNTTWQ/0=\",\n         \"owner\": \"numtide\",\n         \"repo\": \"flake-utils\",\n-        \"rev\": \"3db36a8b464d0c4532ba1c7dda728f4576d6d073\",\n+        \"rev\": \"dbabf0ca0c0c4bce6ea5eaf65af5cb694d2082c7\",\n         \"type\": \"github\"\n       },\n       \"original\": {\n@@ -67,11 +70,11 @@\n     },\n     \"nixpkgs_2\": {\n       \"locked\": {\n-        \"lastModified\": 1678654296,\n-        \"narHash\": \"sha256-aVfw3ThpY7vkUeF1rFy10NAkpKDS2imj3IakrzT0Occ=\",\n+        \"lastModified\": 1687681650,\n+        \"narHash\": \"sha256-M2If+gRcfpmaJy/XbfSsRzLlPpoU4nr0NHnKKl50fd8=\",\n         \"owner\": \"nixos\",\n         \"repo\": \"nixpkgs\",\n-        \"rev\": \"5a1dc8acd977ff3dccd1328b7c4a6995429a656b\",\n+        \"rev\": \"1c9db9710cb23d60570ad4d7ab829c2d34403de3\",\n         \"type\": \"github\"\n       },\n       \"original\": {\n@@ -87,6 +90,21 @@\n         \"flake-utils\": \"flake-utils_2\",\n         \"nixpkgs\": \"nixpkgs_2\"\n       }\n+    },\n+    \"systems\": {\n+      \"locked\": {\n+        \"lastModified\": 1681028828,\n+        \"narHash\": \"sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=\",\n+        \"owner\": \"nix-systems\",\n+        \"repo\": \"default\",\n+        \"rev\": \"da67096a3b9bf56a91d16901293e51ba5b49a27e\",\n+        \"type\": \"github\"\n+      },\n+      \"original\": {\n+        \"owner\": \"nix-systems\",\n+        \"repo\": \"default\",\n+        \"type\": \"github\"\n+      }\n     }\n   },\n   \"root\": \"root\",",
+    "raw_url": "https://github.com/coder/coder/raw/6e142605e0098a6e4c73cd05d47075c3ebd55c4f/flake.lock",
+    "sha": "ddf48b33772acb60743f9e2d507a11d8455d0041",
+    "status": "modified"
+  }
+]

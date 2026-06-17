@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/628cfcd2a4fc7dc36ff9d749dbda63bf75646d37/enterprise%2Fwsproxy%2Fwsproxy_test.go",
+    "changes": 1,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fwsproxy%2Fwsproxy_test.go?ref=628cfcd2a4fc7dc36ff9d749dbda63bf75646d37",
+    "deletions": 0,
+    "filename": "enterprise/wsproxy/wsproxy_test.go",
+    "patch": "@@ -324,6 +324,7 @@ func TestDERPEndToEnd(t *testing.T) {\n \tdeploymentValues.Experiments = []string{\n \t\t\"*\",\n \t}\n+\tdeploymentValues.DERP.Config.BlockDirect = true\n \n \tclient, closer, api, user := coderdenttest.NewWithAPI(t, &coderdenttest.Options{\n \t\tOptions: &coderdtest.Options{",
+    "raw_url": "https://github.com/coder/coder/raw/628cfcd2a4fc7dc36ff9d749dbda63bf75646d37/enterprise%2Fwsproxy%2Fwsproxy_test.go",
+    "sha": "cff04e26a4296911591a7eaf7c021acaf39e29ae",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 11,
+    "blob_url": "https://github.com/coder/coder/blob/5b0938a4950fc9bae404738b26a55765982896e9/coderd%2Fx%2Fchatd%2Fintegration_test.go",
+    "changes": 13,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fx%2Fchatd%2Fintegration_test.go?ref=5b0938a4950fc9bae404738b26a55765982896e9",
+    "deletions": 2,
+    "filename": "coderd/x/chatd/integration_test.go",
+    "patch": "@@ -853,8 +853,17 @@ func runOpenAIReasoningWithWebSearchRoundTripTest(t *testing.T, storeMode openAI\n \t\t\"follow-up should have added more messages\")\n \trequire.NotNil(t, findLastAssistantWithText(t, chatMsgs2.Messages),\n \t\t\"expected an assistant message with text after the follow-up\")\n-\trequire.Equal(t, int32(2), streamRequestCount.Load(),\n-\t\t\"expected exactly two streamed OpenAI responses\")\n+\t// waitForChatDone returns on the chat status event, which can arrive\n+\t// before the capture server records the second streamed request.\n+\tcaptureCtx, cancel := context.WithTimeout(ctx, testutil.WaitShort)\n+\tdefer cancel()\n+\trequire.True(t, testutil.Eventually(captureCtx, t, func(context.Context) bool {\n+\t\tmu.Lock()\n+\t\tdefer mu.Unlock()\n+\t\treturn secondReq != nil\n+\t}, testutil.IntervalFast), \"expected second streaming request to be captured\")\n+\trequire.GreaterOrEqual(t, streamRequestCount.Load(), int32(2),\n+\t\t\"expected at least two streamed OpenAI responses\")\n \n \tmu.Lock()\n \tdefer mu.Unlock()",
+    "raw_url": "https://github.com/coder/coder/raw/5b0938a4950fc9bae404738b26a55765982896e9/coderd%2Fx%2Fchatd%2Fintegration_test.go",
+    "sha": "c53e2d8eb6a4827290ff2759c2972e2f6b16a022",
+    "status": "modified"
+  }
+]

@@ -1,0 +1,211 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/1562#discussion_r876117945"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/1562"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/876117945"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "This should properly be buffered on the server-side, were you seeing it differently?",
+    "commit_id": "0696b4029416f28c553bda4a3e63f20f485a4890",
+    "created_at": "2022-05-18T16:42:13Z",
+    "diff_hunk": "@@ -204,6 +205,11 @@ func TestAgent(t *testing.T) {\n \t\tid := uuid.NewString()\n \t\tnetConn, err := conn.ReconnectingPTY(id, 100, 100)\n \t\trequire.NoError(t, err)\n+\t\tbufRead := bufio.NewReader(netConn)\n+\n+\t\t// Brief pause to reduce the likelihood that we send keystrokes while\n+\t\t// the shell is simultaneously sending a prompt.\n+\t\ttime.Sleep(100 * time.Millisecond)",
+    "html_url": "https://github.com/coder/coder/pull/1562#discussion_r876117945",
+    "id": 876117945,
+    "line": 212,
+    "node_id": "PRRC_kwDOGkVX1s40OH-5",
+    "original_commit_id": "bf9c363cd02dddaacdbd8787b393f38351183736",
+    "original_line": 212,
+    "original_position": 16,
+    "original_start_line": 210,
+    "path": "agent/agent_test.go",
+    "position": 16,
+    "pull_request_review_id": 977281415,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/1562",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/876117945/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 210,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-05-18T16:42:28Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/876117945",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/1562#discussion_r876129603"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/1562"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/876129603"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "I don't think it's a problem with the server, just an inherent race. The actual issue I was seeing was that the test was sending the command *before* it received the prompt, which means the command text actually got echoed twice. This is because after bash prints the prompt, it helpfully re-echoes anything that was pending in the input buffer, in order to make line editing work properly.\r\n\r\nFor instance, if you type `sleep 10<ENTER>echo foo<ENTER>` quickly, you get output on your terminal that looks like:\r\n\r\n    $ sleep 10\r\n    echo foo\r\n    $ echo foo\r\n    foo\r\n\r\nIt would certainly be cleaner to wait for the prompt and *then* send the input, but I'm not sure that we can easily/portably do that.",
+    "commit_id": "0696b4029416f28c553bda4a3e63f20f485a4890",
+    "created_at": "2022-05-18T16:55:06Z",
+    "diff_hunk": "@@ -204,6 +205,11 @@ func TestAgent(t *testing.T) {\n \t\tid := uuid.NewString()\n \t\tnetConn, err := conn.ReconnectingPTY(id, 100, 100)\n \t\trequire.NoError(t, err)\n+\t\tbufRead := bufio.NewReader(netConn)\n+\n+\t\t// Brief pause to reduce the likelihood that we send keystrokes while\n+\t\t// the shell is simultaneously sending a prompt.\n+\t\ttime.Sleep(100 * time.Millisecond)",
+    "html_url": "https://github.com/coder/coder/pull/1562#discussion_r876129603",
+    "id": 876129603,
+    "in_reply_to_id": 876117945,
+    "line": 212,
+    "node_id": "PRRC_kwDOGkVX1s40OK1D",
+    "original_commit_id": "bf9c363cd02dddaacdbd8787b393f38351183736",
+    "original_line": 212,
+    "original_position": 16,
+    "original_start_line": 210,
+    "path": "agent/agent_test.go",
+    "position": 16,
+    "pull_request_review_id": 977297358,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/1562",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/876129603/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 210,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-05-18T16:55:06Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/876129603",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/548160?v=4",
+      "events_url": "https://api.github.com/users/dwahler/events{/privacy}",
+      "followers_url": "https://api.github.com/users/dwahler/followers",
+      "following_url": "https://api.github.com/users/dwahler/following{/other_user}",
+      "gists_url": "https://api.github.com/users/dwahler/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/dwahler",
+      "id": 548160,
+      "login": "dwahler",
+      "node_id": "MDQ6VXNlcjU0ODE2MA==",
+      "organizations_url": "https://api.github.com/users/dwahler/orgs",
+      "received_events_url": "https://api.github.com/users/dwahler/received_events",
+      "repos_url": "https://api.github.com/users/dwahler/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/dwahler/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/dwahler/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/dwahler",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/1562#discussion_r876130990"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/1562"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/876130990"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "Ahh I see. Makes sense!",
+    "commit_id": "0696b4029416f28c553bda4a3e63f20f485a4890",
+    "created_at": "2022-05-18T16:56:48Z",
+    "diff_hunk": "@@ -204,6 +205,11 @@ func TestAgent(t *testing.T) {\n \t\tid := uuid.NewString()\n \t\tnetConn, err := conn.ReconnectingPTY(id, 100, 100)\n \t\trequire.NoError(t, err)\n+\t\tbufRead := bufio.NewReader(netConn)\n+\n+\t\t// Brief pause to reduce the likelihood that we send keystrokes while\n+\t\t// the shell is simultaneously sending a prompt.\n+\t\ttime.Sleep(100 * time.Millisecond)",
+    "html_url": "https://github.com/coder/coder/pull/1562#discussion_r876130990",
+    "id": 876130990,
+    "in_reply_to_id": 876117945,
+    "line": 212,
+    "node_id": "PRRC_kwDOGkVX1s40OLKu",
+    "original_commit_id": "bf9c363cd02dddaacdbd8787b393f38351183736",
+    "original_line": 212,
+    "original_position": 16,
+    "original_start_line": 210,
+    "path": "agent/agent_test.go",
+    "position": 16,
+    "pull_request_review_id": 977299343,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/1562",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/876130990/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": 210,
+    "start_side": "RIGHT",
+    "subject_type": "line",
+    "updated_at": "2022-05-18T16:56:48Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/876130990",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/7122116?v=4",
+      "events_url": "https://api.github.com/users/kylecarbs/events{/privacy}",
+      "followers_url": "https://api.github.com/users/kylecarbs/followers",
+      "following_url": "https://api.github.com/users/kylecarbs/following{/other_user}",
+      "gists_url": "https://api.github.com/users/kylecarbs/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/kylecarbs",
+      "id": 7122116,
+      "login": "kylecarbs",
+      "node_id": "MDQ6VXNlcjcxMjIxMTY=",
+      "organizations_url": "https://api.github.com/users/kylecarbs/orgs",
+      "received_events_url": "https://api.github.com/users/kylecarbs/received_events",
+      "repos_url": "https://api.github.com/users/kylecarbs/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/kylecarbs/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/kylecarbs/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/kylecarbs",
+      "user_view_type": "public"
+    }
+  }
+]

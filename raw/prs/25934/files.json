@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 1,
+    "blob_url": "https://github.com/coder/coder/blob/e33b5266d29e2b673b6890210d63f267adf87a90/.github%2Fworkflows%2Fflake-go.yaml",
+    "changes": 2,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/.github%2Fworkflows%2Fflake-go.yaml?ref=e33b5266d29e2b673b6890210d63f267adf87a90",
+    "deletions": 1,
+    "filename": ".github/workflows/flake-go.yaml",
+    "patch": "@@ -48,7 +48,7 @@ jobs:\n         uses: ./.github/actions/go-cache\n \n       - name: Install Go mise tools\n-        run: ./.github/scripts/retry.sh -- mise install --locked go:github.com/coder/whichtests\n+        run: ./.github/scripts/retry.sh -- mise install --locked go:github.com/coder/whichtests go:gotest.tools/gotestsum\n \n       - name: Select changed tests\n         id: selector",
+    "raw_url": "https://github.com/coder/coder/raw/e33b5266d29e2b673b6890210d63f267adf87a90/.github%2Fworkflows%2Fflake-go.yaml",
+    "sha": "b3226462d2398ae7058f87b9a8ab42722fbd732b",
+    "status": "modified"
+  }
+]

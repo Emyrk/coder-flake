@@ -1,0 +1,37 @@
+[
+  {
+    "additions": 22,
+    "blob_url": "https://github.com/coder/coder/blob/8c0a262426502121c96617507c8c72bc5b68e74d/flake.nix",
+    "changes": 32,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=8c0a262426502121c96617507c8c72bc5b68e74d",
+    "deletions": 10,
+    "filename": "flake.nix",
+    "patch": "@@ -32,7 +32,7 @@\n           inherit system;\n         };\n \n-        nodejs = pkgs.nodejs-18_x;\n+        nodejs = pkgs.nodejs_20;\n         # Check in https://search.nixos.org/packages to find new packages.\n         # Use `nix --extra-experimental-features nix-command --extra-experimental-features flakes flake update`\n         # to update the lock file if packages are out-of-date.\n@@ -88,6 +88,7 @@\n           less\n           mockgen\n           moreutils\n+          nix-prefetch-git\n           nfpm\n           nodejs\n           neovim\n@@ -119,9 +120,17 @@\n \n         # buildSite packages the site directory.\n         buildSite = pnpm2nix.packages.${system}.mkPnpmPackage {\n+          inherit nodejs;\n+\n           src = ./site/.;\n           # Required for the `canvas` package!\n-          extraBuildInputs = with pkgs; [ pkgs.cairo pkgs.pango pkgs.pixman ];\n+          extraBuildInputs = with pkgs; [\n+            cairo\n+            pango\n+            pixman\n+            libpng libjpeg giflib librsvg\n+            python312Packages.setuptools\n+          ] ++ ( lib.optionals stdenv.targetPlatform.isDarwin [ darwin.apple_sdk.frameworks.Foundation xcbuild ] );\n           installInPlace = true;\n           distDir = \"out\";\n         };\n@@ -161,15 +170,18 @@\n           };\n       in\n       {\n-        devShell = pkgs.mkShell {\n-          buildInputs = devShellPackages;\n-          shellHook = ''\n-            export PLAYWRIGHT_BROWSERS_PATH=${pkgs.playwright-driver.browsers}\n-            export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true\n-          '';\n-\n-          LOCALE_ARCHIVE = with pkgs; lib.optionalDrvAttr stdenv.isLinux \"${glibcLocales}/lib/locale/locale-archive\";\n+        devShells = {\n+          default = pkgs.mkShell {\n+            buildInputs = devShellPackages;\n+            shellHook = ''\n+              export PLAYWRIGHT_BROWSERS_PATH=${pkgs.playwright-driver.browsers}\n+              export PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true\n+            '';\n+\n+            LOCALE_ARCHIVE = with pkgs; lib.optionalDrvAttr stdenv.isLinux \"${glibcLocales}/lib/locale/locale-archive\";\n+          };\n         };\n+\n         packages = {\n           proto_gen_go = proto_gen_go_1_30;\n           all = pkgs.buildEnv {",
+    "raw_url": "https://github.com/coder/coder/raw/8c0a262426502121c96617507c8c72bc5b68e74d/flake.nix",
+    "sha": "18eb95103fcc0943b026c7021218b7506e8caf55",
+    "status": "modified"
+  },
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/8c0a262426502121c96617507c8c72bc5b68e74d/site%2F.npmrc",
+    "changes": 3,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2F.npmrc?ref=8c0a262426502121c96617507c8c72bc5b68e74d",
+    "deletions": 0,
+    "filename": "site/.npmrc",
+    "patch": "@@ -1,2 +1,5 @@\n save-exact=true\n engine-strict=true\n+\n+# Needed for nix builds of the site; see: https://github.com/nzbr/pnpm2nix-nzbr/issues/33#issuecomment-2381628294\n+lockfile-include-tarball-url=true",
+    "raw_url": "https://github.com/coder/coder/raw/8c0a262426502121c96617507c8c72bc5b68e74d/site%2F.npmrc",
+    "sha": "653114053b951cd982d4c8ab18c4dac4d8bc067a",
+    "status": "modified"
+  },
+  {
+    "additions": 1312,
+    "blob_url": "https://github.com/coder/coder/blob/8c0a262426502121c96617507c8c72bc5b68e74d/site%2Fpnpm-lock.yaml",
+    "changes": 2623,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/site%2Fpnpm-lock.yaml?ref=8c0a262426502121c96617507c8c72bc5b68e74d",
+    "deletions": 1311,
+    "filename": "site/pnpm-lock.yaml",
+    "raw_url": "https://github.com/coder/coder/raw/8c0a262426502121c96617507c8c72bc5b68e74d/site%2Fpnpm-lock.yaml",
+    "sha": "8ef4934213ba93dd85da26d0583851fdc245bd0a",
+    "status": "modified"
+  }
+]

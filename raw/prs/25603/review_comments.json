@@ -1,0 +1,280 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25603#discussion_r3287698629"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25603"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3287698629"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "**Nit** [DEREM-1] The first clause is the real value: it explains a non-obvious race. The second clause (\"so find the user message rather than asserting an exact count\") restates what `slices.IndexFunc` and `userMsgIdx` already show. Trim to the trap:\n\n```go\n// The chat daemon may insert an assistant response before this runs.\n```\n\nAlso, this 5-line block (comment + IndexFunc + assertions) is duplicated verbatim in `TestSubsequentSendWithoutOverrideUsesPersistedModel`. A small helper like `findUserMessage(t, messages)` would centralize both the rationale and the logic.\n\n*(Gon, Mafu-san)*\n\n> \ud83e\udd16",
+    "commit_id": "72fd03f4561d113e668b933fa0ef89e3cf646ed3",
+    "created_at": "2026-05-22T10:25:11Z",
+    "diff_hunk": "@@ -6391,9 +6391,14 @@ func TestSendMessageWithModelOverrideUpdatesLastModelConfigID(t *testing.T) {\n \t\tAfterID: 0,\n \t})\n \trequire.NoError(t, err)\n-\trequire.Len(t, messages, 1)\n-\trequire.True(t, messages[0].ModelConfigID.Valid)\n-\trequire.Equal(t, modelConfigB.ID, messages[0].ModelConfigID.UUID)\n+\t// The chat daemon may have inserted an assistant response, so find",
+    "html_url": "https://github.com/coder/coder/pull/25603#discussion_r3287698629",
+    "id": 3287698629,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7D9kzF",
+    "original_commit_id": "72fd03f4561d113e668b933fa0ef89e3cf646ed3",
+    "original_line": 6394,
+    "original_position": 7,
+    "original_start_line": null,
+    "path": "coderd/exp_chats_test.go",
+    "position": 1,
+    "pull_request_review_id": 4344660064,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25603",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3287698629/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-05-22T10:25:12Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3287698629",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25603#discussion_r3287698634"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25603"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3287698634"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "**Nit** [DEREM-2] Same verbose comment, second instance. See DEREM-1 above.\n\n*(Gon)*\n\n> \ud83e\udd16",
+    "commit_id": "72fd03f4561d113e668b933fa0ef89e3cf646ed3",
+    "created_at": "2026-05-22T10:25:11Z",
+    "diff_hunk": "@@ -6532,9 +6537,14 @@ func TestSubsequentSendWithoutOverrideUsesPersistedModel(t *testing.T) {\n \t\tAfterID: 0,\n \t})\n \trequire.NoError(t, err)\n-\trequire.Len(t, messages, 1)\n-\trequire.True(t, messages[0].ModelConfigID.Valid)\n-\trequire.Equal(t, modelConfigB.ID, messages[0].ModelConfigID.UUID)\n+\t// The chat daemon may have inserted an assistant response, so find",
+    "html_url": "https://github.com/coder/coder/pull/25603#discussion_r3287698634",
+    "id": 3287698634,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7D9kzK",
+    "original_commit_id": "72fd03f4561d113e668b933fa0ef89e3cf646ed3",
+    "original_line": 6540,
+    "original_position": 25,
+    "original_start_line": null,
+    "path": "coderd/exp_chats_test.go",
+    "position": 1,
+    "pull_request_review_id": 4344660064,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25603",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3287698634/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-05-22T10:25:12Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3287698634",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/in/3454270?v=4",
+      "events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/events{/privacy}",
+      "followers_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/apps/coder-agents-review",
+      "id": 278093721,
+      "login": "coder-agents-review[bot]",
+      "node_id": "BOT_kgDOEJNfmQ",
+      "organizations_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/orgs",
+      "received_events_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/received_events",
+      "repos_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/coder-agents-review%5Bbot%5D/subscriptions",
+      "type": "Bot",
+      "url": "https://api.github.com/users/coder-agents-review%5Bbot%5D",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25603#discussion_r3287796610"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25603"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3287796610"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "[a79da45](https://github.com/coder/coder/pull/25603/commits/a79da45b3915854198cb49ea6fb09af155a09a6e)",
+    "commit_id": "72fd03f4561d113e668b933fa0ef89e3cf646ed3",
+    "created_at": "2026-05-22T10:44:52Z",
+    "diff_hunk": "@@ -6532,9 +6537,14 @@ func TestSubsequentSendWithoutOverrideUsesPersistedModel(t *testing.T) {\n \t\tAfterID: 0,\n \t})\n \trequire.NoError(t, err)\n-\trequire.Len(t, messages, 1)\n-\trequire.True(t, messages[0].ModelConfigID.Valid)\n-\trequire.Equal(t, modelConfigB.ID, messages[0].ModelConfigID.UUID)\n+\t// The chat daemon may have inserted an assistant response, so find",
+    "html_url": "https://github.com/coder/coder/pull/25603#discussion_r3287796610",
+    "id": 3287796610,
+    "in_reply_to_id": 3287698634,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7D98uC",
+    "original_commit_id": "72fd03f4561d113e668b933fa0ef89e3cf646ed3",
+    "original_line": 6540,
+    "original_position": 25,
+    "original_start_line": null,
+    "path": "coderd/exp_chats_test.go",
+    "position": 1,
+    "pull_request_review_id": 4344766105,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25603",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3287796610/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-05-22T10:44:52Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3287796610",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/25603#discussion_r3287796777"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/25603"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/3287796777"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "[a79da45](https://github.com/coder/coder/pull/25603/commits/a79da45b3915854198cb49ea6fb09af155a09a6e)",
+    "commit_id": "72fd03f4561d113e668b933fa0ef89e3cf646ed3",
+    "created_at": "2026-05-22T10:44:54Z",
+    "diff_hunk": "@@ -6391,9 +6391,14 @@ func TestSendMessageWithModelOverrideUpdatesLastModelConfigID(t *testing.T) {\n \t\tAfterID: 0,\n \t})\n \trequire.NoError(t, err)\n-\trequire.Len(t, messages, 1)\n-\trequire.True(t, messages[0].ModelConfigID.Valid)\n-\trequire.Equal(t, modelConfigB.ID, messages[0].ModelConfigID.UUID)\n+\t// The chat daemon may have inserted an assistant response, so find",
+    "html_url": "https://github.com/coder/coder/pull/25603#discussion_r3287796777",
+    "id": 3287796777,
+    "in_reply_to_id": 3287698629,
+    "line": null,
+    "node_id": "PRRC_kwDOGkVX1s7D98wp",
+    "original_commit_id": "72fd03f4561d113e668b933fa0ef89e3cf646ed3",
+    "original_line": 6394,
+    "original_position": 7,
+    "original_start_line": null,
+    "path": "coderd/exp_chats_test.go",
+    "position": 1,
+    "pull_request_review_id": 4344766270,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/25603",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/3287796777/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2026-05-22T10:44:54Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/3287796777",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/4949514?v=4",
+      "events_url": "https://api.github.com/users/johnstcn/events{/privacy}",
+      "followers_url": "https://api.github.com/users/johnstcn/followers",
+      "following_url": "https://api.github.com/users/johnstcn/following{/other_user}",
+      "gists_url": "https://api.github.com/users/johnstcn/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/johnstcn",
+      "id": 4949514,
+      "login": "johnstcn",
+      "node_id": "MDQ6VXNlcjQ5NDk1MTQ=",
+      "organizations_url": "https://api.github.com/users/johnstcn/orgs",
+      "received_events_url": "https://api.github.com/users/johnstcn/received_events",
+      "repos_url": "https://api.github.com/users/johnstcn/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/johnstcn/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/johnstcn/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/johnstcn",
+      "user_view_type": "public"
+    }
+  }
+]

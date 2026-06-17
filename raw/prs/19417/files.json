@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/7a0ea8fc4b2268f4300090c682078ced8e45e2e9/enterprise%2Fcoderd%2Fworkspaces_test.go",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/enterprise%2Fcoderd%2Fworkspaces_test.go?ref=7a0ea8fc4b2268f4300090c682078ced8e45e2e9",
+    "deletions": 3,
+    "filename": "enterprise/coderd/workspaces_test.go",
+    "patch": "@@ -1122,7 +1122,7 @@ func TestWorkspaceAutobuild(t *testing.T) {\n \n \t\t// Simulate the workspace being dormant beyond the threshold.\n \t\ttickTime2 := ws.DormantAt.Add(2 * transitionTTL)\n-\t\tcoderdtest.UpdateProvisionerLastSeenAt(t, db, p.ID, tickTime)\n+\t\tcoderdtest.UpdateProvisionerLastSeenAt(t, db, p.ID, tickTime2)\n \t\tticker <- tickTime2\n \t\tstats = <-statCh\n \t\trequire.Len(t, stats.Transitions, 1)\n@@ -1277,7 +1277,7 @@ func TestWorkspaceAutobuild(t *testing.T) {\n \n \t\t// We should see the workspace get stopped now.\n \t\ttickTime2 := ws.LastUsedAt.Add(inactiveTTL * 2)\n-\t\tcoderdtest.UpdateProvisionerLastSeenAt(t, db, p.ID, tickTime)\n+\t\tcoderdtest.UpdateProvisionerLastSeenAt(t, db, p.ID, tickTime2)\n \t\ttickCh <- tickTime2\n \t\tstats = <-statsCh\n \t\trequire.Len(t, stats.Errors, 0)\n@@ -1481,7 +1481,7 @@ func TestWorkspaceAutobuild(t *testing.T) {\n \n \t\t// Force an autostart transition again.\n \t\ttickTime2 := sched.Next(firstBuild.CreatedAt)\n-\t\tcoderdtest.UpdateProvisionerLastSeenAt(t, db, p.ID, tickTime)\n+\t\tcoderdtest.UpdateProvisionerLastSeenAt(t, db, p.ID, tickTime2)\n \t\ttickCh <- tickTime2\n \t\tstats = <-statsCh\n \t\trequire.Len(t, stats.Errors, 0)",
+    "raw_url": "https://github.com/coder/coder/raw/7a0ea8fc4b2268f4300090c682078ced8e45e2e9/enterprise%2Fcoderd%2Fworkspaces_test.go",
+    "sha": "7004653e4ed609cd10211312431de88ed668fc92",
+    "status": "modified"
+  }
+]

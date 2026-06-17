@@ -1,0 +1,210 @@
+[
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/10553#discussion_r1383877705"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/10553"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1383877705"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "This got removed in favor of making it a separate component at the bottom of the file",
+    "commit_id": "7dabbe3ca6f961143c7f876ca8ee53e9fe332e41",
+    "created_at": "2023-11-06T19:42:10Z",
+    "diff_hunk": "@@ -29,54 +28,10 @@ export const GlobalSnackbar: FC = () => {\n   const [open, setOpen] = useState<boolean>(false);\n   const [notification, setNotification] = useState<NotificationMsg>();\n \n-  const handleNotification = useCallback<CustomEventListener<NotificationMsg>>(\n-    (event) => {\n-      setNotification(event.detail);\n-      setOpen(true);\n-    },\n-    [],\n-  );\n-\n-  useCustomEvent(SnackbarEventType, handleNotification);\n-\n-  const renderAdditionalMessage = (msg: AdditionalMessage, idx: number) => {",
+    "html_url": "https://github.com/coder/coder/pull/10553#discussion_r1383877705",
+    "id": 1383877705,
+    "line": 42,
+    "node_id": "PRRC_kwDOGkVX1s5SfExJ",
+    "original_commit_id": "8083591bc758b58d955d8aace8b4421321d05f4b",
+    "original_line": 42,
+    "original_position": 22,
+    "original_start_line": null,
+    "path": "site/src/components/GlobalSnackbar/GlobalSnackbar.tsx",
+    "position": 22,
+    "pull_request_review_id": 1716106331,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/10553",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1383877705/reactions"
+    },
+    "side": "LEFT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2023-11-06T19:42:10Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1383877705",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/28937484?v=4",
+      "events_url": "https://api.github.com/users/buenos-nachos/events{/privacy}",
+      "followers_url": "https://api.github.com/users/buenos-nachos/followers",
+      "following_url": "https://api.github.com/users/buenos-nachos/following{/other_user}",
+      "gists_url": "https://api.github.com/users/buenos-nachos/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/buenos-nachos",
+      "id": 28937484,
+      "login": "buenos-nachos",
+      "node_id": "MDQ6VXNlcjI4OTM3NDg0",
+      "organizations_url": "https://api.github.com/users/buenos-nachos/orgs",
+      "received_events_url": "https://api.github.com/users/buenos-nachos/received_events",
+      "repos_url": "https://api.github.com/users/buenos-nachos/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/buenos-nachos/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/buenos-nachos/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/buenos-nachos",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/10553#discussion_r1383878481"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/10553"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1383878481"
+      }
+    },
+    "author_association": "CONTRIBUTOR",
+    "body": "All the prop changes here are just moving the single-line prop definitions so they're grouped together",
+    "commit_id": "7dabbe3ca6f961143c7f876ca8ee53e9fe332e41",
+    "created_at": "2023-11-06T19:42:48Z",
+    "diff_hunk": "@@ -87,26 +42,27 @@ export const GlobalSnackbar: FC = () => {\n       key={notification.msg}\n       open={open}\n       variant={variantFromMsgType(notification.msgType)}\n+      onClose={() => setOpen(false)}\n+      autoHideDuration={notification.msgType === MsgType.Error ? 22000 : 6000}\n+      anchorOrigin={{ vertical: \"bottom\", horizontal: \"right\" }}",
+    "html_url": "https://github.com/coder/coder/pull/10553#discussion_r1383878481",
+    "id": 1383878481,
+    "line": 47,
+    "node_id": "PRRC_kwDOGkVX1s5SfE9R",
+    "original_commit_id": "8083591bc758b58d955d8aace8b4421321d05f4b",
+    "original_line": 47,
+    "original_position": 73,
+    "original_start_line": null,
+    "path": "site/src/components/GlobalSnackbar/GlobalSnackbar.tsx",
+    "position": 73,
+    "pull_request_review_id": 1716107361,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/10553",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1383878481/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2023-11-06T19:42:48Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1383878481",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/28937484?v=4",
+      "events_url": "https://api.github.com/users/buenos-nachos/events{/privacy}",
+      "followers_url": "https://api.github.com/users/buenos-nachos/followers",
+      "following_url": "https://api.github.com/users/buenos-nachos/following{/other_user}",
+      "gists_url": "https://api.github.com/users/buenos-nachos/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/buenos-nachos",
+      "id": 28937484,
+      "login": "buenos-nachos",
+      "node_id": "MDQ6VXNlcjI4OTM3NDg0",
+      "organizations_url": "https://api.github.com/users/buenos-nachos/orgs",
+      "received_events_url": "https://api.github.com/users/buenos-nachos/received_events",
+      "repos_url": "https://api.github.com/users/buenos-nachos/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/buenos-nachos/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/buenos-nachos/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/buenos-nachos",
+      "user_view_type": "public"
+    }
+  },
+  {
+    "_links": {
+      "html": {
+        "href": "https://github.com/coder/coder/pull/10553#discussion_r1383975549"
+      },
+      "pull_request": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/10553"
+      },
+      "self": {
+        "href": "https://api.github.com/repos/coder/coder/pulls/comments/1383975549"
+      }
+    },
+    "author_association": "MEMBER",
+    "body": "it's the little things \u2728 ",
+    "commit_id": "7dabbe3ca6f961143c7f876ca8ee53e9fe332e41",
+    "created_at": "2023-11-06T20:55:01Z",
+    "diff_hunk": "@@ -87,26 +42,27 @@ export const GlobalSnackbar: FC = () => {\n       key={notification.msg}\n       open={open}\n       variant={variantFromMsgType(notification.msgType)}\n+      onClose={() => setOpen(false)}\n+      autoHideDuration={notification.msgType === MsgType.Error ? 22000 : 6000}\n+      anchorOrigin={{ vertical: \"bottom\", horizontal: \"right\" }}",
+    "html_url": "https://github.com/coder/coder/pull/10553#discussion_r1383975549",
+    "id": 1383975549,
+    "in_reply_to_id": 1383878481,
+    "line": 47,
+    "node_id": "PRRC_kwDOGkVX1s5Sfcp9",
+    "original_commit_id": "8083591bc758b58d955d8aace8b4421321d05f4b",
+    "original_line": 47,
+    "original_position": 73,
+    "original_start_line": null,
+    "path": "site/src/components/GlobalSnackbar/GlobalSnackbar.tsx",
+    "position": 73,
+    "pull_request_review_id": 1716223828,
+    "pull_request_url": "https://api.github.com/repos/coder/coder/pulls/10553",
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/pulls/comments/1383975549/reactions"
+    },
+    "side": "RIGHT",
+    "start_line": null,
+    "start_side": null,
+    "subject_type": "line",
+    "updated_at": "2023-11-06T21:07:34Z",
+    "url": "https://api.github.com/repos/coder/coder/pulls/comments/1383975549",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/418348?v=4",
+      "events_url": "https://api.github.com/users/aslilac/events{/privacy}",
+      "followers_url": "https://api.github.com/users/aslilac/followers",
+      "following_url": "https://api.github.com/users/aslilac/following{/other_user}",
+      "gists_url": "https://api.github.com/users/aslilac/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/aslilac",
+      "id": 418348,
+      "login": "aslilac",
+      "node_id": "MDQ6VXNlcjQxODM0OA==",
+      "organizations_url": "https://api.github.com/users/aslilac/orgs",
+      "received_events_url": "https://api.github.com/users/aslilac/received_events",
+      "repos_url": "https://api.github.com/users/aslilac/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/aslilac/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/aslilac/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/aslilac",
+      "user_view_type": "public"
+    }
+  }
+]

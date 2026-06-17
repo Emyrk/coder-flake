@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 8,
+    "blob_url": "https://github.com/coder/coder/blob/a7e1650d9b294b295b3f16aab97c88a46b5968df/coderd%2Fdatabase%2Fmigrations%2Fmigrate.go",
+    "changes": 8,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/coderd%2Fdatabase%2Fmigrations%2Fmigrate.go?ref=a7e1650d9b294b295b3f16aab97c88a46b5968df",
+    "deletions": 0,
+    "filename": "coderd/database/migrations/migrate.go",
+    "patch": "@@ -12,6 +12,7 @@ import (\n \t\"sort\"\n \t\"strings\"\n \t\"sync\"\n+\t\"time\"\n \n \t\"github.com/golang-migrate/migrate/v4\"\n \t\"github.com/golang-migrate/migrate/v4/source\"\n@@ -101,6 +102,13 @@ func setup(db *sql.DB, migs fs.FS) (source.Driver, *migrate.Migrate, error) {\n \t\treturn nil, nil, xerrors.Errorf(\"new migrate instance: %w\", err)\n \t}\n \n+\t// The default LockTimeout of 15s is too short for concurrent migrations,\n+\t// especially when the number of migrations is large. Since we use\n+\t// pg_advisory_xact_lock which releases automatically when the transaction\n+\t// ends, we just need to wait long enough for any concurrent migration to\n+\t// finish.\n+\tm.LockTimeout = 2 * time.Minute\n+\n \treturn sourceDriver, m, nil\n }\n ",
+    "raw_url": "https://github.com/coder/coder/raw/a7e1650d9b294b295b3f16aab97c88a46b5968df/coderd%2Fdatabase%2Fmigrations%2Fmigrate.go",
+    "sha": "50a931c902fa2a34c4de2e8f555ae8d351143026",
+    "status": "modified"
+  }
+]

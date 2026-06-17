@@ -1,0 +1,26 @@
+[
+  {
+    "additions": 3,
+    "blob_url": "https://github.com/coder/coder/blob/832ba781efd79d06f7e2c6a0621823952a391908/flake.lock",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.lock?ref=832ba781efd79d06f7e2c6a0621823952a391908",
+    "deletions": 3,
+    "filename": "flake.lock",
+    "patch": "@@ -70,11 +70,11 @@\n     },\n     \"nixpkgs_2\": {\n       \"locked\": {\n-        \"lastModified\": 1692174805,\n-        \"narHash\": \"sha256-xmNPFDi/AUMIxwgOH/IVom55Dks34u1g7sFKKebxUm0=\",\n+        \"lastModified\": 1692264070,\n+        \"narHash\": \"sha256-WepAkIL2UcHOj7JJiaFS/vxrA9lklQHv8p+xGL+7oQ0=\",\n         \"owner\": \"nixos\",\n         \"repo\": \"nixpkgs\",\n-        \"rev\": \"caac0eb6bdcad0b32cb2522e03e4002c8975c62e\",\n+        \"rev\": \"42c25608aa2ad4e5d3716d8d63c606063513ba33\",\n         \"type\": \"github\"\n       },\n       \"original\": {",
+    "raw_url": "https://github.com/coder/coder/raw/832ba781efd79d06f7e2c6a0621823952a391908/flake.lock",
+    "sha": "c1218badef8b2607ccd7c4aa47a0078b56f4b01a",
+    "status": "modified"
+  },
+  {
+    "additions": 5,
+    "blob_url": "https://github.com/coder/coder/blob/832ba781efd79d06f7e2c6a0621823952a391908/flake.nix",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/flake.nix?ref=832ba781efd79d06f7e2c6a0621823952a391908",
+    "deletions": 1,
+    "filename": "flake.nix",
+    "patch": "@@ -13,13 +13,16 @@\n         pkgs = nixpkgs.legacyPackages.${system};\n         formatter = pkgs.nixpkgs-fmt;\n         # Check in https://search.nixos.org/packages to find new packages.\n-        # Use `nix flake update` to update the lock file if packages are out-of-date.\n+        # Use `nix --extra-experimental-features nix-command --extra-experimental-features flakes flake update`\n+        # to update the lock file if packages are out-of-date.\n+\n         devShellPackages = with pkgs; [\n           bat\n           cairo\n           curl\n           drpc.defaultPackage.${system}\n           gcc\n+          google-cloud-sdk\n           getopt\n           git\n           gh\n@@ -31,6 +34,7 @@\n           gopls\n           gotestsum\n           jq\n+          kubectl\n           kubernetes-helm\n           less\n           mockgen",
+    "raw_url": "https://github.com/coder/coder/raw/832ba781efd79d06f7e2c6a0621823952a391908/flake.nix",
+    "sha": "3a027ea6051aa3ff54984718619eb1183db7dd35",
+    "status": "modified"
+  }
+]

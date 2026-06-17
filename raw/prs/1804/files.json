@@ -1,0 +1,14 @@
+[
+  {
+    "additions": 4,
+    "blob_url": "https://github.com/coder/coder/blob/cd88da0c5085ea31cdbbf2ddeefedd13c3c6e497/cli%2Fserver_test.go",
+    "changes": 6,
+    "contents_url": "https://api.github.com/repos/coder/coder/contents/cli%2Fserver_test.go?ref=cd88da0c5085ea31cdbbf2ddeefedd13c3c6e497",
+    "deletions": 2,
+    "filename": "cli/server_test.go",
+    "patch": "@@ -91,17 +91,19 @@ func TestServer(t *testing.T) {\n \t\trequire.Eventually(t, func() bool {\n \t\t\tvar err error\n \t\t\ttoken, err = cfg.Session().Read()\n-\t\t\treturn err == nil\n+\t\t\treturn err == nil && token != \"\"\n \t\t}, 15*time.Second, 25*time.Millisecond)\n+\n \t\t// Verify that authentication was properly set in dev-mode.\n \t\taccessURL, err := cfg.URL().Read()\n \t\trequire.NoError(t, err)\n \t\tparsed, err := url.Parse(accessURL)\n \t\trequire.NoError(t, err)\n+\n \t\tclient := codersdk.New(parsed)\n \t\tclient.SessionToken = token\n \t\t_, err = client.User(ctx, codersdk.Me)\n-\t\trequire.NoError(t, err)\n+\t\trequire.NoError(t, err, \"token:\", token)\n \n \t\tcancelFunc()\n \t\trequire.ErrorIs(t, <-errC, context.Canceled)",
+    "raw_url": "https://github.com/coder/coder/raw/cd88da0c5085ea31cdbbf2ddeefedd13c3c6e497/cli%2Fserver_test.go",
+    "sha": "c9afbf2677158e15480063d0b09010591a52d518",
+    "status": "modified"
+  }
+]
