@@ -4,7 +4,7 @@ Research workspace for nondeterministic test flakes in [`coder/coder`](https://g
 
 A "flake" here means a test or CI failure that is nondeterministic. It is not a Nix flake.
 
-Start here: [one-page summary](ONE_PAGER.md).
+Start here: [wiki summary](ONE_PAGER.md). Each category has its own page under [`categories/`](categories/), with references collapsed at the bottom.
 
 ## Goals
 
