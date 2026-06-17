@@ -12,3 +12,4 @@ issue_number,pr_number,event,created_at,actor,source_type,source_title,source_ur
 2709,2730,cross-referenced,2022-06-29T17:43:33Z,Emyrk,issue,test: Try again in unit test if user already exists,https://github.com/coder/coder/pull/2730
 3747,3765,cross-referenced,2022-08-30T23:08:03Z,kylecarbs,issue,fix: Scope error to test functions to fix TestFeaturesService race,https://github.com/coder/coder/pull/3765
 4607,4842,cross-referenced,2022-11-01T19:27:46Z,kylecarbs,issue,fix: Flake on `TestReplica/TwentyConcurrent`,https://github.com/coder/coder/pull/4842
+5159,5160,cross-referenced,2022-11-23T20:51:53Z,BrunoQuaresma,issue,chore: Skip reconnect and complete test,https://github.com/coder/coder/pull/5160

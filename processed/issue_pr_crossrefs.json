@@ -128,5 +128,15 @@
     "source_title": "fix: Flake on `TestReplica/TwentyConcurrent`",
     "source_type": "issue",
     "source_url": "https://github.com/coder/coder/pull/4842"
+  },
+  {
+    "actor": "BrunoQuaresma",
+    "created_at": "2022-11-23T20:51:53Z",
+    "event": "cross-referenced",
+    "issue_number": 5159,
+    "pr_number": 5160,
+    "source_title": "chore: Skip reconnect and complete test",
+    "source_type": "issue",
+    "source_url": "https://github.com/coder/coder/pull/5160"
   }
 ]

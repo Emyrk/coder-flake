@@ -1,0 +1,48 @@
+[
+  {
+    "author_association": "MEMBER",
+    "body": "Hopefully fixed (or at least alleviated by #5169), let's re-open if it is still a problem.",
+    "created_at": "2022-11-24T12:15:48Z",
+    "html_url": "https://github.com/coder/coder/issues/5159#issuecomment-1326371382",
+    "id": 1326371382,
+    "issue_url": "https://api.github.com/repos/coder/coder/issues/5159",
+    "node_id": "IC_kwDOGkVX1s5PDtI2",
+    "performed_via_github_app": null,
+    "pin": null,
+    "reactions": {
+      "+1": 0,
+      "-1": 0,
+      "confused": 0,
+      "eyes": 0,
+      "heart": 0,
+      "hooray": 0,
+      "laugh": 0,
+      "rocket": 0,
+      "total_count": 0,
+      "url": "https://api.github.com/repos/coder/coder/issues/comments/1326371382/reactions"
+    },
+    "updated_at": "2022-11-24T12:15:48Z",
+    "url": "https://api.github.com/repos/coder/coder/issues/comments/1326371382",
+    "user": {
+      "avatar_url": "https://avatars.githubusercontent.com/u/147409?v=4",
+      "events_url": "https://api.github.com/users/mafredri/events{/privacy}",
+      "followers_url": "https://api.github.com/users/mafredri/followers",
+      "following_url": "https://api.github.com/users/mafredri/following{/other_user}",
+      "gists_url": "https://api.github.com/users/mafredri/gists{/gist_id}",
+      "gravatar_id": "",
+      "html_url": "https://github.com/mafredri",
+      "id": 147409,
+      "login": "mafredri",
+      "node_id": "MDQ6VXNlcjE0NzQwOQ==",
+      "organizations_url": "https://api.github.com/users/mafredri/orgs",
+      "received_events_url": "https://api.github.com/users/mafredri/received_events",
+      "repos_url": "https://api.github.com/users/mafredri/repos",
+      "site_admin": false,
+      "starred_url": "https://api.github.com/users/mafredri/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/mafredri/subscriptions",
+      "type": "User",
+      "url": "https://api.github.com/users/mafredri",
+      "user_view_type": "public"
+    }
+  }
+]
