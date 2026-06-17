@@ -1,71 +1,94 @@
-# Coder CI flakes: what we found
+# Coder CI flakes: one-page summary
 
-A flake is a test or CI failure that fails nondeterministically, then often passes on rerun. This research looked at GitHub issues and PRs in [`coder/coder`](https://github.com/coder/coder) that mention test flakes, then grouped them by failure mode.
+A flake is a test or CI failure that fails nondeterministically, then often passes on rerun. We analyzed flake-related issues and PRs in [`coder/coder`](https://github.com/coder/coder), grouped them by failure mode, and looked for fixes that repeat.
 
-## Short version
+## What we found
 
-Coder's flakes are not random. They cluster around a few repeat patterns:
+Coder flakes are not random. Most fall into a few recurring buckets:
 
-| category | rows |
-| --- | ---: |
-| Networking, proxy, websocket | 105 |
-| Workspace, agent, provisioner lifecycle | 102 |
-| Concurrency and races | 74 |
-| Database, transactions, migrations | 47 |
-| Browser, e2e, Playwright | 47 |
-| Timing and eventual consistency | 46 |
+| rank | category | rows | common fix |
+| ---: | --- | ---: | --- |
+| 1 | Networking, proxy, websocket | 105 | explicit readiness, route assertions, local fakes, close-drain helpers |
+| 2 | Workspace, agent, provisioner lifecycle | 102 | wait for real lifecycle state, not sleeps |
+| 3 | Concurrency and races | 74 | isolate subtests, join goroutines, avoid shared mutable state |
+| 4 | Database, transactions, migrations | 47 | isolate DB resources, clean up sockets/DBs, reduce DB-heavy parallelism |
+| 5 | Browser, e2e, Playwright | 47 | stable selectors, trace artifacts, wait for settled UI state |
+| 6 | Timing and eventual consistency | 46 | deterministic clocks, explicit time params, condition polling |
+| 7 | Platform or OS-specific CI behavior | 31 | platform helpers, runner-aware parallelism, better failure metadata |
+| 8 | Resource exhaustion and timeouts | 21 | right-size parallelism, log runner resources, avoid blanket timeout bumps |
+| 9 | Test isolation and order dependency | 20 | unique names, temp dirs, ports, contexts, and cleanup per test |
 
-The main fix is not bigger timeouts. The main fix is better test structure:
+There were also 41 false positives about Nix `flake.nix` maintenance and 25 rows that need manual reading.
 
-1. Wait for real state, not time.
-2. Isolate mutable state per test and subtest.
-3. Use fakes or injected transports instead of real external systems.
-4. Track flakes by signature so rerun-green failures do not disappear.
-5. Quarantine noisy tests only with owner, reason, date, and expiry.
+## Quick and dirty
 
-## Recommended first move
+The repeated mistakes, sorted by occurrence:
 
-Start with workspace, agent, and provisioner lifecycle tests.
+- Network tests assume the route, socket, websocket, DERP path, or proxy state is ready before it is.
+- Workspace and agent tests assert before provisioners, agents, builds, PTYs, logs, or apps reach the expected lifecycle point.
+- Parallel tests share state: maps, contexts, transports, users, deployments, ports, DB rows, or goroutines.
+- DB-backed tests leak resources or depend on timing around transactions, migrations, cleanup, or Postgres runner behavior.
+- Browser tests assert against transient UI state, ambiguous selectors, or navigation before the page settles.
+- Time-based tests compare wall-clock values too tightly or call `time.Now()` around boundaries.
+- CI jobs run platform-sensitive tests with the wrong assumptions about OS, CPU, memory, shell, browser, or Postgres behavior.
+- Quarantine sometimes removes pain without recording owner, expiry, or retirement criteria.
 
-That bucket is large, central to Coder, and likely to produce reusable helper wins. Build shared helpers that wait for exact lifecycle milestones:
+## Recommended approach
 
-- workspace build created
-- provisioner job started
-- provisioner job completed or failed
-- expected provisioner log line drained
-- agent connected and ready
-- workspace app route available
+Do not solve this as one giant flake cleanup. Treat it as a reliability program with category-specific fixes.
 
-The helper should report the last observed state when it times out. That turns a flaky timeout into a useful failure.
+1. Track flakes by signature.
+   - test name
+   - package or spec file
+   - normalized error message
+   - category
+   - job and platform
+   - linked issue or PR
 
-## Why this matters
+2. Add an intake template.
+   - failure link
+   - category
+   - suspected owner area
+   - reproduction command
+   - whether rerun passed
+   - first seen and last seen
 
-Repeated flakes burn CI minutes, hide real regressions, and train engineers to ignore red builds. Worse, a rerun that turns green deletes the evidence unless we record the signature.
+3. Fix the top buckets with shared helpers.
+   - networking: server-ready, route-selected, message-ack, close-drain helpers
+   - lifecycle: workspace build, provisioner job, log drain, agent ready helpers
+   - concurrency: goroutine join, per-subtest context, immutable testcase helpers
+   - DB: isolated DB resources, cleanup checks, package-specific parallelism
+   - browser: stable locator helpers and mandatory trace artifacts on failure
+   - time: injected clocks and explicit time parameters
 
-The research shows recurring root causes and recurring fixes. That means we can treat flakes as a reliability program, not a pile of one-off bugs.
+4. Quarantine with discipline.
+   - issue link
+   - owner
+   - category
+   - date
+   - retirement condition
+   - default expiry, 30 days
 
-## Proposed rollout
+5. Add targeted detection, not blanket reruns.
+   - `go test -count=N` for labeled flakes
+   - `-race` for race-suspect packages
+   - nightly stress for high-risk packages
+   - repeated Playwright/Jest specs with trace uploads
 
-1. Baseline and containment, 1 to 2 weeks
-   - Add a flake issue template and category taxonomy.
-   - Track normalized flake signatures.
-   - Require quarantine metadata: issue, owner, category, date, retirement condition.
+## First workstream to pilot
 
-2. Deterministic helpers, 2 to 6 weeks
-   - Harden lifecycle helpers for workspace, provisioner, agent, and log drain states.
-   - Add deterministic time fixtures for scheduling and metrics tests.
-   - Add isolated HTTP client and transport helpers.
-   - Add websocket readiness and close-drain helpers.
+Pick one category and make it boring.
 
-3. Detection automation, 4 to 8 weeks
-   - Add a targeted `go test -count` and `-race` workflow for labeled flakes.
-   - Add nightly stress runs for high-risk packages.
-   - Upload Playwright traces, screenshots, and locator state for browser flakes.
+Best pilot: workspace, agent, and provisioner lifecycle. It is the second largest bucket, core to Coder, and the helper work should reduce timing, DB-backed lifecycle, and resource flakes too.
 
-4. Enforcement, after signal stabilizes
-   - Promote safe known-pattern checks to blocking.
-   - Require verification commands in flake fix PRs.
-   - Enforce quarantine expiry for high-value tests.
+Pilot output:
+
+- lifecycle wait helpers for build, provisioner, logs, agent ready, and app route state
+- timeout errors that print the last observed state
+- 3 to 5 existing flaky tests migrated to the helpers
+- a short pattern doc showing when to use the helpers
+
+This is not the only category. It is just the best first slice.
 
 ## Links
 
@@ -73,7 +96,7 @@ The research shows recurring root causes and recurring fixes. That means we can 
 - [Common fixes by category](notes/common-solutions.md)
 - [Category taxonomy](notes/category-taxonomy.md)
 - [Categorized data](processed/categories.csv)
-- [Crawler and raw data](README.md)
+- [Raw data and crawler](README.md)
 
 <details>
 <summary>Dataset details</summary>
@@ -95,23 +118,6 @@ Expanded corpus:
 - 563 categorized rows total
 
 This is a flake candidate corpus, not every issue and PR in `coder/coder`.
-
-</details>
-
-<details>
-<summary>Category notes</summary>
-
-Networking, proxy, websocket, 105 rows. Transport tests often observed distributed network state too early or assumed ideal delivery. Examples include websocket close races, DERP versus direct path assumptions, random port conflicts, DNS noise, and tunnel startup latency.
-
-Workspace, agent, provisioner lifecycle, 102 rows. Tests often asserted before a workspace, provisioner job, agent, PTY, log stream, or template version reached the expected state.
-
-Concurrency and races, 74 rows. Shared mutable state, goroutine cleanup, waitgroups, contexts, maps, and parallel subtests produced nondeterministic outcomes.
-
-Database, transactions, migrations, 47 rows. Shared Postgres resources, cleanup gaps, socket leaks, transaction timing, migration behavior, and DB-backed async state amplified flakes.
-
-Browser, e2e, Playwright, 47 rows. UI tests often asserted against transient state, ambiguous selectors, unflushed React state, browser dependency availability, or navigation before the page settled.
-
-Timing and eventual consistency, 46 rows. Tests checked async state before convergence or compared wall-clock values too tightly.
 
 </details>
 
