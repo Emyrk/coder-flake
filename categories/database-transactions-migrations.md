@@ -46,7 +46,6 @@ t.Run("second", func(t *testing.T) {
 
 ```go
 for _, tc := range cases {
-	tc := tc
 	t.Run(tc.name, func(t *testing.T) {
 		t.Parallel()
 		user := dbgen.User(t, db, database.User{
@@ -55,6 +54,24 @@ for _, tc := range cases {
 		require.NoError(t, db.UpdateUser(ctx, user.ID, tc.patch))
 	})
 }
+```
+
+### Bad: assert exact timestamps after a DB round trip
+
+```go
+now := time.Now()
+row := dbgen.Token(t, db, database.Token{CreatedAt: now})
+
+require.Equal(t, now, row.CreatedAt)
+```
+
+### Better: compare within precision the DB actually preserves
+
+```go
+now := dbtime.Now()
+row := dbgen.Token(t, db, database.Token{CreatedAt: now})
+
+require.WithinDuration(t, now, row.CreatedAt, time.Millisecond)
 ```
 
 </details>

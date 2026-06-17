@@ -14,7 +14,7 @@ Race flakes are often real product bugs or test harness bugs that only show up u
 
 ## Common fixes
 
-- Scope state per subtest. Copy maps and testcase structs before `t.Parallel()`.
+- Scope mutable state per subtest. Do not share maps, buffers, contexts, or handles across parallel subtests without synchronization.
 - Use per-subtest contexts so one timeout does not poison sibling subtests.
 - Join goroutines before cleanup and context cancellation.
 - Never call `t.Fatal`, `require.*`, or `assert.*` from non-test goroutines.
@@ -27,26 +27,62 @@ These examples are illustrative patterns for the category, not direct patches ag
 <details>
 <summary>Code examples</summary>
 
-### Bad: parallel subtests capture shared loop state
+### Bad: assert from a background goroutine
 
 ```go
-for _, tc := range cases {
-	t.Run(tc.name, func(t *testing.T) {
+go func() {
+	result, err := doAsyncWork(ctx)
+	require.NoError(t, err)
+	require.Equal(t, want, result)
+}()
+```
+
+### Better: send results back to the test goroutine
+
+```go
+type result struct {
+	value string
+	err   error
+}
+results := make(chan result, 1)
+
+go func() {
+	value, err := doAsyncWork(ctx)
+	results <- result{value: value, err: err}
+}()
+
+select {
+case got := <-results:
+	require.NoError(t, got.err)
+	require.Equal(t, want, got.value)
+case <-time.After(testutil.WaitLong):
+	t.Fatal("timed out waiting for async work")
+}
+```
+
+### Bad: share mutable state across parallel subtests
+
+```go
+seen := map[string]bool{}
+for _, name := range names {
+	t.Run(name, func(t *testing.T) {
 		t.Parallel()
-		require.Equal(t, tc.want, run(tc.input))
+		seen[name] = true
 	})
 }
 ```
 
-### Better: copy testcase data before `t.Parallel()`
+### Better: keep parallel subtest state local or synchronized
 
 ```go
-for _, tc := range cases {
-	tc := tc
-	t.Run(tc.name, func(t *testing.T) {
+var mu sync.Mutex
+seen := map[string]bool{}
+for _, name := range names {
+	t.Run(name, func(t *testing.T) {
 		t.Parallel()
-		got := run(tc.input)
-		require.Equal(t, tc.want, got)
+		mu.Lock()
+		defer mu.Unlock()
+		seen[name] = true
 	})
 }
 ```
@@ -55,7 +91,7 @@ for _, tc := range cases {
 
 ## Suggested first slice
 
-Add review checks and helper patterns for goroutine joins, per-subtest contexts, and immutable testcase setup.
+Add review checks and helper patterns for goroutine joins, per-subtest contexts, and synchronized shared state.
 
 <details>
 <summary>References (74)</summary>

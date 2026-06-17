@@ -41,6 +41,22 @@ from github_references
 where category != 'not-a-test-flake/nix-flake-or-maintenance';
 ```
 
+### Bad: tag every `flake.lock` update as CI flake work
+
+```md
+Labels: flake, ci, reliability
+Title: chore: update flake.lock
+```
+
+### Better: route Nix maintenance separately
+
+```md
+Labels: nix, dependencies
+Title: chore: update flake.lock
+
+Not counted in nondeterministic test-flake metrics.
+```
+
 </details>
 
 ## Suggested first slice

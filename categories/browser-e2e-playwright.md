@@ -48,6 +48,25 @@ await test.info().attach("workspace-url", {
 });
 ```
 
+### Bad: click before the async request settles
+
+```ts
+await page.getByRole("button", { name: "Save" }).click();
+await expect(page.getByText("Saved")).toBeVisible();
+```
+
+### Better: wait for the API response and final UI state
+
+```ts
+await Promise.all([
+	page.waitForResponse((res) =>
+		res.url().includes("/api/v2/workspaces") && res.status() === 200,
+	),
+	page.getByRole("button", { name: "Save" }).click(),
+]);
+await expect(page.getByTestId("save-status")).toHaveText("Saved");
+```
+
 </details>
 
 ## Suggested first slice

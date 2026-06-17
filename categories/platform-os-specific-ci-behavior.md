@@ -45,6 +45,23 @@ _, err := os.Stat(path)
 require.NoError(t, err)
 ```
 
+### Bad: assume a fixed shell binary
+
+```go
+cmd := exec.Command("bash", "-lc", "echo ok")
+require.NoError(t, cmd.Run())
+```
+
+### Better: skip or branch with explicit platform intent
+
+```go
+if runtime.GOOS == "windows" {
+	t.Skip("tracked in #12345: requires POSIX shell semantics")
+}
+cmd := exec.Command("bash", "-lc", "echo ok")
+require.NoError(t, cmd.Run())
+```
+
 </details>
 
 ## Suggested first slice

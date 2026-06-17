@@ -54,6 +54,23 @@ require.Eventuallyf(t, func() bool {
 }, testutil.WaitLong, testutil.IntervalFast, "last status: %s", last)
 ```
 
+### Bad: compare against a second `time.Now()` at the boundary
+
+```go
+expiresAt := time.Now().Add(time.Hour)
+require.True(t, expiresAt.After(time.Now().Add(59*time.Minute)))
+```
+
+### Better: inject one clock value and derive expectations from it
+
+```go
+clock := quartz.NewMock(t)
+now := clock.Now()
+expiresAt := now.Add(time.Hour)
+
+require.Equal(t, now.Add(time.Hour), expiresAt)
+```
+
 </details>
 
 ## Suggested first slice

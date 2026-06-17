@@ -45,6 +45,21 @@ Test failed again. Rerun passed.
 - Artifacts: logs, trace, last observed agent state
 ```
 
+### Bad: omit reproduction scope
+
+```md
+Saw a flake in CI. Not sure what happened.
+```
+
+### Better: include the targeted rerun command
+
+```md
+## Reproduction
+- Command: `go test ./coderd -run TestWorkspaceAgentReconnect -count=50`
+- Result: failed 2/50 on linux-amd64-postgres
+- First failing seed/log: <artifact URL>
+```
+
 </details>
 
 ## Suggested first slice

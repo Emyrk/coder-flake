@@ -52,6 +52,27 @@ require.NoError(t, err)
 require.Equal(t, "ok", resp.Choices[0].Message.Content)
 ```
 
+### Bad: depend on DNS or the internet for product-neutral behavior
+
+```go
+resp, err := http.Get("https://example.com/healthz")
+require.NoError(t, err)
+require.Equal(t, http.StatusOK, resp.StatusCode)
+```
+
+### Better: use an `httptest.Server` for product-neutral behavior
+
+```go
+srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}))
+t.Cleanup(srv.Close)
+
+resp, err := srv.Client().Get(srv.URL + "/healthz")
+require.NoError(t, err)
+require.Equal(t, http.StatusOK, resp.StatusCode)
+```
+
 </details>
 
 ## Suggested first slice

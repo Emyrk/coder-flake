@@ -50,6 +50,23 @@ t.Cleanup(func() {
 })
 ```
 
+### Bad: bind to a hardcoded port
+
+```go
+ln, err := net.Listen("tcp", "127.0.0.1:3000")
+require.NoError(t, err)
+```
+
+### Better: let the listener allocate the port
+
+```go
+ln, err := net.Listen("tcp", "127.0.0.1:0")
+require.NoError(t, err)
+t.Cleanup(func() { _ = ln.Close() })
+
+addr := ln.Addr().String()
+```
+
 </details>
 
 ## Suggested first slice

@@ -53,6 +53,28 @@ require.Eventuallyf(t, func() bool {
 }, testutil.WaitLong, testutil.IntervalFast, "last agent state: %+v", last)
 ```
 
+### Bad: cancel the context before logs drain
+
+```go
+ctx, cancel := context.WithCancel(context.Background())
+logs := agent.StartupLogs(ctx)
+
+cancel()
+require.Contains(t, logs.String(), "agent started")
+```
+
+### Better: wait for the log marker, then clean up
+
+```go
+ctx, cancel := context.WithCancel(context.Background())
+t.Cleanup(cancel)
+logs := agent.StartupLogs(ctx)
+
+require.Eventually(t, func() bool {
+	return strings.Contains(logs.String(), "agent started")
+}, testutil.WaitLong, testutil.IntervalFast)
+```
+
 </details>
 
 ## Suggested first slice

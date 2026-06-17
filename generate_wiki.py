@@ -46,13 +46,13 @@ CATEGORY_INFO = {
         "summary": "Shared mutable state, goroutines, waitgroups, contexts, maps, and parallel subtests produce nondeterministic outcomes.",
         "why": "Race flakes are often real product bugs or test harness bugs that only show up under unlucky scheduling. Reruns hide them until they come back worse.",
         "fixes": [
-            "Scope state per subtest. Copy maps and testcase structs before `t.Parallel()`.",
+            "Scope mutable state per subtest. Do not share maps, buffers, contexts, or handles across parallel subtests without synchronization.",
             "Use per-subtest contexts so one timeout does not poison sibling subtests.",
             "Join goroutines before cleanup and context cancellation.",
             "Never call `t.Fatal`, `require.*`, or `assert.*` from non-test goroutines.",
             "Verify race suspects with `go test -race -count=N`.",
         ],
-        "pilot": "Add review checks and helper patterns for goroutine joins, per-subtest contexts, and immutable testcase setup.",
+        "pilot": "Add review checks and helper patterns for goroutine joins, per-subtest contexts, and synchronized shared state.",
     },
     "database/transactions/migrations": {
         "slug": "database-transactions-migrations",
@@ -251,22 +251,31 @@ require.Eventuallyf(t, func() bool {
 ```"""),
     ],
     "concurrency/race": [
-        ("Bad: parallel subtests capture shared loop state", """```go
-for _, tc := range cases {
-	t.Run(tc.name, func(t *testing.T) {
-		t.Parallel()
-		require.Equal(t, tc.want, run(tc.input))
-	})
-}
+        ("Bad: assert from a background goroutine", """```go
+go func() {
+	result, err := doAsyncWork(ctx)
+	require.NoError(t, err)
+	require.Equal(t, want, result)
+}()
 ```"""),
-        ("Better: copy testcase data before `t.Parallel()`", """```go
-for _, tc := range cases {
-	tc := tc
-	t.Run(tc.name, func(t *testing.T) {
-		t.Parallel()
-		got := run(tc.input)
-		require.Equal(t, tc.want, got)
-	})
+        ("Better: send results back to the test goroutine", """```go
+type result struct {
+	value string
+	err   error
+}
+results := make(chan result, 1)
+
+go func() {
+	value, err := doAsyncWork(ctx)
+	results <- result{value: value, err: err}
+}()
+
+select {
+case got := <-results:
+	require.NoError(t, got.err)
+	require.Equal(t, want, got.value)
+case <-time.After(testutil.WaitLong):
+	t.Fatal("timed out waiting for async work")
 }
 ```"""),
     ],
@@ -285,7 +294,6 @@ t.Run("second", func(t *testing.T) {
 ```"""),
         ("Better: create isolated DB resources per subtest", """```go
 for _, tc := range cases {
-	tc := tc
 	t.Run(tc.name, func(t *testing.T) {
 		t.Parallel()
 		user := dbgen.User(t, db, database.User{
@@ -353,7 +361,6 @@ require.NoError(t, err)
     "resource exhaustion/timeout": [
         ("Bad: unbounded parallel work inside an already parallel package", """```go
 for _, workspace := range workspaces {
-	workspace := workspace
 	go func() {
 		_ = startWorkspace(ctx, workspace)
 	}()
@@ -364,7 +371,6 @@ group, ctx := errgroup.WithContext(ctx)
 group.SetLimit(4)
 
 for _, workspace := range workspaces {
-	workspace := workspace
 	group.Go(func() error {
 		return startWorkspace(ctx, workspace)
 	})
@@ -443,6 +449,208 @@ where category != 'not-a-test-flake/nix-flake-or-maintenance';
 }
 
 
+ADDITIONAL_CODE_EXAMPLES = {
+    "networking/proxy/websocket": [
+        ("Bad: ignore websocket close reasons", """```go
+_ = conn.Close()
+require.NoError(t, <-readerDone)
+```"""),
+        ("Better: drain the reader and assert the expected close", """```go
+closeErr := make(chan error, 1)
+go func() {
+	for {
+		_, _, err := conn.ReadMessage()
+		if err != nil {
+			closeErr <- err
+			return
+		}
+	}
+}()
+
+require.NoError(t, conn.WriteControl(
+	websocket.CloseMessage,
+	websocket.FormatCloseMessage(websocket.CloseNormalClosure, "done"),
+	time.Now().Add(time.Second),
+))
+require.Eventually(t, func() bool {
+	select {
+	case err := <-closeErr:
+		return websocket.IsCloseError(err, websocket.CloseNormalClosure)
+	default:
+		return false
+	}
+}, testutil.WaitShort, testutil.IntervalFast)
+```"""),
+    ],
+    "workspace/agent lifecycle": [
+        ("Bad: cancel the context before logs drain", """```go
+ctx, cancel := context.WithCancel(context.Background())
+logs := agent.StartupLogs(ctx)
+
+cancel()
+require.Contains(t, logs.String(), "agent started")
+```"""),
+        ("Better: wait for the log marker, then clean up", """```go
+ctx, cancel := context.WithCancel(context.Background())
+t.Cleanup(cancel)
+logs := agent.StartupLogs(ctx)
+
+require.Eventually(t, func() bool {
+	return strings.Contains(logs.String(), "agent started")
+}, testutil.WaitLong, testutil.IntervalFast)
+```"""),
+    ],
+    "concurrency/race": [
+        ("Bad: share mutable state across parallel subtests", """```go
+seen := map[string]bool{}
+for _, name := range names {
+	t.Run(name, func(t *testing.T) {
+		t.Parallel()
+		seen[name] = true
+	})
+}
+```"""),
+        ("Better: keep parallel subtest state local or synchronized", """```go
+var mu sync.Mutex
+seen := map[string]bool{}
+for _, name := range names {
+	t.Run(name, func(t *testing.T) {
+		t.Parallel()
+		mu.Lock()
+		defer mu.Unlock()
+		seen[name] = true
+	})
+}
+```"""),
+    ],
+    "database/transactions/migrations": [
+        ("Bad: assert exact timestamps after a DB round trip", """```go
+now := time.Now()
+row := dbgen.Token(t, db, database.Token{CreatedAt: now})
+
+require.Equal(t, now, row.CreatedAt)
+```"""),
+        ("Better: compare within precision the DB actually preserves", """```go
+now := dbtime.Now()
+row := dbgen.Token(t, db, database.Token{CreatedAt: now})
+
+require.WithinDuration(t, now, row.CreatedAt, time.Millisecond)
+```"""),
+    ],
+    "browser/e2e/playwright": [
+        ("Bad: click before the async request settles", """```ts
+await page.getByRole("button", { name: "Save" }).click();
+await expect(page.getByText("Saved")).toBeVisible();
+```"""),
+        ("Better: wait for the API response and final UI state", """```ts
+await Promise.all([
+	page.waitForResponse((res) =>
+		res.url().includes("/api/v2/workspaces") && res.status() === 200,
+	),
+	page.getByRole("button", { name: "Save" }).click(),
+]);
+await expect(page.getByTestId("save-status")).toHaveText("Saved");
+```"""),
+    ],
+    "timing/eventual consistency": [
+        ("Bad: compare against a second `time.Now()` at the boundary", """```go
+expiresAt := time.Now().Add(time.Hour)
+require.True(t, expiresAt.After(time.Now().Add(59*time.Minute)))
+```"""),
+        ("Better: inject one clock value and derive expectations from it", """```go
+clock := quartz.NewMock(t)
+now := clock.Now()
+expiresAt := now.Add(time.Hour)
+
+require.Equal(t, now.Add(time.Hour), expiresAt)
+```"""),
+    ],
+    "platform/os-specific CI behavior": [
+        ("Bad: assume a fixed shell binary", """```go
+cmd := exec.Command("bash", "-lc", "echo ok")
+require.NoError(t, cmd.Run())
+```"""),
+        ("Better: skip or branch with explicit platform intent", """```go
+if runtime.GOOS == "windows" {
+	t.Skip("tracked in #12345: requires POSIX shell semantics")
+}
+cmd := exec.Command("bash", "-lc", "echo ok")
+require.NoError(t, cmd.Run())
+```"""),
+    ],
+    "resource exhaustion/timeout": [
+        ("Bad: timeout without runner context", """```go
+ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+defer cancel()
+
+require.NoError(t, runLargeScenario(ctx))
+```"""),
+        ("Better: include package fanout and runner context in timeout failures", """```go
+ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+defer cancel()
+
+err := runLargeScenario(ctx)
+require.NoErrorf(t, err, "job=%s package=%s parallel=%d cpus=%d",
+	os.Getenv("GITHUB_JOB"), "coderd", runtime.GOMAXPROCS(0), runtime.NumCPU(),
+)
+```"""),
+    ],
+    "test isolation/order dependency": [
+        ("Bad: bind to a hardcoded port", """```go
+ln, err := net.Listen("tcp", "127.0.0.1:3000")
+require.NoError(t, err)
+```"""),
+        ("Better: let the listener allocate the port", """```go
+ln, err := net.Listen("tcp", "127.0.0.1:0")
+require.NoError(t, err)
+t.Cleanup(func() { _ = ln.Close() })
+
+addr := ln.Addr().String()
+```"""),
+    ],
+    "external service/dependency": [
+        ("Bad: depend on DNS or the internet for product-neutral behavior", """```go
+resp, err := http.Get("https://example.com/healthz")
+require.NoError(t, err)
+require.Equal(t, http.StatusOK, resp.StatusCode)
+```"""),
+        ("Better: use an `httptest.Server` for product-neutral behavior", """```go
+srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}))
+t.Cleanup(srv.Close)
+
+resp, err := srv.Client().Get(srv.URL + "/healthz")
+require.NoError(t, err)
+require.Equal(t, http.StatusOK, resp.StatusCode)
+```"""),
+    ],
+    "unknown/needs manual read": [
+        ("Bad: omit reproduction scope", """```md
+Saw a flake in CI. Not sure what happened.
+```"""),
+        ("Better: include the targeted rerun command", """```md
+## Reproduction
+- Command: `go test ./coderd -run TestWorkspaceAgentReconnect -count=50`
+- Result: failed 2/50 on linux-amd64-postgres
+- First failing seed/log: <artifact URL>
+```"""),
+    ],
+    "not-a-test-flake/nix-flake-or-maintenance": [
+        ("Bad: tag every `flake.lock` update as CI flake work", """```md
+Labels: flake, ci, reliability
+Title: chore: update flake.lock
+```"""),
+        ("Better: route Nix maintenance separately", """```md
+Labels: nix, dependencies
+Title: chore: update flake.lock
+
+Not counted in nondeterministic test-flake metrics.
+```"""),
+    ],
+}
+
+
 def clean(s: str, n: int = 360) -> str:
     s = re.sub(r"\s+", " ", s or "").strip()
     s = (
@@ -513,7 +721,7 @@ def ref_table(rows: list[dict[str, str]], pr_attribution: dict[str, dict[str, st
 
 
 def code_examples(category: str) -> str:
-    examples = CODE_EXAMPLES[category]
+    examples = CODE_EXAMPLES[category] + ADDITIONAL_CODE_EXAMPLES.get(category, [])
     lines = ["<details>", "<summary>Code examples</summary>", ""]
     for title, snippet in examples:
         lines += [f"### {title}", "", snippet, ""]

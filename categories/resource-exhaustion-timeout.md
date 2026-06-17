@@ -31,7 +31,6 @@ These examples are illustrative patterns for the category, not direct patches ag
 
 ```go
 for _, workspace := range workspaces {
-	workspace := workspace
 	go func() {
 		_ = startWorkspace(ctx, workspace)
 	}()
@@ -45,13 +44,33 @@ group, ctx := errgroup.WithContext(ctx)
 group.SetLimit(4)
 
 for _, workspace := range workspaces {
-	workspace := workspace
 	group.Go(func() error {
 		return startWorkspace(ctx, workspace)
 	})
 }
 
 require.NoError(t, group.Wait())
+```
+
+### Bad: timeout without runner context
+
+```go
+ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+defer cancel()
+
+require.NoError(t, runLargeScenario(ctx))
+```
+
+### Better: include package fanout and runner context in timeout failures
+
+```go
+ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+defer cancel()
+
+err := runLargeScenario(ctx)
+require.NoErrorf(t, err, "job=%s package=%s parallel=%d cpus=%d",
+	os.Getenv("GITHUB_JOB"), "coderd", runtime.GOMAXPROCS(0), runtime.NumCPU(),
+)
 ```
 
 </details>

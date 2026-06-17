@@ -64,6 +64,42 @@ conn, _, err := websocket.DefaultDialer.Dial(wsURL(srv.URL), nil)
 require.NoError(t, err)
 ```
 
+### Bad: ignore websocket close reasons
+
+```go
+_ = conn.Close()
+require.NoError(t, <-readerDone)
+```
+
+### Better: drain the reader and assert the expected close
+
+```go
+closeErr := make(chan error, 1)
+go func() {
+	for {
+		_, _, err := conn.ReadMessage()
+		if err != nil {
+			closeErr <- err
+			return
+		}
+	}
+}()
+
+require.NoError(t, conn.WriteControl(
+	websocket.CloseMessage,
+	websocket.FormatCloseMessage(websocket.CloseNormalClosure, "done"),
+	time.Now().Add(time.Second),
+))
+require.Eventually(t, func() bool {
+	select {
+	case err := <-closeErr:
+		return websocket.IsCloseError(err, websocket.CloseNormalClosure)
+	default:
+		return false
+	}
+}, testutil.WaitShort, testutil.IntervalFast)
+```
+
 </details>
 
 ## Suggested first slice
