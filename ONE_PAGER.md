@@ -10,7 +10,7 @@ Coder flakes are not random. Most fall into a few recurring buckets.
 | ---: | --- | ---: | --- |
 | 1 | [Networking, proxy, websocket](categories/networking-proxy-websocket.md) | 105 | Add explicit server-ready signals before clients connect. |
 | 2 | [Workspace, agent, provisioner lifecycle](categories/workspace-agent-lifecycle.md) | 102 | Wait for exact lifecycle states: build created, provisioner job started, job complete, logs drained, agent ready, app route available. |
-| 3 | [Concurrency and races](categories/concurrency-race.md) | 74 | Scope state per subtest. Copy maps and testcase structs before `t.Parallel()`. |
+| 3 | [Concurrency and races](categories/concurrency-race.md) | 74 | Scope mutable state per subtest. Do not share maps, buffers, contexts, or handles across parallel subtests without synchronization. |
 | 4 | [Database, transactions, migrations](categories/database-transactions-migrations.md) | 47 | Create isolated DB resources per test where practical. |
 | 5 | [Browser, e2e, Playwright](categories/browser-e2e-playwright.md) | 47 | Use stable selectors and avoid broad text or role matches that can hit multiple elements. |
 | 6 | [Timing and eventual consistency](categories/timing-eventual-consistency.md) | 46 | Inject clocks or pass explicit time values in scheduling, TTL, metrics, and status tests. |
