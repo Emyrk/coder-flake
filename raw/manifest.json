@@ -1,0 +1,31 @@
+{
+  "downloaded_at": "2026-06-17T14:14:44.233409+00:00",
+  "repo": "coder/coder",
+  "queries": [
+    {
+      "name": "issues-flake-title",
+      "q": "repo:coder/coder type:issue flake in:title"
+    },
+    {
+      "name": "issues-flaky-title",
+      "q": "repo:coder/coder type:issue flaky in:title"
+    },
+    {
+      "name": "prs-flake-title",
+      "q": "repo:coder/coder type:pr flake in:title"
+    },
+    {
+      "name": "prs-flaky-title",
+      "q": "repo:coder/coder type:pr flaky in:title"
+    }
+  ],
+  "per_query_counts": {
+    "issues-flake-title": 206,
+    "issues-flaky-title": 13,
+    "prs-flake-title": 264,
+    "prs-flaky-title": 69
+  },
+  "unique_records": 552,
+  "unique_issues": 219,
+  "unique_prs": 333
+}

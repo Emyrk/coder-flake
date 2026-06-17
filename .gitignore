@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local env and credentials
+.env
+*.token
+*.key
+
+# Editor cruft
+.DS_Store
+.idea/
+.vscode/
+
+# Temporary scratch
+.tmp/
+tmp/
