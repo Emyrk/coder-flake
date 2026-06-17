@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import csv
+import json
 import re
 from collections import Counter
 from pathlib import Path
@@ -464,11 +465,49 @@ def gh_link(kind: str, number: str) -> str:
     return f"[issue #{number}](https://github.com/coder/coder/issues/{number})"
 
 
-def ref_table(rows: list[dict[str, str]]) -> str:
-    lines = ["| ref | type | title | status | evidence |", "| --- | --- | --- | --- | --- |"]
+def load_pr_attribution() -> dict[str, dict[str, str]]:
+    attribution: dict[str, dict[str, str]] = {}
+    for pull_path in (ROOT / "raw/prs").glob("*/pull.json"):
+        data = json.loads(pull_path.read_text(encoding="utf-8"))
+        number = str(data.get("number") or pull_path.parent.name)
+        user = data.get("user") or {}
+        merged_by = data.get("merged_by") or {}
+        attribution[number] = {
+            "author": user.get("login") or "",
+            "merged_by": merged_by.get("login") or "",
+            "merged": "yes" if data.get("merged") else "no",
+        }
+    return attribution
+
+
+def user_link(login: str) -> str:
+    if not login:
+        return ""
+    return f"[@{login}](https://github.com/{login})"
+
+
+def solved_by(r: dict[str, str], pr_attribution: dict[str, dict[str, str]]) -> str:
+    if r["kind"] == "PR":
+        pr = pr_attribution.get(r["number"], {})
+        if pr.get("merged") == "yes":
+            return user_link(pr.get("author", ""))
+        return ""
+
+    solved: list[str] = []
+    for number in re.findall(r"#(\d+)", r.get("linked_fix_prs", "")):
+        pr = pr_attribution.get(number, {})
+        if pr.get("merged") == "yes":
+            author = user_link(pr.get("author", ""))
+            if author and author not in solved:
+                solved.append(author)
+    return ", ".join(solved)
+
+
+def ref_table(rows: list[dict[str, str]], pr_attribution: dict[str, dict[str, str]]) -> str:
+    lines = ["| ref | type | title | status | solved by | evidence |", "| --- | --- | --- | --- | --- | --- |"]
     for r in rows:
         lines.append(
-            f"| {gh_link(r['kind'], r['number'])} | {r['kind']} | {clean(r['title'], 120)} | {clean(r['status'], 80)} | {clean(r['evidence'], 320)} |"
+            f"| {gh_link(r['kind'], r['number'])} | {r['kind']} | {clean(r['title'], 120)} | {clean(r['status'], 80)} | {solved_by(r, pr_attribution)} | {clean(r['evidence'], 320)} |"
         )
     return "\n".join(lines)
 
@@ -482,7 +521,7 @@ def code_examples(category: str) -> str:
     return "\n".join(lines)
 
 
-def category_page(category: str, rows: list[dict[str, str]]) -> str:
+def category_page(category: str, rows: list[dict[str, str]], pr_attribution: dict[str, dict[str, str]]) -> str:
     info = CATEGORY_INFO[category]
     counts = Counter(r["kind"] for r in rows)
     fixes = "\n".join(f"- {x}" for x in info["fixes"])
@@ -518,7 +557,9 @@ These examples are illustrative patterns for the category, not direct patches ag
 <details>
 <summary>References ({len(rows)})</summary>
 
-{ref_table(rows)}
+`solved by` is the author of the merged PR, either the reference itself or a linked fix PR. It is blank when the corpus did not identify a merged fix PR.
+
+{ref_table(rows, pr_attribution)}
 
 </details>
 """
@@ -617,9 +658,10 @@ def main() -> None:
     by_cat: dict[str, list[dict[str, str]]] = {}
     for r in rows:
         by_cat.setdefault(r["category"], []).append(r)
+    pr_attribution = load_pr_attribution()
     for cat, cat_rows in by_cat.items():
         info = CATEGORY_INFO[cat]
-        (OUT / f"{info['slug']}.md").write_text(category_page(cat, cat_rows), encoding="utf-8")
+        (OUT / f"{info['slug']}.md").write_text(category_page(cat, cat_rows, pr_attribution), encoding="utf-8")
     (ROOT / "ONE_PAGER.md").write_text(one_pager(by_cat), encoding="utf-8")
 
 
